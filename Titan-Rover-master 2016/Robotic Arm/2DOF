@@ -1,0 +1,420 @@
+#include "PinChangeInt.h"
+#include <math.h>
+#include <Servo.h>
+
+//x is channel 7, y is channel 6
+#define XCOORD 11
+#define YCOORD 10
+
+#define XCOORDFLAG 1
+#define YCOORDFLAG 2   
+
+/*Calibration signal for AJNT servo motors; 1500 = 0 output 1615 for the endeffector
+*/
+#define CENTER_SIGNAL 1500
+#define ENDE_SIGNAL 1615
+/*raw sensor data
+*/
+volatile uint16_t XINPUTSHARED;
+volatile uint16_t YINPUTSHARED;
+/*timestamp placeholder for signal time length calcs
+*/
+uint32_t XSTART;
+uint32_t YSTART;
+
+float XEPOS;
+float YEPOS;
+float phiE;
+
+float XWPOS;
+float YWPOS;
+
+//1615 wrist straight out
+
+double length1 = 900;
+double length2 = 1100;
+double length3 = 300;
+double theta1;
+double theta2;
+double theta3;
+
+/*Valid PWM Output pins to arm joints(UNO) : 3,5,6,9
+*/
+#define AJNT1_OUT_PIN 3  //tape 1
+#define AJNT2_OUT_PIN 5  //tape 2
+#define ENDE_OUT_PIN 9  //tape 4
+
+/*define binary flag values for interrupt
+*/
+#define JOINT1_FLAG 1
+#define JOINT2_FLAG 2
+/*Calibration signal for AJNT servo motors; 1500 = 0 output
+*/
+//#define CAL_SIGNAL 1500
+/*Raw sensor data
+*/
+//volatile uint16_t usAJNT1InShared;
+//volatile uint16_t usAJNT2InShared;
+
+/*timestamp palceholder to for signal time length calcs
+*/
+//uint32_t ulAJNT1Start;
+//uint32_t ulAJNT2Start;
+/*Object declaration
+*/
+Servo armJoint1;
+Servo armJoint2;
+Servo endeJoint;
+
+volatile uint8_t bUpdateFlagsShared;
+
+void setup() {
+  Serial.begin(9600);
+
+  /*Attach output pins
+  */
+  Serial.println("attaching pins");
+  armJoint1.attach(AJNT1_OUT_PIN);
+  armJoint2.attach(AJNT2_OUT_PIN);
+  endeJoint.attach(ENDE_OUT_PIN);
+  
+  /*Safety signal in case receiver does not receive data
+  */
+  armJoint1.writeMicroseconds(CENTER_SIGNAL);
+  armJoint2.writeMicroseconds(CENTER_SIGNAL);
+  endeJoint.writeMicroseconds(ENDE_SIGNAL);
+
+  Serial.println("attaching interrupts");
+  PCintPort::attachInterrupt(XCOORD, calcXLocation, CHANGE);
+  PCintPort::attachInterrupt(YCOORD, calcYLocation, CHANGE);
+
+  Serial.println("Done with Setup");
+
+  //Temporarily setting X and Y
+  XEPOS = 1060;
+  YEPOS = 1600;
+  phiE = 50;
+  
+  delay(10000);
+}
+
+void loop() {
+  /*put your main code here, to run repeatedly:
+  */
+  static uint16_t XCOORDIN;
+  static uint16_t YCOORDIN;
+
+  static uint8_t bUpdateFlags;
+
+  /*Theta after converted from radians to degrees
+  */
+  int theta1Deg;
+  int theta2Deg;
+  int theta3Deg;
+  
+  static int usAJNT1;
+  static int usAJNT2;
+  static int usENDE;
+  
+  if (bUpdateFlagsShared)
+  {
+    //prevent writing from sensors to volatile vars
+    noInterrupts();
+
+    //grab values from volatile vars
+    bUpdateFlags = bUpdateFlagsShared;
+
+    if (bUpdateFlags & XCOORDFLAG)
+    {
+      XCOORDIN = XINPUTSHARED;
+    }
+    if (bUpdateFlags & YCOORDFLAG)
+    {
+      YCOORDIN = YINPUTSHARED;
+    }
+    //reset flag
+    bUpdateFlagsShared = 0;
+
+    //resume sensor writing
+    interrupts();
+  }
+
+  //if flag values present redundancy, scrub the new values for valid servo inputs
+  if (bUpdateFlags & (XCOORDFLAG || YCOORDFLAG))
+  {
+    if (XCOORDIN < 1000)
+    {
+      XCOORDIN = 1000;
+    }
+    else if (XCOORDIN > 2000)
+    {
+      XCOORDIN = 2000;
+    }
+
+    if (YCOORDIN < 1000)
+    {
+      YCOORDIN = 1000;
+    }
+    else if (YCOORDIN > 2000)
+    {
+      YCOORDIN = 2000;
+    }
+  }
+
+  XEPOS = map(XCOORDIN, 1000, 2000, -2200, 2200);
+  YEPOS = map(YCOORDIN, 1000, 2000, -2200, 2200);
+
+  if(YCOORDIN > 1750)
+  {
+    YEPOS = YEPOS + 50;  
+  }
+  else if(YCOORDIN < 1250)
+  {
+    YEPOS = YEPOS - 50;  
+  }
+  else if(YEPOS <= -2000)
+  {
+    YEPOS = -2000;  
+  }
+  else if(YEPOS >= 2000)
+  {
+    YEPOS = 2000;  
+  }
+
+  if(XCOORDIN > 1750)
+  {
+    XEPOS = XEPOS + 50;
+  }
+  else if(XCOORDIN < 1250)
+  {
+    XEPOS = XEPOS - 50;  
+  }
+  else if(XEPOS <= -2000)
+  {
+    XEPOS = -2000;  
+  }
+  else if(XEPOS >= 2000)
+  {
+    XEPOS = 2000;  
+  }
+  
+/*
+ *Solve the wrist positions given our input is the end effector known as XEPOS and YEPOS
+ *the output will be for XW and YW the wrst positions
+ */
+  XWPOS = solveXWrist(XEPOS);
+  YWPOS = solveYWrist(YEPOS);
+
+  // Math Stuff, these are in radians
+  theta1 = solveTheta1(XWPOS, YWPOS, length1, length2);
+  theta2 = solveTheta2(XWPOS, YWPOS, length1, length2, theta1);
+  theta3 = solveTheta3(phiE, theta1, theta2);
+  
+    Serial.print(XCOORDIN);
+    Serial.print("knob");
+    Serial.print("\t");
+    Serial.print(YCOORDIN);
+    Serial.print("knob");
+    Serial.print("\t");
+  //if (!isnan(theta1) || !isnan(theta2))
+  //{
+    //output Xcoordinate
+    Serial.print(XEPOS);
+    Serial.print("EPOS");
+    Serial.print("\t");
+    //output Ycoordinate
+    Serial.print(YEPOS);
+    Serial.print("EPOS");
+    Serial.print("\t");
+
+    //output theta1 in radian
+    Serial.print(theta1);
+    Serial.print("rad");
+    Serial.print("\t");
+    //output theta2 in radian
+    Serial.print(theta2);
+    Serial.print("rad");
+    Serial.print("\t");
+    //output theta3 in radian
+    //Serial.print(theta3);
+    //Serial.print("rad");
+    Serial.print("\t");
+    
+    //Convert to from Radians to Degrees
+    theta1Deg = theta1 * (180 / PI);
+    theta2Deg = theta2 * (180 / PI);
+    theta3Deg = theta3 * (180 / PI);
+    
+    //Output Degrees
+    Serial.print(theta1Deg);
+    Serial.print("deg");
+    Serial.print("\t");
+    Serial.print(theta2Deg);
+    Serial.print("deg");
+    Serial.print("\t");
+    //Serial.print(theta3Deg);
+    //Serial.print("deg");
+    Serial.print("\t");
+
+    // Mapping Degrees to proper PWM SIGNAL, MODIFY THIS
+    // Account for the fact that JOINT2 is still reversed
+    if (theta1Deg >= -140 && theta1Deg <= 140 && theta2Deg >= -140 && theta2Deg <= 140)// && theta3Deg >= -120 && theta3Deg <= 120)
+    {
+      usAJNT1 = map(theta1Deg, -140, 140, 1000, 2000);
+      usAJNT2 = map(theta2Deg, -140, 140, 1000, 2000);
+      usENDE = map(theta3Deg, -120, 120, 1000, 2000);
+      //Converted Values that are inputs
+
+      setSpeedJoint1(usAJNT1);
+      setSpeedJoint2(usAJNT2);
+      //setSpeedEndE(usENDE);
+      setSpeedEndE(1500);
+    }
+    Serial.print(usAJNT1);
+    Serial.print("PWM");
+    Serial.print("\t");
+    Serial.print(usAJNT2);
+    Serial.print("PWM");
+    Serial.print("\t");
+    //Serial.print(usENDE);
+    //Serial.print("PWM");
+    Serial.println("\t");
+
+    //Will write value to the servo
+    /*
+    setSpeedJoint1(usAJNT1);
+    setSpeedJoint2(usAJNT2);
+    */
+    bUpdateFlags = 0;
+  //}
+
+  delay(500);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void setSpeedJoint1(uint16_t val)
+{
+  armJoint1.writeMicroseconds(val);
+}
+void setSpeedJoint2(uint16_t val)
+{
+  armJoint2.writeMicroseconds(val);
+}
+void setSpeedEndE(uint16_t val)
+{
+  endeJoint.writeMicroseconds(val);
+}
+double solveTheta1(double XWPOS, double YWPOS, double length1, double length2)
+{
+//  double tempL1sq = pow(length1, 2);
+//  double tempL2sq = pow(length2, 2);
+//  double tempXsq = pow(XWPOS, 2);
+//  double tempYsq = pow(YWPOS, 2);
+//
+//  double SquareRootInput =  tempXsq + tempYsq;
+//  double squareRoot = sqrt(SquareRootInput);
+//  double denominator = 2 * length1 * squareRoot;
+//
+//  //double atan_calc;
+//
+//  if (XWPOS == 0)
+//    XWPOS = 1;
+//  //if(YWPOS == 0)
+//  //  atac_Calc = 0;
+//  //else
+//  //  atan_calc = atan(YWPOS/XWPOS);
+//  double tempTheta1 = atan(YWPOS / XWPOS) - acos((tempXsq + tempYsq + tempL1sq - tempL2sq) / (denominator));
+//
+//  return tempTheta1;
+  if (XWPOS == 0)
+    XWPOS = 1;
+  double _length = sqrt((XWPOS*XWPOS) + (YWPOS*YWPOS));
+  double gamma = acos((_length*_length + length1*length1 - length2*length2) / (2*length1*_length));
+  double th1 = atan(YWPOS / XWPOS) - gamma;
+  return th1;
+}
+double solveTheta2(double XWPOS, double YWPOS, double length1, double length2, double _theta1)
+{
+//  double tempL1sq = pow(length1, 2);
+//  double tempL2sq = pow(length2, 2);
+//  double tempXsq = pow(XWPOS, 2);
+//  double tempYsq = pow(YWPOS, 2);
+//
+//  double denominator = 2 * length1 * length2;
+//
+//  double tempTheta2 = PI - acos((tempL1sq + tempL2sq - tempXsq - tempYsq) / (denominator));
+//  return tempTheta2;
+  double y_comp = YWPOS - length1*sin(_theta1);
+  double x_comp = XWPOS - length1*cos(_theta1);
+  double th2 = atan(y_comp / x_comp) - _theta1;
+  return th2;
+}
+double solveTheta3(double tempPhiE, double tempTheta1, double tempTheta2)
+{
+  double tempTheta3;
+  tempTheta3 = tempPhiE - tempTheta1 - tempTheta2;
+  return tempTheta3;  
+}
+double solveXWrist(double xVal)
+{
+//  double XW;
+//  XW = xVal - length3*cos(phiE);
+//  return XW;  
+  return xVal;
+}
+double solveYWrist(double yVal)
+{
+//  double YW;
+//  YW = yVal - length3*sin(phiE);
+//  return YW;
+  return yVal;
+}
+
+void calcXLocation()
+{
+  if (digitalRead(XCOORD) == HIGH)
+  {
+    XSTART = micros();
+  }
+  else
+  {
+    XINPUTSHARED = (uint16_t)(micros() - XSTART);
+    bUpdateFlagsShared |= XCOORDFLAG;
+  }
+}
+void calcYLocation()
+{
+  if (digitalRead(YCOORD) == HIGH)
+  {
+    YSTART = micros();
+  }
+  else
+  {
+    YINPUTSHARED = (uint16_t)(micros() - YSTART);
+    bUpdateFlagsShared |= YCOORDFLAG;
+  }
+}

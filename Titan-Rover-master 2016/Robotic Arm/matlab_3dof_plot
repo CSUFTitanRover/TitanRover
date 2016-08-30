@@ -1,0 +1,22 @@
+function [x_coords,y_coords] = forward_kinematics_model(length1,length2,length3)
+
+theta1 = 0:0.1:pi/2;
+theta2 = 0:0.1:pi;
+theta3 = 0:0.1:pi;
+
+[THETA1,THETA2,THETA3] = meshgrid(theta1,theta2,theta3);
+
+x_coords = length1*cos(THETA1) + length2*cos(THETA1 + THETA2) + length3*cos(THETA1 + THETA2 + THETA3);
+y_coords = length1*sin(THETA1) + length2*sin(THETA1 + THETA2) + length3*sin(THETA1 + THETA2 + THETA3);
+
+data1 = [x_coords(:) y_coords(:) THETA1(:)];
+data2 = [x_coords(:) y_coords(:) THETA2(:)];
+data3 = [x_coords(:) y_coords(:) THETA3(:)];
+
+plot(x_coords(:), y_coords(:), 'r.');
+axis equal;
+xlabel('X','fontsize',10)
+ylabel('Y','fontsize',10)
+title('X-Y co-ordinates generated for all theta1 and theta2 combinations using forward kinematics formula','fontsize',10)
+  
+end

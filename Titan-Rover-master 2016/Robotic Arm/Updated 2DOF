@@ -1,0 +1,490 @@
+#include "PinChangeInt.h"
+#include <math.h>
+#include <Servo.h>
+
+/*x is channel 1, y is channel 2
+*/
+#define XCOORD 11
+#define YCOORD 10
+
+#define XCOORDFLAG 1
+#define YCOORDFLAG 2   
+
+/*Calibration signal for AJNT servo motors; 1500 = 0 output
+*/
+#define CENTER_SIGNAL 1500
+#define ENDE_SIGNAL 1615
+/*raw sensor data
+*/
+volatile uint16_t XINPUTSHARED;
+volatile uint16_t YINPUTSHARED;
+/*timestamp placeholder for signal time length calcs
+*/
+uint32_t XSTART;
+uint32_t YSTART;
+
+float xEndEPos;
+float yEndEPos;
+float phiE;
+
+double length1 = 900;
+double length2 = 1050;
+double length3 = 350;
+double theta1;
+double theta2;
+double theta3;
+
+/*Valid PWM Output pins to arm joints(UNO) : 3,5,6,9
+*/
+#define AJNT1_OUT_PIN 3   //tape 1
+#define AJNT2_OUT_PIN 5   //tape 2
+#define ENDE_OUT_PIN 9    //tape 4
+/*define binary flag values for interrupt
+*/
+#define JOINT1_FLAG 1
+#define JOINT2_FLAG 2
+
+/*Raw sensor data
+*/
+Servo armJoint1;
+Servo armJoint2;
+Servo endeJoint;
+
+volatile uint8_t bUpdateFlagsShared;
+
+//double theta1_bounds[512];
+//double theta2_bounds[512];
+//double x_bounds[512];
+//double y_bounds[512];
+
+void setup() {
+  Serial.begin(9600);
+
+  /*Attach output pins
+  */
+  Serial.println("attaching pins");
+  armJoint1.attach(AJNT1_OUT_PIN);
+  armJoint2.attach(AJNT2_OUT_PIN);
+  endeJoint.attach(ENDE_OUT_PIN);
+  /*Safety signal in case receiver does not receive data
+  */
+  armJoint1.writeMicroseconds(CENTER_SIGNAL);
+  armJoint2.writeMicroseconds(CENTER_SIGNAL);
+  endeJoint.writeMicroseconds(ENDE_SIGNAL);
+
+  Serial.println("attaching interrupts");
+  PCintPort::attachInterrupt(XCOORD, calcXLocation, CHANGE);
+  PCintPort::attachInterrupt(YCOORD, calcYLocation, CHANGE);
+
+  xEndEPos = 1050;
+  yEndEPos = 1600;
+  phiE = 0;
+
+//  Serial.println("initializing bounds");
+//  initializeBounds(length1,length2);
+  
+  Serial.println("Done with Setup");
+  delay(500);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+void loop() {
+  /*put your main code here, to run repeatedly:
+  */
+  static uint16_t XCOORDIN;
+  static uint16_t YCOORDIN;
+
+  static uint8_t bUpdateFlags;
+
+  /*Theta after converted from radians to degrees
+  */
+  int theta1Deg;
+  int theta2Deg;
+  int theta3Deg;
+  
+  double xWristPos;
+  double yWristPos;
+  
+  static int usAJNT1;
+  static int usAJNT2;
+  static int usENDE;
+  
+  if (bUpdateFlagsShared)
+  {
+    //prevent writing from sensors to volatile vars
+    noInterrupts();
+
+    //grab values from volatile vars
+    bUpdateFlags = bUpdateFlagsShared;
+
+    if (bUpdateFlags & XCOORDFLAG)
+    {
+      XCOORDIN = XINPUTSHARED;
+    }
+    if (bUpdateFlags & YCOORDFLAG)
+    {
+      YCOORDIN = YINPUTSHARED;
+    }
+    //reset flag
+    bUpdateFlagsShared = 0;
+
+    //resume sensor writing
+    interrupts();
+  }
+
+  //if flag values present redundancy, scrub the new values for valid servo inputs
+  if (bUpdateFlags & (XCOORDFLAG || YCOORDFLAG))
+  {
+    if (XCOORDIN < 1000)
+    {
+      XCOORDIN = 1000;
+    }
+    else if (XCOORDIN > 2000)
+    {
+      XCOORDIN = 2000;
+    }
+    if (YCOORDIN < 1000)
+    {
+      YCOORDIN = 1000;
+    }
+    else if (YCOORDIN > 2000)
+    {
+      YCOORDIN = 2000;
+    }
+  }
+
+  if(YCOORDIN > 1750)
+  {
+    yEndEPos = yEndEPos + 50;  
+  }
+  else if(YCOORDIN < 1250)
+  {
+    yEndEPos = yEndEPos - 50;  
+  }
+//  if(yEndEPos <= -2300)
+//  {
+//    yEndEPos = -2300;  
+//  }
+  if(yEndEPos <= -145)
+  {
+    yEndEPos = -145;
+  }
+  else if(yEndEPos >= 1950)
+  {
+    yEndEPos = 1950;  
+  }
+
+  if(XCOORDIN > 1750)
+  {
+    xEndEPos = xEndEPos + 50;
+  }
+  else if(XCOORDIN < 1250)
+  {
+    xEndEPos = xEndEPos - 50;  
+  }
+//  if(xEndEPos <= -2300)
+//  {
+//    xEndEPos = -2300;  
+//  }
+  if(xEndEPos <= -985)
+  {
+    xEndEPos = -985;
+  }
+  else if(xEndEPos >= 1950)
+  {
+    xEndEPos = 1950;  
+  }
+  
+  //xWristPos = solveXWrist(xEndEPos);
+  //yWristPos = solveYWrist(yEndEPos);
+  
+  // Math Stuff, these are radians
+//  bool inBounds = checkBounds(xEndEPos,yEndEPos,length1,length2);
+//  {
+    theta1 = solveTheta1(xEndEPos, yEndEPos, length1, length2);
+    theta2 = solveTheta2(xEndEPos, yEndEPos, length1, length2);
+    //theta3 = solveTheta3(phiE, theta1, theta2);
+//  }
+//  else
+//  {
+//    theta1 = NAN;
+//    theta2 = NAN;
+//  }
+  
+  //Convert to from Radians to Degrees
+  theta1Deg = theta1 * (180 / PI);
+  theta2Deg = theta2 * (180 / PI);
+  //theta3Deg = theta3 * (180 / PI);
+ 
+//  if (!isnan(theta1) || !isnan(theta2))
+//  {
+    // Mapping Degrees to proper PWM SIGNAL, MODIFY THIS
+    // Account for the fact that JOINT2 is still reversed
+    if (theta1Deg >= -170 && theta1Deg <= 170 && theta2Deg >= -170 && theta2Deg <= 170)
+    {
+      usAJNT1 = map(theta1Deg, -180, 180, 1000, 2000);
+      usAJNT2 = map(theta2Deg, -180, 180, 2000, 1000);
+      usENDE = map(theta3Deg, -180, 180, 1400, 1800);
+      //Converted Values that are inputs
+      setSpeedJoint1(usAJNT1);
+      setSpeedJoint2(usAJNT2);
+      /*
+       * Since Joint 2 is mounted backwards, we need to reverse mirror the 
+       * value so that Joint 1 and Joint 2 are Oriented in the same way
+       * For example, a PWM signal of 1200 going to Joint 2 needs to be 
+       * coverted to 1800 as neutral PWM signal is 1500.
+       */
+//      if(usAJNT2 == 1500)
+//      {
+//        setSpeedJoint2(usAJNT2);  
+//      }
+//      else if(usAJNT2 > 1500)
+//      {
+//        setSpeedJoint2(1500 - (usAJNT2 - 1500));
+//      }
+//      else if(usAJNT2 < 1500)
+//      {
+//        setSpeedJoint2(1500 + (1500 - usAJNT2)); 
+//      }
+      setSpeedEndE(1500);
+    }
+
+    float debugX = map(xEndEPos, -2300, 2300, -1335, 2300);
+    float debugY = map(yEndEPos, -2300, 2300, -500, 2300);
+  
+    //output Xcoordinate of End Effector
+    Serial.print(xEndEPos);
+    //Serial.print(debugX);
+    //Serial.print(xWristPos);
+    Serial.print(" pos");
+    Serial.print("\t");
+
+    //output Ycoordinate of End Effector
+    Serial.print(yEndEPos);
+    //Serial.print(debugY);
+    //Serial.print(yWristPos);
+    Serial.print(" pos");
+    Serial.print("\t");
+
+    //output theta1 in radian
+    Serial.print(theta1);
+    Serial.print(" rad");
+    Serial.print("\t");
+    //output theta2 in radian
+    Serial.print(theta2);
+    Serial.print(" rad");
+    Serial.print("\t");
+
+    //Output Degrees for thetas 1 2 3
+    Serial.print(theta1Deg);
+    Serial.print(" deg");
+    Serial.print("\t");
+    Serial.print(theta2Deg);
+    Serial.print(" deg");
+    Serial.print("\t");
+
+//    Serial.print(inBounds);
+//    Serial.print(" bounds");
+//    Serial.print("\t");
+    
+    Serial.print(usAJNT1);
+    Serial.print(" PWM");
+    Serial.print("\t");
+    Serial.print(usAJNT2);
+    Serial.print(" PWM");
+    Serial.println("\t");
+
+    //Will write value to the servo
+    /*
+    setSpeedJoint1(usAJNT1);
+    setSpeedJoint2(usAJNT2);
+    */
+    bUpdateFlags = 0;
+//  }
+  delay(250);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void setSpeedJoint1(uint16_t val)
+{
+  armJoint1.writeMicroseconds(val);
+}
+void setSpeedJoint2(uint16_t val)
+{
+  armJoint2.writeMicroseconds(val);
+}
+void setSpeedEndE(uint16_t val)
+{
+  endeJoint.writeMicroseconds(val);
+}
+
+double solveTheta1(double x, double y, double l1, double l2)
+{
+  double c2 = (x*x + y*y - l1*l1 - l2*l2) / (2*l1*l2);
+  double s2 = sqrt(1 - c2*c2);
+  
+  double k1 = length1 + (length2*c2);
+  double k2 = l2*s2;
+
+  double t1 = atan2(y,x) - atan2(k2,k1);
+  
+  return t1;
+}
+
+double solveTheta2(double x, double y, double l1, double l2)
+{
+  double c2 = (x*x + y*y - l1*l1 - l2*l2) / (2*l1*l2);
+  double s2 = sqrt(1 - c2*c2);
+
+  double t2 = atan2(s2,c2);
+
+  return t2;
+}
+
+//void initializeBounds(double l1, double l2)
+//{
+//  //double theta1[512];
+//  //double theta2[512];
+//
+//  double temp = 0.0f;
+//  int loopCount = 0;
+//
+//  //initialize theta1
+//  for (int i = 0; i < 16; ++i)
+//  {
+//    for (int j = 0; j < 32; ++j)
+//    {
+//      theta1_bounds[j + loopCount] = temp;
+//    }
+//    temp += 0.1f;
+//    loopCount += 32;
+//  }
+//
+//  temp = 0.0f;
+//  loopCount = 0;
+//
+//  //initialize theta2
+//  for (int i = 0; i < 16; ++i)
+//  {
+//    for (int j = 0; j < 32; ++j)
+//    {
+//      theta2_bounds[j + loopCount] = temp;
+//      temp += 0.1f;
+//    }
+//    temp = 0.0f;
+//    loopCount += 32;
+//  }
+//
+////  double x_coords[512];
+////  double y_coords[512];
+//
+//  //define all possible x and y coordinate values
+//  for (int i = 0; i < 512; ++i)
+//  {
+//    x_bounds[i] = l1*cos(theta1_bounds[i]) + l2*cos(theta1_bounds[i] + theta2_bounds[i]);
+//    y_bounds[i] = l1*sin(theta1_bounds[i]) + l2*sin(theta1_bounds[i] + theta2_bounds[i]);
+////    theta1_bounds[i] = theta1[i];
+////    theta2_bounds[i] = theta2[i];
+////    x_bounds[i] = x_coords[i];
+////    y_bounds[i] = y_coords[i];
+//  }
+//}
+//bool checkBounds(double x, double y)
+//{
+//  int xn = 1;
+//  int yn = 1;
+//
+//  if (x < 0) xn = -1;
+//  if (y < 0) yn = -1;
+//  
+//  //check bounds
+//  for (int i = 0; i < 512; ++i)
+//  {
+//    if ((xn*x) >= (xn*(x_bounds[i] - 0.1*x_bounds[i])) && (xn*x) <= (xn*(x_bounds[i] + 0.1*x_bounds[i])))
+//    {
+//      if ((yn*y) >= (yn*(y_bounds[i] - 0.1*y_bounds[i])) && (yn*y) <= (yn*(y_bounds[i] + 0.1*y_bounds[i])))
+//      {
+//        return true;
+//      }
+//    }
+//  }
+//  
+//  return false;
+//}
+
+double solveTheta3(double tempPhiE, double tempTheta1, double tempTheta2)
+{
+  double tempTheta3;
+  tempTheta3 = tempPhiE - tempTheta1 - tempTheta2;
+  return tempTheta3;
+}
+double solveXWrist(double xVal)
+{
+  double XW;
+  XW = xVal - length3*cos(phiE);
+  return XW;  
+}
+double solveYWrist(double yVal)
+{
+  double YW;
+  YW = yVal - length3*sin(phiE);
+  return YW;
+}
+void calcXLocation()
+{
+  if (digitalRead(XCOORD) == HIGH)
+  {
+    XSTART = micros();
+  }
+  else
+  {
+    XINPUTSHARED = (uint16_t)(micros() - XSTART);
+    bUpdateFlagsShared |= XCOORDFLAG;
+  }
+}
+void calcYLocation()
+{
+  if (digitalRead(YCOORD) == HIGH)
+  {
+    YSTART = micros();
+  }
+  else
+  {
+    YINPUTSHARED = (uint16_t)(micros() - YSTART);
+    bUpdateFlagsShared |= YCOORDFLAG;
+  }
+}

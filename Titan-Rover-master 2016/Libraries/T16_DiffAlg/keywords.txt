@@ -1,0 +1,6 @@
+T16_DiffAlg	KEYWORD1
+calcSpeed	KEYWORD2
+getPowLeft	KEYWORD2
+getPowRight	KEYWORD2
+setMaxThrottle	KEYWORD2
+getMaxThrottle	KEYWORD2

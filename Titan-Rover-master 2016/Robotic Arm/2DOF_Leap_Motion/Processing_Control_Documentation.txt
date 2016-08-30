@@ -1,0 +1,36 @@
+
+The Processing code has a small handful of keyboard inputs that need to taken into account.
+
+With the caps lock on:
+
+‘A’: holding the A key will send a bit signal to the lazy susan motor, forcing it to rotate counter-clockwise
+
+‘D’: holding the D key will send a bit signal to the lazy susan motor, forcing it to rotate clockwise
+
+‘W’: holding the W key will send a bit signal to the shoulder motor, forcing it to rotate upwards
+
+’S’: holding the S key will send a bit signal to the shoulder motor, forcing it to rotate downwards
+
+
+With the caps lock off:
+
+‘r’: pressing or holding the r key will cause a reset in joint1 and joint 2, forcing them back to a rest position
+
+‘g’: *pressing the g key will lock joint1 and joint2 in place, pressing the g key again will unlock joint1 and joint2
+
+	While joint1 and joint2 are locked in place:
+
+	‘h’: holding the h key will allow for wrist control, otherwise the wrist will be locked
+
+	‘j’: holding the j key will allow for gripper control, otherwise the gripper will be locked
+
+‘a’: holding the a key will slowly increment joint1, forcing it to move upwards
+
+‘z’: holding the z key will slowly decrement joint1, forcing it to move downwards
+
+’s’: holding the s key will slowly increment joint2, forcing it to move upwards
+
+‘x’: holding the x key will slowly decrement joint2, forcing it to move downwards
+
+
+*the ‘g’ key is the only toggle key, meaning that once pressed it is turned on and pressing it again will turn it off, as opposed to all the other keys which are dependent on being held down
