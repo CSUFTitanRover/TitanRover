@@ -1,11 +1,20 @@
-var five = require("johnny-five");
-var board = new five.Board();
+/*
+  Author: Shan Liyanage
+
+  Titan Rover - Linear Actuator controller 
+
+  Description: 
+    
+    Controlling a linear actuator with a joystick. 
+    
+    Potentiometer values will be displayed graphically on a 
+    separate web page in real time
+*/
 
 var pubnub = require('pubnub');
+var five = require("johnny-five");
 
-
-
-
+var board = new five.Board();
 
 board.on("ready", function() {
   
@@ -15,17 +24,19 @@ board.on("ready", function() {
 
   // Initializing joystick pin Range ( 0 - 1023)
   var pin = new five.Pin(2);
+  
+  // The joystick is in the neutral position ~ between 500 - 530 
   var lBound = 500; 
-  var uBound = 530;
+  var uBound = 530; 
 
 
-// PubNub Stuff
+  // PubNub Stuff
   var potentiometer; 
   var channel = 'arduino_output';
 
   var pub = new pubnub({
-  publish_key: 'pub-c-a72e78c9-93be-4e27-bf0c-f451ae2e4bf6',
-  subscribe_key: 'sub-c-e1e6b59e-7495-11e6-80e7-02ee2ddab7fe'
+    publish_key: 'pub-c-a72e78c9-93be-4e27-bf0c-f451ae2e4bf6',
+    subscribe_key: 'sub-c-e1e6b59e-7495-11e6-80e7-02ee2ddab7fe'
 });
 
 
@@ -34,16 +45,22 @@ board.on("ready", function() {
     High: ~990
 */
 
+/* 
 
-// This reads the values from the joystick 
+  Reading values from the joystick  
+    
+    If the joystick is position up, send signal to expand.
+    If down, send signal to contract
+    if neutral, stop actuator. 
+
+*/
   
   this.analogRead(2, function(voltage){
   
     if(voltage > uBound){
-
-      in8.high();
-      in7.low();
       
+      in7.low();
+      in8.high();
       console.log("Y Value: " + voltage);
     }
     else if(voltage < lBound){
@@ -52,40 +69,35 @@ board.on("ready", function() {
         console.log("Y Value: " + voltage);
     }
     else {
-       in8.low()
        in7.low();
+       in8.low()
+       
     }
-
-    // This reads the values from the pot on the actuator 
     
   })
 
+ // Reading values from the actuators potentiometer
+ 
   this.analogRead(4, function(vol){
       potentiometer = vol;
       console.log("Pot voltage:" + vol);
 
     })
 
+// Sending voltage to pubnub server 
+// setInterval(publish, 3000);
 
-setInterval(publish, 3000);
+// function publish() {
+//   var data = {
+//     'voltage': potentiometer,
+//   };
+//   pub.publish({
+//     channel: channel,
+//     message: data,
+//   });
+// }
 
-function publish() {
-  var data = {
-    'voltage': potentiometer,
-  };
-  pub.publish({
-    channel: channel,
-    message: data,
-  });
-}
 
- pubnub.time(
-    function(time){
-        console.log("connected @: " + time);
-    }
-);
- 
- 
  
 
 });
