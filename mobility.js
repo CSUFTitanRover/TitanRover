@@ -193,7 +193,7 @@ var mapVariableRange = function(x, inMin, inMax, outMin, outMax) {
     return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
 
-board.on('ready', funtion(){
+board.on('ready', function(){
     this.loop(1, function(){
         console.log("Setting Interrupts");
         activateInterrupts();
@@ -284,5 +284,5 @@ board.on('ready', funtion(){
         setSpeedLeft(powerLeft);
 
         updateFlags = false;
-    }
+    })
 });
