@@ -146,7 +146,7 @@ var yInputInterrupt = function() {
     }
     else
     {
-    usJLYInShared = microseconds() - CONTROL_Y_START_TIME);
+    usJLYInShared = microseconds() - CONTROL_Y_START_TIME;
     CONTROL_XY_SHARED_FLAG |= CONTROL_Y_FLAG;
     }
 }
@@ -159,10 +159,10 @@ var xInputInterrupt = function(){
         usJLXInShared = (microseconds() - CONTROL_X_START_TIME);
         CONTROL_XY_SHARED_FLAG |= CONTROL_X_FLAG;
     }
-}
+};
 
 var microseconds = function(){
-    return (micros.parse(micros.now().microseconds)
+    return (micros.parse(micros.now().microseconds));
 };
 
 var deactivateInterrupts = function(){
