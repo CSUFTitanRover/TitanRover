@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
     "johnny-five": "^0.10.0",
-    "pubnub": "^4.0.8"
+    "pubnub": "^4.0.8",
+    "request": "^2.75.0"
   }
 }
