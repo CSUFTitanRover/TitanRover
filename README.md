@@ -21,14 +21,14 @@ Launch the app
    [Mongo Website](https://www.mongodb.com/)
 2. Create /data/db directories in your root folder
 3. Then navigate to the bin directory of the downloaded folder
-4. Run the mongo server (needs to have root permissions)
+4. Run the mongo server (needs to have root permissions)  
 	```sudo mongod --port 6969```
-5. Then in other terminal run
+5. Then in other terminal run  
 	```sudo mongo --port 6969```
 	This should connect you with the mongodb server running in other terminal
-6. Run the homebase server
+6. Run the homebase server  
 	```node homebase_server.js```
-7. Run the rover server to post data to homebase
+7. Run the rover server to post data to homebase  
 	```node rover_server.js```
 
 
