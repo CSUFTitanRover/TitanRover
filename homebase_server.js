@@ -23,7 +23,7 @@ mongo.connect("mongodb://localhost:6969/test", function(err, db) {
 	}
 	else {
 		console.log("########## Failed to Connect to Database ##########");
-		throw new Error("Terminating the server database not started");
+		throw new Error("\n\n\tTerminating the server database not started\n\n\n");
 	}
 
 });
@@ -38,33 +38,42 @@ app.use('/data', function(req, res, next) {
 })
 
 app.post('/data', function(req, res, next) {
-    console.log(req.body);
     var request = req.body;
+
+	// Will return OK if everything is fine
+	var statusCode = 200;
+
+	if (request.id != undefined) {
 
     // The id will be what kind of data this is
     // saving it into a json file for now 
     // Should probably use either mysql or mongodb to store the data for quick access
-    switch(request.id)
-    {
-        case 0:
-			// Store in the database
-            database.collection('data').insertOne(request);
-            console.log("Storing mobility data");
-            break;
-        case 1:
-			// Store in the database
-            database.collection('data').insertOne(request);
-            console.log("Storing sensor data");
-            break;
-        // Make more for the sensors
+		switch(request.id)
+		{
+		    case 0:
+				// Store in the database
+		        database.collection('data').insertOne(request);
+		        console.log("======= Storing Mobility =======");
+		        break;
+		    case 1:
+				// Store in the database
+		        database.collection('data').insertOne(request);
+		        console.log("======= Storing Sensor 1 =======");
+		        break;
+		    // Make more for the sensors
 
-		default:
-			// The ID does not match or is not included
-			res.sendStatus(400);
-    }
+			default:
+				// The ID does not match or is not included
+				statusCode = 400;
+				console.log("####### INVALID REQUEST ID #######");
+		}
+	}
+	else {
+		statusCode = 400;
+		console.log("####### INVALID REQUEST FORMAT ########");
+	}
 
-
-    res.sendStatus(200);
+    res.sendStatus(statusCode);
 });
 
 // Shutdown the server and close the database on ctrl+c press
