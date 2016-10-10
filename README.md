@@ -17,10 +17,10 @@ Launch the app
 
 In one terminal run the homebase server with
 
-'''node homebase_server.js'''
+```node homebase_server.js```
 
 then in other terminal run the rover server and it should post data to homebase server
 
-'''node rover_server.js'''
+```node rover_server.js```
 
 If you want to change the data passed in the rover_server.js file modify the post_data object to whatever you want
