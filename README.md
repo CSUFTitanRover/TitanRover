@@ -38,4 +38,22 @@ This should show all the data inserted into the database
 
 
 If you want to change the data passed in the rover_server.js file modify the post_data object to whatever you want  
-*Will need to have id in order for it to work*
+*Will need to have id in order for it to work*  
+
+
+## Send Joystick Data
+
+1. Start the joystick server first  
+	```node joystick_receiver.js```  
+2. Then start the joystick sender  
+	```node Joystick_Sender.js```  
+3. Play with the joystick  
+	As of now it only works on linux machines  
+	*Might need to install joystick module on linux*  
+	```sudo apt-get install joystick```  
+
+### If you just want to see joystick data in the termianl  
+
+1. Run jstest  
+	```jstest /dev/input/js0```  
+2. Watch the values change  

@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "dgram": "^1.0.1",
     "express": "^4.14.0",
     "johnny-five": "^0.10.0",
     "joystick": "^0.1.2",
