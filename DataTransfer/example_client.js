@@ -1,3 +1,10 @@
+/*
+  Author: Joseph Porter
+  Titan Rover - Example for sending to the homebase server 
+  Description: 
+    
+    Just an example to send data to the homebase serverx
+*/
 var request = require('request');
 
 // Need to find a way to get science sensors to send data back to rovers server

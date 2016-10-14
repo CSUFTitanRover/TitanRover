@@ -1,3 +1,14 @@
+/*
+  Author: Joseph Porter
+  Titan Rover - Server for the Homebase station 
+  Description: 
+    
+    Will accept any data sent from the rover subsystems
+    and save it into a MongoDB
+    
+    Will also provide a api endpoint to get all the data
+    based on id to display in UI elements
+*/
 var express = require('express');
 var fs = require('fs');
 var bodyParser = require('body-parser')
@@ -46,8 +57,7 @@ app.post('/data', function(req, res, next) {
 	if (request.id != undefined) {
 
     // The id will be what kind of data this is
-    // saving it into a json file for now 
-    // Should probably use either mysql or mongodb to store the data for quick access
+    // probably don't need the switch statement leaving it for testing
 		switch(request.id)
 		{
 		    case 0:

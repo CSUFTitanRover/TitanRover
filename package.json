@@ -12,6 +12,7 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "johnny-five": "^0.10.0",
+    "joystick": "^0.1.2",
     "mongodb": "^2.2.10",
     "pubnub": "^4.0.8",
     "request": "^2.75.0"
