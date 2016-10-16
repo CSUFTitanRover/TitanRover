@@ -5,9 +5,16 @@
     
     Will accept any data sent from the rover subsystems
     and save it into a MongoDB
+
+	Must be in this format:
+	
+	{ "id" : value, "timestamp" : Date.now(), "sensorData1" : value ........ }
     
-    Will also provide a api endpoint to get all the data
-    based on id to display in UI elements
+    Use the API endpoint to query data
+	To get all the data by id use this URL
+
+	http://localhost:3000/getdata/:id		id must be a value
+	Will return the values as JSON
 */
 var express = require('express');
 var fs = require('fs');
@@ -18,10 +25,14 @@ var mongo = require('mongodb').MongoClient;
 // Will be set when we connect to the MongoDB
 var database;
 
+// Log all the storing and data retrieval into a log file
+var logger = fs.createWriteStream('serverLog.txt', {flags: 'a'});
+
 
 // Start the server
 var server = app.listen(3000, function() {
 	console.log("============ Server is up and running on port: ", server.address().port, "=============");
+	logger.write(Date.now() + ": Started server\n");
 });
 
 
@@ -30,67 +41,83 @@ var server = app.listen(3000, function() {
 mongo.connect("mongodb://localhost:6969/test", function(err, db) {
 	if (!err) {
 		console.log("=========== Connected to MongoDB =============");
+		logger.write(Date.now() + ": Connected to MongoDB\n");
 		database = db
 	}
 	else {
 		console.log("########## Failed to Connect to Database ##########");
+		logger.write(Date.now() + ": Failed to connect to Database Error: " + err + '\n');
 		throw new Error("\n\n\tTerminating the server database not started\n\n\n");
 	}
 
 });
 
+
 // parse application/json
 app.use(bodyParser.json())
 
 
+app.param('id_val', function(req, res, next, id_val) {
+	logger.write(Date.now() + ": +++++++ Getting Data ID: " + id_val + " +++++++\n");	
+	next();
+});
+
+
+app.get('/getdata/:id_val', function(req, res) {
+	database.collection('data').find({ id: parseInt(req.params.id_val) }).toArray(function(err, result) {
+		if (err) {
+			console.log(err);
+			logger.write(Date.now() + ": Error finding data: " + err + '\n');
+			res.sendStatus(400);
+		} 
+		else if (result.length) {
+			logger.write(Date.now() + ": Found results with id: " + req.params.id_val + '\n');
+			res.json(result);
+		}
+		else {
+			res.json({ "message" : "no data or invalid id" });
+		}
+	});	
+});
+
+
+
+// Store the incoming data into a mongo db
 app.use('/data', function(req, res, next) {
-    console.log("======= Storing Data ========");
-    next();
+	logger.write(Date.now() + ": ======= Storing Data ID: " + req.body.id + " ========\n");
+	next();
 })
 
+
 app.post('/data', function(req, res, next) {
-    var request = req.body;
+	var request = req.body;
 
 	// Will return OK if everything is fine
 	var statusCode = 200;
 
 	if (request.id != undefined) {
 
-    // The id will be what kind of data this is
-    // probably don't need the switch statement leaving it for testing
-		switch(request.id)
-		{
-		    case 0:
-				// Store in the database
-		        database.collection('data').insertOne(request);
-		        console.log("======= Storing Mobility =======");
-		        break;
-		    case 1:
-				// Store in the database
-		        database.collection('data').insertOne(request);
-		        console.log("======= Storing Sensor 1 =======");
-		        break;
-		    // Make more for the sensors
+		// Store the data within the MongoDB
 
-			default:
-				// The ID does not match or is not included
-				statusCode = 400;
-				console.log("####### INVALID REQUEST ID #######");
-		}
+		database.collection('data').insertOne(request);
 	}
 	else {
 		statusCode = 400;
 		console.log("####### INVALID REQUEST FORMAT ########");
 	}
 
-    res.sendStatus(statusCode);
+	res.sendStatus(statusCode);
 });
+
 
 // Shutdown the server and close the database on ctrl+c press
 // This shutdowns the connections gracfully
 process.on( 'SIGINT', function() {
 	console.log("\n####### Server shutting down #######\n");
+	logger.write(Date.now() + ": Server shutting down\n");
 	database.close();
-  // some other closing procedures go here
+	logger.end();
+	logger.close();
+	// some other closing procedures go here
 	process.exit( );
 });

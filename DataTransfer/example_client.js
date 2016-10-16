@@ -12,24 +12,24 @@ var request = require('request');
 
 // Example data from sensor
 var post_data = {
-    id: 1,
-    timestamp: Date.now(),
-    sensordata: Math.random()
+	id: 0,
+	timestamp: Date.now(),
+	sensordata: Math.random()
 };
 
 
 
 // Send the data to the home base server
 request.post({
-        url: 'http://localhost:3000/data',
-        method: 'POST',
-        json: true,
-        body: post_data
-    }, function(error, res, body) {
-        if (error) {
-            console.log(error);
-        }
-        else {
-            console.log(res.statusCode);
-        }
-    });
+		url: 'http://localhost:3000/data',
+		method: 'POST',
+		json: true,
+		body: post_data
+	}, function(error, res, body) {
+		if (error) {
+			console.log(error);
+		}
+		else {
+			console.log(res.statusCode);
+		}
+	});

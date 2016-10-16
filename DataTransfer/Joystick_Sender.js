@@ -47,13 +47,13 @@ function onJoystickData(event) {
 
 	var message = new Buffer(JSON.stringify(event));
 
-    client.send(message, 0, message.length, 5000, "localhost", function(err) {
-        if (err) {
-            console.log("Problem with sending data!!!");
-        }
-        else {
-            console.log("Sent the data!!!")
-        }
+	client.send(message, 0, message.length, 5000, "localhost", function(err) {
+		if (err) {
+			console.log("Problem with sending data!!!");
+		}
+		else {
+			console.log("Sent the data!!!")
+		}
 		//client.close();
-    });
+	});
 }

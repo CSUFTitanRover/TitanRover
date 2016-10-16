@@ -2,3 +2,4 @@
 *.json
 node_modules
 .DS_STORE
+*.txt
