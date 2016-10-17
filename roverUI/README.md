@@ -2,6 +2,12 @@
 
 So I'm using the create-react-app as a base template for developing the webpage. The one thing that is not included in this github page is the node_modules folder which contains over 500+ items. Don't worry... running 'npm run build' heavily optimizes the final product. Still trying to figure out how to organize things but I'm making some progress.
 
+If you want to download and run the react app, the only way I can see about doing so is:
+  1. Go to the [Create React App Page](https://github.com/facebookincubator/create-react-app) and installing the template on your own computer. 
+  2. Then download the files from this github folder and replace the existing files with the roverUI ones.
+  3. Then type into the console ```npm start```
+    - the webpage should load at ```http://localhost:3000/```
+
 What we're aiming for:
   - [mockup 1](https://dl.dropboxusercontent.com/content_link/6C5v4HFFpQiJTpDargWvXSmK2X0ZGe5buHlWCUEWxQDoYJXyFrjKRdcpvRnLhxn9/file)
   - [mockup 2](https://dl.dropboxusercontent.com/content_link/ro45415L15vtbtSq2NMxX9pDARye3cp94dbJNJb9mmjNRNixlJHnl2bu5lwKqFRh/file)
