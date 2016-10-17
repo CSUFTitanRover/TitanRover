@@ -4,8 +4,8 @@ So I'm using the create-react-app as a base template for developing the webpage.
 
 If you want to download and run the react app, the only way I can see about doing so is:
   1. Go to the [Create React App Page](https://github.com/facebookincubator/create-react-app) and installing the template on your own computer. 
-  2. Then download the files from this github folder and replace the existing files with the roverUI ones.
-  3. Then type into the console ```npm start```
+  2. Download the files from this github folder and replace the existing files with the roverUI ones.
+  3. Then type into a console ```npm start```
     - the webpage should load at ```http://localhost:3000/```
 
 What we're aiming for:
