@@ -1,0 +1,20 @@
+#nav-header {
+    width: 20%;
+    height: 100vh; /*might need to change when the main content has srollbars*/
+    background: #242424;
+    display: flex;
+    flex-flow: column;
+    color: white;
+}
+
+#main-content {
+    width: 100%;
+    /*height: 100vh; -- might need to change */
+    height: 100%;
+    background: white;
+    padding: 50px;
+}
+
+#root {
+    display: flex;
+}
