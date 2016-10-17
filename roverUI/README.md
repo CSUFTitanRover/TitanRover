@@ -1,3 +1,15 @@
+# Important!
+
+So I'm using the create-react-app as a base template for developing the webpage. The one thing that is not included in this github page is the node_modules folder which contains over 500+ items. Don't worry... running 'npm run build' heavily optimizes the final product. Still trying to figure out how to organize things but I'm making some progress.
+
+What we're aiming for:
+  - [mockup 1](https://dl.dropboxusercontent.com/content_link/6C5v4HFFpQiJTpDargWvXSmK2X0ZGe5buHlWCUEWxQDoYJXyFrjKRdcpvRnLhxn9/file)
+  - [mockup 2](https://dl.dropboxusercontent.com/content_link/ro45415L15vtbtSq2NMxX9pDARye3cp94dbJNJb9mmjNRNixlJHnl2bu5lwKqFRh/file)
+
+\- Weffe (Michael)
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.  
