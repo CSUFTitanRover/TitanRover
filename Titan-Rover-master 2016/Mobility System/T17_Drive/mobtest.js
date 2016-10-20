@@ -1,3 +1,5 @@
+/* mobtest sends joystick values to the steermotors function*/
+
 console.log('Loading');
 var joystick = new (require('joystick'))(0, 3500, 350);
 var steerMotors = require('diff-steer/motor_control');
