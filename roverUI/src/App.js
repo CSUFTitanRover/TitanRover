@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import Navbar from './components/Navbar.js';
-import MainContent from './components/MainContent';
+import Navbar from './components/Navbar';
 import './App.css';
 
 class App extends Component {
@@ -8,7 +7,9 @@ class App extends Component {
         return (
             <div id="root">
                 <Navbar/>
-                <MainContent/>
+                <div id="main-content">
+                    {this.props.children}
+                </div>
             </div>
         );
     }
