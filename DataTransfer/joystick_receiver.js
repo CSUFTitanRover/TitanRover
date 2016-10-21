@@ -7,7 +7,7 @@
 	the controller.
 */
 var PORT = 5000;
-var HOST = 'localhost';
+var HOST = '192.168.0.13';
 
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');

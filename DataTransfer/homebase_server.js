@@ -57,7 +57,7 @@ mongo.connect("mongodb://localhost:6969/test", function(err, db) {
 app.use(bodyParser.json())
 
 
-app.param('id_val', function(req, res, next, id_val) {
+app.param(['id_val', 'startTime', 'endTime'] function(req, res, next, id_val, startTime, endTime) {
 	logger.write(Date.now() + ": +++++++ Getting Data ID: " + id_val + " +++++++\n");	
 	next();
 });
@@ -78,6 +78,10 @@ app.get('/getdata/:id_val', function(req, res) {
 			res.json({ "message" : "no data or invalid id" });
 		}
 	});	
+});
+
+app.get('/getdata/:id_val/:startTime/:endTime', function(req, res) {
+    database.collection('data').find({ id: parseInt(req.params.id_val), timestamp : { $gt parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}});
 });
 
 
