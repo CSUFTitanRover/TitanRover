@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import ModuleLink from './ModuleLink';
 import './Navbar.css';
+import { Link } from 'react-router';
+
+// wrapper class for Links
+class NavLink extends Component {
+    render () {
+        return <Link {...this.props} activeClassName="active"/>
+    }
+}
 
 class Navbar extends Component {
     render() {
@@ -11,18 +18,13 @@ class Navbar extends Component {
                 </div>
                 <nav>
                     <ul>
-                        <li className="folder"><ModuleLink name="Overview" focusState="true"/>
+                        <li className="folder">
+                            <span><NavLink to="/" onlyActiveOnIndex={true}>Overview</NavLink></span>
                             <ul>
-                                <li><ModuleLink name="Module Name #1"/></li>
-                                <li><ModuleLink name="Module Name #2"/></li>
-                                <li><ModuleLink name="Module Name #3"/></li>
-                                <li><ModuleLink name="Module Name #4"/></li>
-                                <li><ModuleLink name="Live Feed (Front)"/></li>
-                                <li><ModuleLink name="Live Feed (Top)"/></li>
+                                <li><span><NavLink to="/module1">Module Name #1</NavLink></span></li>
+                                <li><span><NavLink to="/module2">Module Name #2</NavLink></span></li>
                             </ul>
                         </li>
-                        <li className="folder"><ModuleLink name="Sensors"/></li>
-                        <li className="folder"><ModuleLink name="Resources"/></li>
                     </ul>
                 </nav>
             </header>
