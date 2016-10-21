@@ -81,7 +81,20 @@ app.get('/getdata/:id_val', function(req, res) {
 });
 
 app.get('/getdata/:id_val/:startTime/:endTime', function(req, res) {
-    database.collection('data').find({ id: parseInt(req.params.id_val), timestamp : { $gt parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}});
+    database.collection('data').find({ id: parseInt(req.params.id_val), timestamp : { $gt parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}}).toArray(function(err, result) {
+      if (err) {
+          console.log(err);
+          logger.write(Date.now() + ": Error finding data: " + err + '\n');
+          res.sendStatus(400);
+        }
+        else if (result.length) {
+            logger.write(Date.now() + ": Found results with id: " + req.params.id_val + " with start and end time\n");
+            res.json(result);
+        }
+        else {
+            res.json({"message" : "Invalid ID or incorrect format");
+        }
+    });
 });
 
 
