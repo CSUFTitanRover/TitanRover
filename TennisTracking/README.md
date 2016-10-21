@@ -7,7 +7,7 @@ This will take a long time to download and will take about 3.9Gb of data.  Only 
 2. Run the python script to track Tennis ball  
 	```python ball_tracking.py```  
 
-![Tennis Ball](./pics/ball.png?raw=true "Ball Tracking")
+![Tennis Ball](https://github.com/justindstewart/TitanRover17/tree/v1/TennisTracking/pics/ball.png?raw=true "Ball Tracking")
 
 ## Additional Features  
 If you want to see what else opencv has to offer.  
@@ -18,4 +18,4 @@ If you want to see what else opencv has to offer.
 4. Run any script some don't work cause you need pictures  
 	The face finding one is pretty neat.
 
-![Awesome Face](./pics/facedetect.png?raw=true "Facedetect")
+![Awesome Face](https://github.com/justindstewart/TitanRover17/tree/v1/TennisTracking/pics/facedetect.png?raw=true "Facedetect")
