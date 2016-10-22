@@ -2,6 +2,7 @@
     background: #054970;
     box-shadow: inset 0px 3px 25px #0c72a9;
     padding: 30px;
+    border-bottom:1px solid black;
 }
 
 .brand h1 {
@@ -15,11 +16,26 @@ ul, li {
 }
 
 .active {
-    background: white;
+    background: white !important;
     color: #054970;
 }
 
-.folder ul {
+nav a {
+    display: block;
+    text-decoration: none;
+    color: white;
+}
+
+nav a:hover {
+    background: #333333;
+}
+
+nav a > span {
+    padding: 10px;
+    display: inherit;
+}
+
+nav .subfolder a > span {
     margin-left: 40px;
 }
 

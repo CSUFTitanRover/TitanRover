@@ -1,10 +1,11 @@
 #nav-header {
-    width: 20%;
-    height: 100vh; /*might need to change when the main content has srollbars*/
+    min-width: 300px;
+    min-height: 100vh; /*might need to change when the main content has srollbars*/
     background: #242424;
     display: flex;
     flex-flow: column;
     color: white;
+    flex-grow: 1;
 }
 
 #main-content {
@@ -17,4 +18,39 @@
 
 #root {
     display: flex;
+}
+
+#met {
+    padding: 10px;
+    width: 225px;
+    border: 1px solid lightgrey;
+    margin: -27px 0px 20px 0px !important;
+}
+
+#met span {
+    padding-right: 5px;
+    color: #086298;
+}
+
+#met h4 {
+    color: darkorange;
+    padding-bottom: 8px;
+    font-weight: bold
+}
+#met .utc {
+    color: black;
+    font-weight: bold;
+}
+
+.module {
+    padding: 10px;
+    border: 1px solid lightgrey;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-weight: bold;
+    font-size: 20px;
+    padding-bottom: 15px;
+    color: darkorange;
 }

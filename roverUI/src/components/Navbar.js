@@ -17,12 +17,14 @@ class Navbar extends Component {
                     <h1>Titan Rover</h1>
                 </div>
                 <nav>
-                    <ul>
-                        <li className="folder">
-                            <span><NavLink to="/" onlyActiveOnIndex={true}>Overview</NavLink></span>
-                            <ul>
-                                <li><span><NavLink to="/module1">Module Name #1</NavLink></span></li>
-                                <li><span><NavLink to="/module2">Module Name #2</NavLink></span></li>
+                    <ul className="folder">
+                        <li>
+                            <NavLink to="/" onlyActiveOnIndex={true}><span>Overview</span></NavLink>
+                            <ul className="subfolder">
+                                <li><NavLink to="/chart1"><span>Chart #1</span></NavLink></li>
+                                <li><NavLink to="/module2"><span>Module Name #2</span></NavLink></li>
+                                <li><NavLink to="/chart2"><span>Chart #2</span></NavLink></li>
+                                <li><NavLink to="/chart3"><span>Chart #3</span></NavLink></li>
                             </ul>
                         </li>
                     </ul>
