@@ -7,8 +7,11 @@
     "react-scripts": "0.6.1"
   },
   "dependencies": {
+    "c3": "^0.4.11",
+    "d3": "^4.2.8",
     "react": "^15.3.2",
-    "react-dom": "^15.3.2"
+    "react-dom": "^15.3.2",
+    "react-router": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
