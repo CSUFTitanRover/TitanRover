@@ -25,6 +25,7 @@ class Navbar extends Component {
                                 <li><NavLink to="/module2"><span>Module Name #2</span></NavLink></li>
                                 <li><NavLink to="/chart2"><span>Chart #2</span></NavLink></li>
                                 <li><NavLink to="/chart3"><span>Chart #3</span></NavLink></li>
+                                <li><NavLink to="/cameras"><span>Camera Feeds</span></NavLink></li>
                             </ul>
                         </li>
                     </ul>
