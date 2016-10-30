@@ -39,3 +39,38 @@ nav .subfolder a > span {
     margin-left: 40px;
 }
 
+.link-text {
+
+}
+.link-text:before {
+
+}
+.file-line {
+    position: absolute;
+}
+.file-line:before {
+    content: '';
+    display: inline-block;
+    border-left: 1px solid white;
+    width: 1px;
+    height: 36px;
+    margin-top: -10px;
+    margin-left: -25px;
+}
+.file-line:after {
+    content: '';
+    display: inline-block;
+    border-top: 1px solid white;
+    width: 15px;
+    height: 1px;
+    margin-bottom: 16px;
+    margin-left: -1px;
+}
+.active .file-line:before, .active .file-line:after {
+    border-color: #054970 !important;
+}
+
+.subfolder li:last-child .file-line:before {
+    height:18px;
+    margin-bottom: 17px;
+}

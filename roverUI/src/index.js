@@ -13,6 +13,7 @@ let routes = (
             <Route path="chart2" component={Modules.Chart2} />
             <Route path="chart3" component={Modules.Chart3} />
             <Route path="module2" component={Modules.Module2} />
+            <Route path="cameras" component={Modules.CameraModule} />
             <Route path="*" component={Modules.FourOhFour} />
         </Route>
     </Router>
