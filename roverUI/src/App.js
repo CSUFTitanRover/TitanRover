@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import MET from './components/modules_dir/MissionElapsedTime';
 import './App.css';
 import './c3.min.css';
+import './font-awesome-4.6.3/css/font-awesome.min.css';
 import 'd3';
 
 class App extends Component {

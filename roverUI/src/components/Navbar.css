@@ -32,10 +32,17 @@ nav a:hover {
 
 nav a > span {
     padding: 10px;
-    display: inherit;
+    display: inline-block;
 }
 
 nav .subfolder a > span {
-    margin-left: 40px;
+    margin-left: 50px;
 }
 
+.fa {
+    margin-left: 10px;
+}
+
+.hidden {
+    display: none;
+}
