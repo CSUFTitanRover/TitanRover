@@ -5,6 +5,9 @@ import Module2 from './modules_dir/Module2';
 import Chart2 from './modules_dir/Chart2';
 import Chart3 from './modules_dir/Chart3';
 import CameraModule from './modules_dir/CameraModule';
+import Resources from './modules_dir/Resources';
+import DummyModule1 from './modules_dir/DummyModule1';
+import DummyModule2 from './modules_dir/DummyModule2';
 
 // grouping modules into a nice package ;)
-export default {FourOhFour, Overview, Chart1, Module2, Chart2, Chart3, CameraModule}
+export default {FourOhFour, Overview, Chart1, Module2, Chart2, Chart3, CameraModule, Resources, DummyModule1, DummyModule2}

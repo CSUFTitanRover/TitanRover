@@ -34,17 +34,13 @@ nav a > span {
     padding: 10px;
     display: inherit;
 }
-
-nav .subfolder a > span {
-    margin-left: 40px;
+.folderroot > span{
+    margin-left: 15px;
+}
+.folderLinks a > span {
+    margin-left: 60px;
 }
 
-.link-text {
-
-}
-.link-text:before {
-
-}
 .file-line {
     position: absolute;
 }
@@ -70,7 +66,7 @@ nav .subfolder a > span {
     border-color: #054970 !important;
 }
 
-.subfolder li:last-child .file-line:before {
+.folderLinks li:last-child .file-line:before {
     height:18px;
     margin-bottom: 17px;
 }

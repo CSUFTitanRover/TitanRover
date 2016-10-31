@@ -14,6 +14,9 @@ let routes = (
             <Route path="chart3" component={Modules.Chart3} />
             <Route path="module2" component={Modules.Module2} />
             <Route path="cameras" component={Modules.CameraModule} />
+            <Route path="resources" component={Modules.Resources} />
+            <Route path="dummymodule1" component={Modules.DummyModule1} />
+            <Route path="dummymodule2" component={Modules.DummyModule2} />
             <Route path="*" component={Modules.FourOhFour} />
         </Route>
     </Router>
