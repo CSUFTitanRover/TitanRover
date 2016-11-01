@@ -28,18 +28,15 @@ class Navbar extends Component {
                         <li>
                             <NavLink to="/" onlyActiveOnIndex={true} text="Overview" />
                             <ul className="subfolder">
-<<<<<<< Updated upstream
                                 <li><NavLink to="/chart1"><span>Chart #1</span></NavLink></li>
                                 <li><NavLink to="/module2"><span>Module Name #2</span></NavLink></li>
                                 <li><NavLink to="/chart2"><span>Chart #2</span></NavLink></li>
                                 <li><NavLink to="/chart3"><span>Chart #3</span></NavLink></li>
                                 <li><NavLink to="/cameras"><span>Camera Feeds</span></NavLink></li>
-=======
                                 <li><NavLink to="/chart1" text="Chart #1" /></li>
                                 <li><NavLink to="/module2" text="Module Name #2" /></li>
                                 <li><NavLink to="/chart2" text="Chart #2" /></li>
                                 <li><NavLink to="/chart3" text="Chart #3" /></li>
->>>>>>> Stashed changes
                             </ul>
                         </li>
                     </ul>
