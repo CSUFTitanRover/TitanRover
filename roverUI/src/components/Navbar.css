@@ -37,7 +37,7 @@ nav a > span {
 .folderroot > span{
     margin-left: 15px;
 }
-.folderLinks a > span {
+.folderlinks a > span {
     margin-left: 60px;
 }
 
@@ -66,7 +66,7 @@ nav a > span {
     border-color: #054970 !important;
 }
 
-.folderLinks li:last-child .file-line:before {
+.folderlinks li:last-child .file-line:before {
     height:18px;
     margin-bottom: 17px;
 }

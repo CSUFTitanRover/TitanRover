@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import Modules from './components/Modules_List';
-import {Router, IndexRoute, Route, browserHistory} from 'react-router';
+import {Router, IndexRoute, Route, browserHistory, refresh} from 'react-router';
 
 let routes = (
-    <Router history={browserHistory}>
+    <Router history={browserHistory} >
         <Route path="/" component={App}>
             <IndexRoute component={Modules.Overview} />
             <Route path="chart1" component={Modules.Chart1} />

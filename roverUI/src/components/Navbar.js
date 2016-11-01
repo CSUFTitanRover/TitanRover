@@ -29,7 +29,7 @@ class Navbar extends Component {
                     <ul>
                         <li>
                             <NavLink to="/" onlyActiveOnIndex={true} folderroot={true} className="folderroot" text="Overview" />
-                            <ul className="folderLinks">
+                            <ul className="folderlinks">
                                 <li><NavLink to="/chart1" text="Chart #1" /></li>
                                 <li><NavLink to="/module2" text="Module Name #2" /></li>
                                 <li><NavLink to="/chart2" text="Chart #2" /></li>
@@ -39,7 +39,7 @@ class Navbar extends Component {
                         </li>
                         <li>
                             <NavLink to="/resources" folderroot={true} className="folderroot" text="Resources" />
-                            <ul className="folderLinks">
+                            <ul className="folderlinks">
                                 <li><NavLink to="/dummymodule1" text="Dummy Module 1" /></li>
                                 <li><NavLink to="/dummymodule2" text="Dummy Module 2" /></li>
                             </ul>

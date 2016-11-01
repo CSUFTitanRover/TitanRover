@@ -5,7 +5,8 @@ class MissionElapsedTime extends Component {
     constructor(props) {
         super(props);
 
-        this.elapsedTime = 0;
+        // load in savedElapsedTime for persistence or default to 0
+        this.elapsedTime = parseInt(localStorage.getItem('savedElapsedTime'), 10) || 0;
         let d = new Date(); // temp date obj
         this.date = d.getFullYear()+'/'+d.getDate()+'/'+(d.getMonth()+1); // date for current day
         this.interval = null;
@@ -16,13 +17,15 @@ class MissionElapsedTime extends Component {
         this.state = {
             isRunning: false,
             resetDisabled: false,
-            elapsedTotalTime: 0
+            // load in savedElapsedTime for persistence or default to 0
+            elapsedTotalTime: (parseInt(localStorage.getItem('savedElapsedTime'), 10) || 0)
         };
     }
 
     tick() {
-        this.elapsedTime += 1;
+        this.elapsedTime = this.elapsedTime + 1;
         this.setState({elapsedTotalTime: this.elapsedTime});
+        localStorage.setItem('savedElapsedTime', this.elapsedTime);
     }
 
     handleStartAndStop() {
@@ -35,11 +38,13 @@ class MissionElapsedTime extends Component {
             this.setState({isRunning: true, resetDisabled: true});
 
             //set the interval for every second
-            this.interval = setInterval(this.tick.bind(this), 1000);
+            this.interval = setInterval(this.tick, 1000);
+
         }
     }
 
     handleStop() {
+        console.log('Stopped elapsedTime: ' + this.elapsedTime);
         this.setState({isRunning: false, resetDisabled: false});
         clearInterval(this.interval);
     }
@@ -47,6 +52,7 @@ class MissionElapsedTime extends Component {
     handleReset() {
         this.elapsedTime = 0;
         this.setState({elapsedTotalTime: 0});
+        localStorage.removeItem('savedElapsedTime')
     }
 
     formatTime(passed_time) {
@@ -58,19 +64,15 @@ class MissionElapsedTime extends Component {
         if (hours   < 10) {hours   = "0"+hours;}
         if (minutes < 10) {minutes = "0"+minutes;}
         if (seconds < 10) {seconds = "0"+seconds;}
+
         return hours+':'+minutes+':'+seconds;
     }
-    /*
-        If the page is accidentally refreshed then the timer is reset
-        check when the component is going to be unmounted if the timer isRunning === true
-        If TRUE, then save the current elapsedTotalTime to storage and load it back in
-        once the page is done refreshing then delete that stored data.
-        Maybe use localStorage???
-     */
-    componentWillUnmount() {
-        clearInterval(this.interval);
-        if (this.state.isRunning) {
-            return;
+
+    componentDidMount() {
+        // check if elapsedTime loaded in a value from localStorage
+        if (this.elapsedTime > 0) {
+            // if so we auto-start the timer
+            this.handleStartAndStop();
         }
     }
 
