@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import Navbar from './components/Navbar';
-import MET from './components/modules_dir/MissionElapsedTime';
+import Navbar from './Navbar';
+import MissionElapsedTime from './MissionElapsedTime';
 import './App.css';
-import './c3.min.css';
 import 'd3';
 
 class App extends Component {
@@ -11,7 +10,7 @@ class App extends Component {
             <div id="root">
                 <Navbar/>
                 <div id="main-content">
-                    <MET/>
+                    <MissionElapsedTime/>
                     {this.props.children}
                 </div>
             </div>

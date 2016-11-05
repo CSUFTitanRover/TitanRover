@@ -1,38 +1,37 @@
 import React, { Component } from 'react';
-import ModuleTemplate from './ModuleTemplate';
+import BaseModuleTemplate from './templates/BaseModuleTemplate';
 
 class MissionElapsedTime extends Component {
     constructor(props) {
         super(props);
 
-        let savedElapsedTime = parseInt(localStorage.getItem('savedElapsedTime'), 10);
-        let savedIsRunning = (localStorage.getItem('savedIsRunning') == "true");  // convert savedIsRunning (str) to a bool type
+        // load in savedElapsedTime or default to 0
+        let savedElapsedTime = parseInt(localStorage.getItem('savedElapsedTime'), 10) || 0;
+        // load in savedIsRunning or default to false
+        let savedIsRunning = (localStorage.getItem('savedIsRunning') == 'true') || false;  // convert savedIsRunning (str) to a bool type
 
-        // load in savedElapsedTime for persistence or default to 0
-        this.elapsedTime = savedElapsedTime || 0;
-        let d = new Date(); // temp date obj
-        this.date = d.getFullYear()+'/'+d.getDate()+'/'+(d.getMonth()+1); // date for current day
-        this.interval = null;
+        let _d = new Date(); // temp date obj
+        this.date = _d.getFullYear() + '/' + _d.getDate() + '/' + (_d.getMonth()+1); // date for current day
         this.tick = this.tick.bind(this);
-        this.handleStartAndStop = this.handleStartAndStop.bind(this);
+        this.handleStartAndPause = this.handleStartAndPause.bind(this);
         this.handleReset = this.handleReset.bind(this);
 
         this.state = {
-            // load in savedIsRunning or default to false
-            isRunning: ( savedIsRunning || false),
+            isRunning: savedIsRunning,
             resetDisabled: false,
-            // load in savedElapsedTime for persistence or default to 0
-            elapsedTotalTime: ( savedElapsedTime || 0)
+            elapsedTotalTime: savedElapsedTime
         };
     }
 
     tick() {
-        this.elapsedTime += 1;
-        this.setState({elapsedTotalTime: this.elapsedTime});
-        localStorage.setItem('savedElapsedTime', this.elapsedTime);
+        this.setState((prevState) => ({
+            elapsedTotalTime: prevState.elapsedTotalTime + 1
+        }));
+
+        localStorage.setItem('savedElapsedTime', this.state.elapsedTotalTime);
     }
 
-    handleStartAndStop() {
+    handleStartAndPause() {
         // check if the stopwatch is running already stop it
         if (this.state.isRunning) {
             this.handleStop();
@@ -54,7 +53,6 @@ class MissionElapsedTime extends Component {
     }
 
     handleReset() {
-        this.elapsedTime = 0;
         this.setState({elapsedTotalTime: 0});
         localStorage.removeItem('savedElapsedTime');
     }
@@ -88,18 +86,18 @@ class MissionElapsedTime extends Component {
         let resetDisabledState = (this.state.resetDisabled) ? 'disabled' : null;
 
         return (
-            <ModuleTemplate id="met" moduleName="Mission Elapsed Time">
+            <BaseModuleTemplate id="met" moduleName="Mission Elapsed Time">
                 <span className="utc">UTC</span>
                 <span className="date">{this.date}</span>
                 <time>
                     {formatted_time}
                 </time>
                 <div className="controls">
-                    <button onClick={this.handleStartAndStop}>{isRunningState}</button>
+                    <button onClick={this.handleStartAndPause}>{isRunningState}</button>
                     <button onClick={this.handleReset} disabled={resetDisabledState}>Reset</button>
                 </div>
 
-            </ModuleTemplate>
+            </BaseModuleTemplate>
         )
     }
 

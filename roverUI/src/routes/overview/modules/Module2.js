@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import ModuleTemplate from './ModuleTemplate';
+import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
 
 class Module2 extends Component {
     render() {
         return (
-            <ModuleTemplate moduleName="Module #2">
+            <BaseModuleTemplate moduleName="Module #2">
                 <p>
                     I wonder... I wonder, if there in your mind,
                     Do you still remember that moment behind?
@@ -24,7 +24,7 @@ class Module2 extends Component {
                     Remember September 11th, and live.
 
                 </p>
-            </ModuleTemplate>
+            </BaseModuleTemplate>
         );
     }
 }
