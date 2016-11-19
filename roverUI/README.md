@@ -1,3 +1,14 @@
+# Testing Socket IO
+
+So I sort of got socket io to work and send random data to each of the clients (our chart modules). 
+
+To see the random data appear on the webpage you need to:
+
+1. In a console: ```npm start``` for the ui webpage
+2. In a separate console: ```node test_server``` to generate random data and send to the clients
+
+Then, you should see random data being generated for each chart.
+
 # Important!
 
 So I'm using the create-react-app as a base template for developing the webpage. The one thing that is not included in this github page is the node_modules folder which contains over 500+ items. Don't worry... running ```npm run build``` heavily optimizes the final product. Still trying to figure out how to organize things but I'm making some progress.

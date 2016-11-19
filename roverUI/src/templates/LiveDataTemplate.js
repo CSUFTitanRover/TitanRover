@@ -1,29 +1,32 @@
 import React, { Component } from 'react';
 import c3 from 'c3';
-import socket from 'socket.io';
+import io from 'socket.io-client';
+
 
 class LiveDataTemplate extends Component {
 
     constructor(props) {
         super(props);
 
+        this.ioClient = io.connect('http://localhost:8000'); // location where the server is ran
+                                                            // don't know about manually setting where to connect the clients to...
         this.state = {
-            columns: []
+            columns: [],
+            msg: null
         };
     }
 
     componentDidMount() {
-        socket.on('init', this._initialize);
-        socket.on('send:message', this._messageRecieve);
-        socket.on('user:join', this._userJoined);
-        socket.on('user:left', this._userLeft);
-        socket.on('change:name', this._userChangedName);
+        let self = this;
+        this.ioClient.on('message', function(passed_msg){
+            self.setState({msg: passed_msg});
+        });
 
         this._renderChart();
 
     }
     componentDidUpdate() {
-        this._renderChart();
+        //this._renderChart();
     }
 
     _renderChart() {
@@ -35,7 +38,10 @@ class LiveDataTemplate extends Component {
 
     render() {
         return (
-            <div id={this.props.chartId}></div>
+            <div>
+                {this.state.msg}
+                <div id={this.props.chartId} />
+            </div>
         );
     }
 }
@@ -46,5 +52,5 @@ export default LiveDataTemplate;
 TODO:
 - write the client side for socket io to see what requests are sent to React
 - figure out the server side socket io for how that data is going to be sent to Client side
-- what data is going to be udpated? Just chart.columns?
+- 8 modules needed for the page!
  */
