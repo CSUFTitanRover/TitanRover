@@ -1,38 +1,31 @@
-var io = require('socket.io');
-var ioServer = io.listen(8000);
+var io = require('socket.io').listen(8000); // start io server at port 8000 to listen at
 var sequence = 1;
 var clients = [];
 
+// Socket Events
 // Event fired every time a new client connects:
-ioServer.on('connection', function(socket) {
-    console.info('New client connected (id=' + socket.id + ').');
-    clients.push(socket);
+io.on('connection', function(socketClient) {
+    console.info('New client connected (id=' + socketClient.id + ').');
+    clients.push(socketClient);
 
     // When socket disconnects, remove it from the list:
-    socket.on('disconnect', function() {
-        var index = clients.indexOf(socket);
+    socketClient.on('disconnect', function() {
+        var index = clients.indexOf(socketClient);
         if (index != -1) {
             clients.splice(index, 1);
-            console.info('Client disconnected (id=' + socket.id + ').');
+            console.info('Client disconnected (id=' + socketClient.id + ').');
         }
     });
 });
 
-var counter = 1;
 setInterval(function() {
-    /*
-    // Every 1 second, sends a message to a random client:
-    var randomClient;
-    if (clients.length > 0) {
-        randomClient = Math.floor(Math.random() * clients.length);
-        clients[randomClient].emit('message', sequence++);
-    }*/
+    clients.forEach(function(socketClient) {
+        io.to(socketClient.id).emit('update: chart data', [generateRandomData(), generateRandomData()]);
+    });
 
-    if (clients.length > 0) {
-        randomClientID = clients[Math.floor(Math.random() * clients.length)];
-
-        console.info('Sending info to client id: ', randomClientID);
-        ioServer.to(randomClientID.id).emit('message', 'This will be receieved randomly. Random Counter ID: ' + counter);
-        counter++;
-    }
 }, 1000);
+
+// random int between 100 to 500
+function generateRandomData() {
+    return Math.floor(Math.random() * 500);
+}

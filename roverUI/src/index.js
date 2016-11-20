@@ -11,8 +11,6 @@ let routes = (
 
             <IndexRoute component={Modules.Overview.Overview} />
             <Route path="chart1" component={Modules.Overview.Chart1} />
-            <Route path="chart2" component={Modules.Overview.Chart2} />
-            <Route path="chart3" component={Modules.Overview.Chart3} />
             <Route path="module2" component={Modules.Overview.Module2} />
             <Route path="livefeeds" component={Modules.Overview.LiveFeeds}>
                 <Route path="/frontcamera" component={Modules.Overview.FrontCamera} />

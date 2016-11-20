@@ -32,8 +32,6 @@ class Navbar extends Component {
                             <ul className="folderlinks">
                                 <li><NavLink to="/chart1" text="Chart #1" /></li>
                                 <li><NavLink to="/module2" text="Module Name #2" /></li>
-                                <li><NavLink to="/chart2" text="Chart #2" /></li>
-                                <li><NavLink to="/chart3" text="Chart #3" /></li>
                                 <li><NavLink to="/livefeeds" text="Live Feeds" /></li>
                             </ul>
                         </li>
