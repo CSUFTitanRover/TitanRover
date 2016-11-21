@@ -17,9 +17,21 @@ var post_data = {
 	sensordata: Math.random()
 };
 
+// Example data from multiple sensors.
+var multi_data = [
+	{ id: 0, timestamp: Date.now(), Temperature: Math.random()},
+	{ id: 1, timestamp: Date.now(), WaterDepth: Math.random()},
+	{ id: 0, timestamp: Date.now(), Temperature: Math.random()},
+	{ id: 1, timestamp: Date.now(), WaterDepth: Math.random()},
+	{ id: 0, timestamp: Date.now(), Temperature: Math.random()},
+	{ id: 1, timestamp: Date.now(), WaterDepth: Math.random()},
+	{ id: 0, timestamp: Date.now(), Temperature: Math.random()},
+	{ id: 1, timestamp: Date.now(), WaterDepth: Math.random()}
+]
 
 
-// Send the data to the home base server
+
+// Send the data to the home base server single value
 request.post({
 		url: 'http://localhost:3000/data',
 		method: 'POST',
@@ -33,3 +45,17 @@ request.post({
 			console.log(res.statusCode);
 		}
 	});
+
+request.post({
+	url: 'http://localhost:3000/dataMulti',
+	method: 'POST',
+	json: true,
+	body: multi_data
+}, function(error, res, body) {
+	if (error) {
+		console.log(error);
+	}
+	else {
+		console.log(res.statusCode);
+	}
+});

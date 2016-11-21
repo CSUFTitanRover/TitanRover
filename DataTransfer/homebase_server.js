@@ -57,12 +57,14 @@ mongo.connect("mongodb://localhost:6969/test", function(err, db) {
 app.use(bodyParser.json())
 
 
-app.param(['id_val', 'startTime', 'endTime'] function(req, res, next, id_val, startTime, endTime) {
+app.param(['id_val', 'startTime', 'endTime'], function(req, res, next, id_val, startTime, endTime) {
 	logger.write(Date.now() + ": +++++++ Getting Data ID: " + id_val + " +++++++\n");	
 	next();
 });
 
 
+// Will return all the data points with a specific id
+// Example use: http://localhost:3000/getdata/3
 app.get('/getdata/:id_val', function(req, res) {
 	database.collection('data').find({ id: parseInt(req.params.id_val) }).toArray(function(err, result) {
 		if (err) {
@@ -80,8 +82,11 @@ app.get('/getdata/:id_val', function(req, res) {
 	});	
 });
 
+
+// Will return all data points within a specific time range
+// The time range has to be in epoch time.
 app.get('/getdata/:id_val/:startTime/:endTime', function(req, res) {
-    database.collection('data').find({ id: parseInt(req.params.id_val), timestamp : { $gt parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}}).toArray(function(err, result) {
+    database.collection('data').find({ id: parseInt(req.params.id_val), timestamp : { $gt: parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}}).toArray(function(err, result) {
       if (err) {
           console.log(err);
           logger.write(Date.now() + ": Error finding data: " + err + '\n');
@@ -92,7 +97,7 @@ app.get('/getdata/:id_val/:startTime/:endTime', function(req, res) {
             res.json(result);
         }
         else {
-            res.json({"message" : "Invalid ID or incorrect format");
+            res.json({"message" : "Invalid ID or incorrect format"});
         }
     });
 });
@@ -103,9 +108,10 @@ app.get('/getdata/:id_val/:startTime/:endTime', function(req, res) {
 app.use('/data', function(req, res, next) {
 	logger.write(Date.now() + ": ======= Storing Data ID: " + req.body.id + " ========\n");
 	next();
-})
+});
 
-
+// Store a single value at a time.
+// Needs to be incorrect format for it to work
 app.post('/data', function(req, res, next) {
 	var request = req.body;
 
@@ -124,6 +130,21 @@ app.post('/data', function(req, res, next) {
 	}
 
 	res.sendStatus(statusCode);
+});
+
+app.use('/dataMulti', function(req, res, next) {
+	logger.write(Date.now() + ": ======= Storing Multiple values =========\n");
+	next();
+})
+
+// Send Multi data at the same time.
+// Every line needs a id and timestamp
+app.post('/dataMulti', function(req, res, next) {
+	var request = req.body;
+
+	database.collection('data').insert(request);
+	res.sendStatus(200);
+
 });
 
 
