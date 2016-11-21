@@ -57,20 +57,22 @@ mongo.connect("mongodb://localhost:6969/test", function(err, db) {
 app.use(bodyParser.json())
 
 
-app.param(['id_val', 'startTime', 'endTime'] function(req, res, next, id_val, startTime, endTime) {
+app.param(['id_val', 'startTime', 'endTime'], function(req, res, next, id_val, startTime, endTime) {
 	logger.write(Date.now() + ": +++++++ Getting Data ID: " + id_val + " +++++++\n");	
 	next();
 });
 
 
+// Will return all the data points with a specific id
+// Example use: http://localhost:3000/getdata/3
 app.get('/getdata/:id_val', function(req, res) {
 	database.collection('data').find({ id: parseInt(req.params.id_val) }).toArray(function(err, result) {
 		if (err) {
 			console.log(err);
 			logger.write(Date.now() + ": Error finding data: " + err + '\n');
-			res.sendStatus(400);
 		} 
 		else if (result.length) {
+			console.log("========== Sending back data from id only field ==========");
 			logger.write(Date.now() + ": Found results with id: " + req.params.id_val + '\n');
 			res.json(result);
 		}
@@ -80,19 +82,22 @@ app.get('/getdata/:id_val', function(req, res) {
 	});	
 });
 
+
+// Will return all data points within a specific time range
+// The time range has to be in epoch time.
 app.get('/getdata/:id_val/:startTime/:endTime', function(req, res) {
-    database.collection('data').find({ id: parseInt(req.params.id_val), timestamp : { $gt parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}}).toArray(function(err, result) {
-      if (err) {
+    database.collection('data').find({ id: parseInt(req.params.id_val), timestamp : { $gt: parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}}).toArray(function(err, result) {
+	  if (err) {
           console.log(err);
           logger.write(Date.now() + ": Error finding data: " + err + '\n');
-          res.sendStatus(400);
         }
         else if (result.length) {
+			console.log("====== Sending back results from timestamp =========");
             logger.write(Date.now() + ": Found results with id: " + req.params.id_val + " with start and end time\n");
             res.json(result);
         }
         else {
-            res.json({"message" : "Invalid ID or incorrect format");
+            res.json({"message" : "Invalid ID or incorrect format"});
         }
     });
 });
@@ -103,9 +108,10 @@ app.get('/getdata/:id_val/:startTime/:endTime', function(req, res) {
 app.use('/data', function(req, res, next) {
 	logger.write(Date.now() + ": ======= Storing Data ID: " + req.body.id + " ========\n");
 	next();
-})
+});
 
-
+// Store a single value at a time.
+// Needs to be incorrect format for it to work
 app.post('/data', function(req, res, next) {
 	var request = req.body;
 
@@ -124,6 +130,27 @@ app.post('/data', function(req, res, next) {
 	}
 
 	res.sendStatus(statusCode);
+});
+
+app.use('/dataMulti', function(req, res, next) {
+	logger.write(Date.now() + ": ======= Storing Multiple values =========\n");
+	next();
+})
+
+// Send Multi data at the same time.
+// Every line needs a id and timestamp
+app.post('/dataMulti', function(req, res, next) {
+	var request = req.body;
+
+	var code = 200;
+
+	database.collection('data').insert(request, function(err) {
+		if (err) {
+			code = 400;
+			logger.write(Date.now() + ": ===== Something went wrong with storing Multiple values =====\n");
+		}
+	});
+	res.sendStatus(200);
 });
 
 
