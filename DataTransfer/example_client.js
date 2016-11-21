@@ -46,6 +46,7 @@ request.post({
 		}
 	});
 
+// Send the data to the home base server using multiple values
 request.post({
 	url: 'http://localhost:3000/dataMulti',
 	method: 'POST',
@@ -58,4 +59,21 @@ request.post({
 	else {
 		console.log(res.statusCode);
 	}
+});
+
+// Example way to get all the values with a specific ID
+request.get({
+	url: 'http://localhost:3000/getdata/0',
+	method: 'GET',
+	json: true
+}, function(error, res) {
+	if (error) {
+		console.log(error);
+	}
+	else {
+		console.log(res.statusCode);
+	}
+
+	// The returned data will be in the body of res
+	console.log(res.body);
 });

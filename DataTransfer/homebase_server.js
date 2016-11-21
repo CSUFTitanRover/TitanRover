@@ -70,9 +70,9 @@ app.get('/getdata/:id_val', function(req, res) {
 		if (err) {
 			console.log(err);
 			logger.write(Date.now() + ": Error finding data: " + err + '\n');
-			res.sendStatus(400);
 		} 
 		else if (result.length) {
+			console.log("========== Sending back data from id only field ==========");
 			logger.write(Date.now() + ": Found results with id: " + req.params.id_val + '\n');
 			res.json(result);
 		}
@@ -87,12 +87,12 @@ app.get('/getdata/:id_val', function(req, res) {
 // The time range has to be in epoch time.
 app.get('/getdata/:id_val/:startTime/:endTime', function(req, res) {
     database.collection('data').find({ id: parseInt(req.params.id_val), timestamp : { $gt: parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}}).toArray(function(err, result) {
-      if (err) {
+	  if (err) {
           console.log(err);
           logger.write(Date.now() + ": Error finding data: " + err + '\n');
-          res.sendStatus(400);
         }
         else if (result.length) {
+			console.log("====== Sending back results from timestamp =========");
             logger.write(Date.now() + ": Found results with id: " + req.params.id_val + " with start and end time\n");
             res.json(result);
         }
@@ -142,9 +142,15 @@ app.use('/dataMulti', function(req, res, next) {
 app.post('/dataMulti', function(req, res, next) {
 	var request = req.body;
 
-	database.collection('data').insert(request);
-	res.sendStatus(200);
+	var code = 200;
 
+	database.collection('data').insert(request, function(err) {
+		if (err) {
+			code = 400;
+			logger.write(Date.now() + ": ===== Something went wrong with storing Multiple values =====\n");
+		}
+	});
+	res.sendStatus(200);
 });
 
 
