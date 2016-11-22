@@ -10,14 +10,14 @@
 var serialPort = require('serialport');
 var request = require('request');
 
-var port = new serialPort('/dev/ttyACM1', {
+var port = new serialPort('/dev/ttyACM0', {
   parser: serialPort.parsers.readline('\r\n')
 });
 
 
 function phoneHome(value) {
   request.post({
-		url: 'http://192.168.1.122:3000/data',  // Replace this with IP of homebase server
+		url: 'http://192.168.1.122:6993/data',  // Replace this with IP of homebase server
 		method: 'POST',
 		json: true,
 		body: value
