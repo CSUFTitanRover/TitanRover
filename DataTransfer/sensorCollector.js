@@ -10,14 +10,14 @@
 var serialPort = require('serialport');
 var request = require('request');
 
-var port = new serialPort('/dev/ttyACM0', {
+var port = new serialPort('/dev/ttyACM1', {
   parser: serialPort.parsers.readline('\r\n')
 });
 
 
 function phoneHome(value) {
   request.post({
-		url: 'http://localhost:3000/data',  // Replace this with IP of homebase server
+		url: 'http://192.168.1.122:3000/data',  // Replace this with IP of homebase server
 		method: 'POST',
 		json: true,
 		body: value
@@ -40,8 +40,8 @@ function formatter(value) {
 
   /* =================================
   == 00: Mobility
-  == 01: 5TE
-  == 02: somethingelse
+  == 01: 5TE: Format { id: , timestamp: , EC: , VWC: , TempCelsiusSoil: }
+  == 02: DHT11: Format { id: , timestamp: , Humidity: , TempCelsiusOutside: }
   ====================================*/
   switch(splitted[0]) {
     case '00':
@@ -51,15 +51,15 @@ function formatter(value) {
     case '01':
       jsonBuilder.id = "01";
       jsonBuilder.timestamp = Date.now();
-      jsonBuilder.value1 = Number(splitted[1]);
-      jsonBuilder.value2 = Number(splitted[2]);
-      jsonBuilder.value3 = Number(splitted[3].substring(0, 4));
+      jsonBuilder.EC = Number(splitted[1]);
+      jsonBuilder.VWC = Number(splitted[2]);
+      jsonBuilder.TempSoil = Number(splitted[3].substring(0, 4));
       break;
     case '02':
       jsonBuilder.id = "02";
       jsonBuilder.timestamp = Date.now();
-      jsonBuilder.value1 = Number(splitted[1]);
-      jsonBuilder.value2 = Number(splitted[2].substring(0, 4));
+      jsonBuilder.Humidity = Number(splitted[1]);
+      jsonBuilder.TempOutside = Number(splitted[2].substring(0, 4));
       break;
     default:
       jsonBuilder.id = null;
