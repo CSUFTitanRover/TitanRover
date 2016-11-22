@@ -10,8 +10,8 @@
 var serialPort = require('serialport');
 var request = require('request');
 
-var port = new SerialPort('/dev/ttyACM0', {
-  parser: SerialPort.parser.readline('/')
+var port = new serialPort('/dev/ttyACM0', {
+  parser: serialPort.parsers.readline('\r\n')
 });
 
 
@@ -34,15 +34,16 @@ function phoneHome(value) {
 
 // Will format the data to send to the homebase server
 function formatter(value) {
-  var jsonBuilder;
+  var jsonBuilder = {};
   var splitted = value.split(':');
+  console.log(splitted);
 
   /* =================================
   == 00: Mobility
   == 01: 5TE
   == 02: somethingelse
   ====================================*/
-  switch(slitted[0]) {
+  switch(splitted[0]) {
     case '00':
       jsonBuilder.id = "00";
       jsonBuilder.timestamp = Date.now();
@@ -50,21 +51,31 @@ function formatter(value) {
     case '01':
       jsonBuilder.id = "01";
       jsonBuilder.timestamp = Date.now();
+      jsonBuilder.value1 = Number(splitted[1]);
+      jsonBuilder.value2 = Number(splitted[2]);
+      jsonBuilder.value3 = Number(splitted[3].substring(0, 4));
       break;
     case '02':
       jsonBuilder.id = "02";
       jsonBuilder.timestamp = Date.now();
+      jsonBuilder.value1 = Number(splitted[1]);
+      jsonBuilder.value2 = Number(splitted[2].substring(0, 4));
       break;
     default:
+      jsonBuilder.id = null;
       console.log("Do not recognize that id!!!!\nIt has been removed!!!!");
   }
 
-  phoneHome(jsonBuilder);
+  if (jsonBuilder.id != null) {
+	console.log(jsonBuilder);
+	phoneHome(jsonBuilder);
+  }
 }
 
-var valueToSend = "";
 port.on('data', function(data) {
   formatter(data);
+
+
   // We have found the end of the serial data send to server
   /*if (data.slice(-1) == '/') {
     formatter(valueToSend);
@@ -73,5 +84,11 @@ port.on('data', function(data) {
   else {  // Keep adding data to the valueToSend
     valueToSend += data;
   }*/
+});
+
+
+process.on('SIGINT', function() {
+	console.log("\n############ Shutting Down ###########\n");
+	process.exit();
 });
 
