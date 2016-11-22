@@ -42,6 +42,7 @@ function formatter(value) {
   == 00: Mobility
   == 01: 5TE: Format { id: , timestamp: , EC: , VWC: , TempCelsiusSoil: }
   == 02: DHT11: Format { id: , timestamp: , Humidity: , TempCelsiusOutside: }
+  == 03: SonicRangeFinder Science: Format { id: , timestamp: , Distance(cm): }
   ====================================*/
   switch(splitted[0]) {
     case '00':
@@ -60,6 +61,11 @@ function formatter(value) {
       jsonBuilder.timestamp = Date.now();
       jsonBuilder.Humidity = Number(splitted[1]);
       jsonBuilder.TempOutside = Number(splitted[2].substring(0, 4));
+      break;
+    case '03':
+      jsonBuilder.id = "03";
+      jsonBuilder.timestamp = Date.now();
+      jsonBuilder.Distance = Number(splitted[1]);
       break;
     default:
       jsonBuilder.id = null;

@@ -19,8 +19,10 @@
 var express = require('express');
 var fs = require('fs');
 var bodyParser = require('body-parser')
-var app = express()
+var app = express();
 var mongo = require('mongodb').MongoClient;
+var socket = require('http').Server(app);
+var io = require('socket.io')(socket);
 
 // Will be set when we connect to the MongoDB
 var database;
@@ -30,8 +32,8 @@ var logger = fs.createWriteStream('serverLog.txt', {flags: 'a'});
 
 
 // Start the server
-var server = app.listen(3000, function() {
-	console.log("============ Server is up and running on port: ", server.address().port, "=============");
+socket.listen(6993, function() {
+	console.log("============ Server is up and running on port: ", socket.address().port, "=============");
 	logger.write(Date.now() + ": Started server\n");
 });
 
@@ -52,6 +54,46 @@ mongo.connect("mongodb://localhost:6969/test", function(err, db) {
 
 });
 
+var clients = [];
+function sendSocketIO(value, dataType) {
+	clients.forEach(function(socketClient) {
+		if(socketClient.datatype == dataType) {
+			io.to(socketClient.id).emit('update: chart data', value);
+		}
+	});
+};
+
+
+console.log("============= Socket.io is running ============");
+logger.write(Date.now() + ": Socket.io running\n");
+// Socket.io is going to be handling all the emits events that the UI needs.
+io.on('connection', function(socketClient) {
+	console.log("Client Connected: " + socketClient.id)
+	logger.write(Date.now() + "===== Client Connected: " + socketClient.id + " ======\n");
+	clients.push(socketClient);
+
+	// immediately request Client ID from the newly connected socket
+    socketClient.emit('get: client id');
+
+	// Client Disconnected from the server
+	socketClient.on('disconnect', function() {
+		console.log("Client Disconnected: " + socketClient.id);
+		var index = clients.indexOf(socketClient);
+        if (index != -1) {
+            clients.splice(index, 1);
+        }
+		/*
+		var id = socketClient.id;
+		delete clients.id;
+		logger.write(Date.now() + ": ==== Client disconnected: " + socketClient.id + " ====\n");
+		*/
+	});
+
+	socketClient.on('set: client id', function(clientID) {
+		socketClient.datatype = clientID;
+    });
+});
+
 
 // parse application/json
 app.use(bodyParser.json())
@@ -66,7 +108,7 @@ app.param(['id_val', 'startTime', 'endTime'], function(req, res, next, id_val, s
 // Will return all the data points with a specific id
 // Example use: http://localhost:3000/getdata/3
 app.get('/getdata/:id_val', function(req, res) {
-	database.collection('data').find({ id: parseInt(req.params.id_val) }).toArray(function(err, result) {
+	database.collection('data').find({ id: req.params.id_val }).toArray(function(err, result) {
 		if (err) {
 			console.log(err);
 			logger.write(Date.now() + ": Error finding data: " + err + '\n');
@@ -86,7 +128,7 @@ app.get('/getdata/:id_val', function(req, res) {
 // Will return all data points within a specific time range
 // The time range has to be in epoch time.
 app.get('/getdata/:id_val/:startTime/:endTime', function(req, res) {
-    database.collection('data').find({ id: parseInt(req.params.id_val), timestamp : { $gt: parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}}).toArray(function(err, result) {
+    database.collection('data').find({ id: req.params.id_val, timestamp : { $gt: parseInt(req.params.startTime), $lt: parseInt(req.params.endTime)}}).toArray(function(err, result) {
 	  if (err) {
           console.log(err);
           logger.write(Date.now() + ": Error finding data: " + err + '\n');
@@ -119,9 +161,9 @@ app.post('/data', function(req, res, next) {
 	var statusCode = 200;
 
 	if (request.id != undefined) {
+		sendSocketIO(request, request.id);
 
 		// Store the data within the MongoDB
-
 		database.collection('data').insertOne(request);
 	}
 	else {
@@ -137,7 +179,7 @@ app.use('/dataMulti', function(req, res, next) {
 	next();
 })
 
-// Send Multi data at the same time.
+// Send Multi data at the same time.  This is used incase the rover sends multi data after a signal loss
 // Every line needs a id and timestamp
 app.post('/dataMulti', function(req, res, next) {
 	var request = req.body;

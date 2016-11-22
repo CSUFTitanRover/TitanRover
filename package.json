@@ -18,6 +18,7 @@
     "mongodb": "^2.2.10",
     "pubnub": "^4.0.8",
     "request": "^2.75.0",
-    "serialport": "^4.0.6"
+    "serialport": "^4.0.6",
+    "socket.io": "^1.6.0"
   }
 }
