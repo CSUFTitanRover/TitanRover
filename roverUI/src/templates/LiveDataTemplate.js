@@ -10,8 +10,11 @@ class LiveDataTemplate extends Component {
 
         this.socketClient = io.connect('localhost:8000'); // set client to connect to the port where the homebase server listens on
         this.state = {
-            columns: this.props.chartInitialColumns
+            columns: this.props.chartInitialColumns,
+            isRunning: true
         };
+
+        this.handleStartAndPause = this.handleStartAndPause.bind(this);
     }
 
     componentDidMount() {
@@ -21,9 +24,15 @@ class LiveDataTemplate extends Component {
         // socket Event handlers
         let self = this; // preserve "this"
         let tempColumns = this.state.columns;
-        this.socketClient.on('update: chart data', function(data) {
-            console.log('update: chart data, CALLED');
 
+        // event for inital socket connection to set client id for future use on server-side
+        this.socketClient.on('get: client id', function () {
+            console.log("get: client id, CALLED");
+            self.socketClient.emit('set: client id', self.props.clientID);
+        });
+
+        // updating chart
+        this.socketClient.on('update: chart data', function(data) {
             // index of data[]
             let i = 0;
 
@@ -31,22 +40,21 @@ class LiveDataTemplate extends Component {
             for(let col of tempColumns) {
                 // only allow 6 entries to be visible on the chart
                 // remove first entry and append new entry
-                if(col.length > 6) {
-                    col.splice(1, 1); // remove entry in index 1 (first data entry)
+                if(col.length >= 16) {
+                    col.splice(1, 1); // remove entry in index: 1 (first data entry)
                     col.push(data[i]);
                     i++;
                 }
                 // append new entry
                 else {
                     col.push(data[i]);
-                    i++
+                    i++;
                 }
             }
 
-            console.info(tempColumns);
-
             // update columns state
             self.setState({columns: tempColumns});
+
         });
 
     }
@@ -57,20 +65,49 @@ class LiveDataTemplate extends Component {
         });
     }
 
+    componentWillUnmount() {
+        this.socketClient.disconnect(); // do we need to disconnect our current connection when we unmount our charts from the viewpage?
+                                        // does this have any performance benefits?
+    }
+
     _renderChart() {
         this.chart = c3.generate({
-            bindto: '#' + this.props.chartId,
-            type: this.props.chartType,
+            bindto: '#' + this.props.chartID,
             data: {
-                columns: this.state.columns
+                columns: this.state.columns, // defaults to 'line' if no chartType is supplied by nature of c3.js behavior
+                type: this.props.chartType
+            },
+            zoom: {
+                enabled: true
             },
             ...this.props.chartProps // additional chart properties
         });
     }
 
+    handleStartAndPause() {
+
+        if (this.state.isRunning) {
+            // handle pause
+            this.setState({isRunning: false});
+            this.socketClient.disconnect();
+        }
+        else {
+            // handle start
+            this.setState({isRunning: true});
+            this.socketClient.connect('localhost:8000');
+        }
+    }
+
     render() {
+        let isRunningState = (this.state.isRunning) ? 'Pause Chart' : 'Start Chart';
+
         return (
-            <div id={this.props.chartId} />
+            <div>
+                <div className="controls">
+                    <button onClick={this.handleStartAndPause}>{isRunningState}</button>
+                </div>
+                <div id={this.props.chartId} />
+            </div>
         );
     }
 }
@@ -80,6 +117,8 @@ export default LiveDataTemplate;
 /*
 TODO:
 - 8 modules needed for the page!
+- Maybe have behavior so that the server doesn't send data to the specific chart if the chart is paused
+    - only sends it on the initial load OR when the chart requests to get data (started chart)
  */
 
 

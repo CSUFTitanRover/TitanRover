@@ -1,3 +1,10 @@
+h3 {
+    font-weight: bold;
+    font-size: 20px;
+    padding-bottom: 15px;
+    color: darkorange;
+}
+
 #nav-header {
     min-width: 250px;
     min-height: 100vh; /*might need to change when the main content has srollbars*/
@@ -36,7 +43,8 @@
 }
 
 #met .controls {
-    margin-top: 10px;
+    margin: 10px 0 0 0;
+
 }
 #met .controls button {
     padding: 2px 10px;
@@ -50,9 +58,6 @@
     margin-bottom: 20px;
 }
 
-h3 {
-    font-weight: bold;
-    font-size: 20px;
-    padding-bottom: 15px;
-    color: darkorange;
+.module .controls {
+    margin-bottom: 15px;
 }

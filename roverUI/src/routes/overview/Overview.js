@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Chart1 from './modules/Chart1';
-import Module2 from './modules/Module2';
+import Chart1 from './modules/Decagon 5TE Chart';
+import Chart2 from './modules/DHT 11 Chart';
 import LiveFeeds from './modules/livefeeds/LiveFeeds';
 import FrontCamera from './modules/livefeeds/FrontCamera';
 import RearCamera from './modules/livefeeds/RearCamera';
@@ -10,7 +10,7 @@ class Overview extends Component {
         return (
             <div>
                 <Chart1/>
-                <Module2/>
+                <Chart2/>
                 <LiveFeeds/>
             </div>
         );
@@ -18,4 +18,4 @@ class Overview extends Component {
 }
 
 // exporting all dependent modules and itself
-export default { Overview, Chart1, Module2, LiveFeeds, FrontCamera, RearCamera};
+export default { Overview, Chart1, Chart2, LiveFeeds, FrontCamera, RearCamera};

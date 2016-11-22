@@ -11,11 +11,13 @@ class Chart1 extends Component {
 
     render() {
         return (
-            <BaseModuleTemplate moduleName="Chart #1">
+            <BaseModuleTemplate moduleName="Decagon 5TE Chart">
                 <LiveDataTemplate
-                    chartId="chart1"
+                    chartID="Decagon-5TE-Chart"
                     chartInitialColumns={initialCols}
-                    chartType="line"
+                    chartType="bar"
+
+                    clientID="01"
                 />
             </BaseModuleTemplate>
         );
@@ -43,7 +45,7 @@ export default Chart1;
      ...
      };
 
-    This would be defined in Chart1.js and passed as a prop
+    This would be defined in Decagon 5TE Chart.js and passed as a prop
     like:
 
     <LiveDataTemplate

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import BaseModuleTemplate from '../templates/BaseModuleTemplate';
+import FourOhFourIMG from '../../public/404ErrorImage.jpg'
 
 class FourOhFour extends Component {
     render() {
         return (
             <BaseModuleTemplate>
-                <h1>
-                    Uh-oh. looks like you found the 404 error page!.
-                </h1>
+               <img src={FourOhFourIMG}/>
             </BaseModuleTemplate>
         );
     }

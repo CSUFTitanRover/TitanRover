@@ -4,7 +4,7 @@
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/test_server-compiled.js" />
         <item url="file://$PROJECT_DIR$/src/templates/LiveDataTemplate-compiled.js" />
-        <item url="file://$PROJECT_DIR$/server-compiled.js" />
+        <item url="file://$PROJECT_DIR$/src/templates/DataTemplate-compiled.js" />
         <item url="file://$PROJECT_DIR$/src/routes/ModuleList-package-compiled.js" />
       </sourceFilesUrls>
     </properties>
@@ -45,9 +45,10 @@
       <root url="file://$PROJECT_DIR$/socketEvents-compiled.js" />
       <root url="file://$PROJECT_DIR$/server-compiled.js" />
       <root url="file://$PROJECT_DIR$/server-compiled.js" />
+      <root url="file://$PROJECT_DIR$/server-compiled.js" />
       <root url="file://$PROJECT_DIR$/test_server-compiled.js" />
       <root url="file://$PROJECT_DIR$/src/templates/LiveDataTemplate-compiled.js" />
-      <root url="file://$PROJECT_DIR$/server-compiled.js" />
+      <root url="file://$PROJECT_DIR$/src/templates/DataTemplate-compiled.js" />
       <root url="file://$PROJECT_DIR$/src/routes/ModuleList-package-compiled.js" />
     </CLASSES>
     <SOURCES />

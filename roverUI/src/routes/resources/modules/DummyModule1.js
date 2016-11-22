@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
+import DataTemplate from '../../../templates/DataTemplate';
+
+const initialCols = [
+    ['data1'],
+    ['data2']
+];
 
 class DummyModule1 extends Component {
     render() {
         return (
-            <BaseModuleTemplate moduleName="Dummy Module 1">
-                <p>
-                    TIL: Ancient Romans would dye their hair black, because blonde hair was associated with prostitutes or French and German slaves. This trend began declining when Augustus Caesar, who was blonde, became Rome's first emperor.
-                </p>
+            <BaseModuleTemplate moduleName="Query Chart Data">
+
+                <DataTemplate
+                    chartId="Decagon-5TE-Chart"
+                    chartInitialColumns={initialCols}
+                    chartType="bar"
+                />
+
             </BaseModuleTemplate>
         );
     }

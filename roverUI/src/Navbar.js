@@ -5,10 +5,10 @@ import { Link } from 'react-router';
 // wrapper class for Links
 class NavLink extends Component {
     render () {
-        const span_file_line = (this.props.folderroot === true) ? null : <span className="file-line" />;
+        const file_line = (this.props.folderroot === true) ? null : <span className="file-line" />;
         return (
             <Link {...this.props} activeClassName="active">
-                {span_file_line}
+                {file_line}
                 <span className="link-text">
                     {this.props.text}
                 </span>
@@ -31,7 +31,7 @@ class Navbar extends Component {
                             <NavLink to="/" onlyActiveOnIndex={true} folderroot={true} className="folderroot" text="Overview" />
                             <ul className="folderlinks">
                                 <li><NavLink to="/chart1" text="Chart #1" /></li>
-                                <li><NavLink to="/module2" text="Module Name #2" /></li>
+                                <li><NavLink to="/chart2" text="Chart #2" /></li>
                                 <li><NavLink to="/livefeeds" text="Live Feeds" /></li>
                             </ul>
                         </li>
