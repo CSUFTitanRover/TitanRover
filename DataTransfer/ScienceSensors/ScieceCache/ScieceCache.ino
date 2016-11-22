@@ -76,7 +76,6 @@ void loop() {
   int wait_for_response_ms = 1000; //allow some time to allow for the sensor to send a response
   Serial.print("01"); //
   char* response = getMeasurement();
-  char* parsedResponse[50];
  if (response) { //lets parse our data!
     for (int i = 0; i < 16; i++) { //lets count all the spaces in the response array and read out the data peice by peice to parse
       if (i == 0) { //ignore the first set as it's only there to display that we got a response
@@ -107,6 +106,7 @@ void loop() {
     Serial.println(response);
   }
   Serial.println("/");
+  free(response);
   delay(20);
   start_test ();
   Serial.print ("02:");
