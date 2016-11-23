@@ -30,8 +30,8 @@ class Navbar extends Component {
                         <li>
                             <NavLink to="/" onlyActiveOnIndex={true} folderroot={true} className="folderroot" text="Overview" />
                             <ul className="folderlinks">
-                                <li><NavLink to="/chart1" text="Chart #1" /></li>
-                                <li><NavLink to="/chart2" text="Chart #2" /></li>
+                                <li><NavLink to="/chart1" text="Decagon 5TE Chart" /></li>
+                                <li><NavLink to="/chart2" text="DHT 11 Chart" /></li>
                                 <li><NavLink to="/livefeeds" text="Live Feeds" /></li>
                             </ul>
                         </li>
