@@ -130,7 +130,7 @@ class DataTemplate extends Component {
 
         return (
             <div>
-                <div className="controls">
+                <div className="controls query-data">
                     <select multiple name="Sensor Options" onChange={this.handleSensorOptionsChange}>
                         <option value="all" selected="selected">All</option>
                         {dropdown_options}

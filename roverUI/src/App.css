@@ -60,9 +60,11 @@ h3 {
 
 .module .controls {
     margin-bottom: 15px;
+}
+.module .controls.query-data {
     display: block;
 }
-.module .controls > *{
+.module .controls.query-data > *{
     display: inherit;
     margin-bottom: 10px;
 }
