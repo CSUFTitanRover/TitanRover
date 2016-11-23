@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import c3 from 'c3';
 import io from 'socket.io-client';
 
+/*
+ Object {id: "01", timestamp: 1479856462231, EC: 1.03, VWC: 0, TempSoil: 22.9}
+
+ Object {id: "02", timestamp: 1479856462281, Humidity: 34, TempOutside: 23}
+ */
 
 class LiveDataTemplate extends Component {
 
     constructor(props) {
         super(props);
 
-        this.socketClient = io.connect('localhost:8000'); // set client to connect to the port where the homebase server listens on
+        this.socketClient = io.connect('192.168.1.122:6993'); // set client to connect to the port where the homebase server listens on
         this.state = {
             columns: this.props.chartInitialColumns,
             isRunning: true
@@ -18,12 +23,15 @@ class LiveDataTemplate extends Component {
     }
 
     componentDidMount() {
+
+        console.info(this.props.clientID);
+
         // initial render of the chart
         this._renderChart();
 
         // socket Event handlers
+        //let tempColumns = this.state.columns;
         let self = this; // preserve "this"
-        let tempColumns = this.state.columns;
 
         // event for inital socket connection to set client id for future use on server-side
         this.socketClient.on('get: client id', function () {
@@ -32,29 +40,31 @@ class LiveDataTemplate extends Component {
         });
 
         // updating chart
-        this.socketClient.on('update: chart data', function(data) {
-            // index of data[]
-            let i = 0;
+        this.socketClient.on('update: chart data', function(jsonObj) {
+            //console.info(jsonObj);
+
+            let tempColumns = self.state.columns;
 
             // loop over each col in columns
             for(let col of tempColumns) {
+
+                let data_name = col[0]; // e.g. Humidity or TempSoil
+
                 // only allow 6 entries to be visible on the chart
                 // remove first entry and append new entry
                 if(col.length >= 16) {
                     col.splice(1, 1); // remove entry in index: 1 (first data entry)
-                    col.push(data[i]);
-                    i++;
+                    col.push(jsonObj[data_name]);
+
                 }
                 // append new entry
                 else {
-                    col.push(data[i]);
-                    i++;
+                    col.push(jsonObj[data_name]);
                 }
             }
 
             // update columns state
             self.setState({columns: tempColumns});
-
         });
 
     }
@@ -106,7 +116,7 @@ class LiveDataTemplate extends Component {
                 <div className="controls">
                     <button onClick={this.handleStartAndPause}>{isRunningState}</button>
                 </div>
-                <div id={this.props.chartId} />
+                <div id={this.props.chartID} />
             </div>
         );
     }

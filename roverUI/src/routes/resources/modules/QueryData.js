@@ -7,7 +7,7 @@ const initialCols = [
     ['data2']
 ];
 
-class DummyModule1 extends Component {
+class QueryData extends Component {
     render() {
         return (
             <BaseModuleTemplate moduleName="Query Chart Data">
@@ -23,4 +23,4 @@ class DummyModule1 extends Component {
     }
 }
 
-export default DummyModule1;
+export default QueryData;
