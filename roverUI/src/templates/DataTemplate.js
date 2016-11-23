@@ -121,27 +121,6 @@ class DataTemplate extends Component {
 
         // emit our appropriate query event to the homebase server
         this.socketClient.emit(queryEvent, data);
-
-        // ********* THIS IS THE SECOND WAY FOR QUERYING DATA
-        /*
-        let myInit = {
-            method: 'GET',
-            headers: {
-                'Content-Type': ''
-            },
-            mode: 'cors',
-            cache: 'default'
-        };
-
-        let mySensorId = this.state.sensorIds[0];
-
-        let myRequest = new Request('127.0.0.1:6993/getdata/' + mySensorId, myInit);
-
-        fetch(myRequest).then(function(responseData) {
-            this.setState({columns: responseData}); // set data recieved from the AJAX GET request
-        });
-        */
-
     }
 
     render() {
@@ -156,16 +135,16 @@ class DataTemplate extends Component {
                         <option value="all" selected="selected">All</option>
                         {dropdown_options}
                     </select>
+                    <div>
+                        <input type="checkbox" name="Timestamp Range" onClick={this.handleTimeRangeClick}/>
+                        <label for="Timestamp Range">Timestamp Range</label>
 
-                    <input type="checkbox" name="Timestamp Range" onClick={this.handleTimeRangeClick}/>
-                    <label for="Timestamp Range">Timestamp Range</label>
-
-                    <div className={hideOrNot}>
-                        <input type="text" placeholder="Beginning Timestamp" name="queryStartTime" onChange={this.handleInputChange}/>
-                        <label>to</label>
-                        <input type="text" placeholder="End Timestamp" name="queryEndTime" onChange={this.handleInputChange}/>
+                        <div className={hideOrNot}>
+                            <input type="text" placeholder="Beginning Timestamp" name="queryStartTime" onChange={this.handleInputChange}/>
+                            <label>to</label>
+                            <input type="text" placeholder="End Timestamp" name="queryEndTime" onChange={this.handleInputChange}/>
+                        </div>
                     </div>
-
                     <button onClick={this.handleGetDataClick}>Get Data</button>
                 </div>
 

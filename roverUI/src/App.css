@@ -60,8 +60,13 @@ h3 {
 
 .module .controls {
     margin-bottom: 15px;
+    display: block;
+}
+.module .controls > *{
+    display: inherit;
+    margin-bottom: 10px;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
