@@ -17,6 +17,7 @@
     "microseconds": "^0.1.0",
     "mongodb": "^2.2.10",
     "pubnub": "^4.0.8",
+    "raspi-io": "^6.1.1",
     "request": "^2.75.0",
     "serialport": "^4.0.6",
     "socket.io": "^1.6.0"

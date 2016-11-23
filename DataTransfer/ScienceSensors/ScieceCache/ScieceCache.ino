@@ -13,6 +13,8 @@ the remaining wire must be connected to ground
  */
 #include <SDISerial.h>
 
+#define TRIGPIN 9
+#define ECHOPIN 10
 #define DHT_DATALINE 8 //DHT11 dataline pin.
 #define DECAGON_DATALINE 2 //interrupt capable pin on the UNOs
 #define INVERTED 1 
@@ -66,6 +68,8 @@ void setup() {
   sdi_serial_connection.begin(); //Start the SDI connection
   Serial.begin(9600); //start and specify the baud rate of our data
   pinMode(DHT_DATALINE, OUTPUT);
+  pinMode(TRIGPIN, OUTPUT);
+  pinMode(ECHOPIN, INPUT);
   Serial.println("...INITIALIZED"); //visually see in the stream that we're ready to recieve data
   delay(3000); //wait 3 seconds to allow sensor to run its startup cycle
 }
@@ -118,6 +122,18 @@ void loop() {
   Serial.print ('.');
   Serial.print (dat [3], DEC); // display the temperature of decimal places;
   Serial.println ("/");
+
+  long duration, distance;
+  digitalWrite(TRIGPIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIGPIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGPIN, LOW);
+  duration = pulseIn(ECHOPIN, HIGH);
+  distance = (duration/2)/29.1;
+  Serial.print("03:");
+  Serial.print(distance);
+  Serial.println("/");
   
   delay(1000); //give the sensor some time before the next response to avoid any broken data
 }
