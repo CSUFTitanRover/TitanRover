@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import c3 from 'c3';
-import io from 'socket.io-client';
-
+//import io from 'socket.io-client';
+import sensorsInfoDict from '../SensorsInfoDict';
 
 class DataTemplate extends Component {
 
     constructor(props) {
         super(props);
 
-        this.socketClient = io.connect('localhost:8000'); // set client to connect to the port where the homebase server listens on
+        //this.socketClient = io.connect('localhost:8000'); // set client to connect to the port where the homebase server listens on
         this.state = {
             columns: this.props.chartInitialColumns,
-            isRunning: true
+            isRunning: true,
+            queryByTimeRange: false
         };
 
         this.handleClick = this.handleClick.bind(this);
+        this.handleTimeRangeClick = this.handleTimeRangeClick.bind(this);
     }
 
     componentDidMount() {
@@ -34,7 +36,7 @@ class DataTemplate extends Component {
     }
 
     componentWillUnmount() {
-        this.socketClient.disconnect(); // do we need to disconnect our current connection when we unmount our charts from the viewpage?
+        //this.socketClient.disconnect(); // do we need to disconnect our current connection when we unmount our charts from the viewpage?
                                         // does this have any performance benefits?
     }
 
@@ -52,27 +54,63 @@ class DataTemplate extends Component {
         });
     }
 
-    handleClick() {
+    handleClick(e) {
+
+        let queryEvent = this.state.queryByTimeRange ? 'get: all data with timestamp range' : 'get: all data by id';
         // we need to get data from homebase server
-        //this.socketClient.emit('get data');
+        this.socketClient.emit(queryEvent);
+    }
+
+    handleTimeRangeClick() {
+        if(this.state.queryByTimeRange) {
+            // switch from true to false
+            this.setState({queryByTimeRange: false});
+        }
+        else {
+            this.setState({queryByTimeRange: true});
+        }
+    }
+
+    getDropdownOptions() {
+        let options = '';
+
+        //console.info(sensorsInfoDict);
+
+        for(let key of sensorsInfoDict.keys()) {
+            options += '<option value="' + sensorsInfoDict.get(key) + '">' + key + '</option>';
+
+        }
+
+        return options;
     }
 
     render() {
+        let dropdown_options = this.getDropdownOptions();
+        console.info(dropdown_options);
+
+        let hideOrNot = this.state.queryByTimeRange ? null : 'hidden';
 
         return (
             <div>
-                <div id={this.props.chartId} />
-
                 <div className="controls">
-                    <form>
-                        <div>
-                            <input type="checkbox" name="id-search"/>
-                            <label for="id-search">Get by ID</label>
-                        </div>
-                        <input type="searchbox"/>
-                        <button onClick={this.handleClick}>Get Data</button>
-                    </form>
+                    <select>
+                        <option value="all">All</option>
+                        {dropdown_options}
+                    </select>
+
+                    <input type="checkbox" name="Timestamp Range" onClick={this.handleTimeRangeClick}/>
+                    <label for="Timestamp Range">Timestamp Range</label>
+
+                    <div className={hideOrNot}>
+                        <input type="text" placeholder="Beginning Timestamp"/>
+                        <label>to</label>
+                        <input type="text" placeholder="End Timestamp"/>
+                    </div>
+
+                    <button onClick={this.handleClick}>Get Data</button>
                 </div>
+
+                <div id={this.props.chartId} />
             </div>
         );
     }

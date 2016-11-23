@@ -18,8 +18,7 @@ let routes = (
             </Route>
 
             <Route path="resources" component={Modules.Resources.Resources} />
-            <Route path="dummymodule1" component={Modules.Resources.DummyModule1} />
-            <Route path="dummymodule2" component={Modules.Resources.DummyModule2} />
+            <Route path="dummymodule1" component={Modules.Resources.QueryData} />
             <Route path="*" component={Modules.FourOhFour} />
         </Route>
     </Router>
