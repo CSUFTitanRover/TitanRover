@@ -18,7 +18,7 @@
 */
 var express = require('express');
 var fs = require('fs');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 var app = express();
 var mongo = require('mongodb').MongoClient;
 var socket = require('http').Server(app);
@@ -68,7 +68,7 @@ console.log("============= Socket.io is running ============");
 logger.write(Date.now() + ": Socket.io running\n");
 // Socket.io is going to be handling all the emits events that the UI needs.
 io.on('connection', function(socketClient) {
-	console.log("Client Connected: " + socketClient.id)
+	console.log("Client Connected: " + socketClient.id);
 	logger.write(Date.now() + "===== Client Connected: " + socketClient.id + " ======\n");
 	clients.push(socketClient);
 
@@ -89,14 +89,48 @@ io.on('connection', function(socketClient) {
 		*/
 	});
 
+	// request from client
 	socketClient.on('set: client id', function(clientID) {
 		socketClient.datatype = clientID;
     });
+
+	// ********* THIS IS THE FIRST WAY I CAN THINK OF FOR QUERYING DATA
+	/*
+		data from Client looks like this:
+		 data = {
+			 'sensorIds': this.state.sensorIds, // type Array[]
+			 'queryByTimeRange': this.state.queryByTimeRange, //bool
+			 'queryStartTime': queryStartTime, // int
+			 'queryEndTime': queryEndTime // int
+		 };
+	 */
+	// request from client for Query Data
+	socketClient.on('get: all data with timestamp range', function(data) {
+		console.info('-----\nget: all data with timestamp range, CALLED');
+		console.info('SensorIds: ' + data['sensorIds'] + '\nqueryByTimeRange: ' + data['queryByTimeRange'] + '\nqueryStartTime: ' + data['queryStartTime'] + '\nqueryEndTime: ' + data['queryEndTime']);
+
+		// send a response back to the client
+		// here we would query the data we need and set it to dataToSendBack
+		var dataToSendBack = 'Server Received request for get: all data with timestamp range'; // just a str msg for now
+		socketClient.emit('set: all data by id', dataToSendBack);
+
+		});
+
+	// request from client for Query Data
+	socketClient.on('get: all data by id', function(data) {
+		console.info('-----\nget: all data by id, CALLED');
+		console.info('SensorIds: ' + data['sensorIds'] + '\nqueryByTimeRange: ' + data['queryByTimeRange'] + '\nqueryStartTime: ' + data['queryStartTime'] + '\nqueryEndTime: ' + data['queryEndTime']);
+
+		// send a response back to the client
+		// here we would query the data we need and set it to dataToSendBack
+		var dataToSendBack = 'Server Received request for get: all data by id'; // just a str msg for now
+		socketClient.emit('set: all data by id', dataToSendBack);
+	});
 });
 
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 
 app.param(['id_val', 'startTime', 'endTime'], function(req, res, next, id_val, startTime, endTime) {
@@ -177,7 +211,7 @@ app.post('/data', function(req, res, next) {
 app.use('/dataMulti', function(req, res, next) {
 	logger.write(Date.now() + ": ======= Storing Multiple values =========\n");
 	next();
-})
+});
 
 // Send Multi data at the same time.  This is used incase the rover sends multi data after a signal loss
 // Every line needs a id and timestamp

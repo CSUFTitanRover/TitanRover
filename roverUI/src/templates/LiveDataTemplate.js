@@ -13,7 +13,8 @@ class LiveDataTemplate extends Component {
     constructor(props) {
         super(props);
 
-        this.socketClient = io.connect('192.168.1.122:6993'); // set client to connect to the port where the homebase server listens on
+        //this.socketClient = io.connect('192.168.1.122:6993'); // set client to connect to the port where the homebase server listens on
+        this.socketClient = io.connect('127.0.0.1:6993');
         this.state = {
             columns: this.props.chartInitialColumns,
             isRunning: true
@@ -29,10 +30,9 @@ class LiveDataTemplate extends Component {
         // initial render of the chart
         this._renderChart();
 
-        // socket Event handlers
-        //let tempColumns = this.state.columns;
         let self = this; // preserve "this"
 
+        // socket Event handlers
         // event for inital socket connection to set client id for future use on server-side
         this.socketClient.on('get: client id', function () {
             console.log("get: client id, CALLED");
