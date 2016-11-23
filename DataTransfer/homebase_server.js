@@ -111,8 +111,23 @@ io.on('connection', function(socketClient) {
 
 		// send a response back to the client
 		// here we would query the data we need and set it to dataToSendBack
-		var dataToSendBack = 'Server Received request for get: all data with timestamp range'; // just a str msg for now
-		socketClient.emit('set: all data by id', dataToSendBack);
+		var dataToSendBack;
+
+		database.collection('data').find({ id: data['sensorIds'], timestamp : { $gt: data['queryStartTime'], $lt: data['queryEndTime']}}).toArray(function(err, result) {
+		  if (err) {
+		      console.log(err);
+		      logger.write(Date.now() + ": Error finding data: " + err + '\n');
+		    }
+		    else if (result.length) {
+				console.log("====== Sending back results from timestamp =========");
+		        logger.write(Date.now() + ": Found results with id: " + data['sensorIds'] + " with start and end time\n");
+		        dataToSendBack = result;
+		    }
+		    else {
+		        dataToSendBack = {"message" : "Invalid ID or incorrect format"};
+		    }
+		});
+		socketClient.emit('set: all data by id', JSON.stringify(dataToSendBack));
 
 		});
 
@@ -123,8 +138,24 @@ io.on('connection', function(socketClient) {
 
 		// send a response back to the client
 		// here we would query the data we need and set it to dataToSendBack
-		var dataToSendBack = 'Server Received request for get: all data by id'; // just a str msg for now
-		socketClient.emit('set: all data by id', dataToSendBack);
+
+		var dataToSendBack; // just a str msg for now
+
+		database.collection('data').find({ id: req.params.id_val }).toArray(function(err, result) {
+		  if (err) {
+		      console.log(err);
+		      logger.write(Date.now() + ": Error finding data: " + err + '\n');
+		    }
+		    else if (result.length) {
+				console.log("====== Sending back results from timestamp =========");
+		        logger.write(Date.now() + ": Found results with id: " + data['sensorIds'] + " with start and end time\n");
+		        dataToSendBack = result;
+		    }
+		    else {
+		        dataToSendBack = {"message" : "Invalid ID or incorrect format"};
+		    }
+		});
+		socketClient.emit('set: all data by id', JSON.stringify(dataToSendBack));
 	});
 });
 
