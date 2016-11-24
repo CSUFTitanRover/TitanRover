@@ -38,7 +38,7 @@ class Navbar extends Component {
                         <li>
                             <NavLink to="/resources" folderroot={true} className="folderroot" text="Resources" />
                             <ul className="folderlinks">
-                                <li><NavLink to="/dummymodule1" text="Query Data" /></li>
+                                <li><NavLink to="/querydata" text="Query Data" /></li>
                             </ul>
                         </li>
                     </ul>

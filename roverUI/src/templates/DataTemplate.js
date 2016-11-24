@@ -11,7 +11,7 @@ class DataTemplate extends Component {
         this.socketClient = io.connect('127.0.0.1:6993'); // set client to connect to the port where the homebase server listens on
         this.state = {
             columns: this.props.chartInitialColumns,
-            sensorIds: ['all'], // by default we get all sensors to graph,
+            sensorsInfo: [], // array of Obj {name,id} for each sensor
             queryByTimeRange: false,
             queryStartTime: null,
             queryEndTime: null
@@ -27,7 +27,7 @@ class DataTemplate extends Component {
         // initial render of the chart
         this._renderChart();
 
-        let self = this; // preserve "this"
+        //let self = this; // preserve "this"
 
         // socket Event handlers
         // socket events from server-side to this client
@@ -75,7 +75,7 @@ class DataTemplate extends Component {
 
         // loop through our sensors from sensorsInfoDict and add to options drowdown
         for(let key of sensorsInfoDict.keys()) {
-            options.push(<option value={sensorsInfoDict.get(key)}> {key} </option>);
+            options.push(<option value={sensorsInfoDict.get(key)} name={key}>{key}</option>);
         }
 
         return options;
@@ -92,11 +92,12 @@ class DataTemplate extends Component {
     }
 
     handleSensorOptionsChange(e) {
-        let newSensorIds = [];
+        let newSensorsInfo = [];
         for(let selectedOption of e.target.selectedOptions) {
-            newSensorIds.push(selectedOption.value);
+            newSensorsInfo.push({name: selectedOption.text, id: selectedOption.value});
         }
-        this.setState({sensorIds: newSensorIds});
+
+        this.setState({sensorsInfo: newSensorsInfo});
     }
 
     handleInputChange(e) {
@@ -105,45 +106,63 @@ class DataTemplate extends Component {
     }
 
     handleGetDataClick() {
-
         let queryEvent = this.state.queryByTimeRange ? 'get: all data with timestamp range' : 'get: all data by id';
         let queryStartTime = this.state.queryByTimeRange ? this.state.queryStartTime : null; // set appropriate value if queryByTimeRange is true/false
         let queryEndTime = this.state.queryByTimeRange ? this.state.queryEndTime : null; // set appropriate value if queryByTimeRange is true/false
 
         let data = {
-            sensorIds: this.state.sensorIds, // type Array[]
+            sensorIds: this.state.sensorsInfo, // type Array[{name,id},{},...]
             queryByTimeRange: this.state.queryByTimeRange, // bool
             queryStartTime: queryStartTime, // int
             queryEndTime: queryEndTime //int
         };
 
-        //console.log(data);
-
+        //console.info(queryEvent, data);
         // emit our appropriate query event to the homebase server
         this.socketClient.emit(queryEvent, data);
+    }
+
+    getTimeRangeOptions() {
+        let sensorsTimeRangeOptions = [];
+        let hideOrNot = this.state.queryByTimeRange ? null : 'hidden';
+
+        // function to return our html for each sensor
+        let sensorTemplate = (sensorName, sensorId) => {
+            return (
+                <div className={hideOrNot}>
+                    <input type="text" placeholder="Beginning Timestamp" name="queryStartTime" sensorId={sensorId}
+                           onChange={this.handleInputChange}/>
+                    <label>to</label>
+                    <input type="text" placeholder="End Timestamp" name="queryEndTime" sensorId={sensorId}
+                           onChange={this.handleInputChange}/>
+                    <span>{sensorName} ({sensorId})</span>
+                </div>
+            )
+        };
+
+        // loop through and build a input fields for each sensor
+        for(let sensor of this.state.sensorsInfo) {
+            sensorsTimeRangeOptions.push(sensorTemplate(sensor['name'], sensor['id']));
+        }
+        return sensorsTimeRangeOptions;
     }
 
     render() {
         let dropdown_options = this.getDropdownOptions();
 
-        let hideOrNot = this.state.queryByTimeRange ? null : 'hidden';
+        let timerange_options = this.getTimeRangeOptions();
 
         return (
             <div>
                 <div className="controls query-data">
                     <select multiple name="Sensor Options" onChange={this.handleSensorOptionsChange}>
-                        <option value="all" selected="selected">All</option>
+                        <option value="all" name="All">All</option>
                         {dropdown_options}
                     </select>
                     <div>
                         <input type="checkbox" name="Timestamp Range" onClick={this.handleTimeRangeClick}/>
                         <label for="Timestamp Range">Timestamp Range</label>
-
-                        <div className={hideOrNot}>
-                            <input type="text" placeholder="Beginning Timestamp" name="queryStartTime" onChange={this.handleInputChange}/>
-                            <label>to</label>
-                            <input type="text" placeholder="End Timestamp" name="queryEndTime" onChange={this.handleInputChange}/>
-                        </div>
+                        {timerange_options}
                     </div>
                     <button onClick={this.handleGetDataClick}>Get Data</button>
                 </div>
@@ -155,6 +174,35 @@ class DataTemplate extends Component {
 }
 
 export default DataTemplate;
+
+/*
+    data being passed through Socket Client to Homebase_Server will look like:
+
+    data = {
+        sensorIds: [{name: 'All', id: 'all'}, {name: 'Decagon-5TE-Chart', id: '01'}, {name: 'DHT-11-Chart', id: '02'}], // type Array[{name,id},{},...]
+        queryByTimeRange: true, // bool
+        queryStartTime: 1598878971, // int
+        queryEndTime: 1599999988 //int
+    };
+
+    TODO:
+        - I need to organize the data so that each sensorData is being passed as its own Obj entity so that it look like:
+             data = [
+                {sensorIds: {name: 'Decagon-5TE-Chart', id: '01'}, // type Obj {}
+                 queryByTimeRange: true, // bool
+                 queryStartTime: 1598878971, // int
+                 queryEndTime: 1599999988 //int
+                 },
+                 {sensorIds: {name: 'DHT-11-Chart', id: '02'}, // type Obj {}
+                 queryByTimeRange: false, // bool
+                 queryStartTime: null, // int
+                 queryEndTime: null //int
+                 },
+                ...
+             ];
+        - This way it allows for multiple charts with different properties to be queried for their data.
+        - This Querying Data Page is gonna be a biiiiiitchhhhhh since there's so much customization needed.
+ */
 
 
 
