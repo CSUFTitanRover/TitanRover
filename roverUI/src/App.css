@@ -62,13 +62,42 @@ h3 {
     margin-bottom: 15px;
 }
 .module .controls.query-data {
-    display: block;
+    border: 1px solid gray;
+    display: flex;
+}
+.module .controls.query-data h4 {
+    color: royalblue;
+    padding-bottom: 10px;
+    font-weight: bold;
 }
 .module .controls.query-data > *{
-    display: inherit;
-    margin-bottom: 10px;
+    padding: 10px;
 }
 
+.module .controls.query-data .sensor-option {
+    padding: 7px;
+    border-bottom: 1px solid gray;
+}
+.module .controls.query-data .sensor-option:last-child {
+    border-bottom: none;
+}
+
+.module .controls.query-data .options-border {
+    border-left: 1px solid gray;
+    padding: 0px;
+}
+
+.module .controls.query-data .options-container {
+    border: 1px solid gray;
+    min-height: 34px;
+}
+
+.module .controls.query-data .timerange {
+    margin-top: 5px;
+}
+.module .controls.query-data .timerange span {
+    padding: 0px 5px;
+}
 .hidden {
     display: none !important;
 }

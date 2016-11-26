@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import c3 from 'c3';
 import io from 'socket.io-client';
+import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
 import sensorsInfoDict from '../SensorsInfoDict';
 
 class DataTemplate extends Component {
@@ -122,60 +123,74 @@ class DataTemplate extends Component {
         this.socketClient.emit(queryEvent, data);
     }
 
-    getTimeRangeOptions() {
-        let sensorsTimeRangeOptions = [];
-        let hideOrNot = this.state.queryByTimeRange ? null : 'hidden';
+    getSensorOptions() {
+        let sensorsOptions = [];
 
         // function to return our html for each sensor
-        let sensorTemplate = (sensorName, sensorId) => {
+        let sensorTemplate = (sensorName, sensorId, sensorHideValue) => {
             return (
-                <div className={hideOrNot}>
-                    <input type="text" placeholder="Beginning Timestamp" name="queryStartTime" sensorId={sensorId}
-                           onChange={this.handleInputChange}/>
-                    <label>to</label>
-                    <input type="text" placeholder="End Timestamp" name="queryEndTime" sensorId={sensorId}
-                           onChange={this.handleInputChange}/>
+                <div className="sensor-option">
                     <span>{sensorName} ({sensorId})</span>
+
+
+                    <input type="checkbox" name="Timestamp Range" onClick={this.handleTimeRangeClick}/>
+                    <label for="Timestamp Range">Timestamp Range</label>
+
+                    <div className={ShowOrHide}>
+                        <input type="text" placeholder="Beginning Timestamp" name="queryStartTime" sensorId={sensorId}
+                               onChange={this.handleInputChange}/>
+                        <label>to</label>
+                        <input type="text" placeholder="End Timestamp" name="queryEndTime" sensorId={sensorId}
+                               onChange={this.handleInputChange}/>
+                    </div>
                 </div>
             )
         };
 
         // loop through and build a input fields for each sensor
         for(let sensor of this.state.sensorsInfo) {
-            sensorsTimeRangeOptions.push(sensorTemplate(sensor['name'], sensor['id']));
+            sensorsOptions.push(sensorTemplate(sensor['name'], sensor['id']));
         }
-        return sensorsTimeRangeOptions;
+        return sensorsOptions;
     }
 
     render() {
         let dropdown_options = this.getDropdownOptions();
 
-        let timerange_options = this.getTimeRangeOptions();
+        let sensor_options = this.getSensorOptions();
 
         return (
-            <div>
+            <BaseModuleTemplate moduleName="Query Chart Data">
                 <div className="controls query-data">
-                    <select multiple name="Sensor Options" onChange={this.handleSensorOptionsChange}>
-                        <option value="all" name="All">All</option>
-                        {dropdown_options}
-                    </select>
                     <div>
-                        <input type="checkbox" name="Timestamp Range" onClick={this.handleTimeRangeClick}/>
-                        <label for="Timestamp Range">Timestamp Range</label>
-                        {timerange_options}
+                        <h4>Select Sensors (Multi-Select)</h4>
+                        <select multiple name="Sensor Options" onChange={this.handleSensorOptionsChange}>
+                            {dropdown_options}
+                        </select>
+                    </div>
+                    <div className="options-border"/>
+                    <div className="sensor-options">
+                        <h4>Sensor Options</h4>
+
+                        {sensor_options}
                     </div>
                     <button onClick={this.handleGetDataClick}>Get Data</button>
                 </div>
 
                 <div id={this.props.chartId} />
-            </div>
+            </BaseModuleTemplate>
         );
     }
 }
 
+
 export default DataTemplate;
 
 /*
+
+ <input type="checkbox" name="Timestamp Range" onClick={this.handleTimeRangeClick}/>
+ <label for="Timestamp Range">Timestamp Range</label>
+
     data being passed through Socket Client to Homebase_Server will look like:
 
     data = {
