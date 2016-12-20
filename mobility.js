@@ -39,11 +39,11 @@ var onJoystickData = function(event) {
 var setMotors = function(diffSteer, channel){
   if(diffSteer.direction === 'fwd'){
     //pwm.setPWMF(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
-    console.log("fwd: " + parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
+    console.log(">>fwd: " + parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
   }
   else{
     //pwm.setPWMF(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
-    console.log("rev: " + parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
+    console.log(">>rev: " + parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
   }
 };
 
