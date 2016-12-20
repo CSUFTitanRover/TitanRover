@@ -25,7 +25,7 @@ Number.prototype.map = function (in_min, in_max, out_min, out_max) {
 var onJoystickData = function(event) {
     if(event.number === 0){
       diffSteer = steerMotors(null, event.value.map(-35000, 35000, -1, 1), lastY);
-      lastX = lastY = event.value.map(-35000, 35000, -1, 1);
+      lastX = event.value.map(-35000, 35000, -1, 1);
     } 
     else if (event.number == 1){
       diffSteer = steerMotors(null, lastX, event.value.map(-35000, 35000, -1, 1));
