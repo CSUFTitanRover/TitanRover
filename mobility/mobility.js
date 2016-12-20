@@ -9,12 +9,13 @@ const pwm = makePwmDriver({
 });
 
 // Based on J. Stewart's calculations:
+// May need to be adjusted/recalculated
 // Values for Sabertooth 2X60:
 //    1000 = Full Reverse
 //    1500 = Stopped
 //    2000 = Full Forward.
 const servo_min = 204; // Calculated to be 1000 us
-const servo_mid = 307; // Calculated to be 1500 us
+const servo_mid = 325; // Calculated to be 1500 us
 const servo_max = 409; // Calculated to be 2000 us
 
 // PWM Channel Config:
@@ -85,11 +86,9 @@ var onJoystickData = function(event) {
  */
 var setMotors = function(diffSteer, channel) {
     if (diffSteer.direction === 'fwd') {
-        //pwm.setPWMF(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
-        console.log(">>fwd: " + parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
+        pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
     } else {
-        //pwm.setPWMF(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
-        console.log(">>rev: " + parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
+        pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
     }
 };
 
