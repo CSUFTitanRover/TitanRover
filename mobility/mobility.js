@@ -1,4 +1,6 @@
 console.log('Loading mobility:');
+// var hrarry = []
+// var sum = 0;
 
 // PWM Config for Pi Hat:
 const makePwmDriver = require('adafruit-i2c-pwm-driver');
@@ -48,7 +50,17 @@ var lastY = 0;
  * @return {Number} An unnamed value described in range out_min -> out_max
  */
 Number.prototype.map = function(in_min, in_max, out_min, out_max) {
+    // var hrstart = process.hrtime();
     return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    // var hrend = process.hrtime(hrstart);
+    // hrarry.push(hrend[1]/1000000);
+    // if(hrarry.length >= 1000){
+    //     for(var i = 0; i < hrarry.length; i++){
+    //         sum += hrarry[i] 
+    //     }
+    //     console.log("1000 Map Avg: " + (sum/hrarry.length));
+    //     process.exit();
+    // }
 };
 
 /**
@@ -60,6 +72,7 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
  * @param {Event} event.  Describes number, value, where number is axis and value is joystick value
  */
 var onJoystickData = function(event) {
+    // var hrstart = process.hrtime();
     // X-Axis
     if (event.number === 0) {
         diffSteer = steerMotors(null, event.value.map(-35000, 35000, -1, 1), lastY);
@@ -70,9 +83,17 @@ var onJoystickData = function(event) {
         diffSteer = steerMotors(null, lastX, event.value.map(-35000, 35000, -1, 1));
         lastY = event.value.map(-35000, 35000, -1, 1);
     }
-    console.log(diffSteer);
     setMotors(diffSteer[0], left_channel);
     setMotors(diffSteer[1], right_channel);
+    // var hrend = process.hrtime(hrstart);
+    // hrarry.push(hrend[1]/1000000);
+    // if(hrarry.length >= 1000){
+    //     for(var i = 0; i < hrarry.length; i++){
+    //         sum += hrarry[i] 
+    //     }
+    //     console.log("1000 setMotors Avg: " + (sum/hrarry.length));
+    //     process.exit();
+    // }
 };
 
 /**
@@ -82,14 +103,24 @@ var onJoystickData = function(event) {
  lastX or last Y depending on axis changed, (4) Send values with proper channels to send values
  to motors.
   * @param {Int} channel.  Value described by left_channel or right_channel corresponding to pin outs
- * @param {JSON} diffSteer.  Differntial steering calculations for one side described by channel
+  * @param {JSON} diffSteer.  Differntial steering calculations for one side described by channel
  */
 var setMotors = function(diffSteer, channel) {
+    //var hrstart = process.hrtime();
     if (diffSteer.direction === 'fwd') {
         pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
     } else {
         pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
     }
+    // hrend = process.hrtime(hrstart);
+    // hrarry.push(hrend[1]/1000000);
+    // if(hrarry.length >= 1000){
+    //     for(var i = 0; i < hrarry.length; i++){
+    //         sum += hrarry[i] 
+    //     }
+    //     console.log("1000 setMotors Avg: " + (sum/hrarry.length));
+    //     process.exit();
+    // }
 };
 
 joystick.on('axis', onJoystickData);
