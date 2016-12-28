@@ -9,12 +9,20 @@
 */
 var serialPort = require('serialport');
 var request = require('request');
+var fs = requre('fs');
 
+// Will store our data when we loss connection to the homebase
+var dissFile = fs.createWriteStream('disconnect.json', {flags: 'a'});
+
+var isDisconnect = false;
+
+// This is the serial port we are reading all of our data from
 var port = new serialPort('/dev/ttyACM0', {
   parser: serialPort.parsers.readline('\r\n')
 });
 
 
+// Will send the data back to the homebase station to be saved into a database
 function phoneHome(value) {
   request.post({
 		url: 'http://192.168.1.122:6993/data',  // Replace this with IP of homebase server
@@ -24,9 +32,37 @@ function phoneHome(value) {
 	}, function(error, res, body) {
 		if (error) {
 			console.log(error);
+            
+            // We have lost connection save to a json file
+            // Need to save as a json array not doing that now
+            dissFile.write(JSON.stringify(value));
+            isDisconnect = true;
 		}
 		else {
-			console.log(res.statusCode);
+            
+            // If this is the first time after losing connection we have connection send the entire file back to the homebase station
+            // This needs to be fixed and sent as json
+            if (isDisconnect) {
+                fs.readFile('disconnect.json', function(err, data) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        phoneHome(data);
+                    }
+                });
+                
+                // Close our writeStream
+                dissFile.close();
+                
+                // Delete the file since we sent the data
+                fs.unlinkSync('disconnect.json');
+                
+                // Recreate our writeStream to use for next time we disconnect
+                dissFile = fs.createWriteStream('disconnect.json', {flags: 'a'});
+                isDisconnect = false;
+            }
+			//console.log(res.statusCode);
 		}
 	});
 }
@@ -95,6 +131,8 @@ port.on('data', function(data) {
 
 process.on('SIGINT', function() {
 	console.log("\n############ Shutting Down ###########\n");
+    dissFile.end();
+    dissFile.close();
 	process.exit();
 });
 

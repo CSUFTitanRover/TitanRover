@@ -141,7 +141,7 @@ io.on('connection', function(socketClient) {
 
 		var dataToSendBack; // just a str msg for now
 
-		database.collection('data').find({ id: req.params.id_val }).toArray(function(err, result) {
+		database.collection('data').find({ id: data['sensorIds'] }).toArray(function(err, result) {
 		  if (err) {
 		      console.log(err);
 		      logger.write(Date.now() + ": Error finding data: " + err + '\n');
@@ -229,7 +229,7 @@ app.post('/data', function(req, res, next) {
 		sendSocketIO(request, request.id);
 
 		// Store the data within the MongoDB
-		database.collection('data').insertOne(request);
+		database.collection('data').insert(request);
 	}
 	else {
 		statusCode = 400;
