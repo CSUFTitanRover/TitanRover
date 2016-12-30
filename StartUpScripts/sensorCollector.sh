@@ -12,11 +12,11 @@ case "$1" in
 	start)
 		echo "Starting the SensorCollector.js node file"
 		cd $pathToFile
-		node homebase_server.js
+		node sensorCollector.js
 		;;
 	stop)
 		echo "Stopping the SensorCollector.js node file"
-		kill -2 `pgrep -n -f 'node homebase_server.js'`
+		kill -2 `pgrep -n -f 'node sensorCollector.js'`
 		;;
 	*)
 		echo "Error has occured"
