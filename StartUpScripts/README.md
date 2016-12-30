@@ -3,6 +3,11 @@
 
 To get these scripts to work on startup place a symbolic link into the rc[level].d file  
 These are located in /etc  
+Linux's init module that runs right after boot looks into these rc[level].d directories to see what scripts to run.  It will then run them in sequencial order based on how they are named. 
+
+This ```S01cups``` will run before ```S04smtp```  
+
+If the first character is S it will pass start as its argument if its a K it will pass stop.   
 
 ## Linux init.d levels  
 0) Shutdown  
