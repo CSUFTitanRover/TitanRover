@@ -9,12 +9,12 @@
 */
 var serialPort = require('serialport');
 var request = require('request');
-var fs = requre('fs');
 
-// Will store our data when we loss connection to the homebase
-var dissFile = fs.createWriteStream('disconnect.json', {flags: 'a'});
+// Will store our data until it reconnects
+var disConnectedData = [];
 
-var isDisconnect = false;
+// Determines if the rover is connected or not
+var connected = true;
 
 // This is the serial port we are reading all of our data from
 var port = new serialPort('/dev/ttyACM0', {
@@ -23,56 +23,49 @@ var port = new serialPort('/dev/ttyACM0', {
 
 
 // Will send the data back to the homebase station to be saved into a database
-function phoneHome(value) {
+function phoneHome(value, multi) {
+
+	var URL = 'http://192.168.1.122:6993';
+
+	if (multi) {
+		URL += '/dataMult';
+	}
+	else {
+		URL += '/data';
+	}
   request.post({
-		url: 'http://192.168.1.122:6993/data',  // Replace this with IP of homebase server
+		url: URL,  // Replace this with IP of homebase server
 		method: 'POST',
 		json: true,
 		body: value
 	}, function(error, res, body) {
 		if (error) {
-			console.log(error);
-            
-            // We have lost connection save to a json file
-            // Need to save as a json array not doing that now
-            dissFile.write(JSON.stringify(value));
-            isDisconnect = true;
+			//console.log(error);
+			disConnectedData.push(value);
+			
+			if(connected) {
+				console.log("###### We have lost connection!! ######\n======== Saving data now!!! ========");
+			}
+			connected = false;
 		}
-		else {
-            
-            // If this is the first time after losing connection we have connection send the entire file back to the homebase station
-            // This needs to be fixed and sent as json
-            if (isDisconnect) {
-                fs.readFile('disconnect.json', function(err, data) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    else {
-                        phoneHome(data);
-                    }
-                });
-                
-                // Close our writeStream
-                dissFile.close();
-                
-                // Delete the file since we sent the data
-                fs.unlinkSync('disconnect.json');
-                
-                // Recreate our writeStream to use for next time we disconnect
-                dissFile = fs.createWriteStream('disconnect.json', {flags: 'a'});
-                isDisconnect = false;
-            }
-			//console.log(res.statusCode);
+		else if(connected == false) {
+			console.log("++++++ We have aquired a connection!! ++++++\n====== Transmitting saved data!!! ======");
+			connected = true;
+			phoneHome(disConnectedData, true);
+			disConnectedData = [];
 		}
-	});
+		//console.log(disConnectedData);
+            });
 }
+
 
 
 // Will format the data to send to the homebase server
 function formatter(value) {
   var jsonBuilder = {};
   var splitted = value.split(':');
-  console.log(splitted);
+
+  //console.log(splitted);
 
   /* =================================
   == 00: Mobility
@@ -105,12 +98,12 @@ function formatter(value) {
       break;
     default:
       jsonBuilder.id = null;
-      console.log("Do not recognize that id!!!!\nIt has been removed!!!!");
+      console.log("###### ID NOT RECOGNIZED IGNORING IT ######");
   }
 
   if (jsonBuilder.id != null) {
-	console.log(jsonBuilder);
-	phoneHome(jsonBuilder);
+	//console.log(jsonBuilder);
+	phoneHome(jsonBuilder, false);
   }
 }
 
@@ -131,8 +124,6 @@ port.on('data', function(data) {
 
 process.on('SIGINT', function() {
 	console.log("\n############ Shutting Down ###########\n");
-    dissFile.end();
-    dissFile.close();
 	process.exit();
 });
 
