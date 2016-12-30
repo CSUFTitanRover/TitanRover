@@ -229,7 +229,7 @@ app.post('/data', function(req, res, next) {
 		sendSocketIO(request, request.id);
 
 		// Store the data within the MongoDB
-		database.collection('data').insert(request);
+		database.collection('data').insertOne(request);
 	}
 	else {
 		statusCode = 400;
