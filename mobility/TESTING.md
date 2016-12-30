@@ -6,7 +6,7 @@ Year: master2017
 Subsystem: administration  
 Status: alpha  
 
-Reference Links: 
+Reference Links:   
 [node.js Adafruit i2c PWM Driver](https://github.com/kaosat-dev/adafruit-i2c-pwm-driver)  
 [Adafruit PWM Library Reference](https://learn.adafruit.com/adafruit-16-channel-pwm-servo-hat-for-raspberry-pi/library-reference)
 
