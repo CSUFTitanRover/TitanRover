@@ -37,11 +37,10 @@ The client will let you access the DB without having to use the UI or homebase_s
 1. Navigate to the bin directory of the mongodb folder
 2. Run the mongo client  
 	```sudo mongo --port 6969```  
-3. To see if data was stored  
+3. See if data is stored
 	```db.data.find()```  
-Place any query you would like in the find() part default will return everything.  
-
-
+	
+This will return all the data place a query in find() to filter results.  
 ### Homebase Server  
 
 The homebase server will accept any JSON data sent to it, and store this data into a MongoDB to be queried later.  
