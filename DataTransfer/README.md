@@ -39,7 +39,7 @@ The client will let you access the DB without having to use the UI or homebase_s
 	```sudo mongo --port 6969```  
 3. To see if data was stored  
 	```db.data.find()```  
-	Place any query you would like in the find() part default will return everything.  
+Place any query you would like in the find() part default will return everything.  
 
 
 ### Homebase Server  
