@@ -30,20 +30,20 @@ Date:  11/16/16
 Version:   1.2
 =============
 Date:  11/25/16
-=============
+
 - Reduced extra code in .h to only required constant addresses needed for project all other code commented out.
 - Moved required addresses to top of file
 
 Version:   1.4
 =============
 Date:  12/02/16
-=============
+
 - Found system bug in orginal code with wrong address in function paramater causing stability issues.
 
-**Version:  Cancelled code sequence
+Version:  Cancelled code sequence
 =============
 Date:  12/15/16
-=============
+
 - After researching the outfile functions in comparison to the direct script 
 communication between Python and Node.js I decided to rewrite the IMU process in 
 Python Script.
