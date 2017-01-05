@@ -12,18 +12,19 @@ This script will provide all axis, temp, and pressure values to the Rover system
 the process is called upon.  
 
 Communication: I2C
+
 ==============================================================================================================================
 
-**Version:  1.0 
+Version:  1.0 
 =============
 Date:  12/29/16
-=============
-Provides output for all axis information.  Software bug for chip orientation if flipped over.
 
-**Version:   1.1
+- Provides output for all axis information.  Software bug for chip orientation if flipped over.
+
+Version:   1.1
 =============
 Date:  1/03/16
-=============
+
 - Commented out unused output for Rover system.  
 - Added test.js which simulates the reading of values from IMU_Acc_Mag_Gyro.py process
 	- Software bug exists in transfer of first value between Python Script and Test.js
