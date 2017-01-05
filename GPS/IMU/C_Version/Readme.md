@@ -18,14 +18,16 @@ Communication: I2C
 Version:  1.0 
 =============
 Date:  11/12/16
-=============
+
 Provides output for all axis information.  Software bug allowing the axis readings to flip from positive to negative.
+
 
 Version:   1.1
 =============
 Date:  11/16/16
-=============
+
 - Improved code standards combining commonly used function call to each chip seperately into one call.  Added chip address to function paramaters and removed access functions.
+
 
 Version:   1.2
 =============
@@ -34,11 +36,13 @@ Date:  11/25/16
 - Reduced extra code in .h to only required constant addresses needed for project all other code commented out.
 - Moved required addresses to top of file
 
+
 Version:   1.4
 =============
 Date:  12/02/16
 
 - Found system bug in orginal code with wrong address in function paramater causing stability issues.
+
 
 Version:  Cancelled code sequence
 =============
