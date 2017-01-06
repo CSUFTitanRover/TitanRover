@@ -1,30 +1,5 @@
-#!/usr/bin/python
-#
-#	This program  reads the angles from the acceleromter, gyrscope
-#	and mangnetometeron a BerryIMU connected to a Raspberry Pi.
-#
-#	This program includes a number of calculations to improve the 
-#	values returned from BerryIMU. If this is new to you, it 
-#	may be worthwhile first to look at berryIMU-simple.py, which 
-#	has a much more simplified version of code which would be easier
-#	to read.   
-#
-#
-#	http://ozzmaker.com/
-#
-#    Copyright (C) 2016  Mark Williams
-#    This library is free software; you can redistribute it and/or
-#    modify it under the terms of the GNU Library General Public
-#    License as published by the Free Software Foundation; either
-#    version 2 of the License, or (at your option) any later version.
-#    This library is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-#    Library General Public License for more details.
-#    You should have received a copy of the GNU Library General Public
-#    License along with this library; if not, write to the Free
-#    Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
-#    MA 02111-1307, USA
+
+
 
 import sys
 
@@ -45,20 +20,13 @@ AA =  0.40      # Complementary filter constant
 Q_angle = 0.02
 Q_gyro = 0.0015
 R_angle = 0.005
-y_bias = 0.0
-x_bias = 0.0
-XP_00 = 0.0
-XP_01 = 0.0
-XP_10 = 0.0
-XP_11 = 0.0
-YP_00 = 0.0
-YP_01 = 0.0
-YP_10 = 0.0
-YP_11 = 0.0
-KFangleX = 0.0
-KFangleY = 0.0
-
-
+x_bias = y_bias = 0.0
+#x_bias = 0.0
+XP_00 = XP_01 = XP_10 = XP_11 = 0.0
+#XP_01 = 0.0 XP_10 = 0.0 XP_11 = 0.0
+YP_00 = YP_01 = YP_10 = YP_11 = 0.0
+#YP_01 = 0.0 YP_10 = 0.0 YP_11 = 0.0
+KFangleX = KFangleY = 0.0
 
 def kalmanFilterY ( accAngle, gyroRate, DT):
 	y=0.0
@@ -143,6 +111,9 @@ def writeGRY(register,value):
         bus.write_byte_data(L3GD20_ADDRESS_GYRO, register, value)
         return -1
 
+def writeRegisterAxis(Address, register, value)LSM303_ADDRESS_ACCEL,LSM303_ADDRESS_MAG,L3GD20_ADDRESS_GYRO
+	bus.write_byte_data(Address, register, value)
+	return -1
 
 
 def readACCx():
@@ -220,17 +191,24 @@ def readGYRz():
 
 	
 #initialise the accelerometer
-writeACC(LSM303_ACCEL_CTRL_REG1_A, 0b01100111) #z,y,x axis enabled, continuos update,  100Hz data rate
-writeACC(LSM303_ACCEL_CTRL_REG2_A, 0b00100000) #+/- 16G full scale
+writeRegisterAxis(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_CTRL_REG1_A, 0b01100111) #z,y,x axis enabled, continuos update,  100Hz data rate
+#writeACC(, ) #z,y,x axis enabled, continuos update,  100Hz data rate
+#writeACC(LSM303_ACCEL_CTRL_REG2_A, 0b00100000) #+/- 16G full scale
+writeRegisterAxis(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_CTRL_REG2_A, 0b00100000) #+/- 16G full scale
 
 #initialise the magnetometer
-writeMAG(LSM303_CRA_REG_M, 0b11110000) #Temp enable, M data rate = 50Hz
-writeMAG(LSM303_CRB_REG_M, 0b01100000) #+/-12gauss
-writeMAG(LSM303_MR_REG_M, 0b00000000) #Continuous-conversion mode
+writeRegisterAxis(LSM303_ADDRESS_MAG,L3GD20_ADDRESS_GYRO, LSM303_CRA_REG_M, 0b11110000) #Temp enable, M data rate = 50Hz
+writeRegisterAxis(LSM303_ADDRESS_MAG, LSM303_CRB_REG_M, 0b01100000) #+/-12gauss
+writeRegisterAxis(LSM303_ADDRESS_MAG, LSM303_MR_REG_M, 0b00000000) #Continuous-conversion mode
+#writeMAG(LSM303_CRA_REG_M, 0b11110000) #Temp enable, M data rate = 50Hz
+#writeMAG(LSM303_CRB_REG_M, 0b01100000) #+/-12gauss
+#writeMAG(LSM303_MR_REG_M, 0b00000000) #Continuous-conversion mode
 
 #initialise the gyroscope
-writeGRY(L3GD20_CTRL_REG1, 0b00001111) #Normal power mode, all axes enabled
-writeGRY(L3GD20_CTRL_REG4, 0b00110000) #Continuos update, 2000 dps full scale
+writeRegisterAxis(L3GD20_ADDRESS_GYRO, L3GD20_CTRL_REG1, 0b00001111) #Normal power mode, all axes enabled
+writeRegisterAxis(L3GD20_ADDRESS_GYRO, L3GD20_CTRL_REG4, 0b00110000) #Continuos update, 2000 dps full scale
+#writeGRY(L3GD20_CTRL_REG1, 0b00001111) #Normal power mode, all axes enabled
+#writeGRY(L3GD20_CTRL_REG4, 0b00110000) #Continuos update, 2000 dps full scale
 
 gyroXangle = 0.0
 gyroYangle = 0.0
