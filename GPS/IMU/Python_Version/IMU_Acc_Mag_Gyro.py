@@ -20,13 +20,7 @@ AA =  0.40      # Complementary filter constant
 Q_angle = 0.02
 Q_gyro = 0.0015
 R_angle = 0.005
-x_bias = y_bias = 0.0
-#x_bias = 0.0
-XP_00 = XP_01 = XP_10 = XP_11 = 0.0
-#XP_01 = 0.0 XP_10 = 0.0 XP_11 = 0.0
-YP_00 = YP_01 = YP_10 = YP_11 = 0.0
-#YP_01 = 0.0 YP_10 = 0.0 YP_11 = 0.0
-KFangleX = KFangleY = 0.0
+x_bias = y_bias = XP_00 = XP_01 = XP_10 = XP_11 = YP_00 = YP_01 = YP_10 = YP_11 = KFangleX = KFangleY = 0.0
 
 def kalmanFilterY ( accAngle, gyroRate, DT):
 	y=0.0
@@ -99,140 +93,86 @@ def kalmanFilterX ( accAngle, gyroRate, DT):
 	
 	return KFangleX
 
-def writeACC(register,value):
-        bus.write_byte_data(LSM303_ADDRESS_ACCEL , register, value)
-        return -1
-
-def writeMAG(register,value):
-        bus.write_byte_data(LSM303_ADDRESS_MAG, register, value)
-        return -1
-
-def writeGRY(register,value):
-        bus.write_byte_data(L3GD20_ADDRESS_GYRO, register, value)
-        return -1
-
-def writeRegisterAxis(Address, register, value)LSM303_ADDRESS_ACCEL,LSM303_ADDRESS_MAG,L3GD20_ADDRESS_GYRO
+def writeRegisterAxis(Address, register, value):
 	bus.write_byte_data(Address, register, value)
 	return -1
 
-
-def readACCx():
-        acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_X_L_A)
-        acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_X_H_A)
+def readACCAxis(axis):
+        reg = LSM303_ACCEL_OUT_X_L_A
+        if axis == 'x':
+                acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg) 
+                acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 1) 
+        elif axis == 'y':
+                acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 2)
+                acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 3)
+        else: #axis == 'z':
+                acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 4)
+                acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 5)
+                
 	acc_combined = (acc_l | acc_h <<8)
-
 	return acc_combined  if acc_combined < 32768 else acc_combined - 65536
 
+def readMAGAxis(axis):
+        reg = LSM303_MAG_OUT_X_H_M
+        if axis == 'x':
+                mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, reg) 
+                mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, reg + 1) 
+        elif axis == 'z':
+                mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, reg + 2)
+                mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, reg + 3)
+        else: #axis == 'y'
+                mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, reg + 4)
+                mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, reg + 5)
+                
+	mag_combined = (mag_l | mag_h <<8)
+	return mag_combined  if mag_combined < 32768 else mag_combined - 65536
 
-def readACCy():
-        acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_Y_L_A)
-        acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_Y_H_A)
-	acc_combined = (acc_l | acc_h <<8)
+def readGYRAxis(axis):
+        reg = L3GD20_OUT_X_L
+        if axis == 'x':
+                gyr_l = bus.read_byte_data(L3GD20_ADDRESS_GYRO, reg)
+                gyr_h = bus.read_byte_data(L3GD20_ADDRESS_GYRO, reg + 1)
+        elif axis == 'y':
+                gyr_l = bus.read_byte_data(L3GD20_ADDRESS_GYRO, reg + 2)
+                gyr_h = bus.read_byte_data(L3GD20_ADDRESS_GYRO, reg + 3)
+        else: #axis == 'z'
+                gyr_l = bus.read_byte_data(L3GD20_ADDRESS_GYRO, reg + 4)
+                gyr_h = bus.read_byte_data(L3GD20_ADDRESS_GYRO, reg + 5)
 
-	return acc_combined  if acc_combined < 32768 else acc_combined - 65536
-
-
-def readACCz():
-        acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_Z_L_A)
-        acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_Z_H_A)
-	acc_combined = (acc_l | acc_h <<8)
-
-	return acc_combined  if acc_combined < 32768 else acc_combined - 65536
-
-
-def readMAGx():
-        mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_X_L_M)
-        mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_X_H_M)
-        mag_combined = (mag_l | mag_h <<8)
-
-        return mag_combined  if mag_combined < 32768 else mag_combined - 65536
-
-
-def readMAGy():
-        mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_Y_L_M)
-        mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_Y_H_M)
-        mag_combined = (mag_l | mag_h <<8)
-
-        return mag_combined  if mag_combined < 32768 else mag_combined - 65536
-
-
-def readMAGz():
-        mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_Z_L_M)
-        mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_Z_H_M)
-        mag_combined = (mag_l | mag_h <<8)
-
-        return mag_combined  if mag_combined < 32768 else mag_combined - 65536
-
-
-
-def readGYRx():
-        gyr_l = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_X_L)
-        gyr_h = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_X_H)
         gyr_combined = (gyr_l | gyr_h <<8)
-
-        return gyr_combined  if gyr_combined < 32768 else gyr_combined - 65536
-  
-
-def readGYRy():
-        gyr_l = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_Y_L)
-        gyr_h = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_Y_H)
-        gyr_combined = (gyr_l | gyr_h <<8)
-
         return gyr_combined  if gyr_combined < 32768 else gyr_combined - 65536
 
-def readGYRz():
-        gyr_l = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_Z_L)
-        gyr_h = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_Z_H)
-        gyr_combined = (gyr_l | gyr_h <<8)
-
-        return gyr_combined  if gyr_combined < 32768 else gyr_combined - 65536
-
-
-
-	
 #initialise the accelerometer
 writeRegisterAxis(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_CTRL_REG1_A, 0b01100111) #z,y,x axis enabled, continuos update,  100Hz data rate
-#writeACC(, ) #z,y,x axis enabled, continuos update,  100Hz data rate
-#writeACC(LSM303_ACCEL_CTRL_REG2_A, 0b00100000) #+/- 16G full scale
 writeRegisterAxis(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_CTRL_REG2_A, 0b00100000) #+/- 16G full scale
 
 #initialise the magnetometer
-writeRegisterAxis(LSM303_ADDRESS_MAG,L3GD20_ADDRESS_GYRO, LSM303_CRA_REG_M, 0b11110000) #Temp enable, M data rate = 50Hz
+writeRegisterAxis(LSM303_ADDRESS_MAG, LSM303_CRA_REG_M, 0b11110000) #Temp enable, M data rate = 50Hz
 writeRegisterAxis(LSM303_ADDRESS_MAG, LSM303_CRB_REG_M, 0b01100000) #+/-12gauss
 writeRegisterAxis(LSM303_ADDRESS_MAG, LSM303_MR_REG_M, 0b00000000) #Continuous-conversion mode
-#writeMAG(LSM303_CRA_REG_M, 0b11110000) #Temp enable, M data rate = 50Hz
-#writeMAG(LSM303_CRB_REG_M, 0b01100000) #+/-12gauss
-#writeMAG(LSM303_MR_REG_M, 0b00000000) #Continuous-conversion mode
 
 #initialise the gyroscope
 writeRegisterAxis(L3GD20_ADDRESS_GYRO, L3GD20_CTRL_REG1, 0b00001111) #Normal power mode, all axes enabled
 writeRegisterAxis(L3GD20_ADDRESS_GYRO, L3GD20_CTRL_REG4, 0b00110000) #Continuos update, 2000 dps full scale
-#writeGRY(L3GD20_CTRL_REG1, 0b00001111) #Normal power mode, all axes enabled
-#writeGRY(L3GD20_CTRL_REG4, 0b00110000) #Continuos update, 2000 dps full scale
 
-gyroXangle = 0.0
-gyroYangle = 0.0
-gyroZangle = 0.0
-CFangleX = 0.0
-CFangleY = 0.0
-kalmanX = 0.0
-kalmanY = 0.0
 
-a = datetime.datetime.now()
+gyroXangle     = gyroYangle    = gyroZangle     = CFangleX       = CFangleY      = kalmanX        = kalmanY       = 0.0
+
+a = datetime.datetime.now()            #Gyro Timing Control
 
 while True:   #Currently this loop is disabled to allow the Node.js control
 	
 	
 	#Read the accelerometer,gyroscope and magnetometer values
-        ACCx = readACCx()
-	ACCy = readACCy()
-	ACCz = readACCz()
-	GYRx = readGYRx()
-	GYRy = readGYRy()
-	GYRz = readGYRz()
-	MAGx = readMAGx()
-	MAGy = readMAGy()
-	MAGz = readMAGz()
+        ACCx = readACCAxis('x')
+	ACCy = readACCAxis('y')
+	ACCz = readACCAxis('z')
+	GYRx = readGYRAxis('x')
+	GYRy = readGYRAxis('y')
+	GYRz = readGYRAxis('z')
+	MAGx = readMAGAxis('x')
+	MAGy = readMAGAxis('y')
+	MAGz = readMAGAxis('z')
 	
 	##Calculate loop Period(LP). How long between Gyro Reads
 	b = datetime.datetime.now() - a
@@ -240,12 +180,10 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 	LP = b.microseconds/(1000000*1.0)
 	print "Loop Time | %5.2f|" % ( LP ),
 	
-	
 	#Convert Gyro raw to degrees per second
 	rate_gyr_x =  GYRx * G_GAIN
 	rate_gyr_y =  GYRy * G_GAIN
 	rate_gyr_z =  GYRz * G_GAIN
-
 
 	#Calculate the angles from the gyro. 
 	gyroXangle+=rate_gyr_x*LP
@@ -342,7 +280,7 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 
 
 
-	if 0: #1:			#Change to '0' to stop showing the angles from the accelerometer
+	if 0: #1:			#Change to '1' to show the angles from the accelerometer
  		print ("\033[1;34;40mACCX Angle %5.2f ACCY Angle %5.2f  \033[0m  " % (AccXangle, AccYangle)),
 	
 	if 0: #1:			#Change to '0' to stop  showing the angles from the gyro
