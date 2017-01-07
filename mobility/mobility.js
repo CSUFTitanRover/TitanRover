@@ -99,8 +99,8 @@ var setMotors = function(diffSteer, channel) {
  */
 var receiveMobility = function(joystickData){
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = joystickData.button;
-    let value = joystickData.value;
+    let axis = parseInt(joystickData.button);
+    let value = parseInt(joystickData.value);
     // X-Axis
     if (axis === 0) {
         diffSteer = steerMotors(null, value.map(-35000, 35000, -1, 1), lastY);
