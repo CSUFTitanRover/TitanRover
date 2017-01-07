@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
-import sensorsInfoDict from '../../../SensorsInfoDict';
 import rover_settings from '../../../../rover_settings.json';
 
 import SensorOptionTemplate from '../../../templates/SensorOptionTemplate';
