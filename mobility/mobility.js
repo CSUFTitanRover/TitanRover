@@ -50,21 +50,11 @@ var lastY = 0;
  * @return {Number} An unnamed value described in range out_min -> out_max
  */
 Number.prototype.map = function(in_min, in_max, out_min, out_max) {
-    // var hrstart = process.hrtime();
     return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    // var hrend = process.hrtime(hrstart);
-    // hrarry.push(hrend[1]/1000000);
-    // if(hrarry.length >= 1000){
-    //     for(var i = 0; i < hrarry.length; i++){
-    //         sum += hrarry[i] 
-    //     }
-    //     console.log("1000 Map Avg: " + (sum/hrarry.length));
-    //     process.exit();
-    // }
 };
 
 /**
- * Function called on axis change from Joystick.  This function only responds to changes on X or Y, 
+ * TESTING ONLY! Function called on axis change from Joystick.  This function only responds to changes on X or Y, 
  number 0 or 1 respectively.  (1) Gets changed joystick value per X or Y Axis, (3) Calculate 
  differential steering by mappng joystick range to diff-steer range and stores the result in 
  lastX or last Y depending on axis changed, (4) Send values with proper channels to send values
@@ -72,7 +62,6 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
  * @param {Event} event.  Describes number, value, where number is axis and value is joystick value
  */
 var onJoystickData = function(event) {
-    // var hrstart = process.hrtime();
     // X-Axis
     if (event.number === 0) {
         diffSteer = steerMotors(null, event.value.map(-35000, 35000, -1, 1), lastY);
@@ -85,15 +74,6 @@ var onJoystickData = function(event) {
     }
     setMotors(diffSteer[0], left_channel);
     setMotors(diffSteer[1], right_channel);
-    // var hrend = process.hrtime(hrstart);
-    // hrarry.push(hrend[1]/1000000);
-    // if(hrarry.length >= 1000){
-    //     for(var i = 0; i < hrarry.length; i++){
-    //         sum += hrarry[i] 
-    //     }
-    //     console.log("1000 setMotors Avg: " + (sum/hrarry.length));
-    //     process.exit();
-    // }
 };
 
 /**
@@ -106,21 +86,33 @@ var onJoystickData = function(event) {
   * @param {JSON} diffSteer.  Differntial steering calculations for one side described by channel
  */
 var setMotors = function(diffSteer, channel) {
-    //var hrstart = process.hrtime();
     if (diffSteer.direction === 'fwd') {
         pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
     } else {
         pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
     }
-    // hrend = process.hrtime(hrstart);
-    // hrarry.push(hrend[1]/1000000);
-    // if(hrarry.length >= 1000){
-    //     for(var i = 0; i < hrarry.length; i++){
-    //         sum += hrarry[i] 
-    //     }
-    //     console.log("1000 setMotors Avg: " + (sum/hrarry.length));
-    //     process.exit();
-    // }
 };
 
-joystick.on('axis', onJoystickData);
+/**
+ * Function to be called from rover Server to send proper signals to motors.
+  * @param {JSON} joystickData.  JSON joystick axis and value data.
+ */
+var receiveMobility = function(joystickData){
+    // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
+    let axis = joystickData.button;
+    let value = joystickData.value;
+    // X-Axis
+    if (axis === 0) {
+        diffSteer = steerMotors(null, value.map(-35000, 35000, -1, 1), lastY);
+        lastX = value.map(-35000, 35000, -1, 1);
+    }
+    // Y-Axis
+    else if (axis == 1) {
+        diffSteer = steerMotors(null, lastX, value.map(-35000, 35000, -1, 1));
+        lastY = value.map(-35000, 35000, -1, 1);
+    }
+    setMotors(diffSteer[0], left_channel);
+    setMotors(diffSteer[1], right_channel);
+};
+
+//joystick.on('axis', onJoystickData);
