@@ -1,3 +1,4 @@
+
 [Python_Version](https://github.com/CSUFTitanRover/TitanRover/tree/master2017/GPS/IMU/Python_Version)
 ==============================================================================================================================
 
@@ -6,6 +7,7 @@
 ToDo's
 - [ ] - Decide on orientation of chip and finalize the code for proper angles
 - [ ] - Fix NaN issue between Python and Node.js
+
 ==============================================================================================================================
 
 
