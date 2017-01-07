@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
 import LiveDataTemplate from '../../../templates/LiveDataTemplate';
-import sensorsInfoDict from '../../../SensorsInfoDict';
-
-const clientID = sensorsInfoDict.get("Decagon-5TE-Chart");
 
 const initialCols = [
     ['EC'],
@@ -17,11 +14,9 @@ class Chart1 extends Component {
         return (
             <BaseModuleTemplate moduleName="Decagon 5TE Chart">
                 <LiveDataTemplate
-                    chartID="Decagon-5TE-Chart"
+                    sensorName="Decagon-5TE-Chart"
                     chartInitialColumns={initialCols}
                     chartType="line"
-
-                    clientID={clientID}
                 />
             </BaseModuleTemplate>
         );
