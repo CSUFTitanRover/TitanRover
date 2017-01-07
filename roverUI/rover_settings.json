@@ -1,0 +1,14 @@
+{
+"homebase_ip": "192.168.1.122:6993",
+"sensorsList": [
+    {"sensorName": "Decagon-5TE-Chart", "sensorID":"01"},
+    {"sensorName": "DHT-11-Chart", "sensorID": "02"},
+    {"sensorName": "Sensor-Name-Chart", "sensorID": "03"},
+    {"sensorName": "Some-Other-Name-Chart", "sensorID": "04"},
+    {"sensorName": "Maris-Chart", "sensorID": "05"},
+    {"sensorName": "Vex-Chart", "sensorID": "06"},
+    {"sensorName": "Willow-Chart", "sensorID": "07"},
+    {"sensorName": "Tart-Chart", "sensorID": "08"}
+  ]
+}
+
