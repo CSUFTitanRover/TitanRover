@@ -37,7 +37,16 @@ Date:   1/05/16
 
 - Combined seperated functions and cleaned up code
 
-'''python
+BEFORE
+
+	def readACCx():
+		.....( 10 lines of code )
+	def readACCy():
+		.....( 10 lines of duplicate code )
+	def readACCz():
+		.....( 10 lines of duplicate code )
+
+AFTER
 
 	def readACCAxis(axis):
 		reg = LSM303_ACCEL_OUT_X_L_A
@@ -53,7 +62,6 @@ Date:   1/05/16
 		acc_combined = (acc_l | acc_h <<8)
 		return acc_combined  if acc_combined < 32768 else acc_combined - 65536
 		
-'''
 
 - Timing Analysis clocks the test.js start to receive @ 105ms
 
