@@ -38,19 +38,19 @@ Date:   1/05/16
 - Combined seperated functions and cleaned up code
 
 '''python
-def readACCAxis(axis):
-        reg = LSM303_ACCEL_OUT_X_L_A
-        if axis == 'x':
-                acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg) 
-                acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 1) 
-        elif axis == 'y':
-                acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 2)
-                acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 3)
-        else: #axis == 'z':
-                acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 4)
-                acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 5)
-	acc_combined = (acc_l | acc_h <<8)
-	return acc_combined  if acc_combined < 32768 else acc_combined - 65536
+	def readACCAxis(axis):
+        	reg = LSM303_ACCEL_OUT_X_L_A
+		if axis == 'x':
+			acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg) 
+			acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 1) 
+		elif axis == 'y':
+			acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 2)
+			acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 3)
+		else: #axis == 'z':
+			acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 4)
+			acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 5)
+		acc_combined = (acc_l | acc_h <<8)
+		return acc_combined  if acc_combined < 32768 else acc_combined - 65536
 '''
 
 - Timing Analysis clocks the test.js start to receive @ 105ms
