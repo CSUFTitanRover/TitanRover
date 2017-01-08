@@ -40,11 +40,11 @@ Date:   1/05/16
 BEFORE
 
 	def readACCx():
-		.....( 10 lines of code )
+		.....( 8 lines of code )
 	def readACCy():
-		.....( 10 lines of duplicate code )
+		.....( 8 lines of duplicate code )
 	def readACCz():
-		.....( 10 lines of duplicate code )
+		.....( 8 lines of duplicate code )
 
 AFTER
 
