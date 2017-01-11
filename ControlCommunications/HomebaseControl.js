@@ -39,23 +39,24 @@ number = 5: Y top of joystick value is either -32767 up or 32767 down
 
 // The third parameter in the joystick declariation is the sensitivity of the joystick 
 // higher the number less events will occur
-var joystick = new (require('joystick'))(0, 3500, 1000);
+var joystick = new (require('joystick'))(0, 3500, 500);
 var request = require('request');
 
-var URL_ROVER = 'http://localhost:3000';
+var URL_ROVER = 'http://192.168.1.117:3000/command';
 
 joystick.on('button', onJoystickData);
 joystick.on('axis', onJoystickData);
 
 function sendCommand(command) {
+    console.log(command);
     request.post({
 		url: URL_ROVER,
 		method: 'POST',
 		json: true,
 		body: command
 	}, function(error, res, body) {
-		if (error) {
-			console.log(error);
+		if (error) {        
+			console.log('ERROR OCCURED!!');
 		}
 		else {
 			console.log(res.statusCode);
@@ -65,11 +66,13 @@ function sendCommand(command) {
 
 function onJoystickData(event) {
 
-    console.log(event);
+    //console.log(event);
     
     // If it is axis data send as mobility
     if(event.type == "axis") {
-        event.commandType = "mobility";
+	if(event.number == 1 || event.number == 0)  {
+	event.commandType = 'mobility';
+	}
     }
     
     sendCommand(event);
