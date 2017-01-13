@@ -12,6 +12,7 @@ placePID="/RoverControl.pid"
 NAME="/RoverControl.js"
 pathToFile="/home/pi/TitanRover/ControlCommunications"
 PIDFile=${pathToFile}${placePID}
+NODE_EXEC=$(which node)
 
 
 	# Linux will pass these arguments when it starts|stops|restarts if the script is in the rc[level].d directory
@@ -24,7 +25,7 @@ case "$1" in
 		logger -i "Starting ${NAME}"
 
 		# The & means we will run the process in the background
-		node ${pathToFile}${NAME} & echo $! > $PIDFile
+		NODE_EXEC ${pathToFile}${NAME} & echo $! > $PIDFile
 		;;
 
 	stop)
@@ -47,7 +48,7 @@ case "$1" in
 		rm $PIDFile
 
 		# Will run the process after killing it
-		node ${pathToFile}${NAME} & echo $! > $PIDFile
+		NODE_EXEC ${pathToFile}${NAME} & echo $! > $PIDFile
 		;;
 
 	status)
