@@ -42,7 +42,7 @@ number = 5: Y top of joystick value is either -32767 up or 32767 down
 var joystick = new (require('joystick'))(0, 3500, 500);
 var request = require('request');
 
-var URL_ROVER = 'http://192.168.1.117:3000/command';
+var URL_ROVER = 'http://localhost:3000/command';
 
 joystick.on('button', onJoystickData);
 joystick.on('axis', onJoystickData);
@@ -70,8 +70,9 @@ function onJoystickData(event) {
     
     // If it is axis data send as mobility
     if(event.type == "axis") {
-	if(event.number == 1 || event.number == 0)  {
-	event.commandType = 'mobility';
+	// If it is X or Y axis
+	if(event.number == 0 || event.number == 1) {
+        	event.commandType = "mobility";
 	}
     }
     

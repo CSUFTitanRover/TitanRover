@@ -1,5 +1,5 @@
 /*
-  Author: Joseph Porter
+  Author: Joseph Porter and Joe Edwards
   Titan Rover - Rover Control
   Description: 
 		Will be accepting commands from the homebase Controller and relaying
@@ -19,6 +19,8 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 var app = express();
 var server = require('http').Server(app);
+
+var PORT = 3000;
 
 //console.log('Loading mobility:');
 // var hrarry = []
@@ -123,13 +125,14 @@ var receiveMobility = function(joystickData){
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.button);
     let value = parseInt(joystickData.value);
+    var diffSteer;
     // X-Axis
-    if (axis === 0) {
+    if (axis === 1) {
         diffSteer = steerMotors(null, value.map(-35000, 35000, -1, 1), lastY);
         lastX = value.map(-35000, 35000, -1, 1);
     }
     // Y-Axis
-    else if (axis == 1) {
+    else if (axis == 0) {
         diffSteer = steerMotors(null, lastX, value.map(-35000, 35000, -1, 1));
         lastY = value.map(-35000, 35000, -1, 1);
     }
@@ -138,8 +141,6 @@ var receiveMobility = function(joystickData){
 };
 
 //joystick.on('axis', onJoystickData);
-
-var PORT = 3000;
 
 // Start the server
 server.listen(PORT, function() {
@@ -167,6 +168,7 @@ app.post('/command', function(req, res, next) {
 			
 			case 'mobility':
 				// Either fork another process or just run code here
+				receiveMobility(request);
 				break;
 			case 'arm':
 				// Do arm stuff

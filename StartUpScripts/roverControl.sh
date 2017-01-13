@@ -8,9 +8,9 @@
 #====== END INIT INFO ======
 
 # To run a different process replace the placePID and NAME with the process 
-placePID="/sensorCollector.pid"
-NAME="/sensorCollector.js"
-pathToFile="/home/pi/TitanRover/DataTransfer"
+placePID="/RoverControl.pid"
+NAME="/RoverControl.js"
+pathToFile="/home/pi/TitanRover/ControlCommunications"
 PIDFile=${pathToFile}${placePID}
 
 
