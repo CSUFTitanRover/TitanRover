@@ -136,10 +136,10 @@ var receiveMobility = function(joystickData){
         diffSteer = steerMotors(null, lastX, value.map(35000, -35000, 1, -1));
         lastY = value.map(35000, -35000, 1, -1);
     }
-    console.log("DS0");
-    console.log(diffSteer[0]);
-    console.log("DS1");
-    console.log(diffSteer[1]);
+    //console.log("DS0");
+    //console.log(diffSteer[0]);
+    //console.log("DS1");
+    //console.log(diffSteer[1]);
     setMotors(diffSteer[0], left_channel);
     setMotors(diffSteer[1], right_channel);
 };

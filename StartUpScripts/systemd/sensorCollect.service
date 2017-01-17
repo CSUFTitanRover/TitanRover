@@ -1,0 +1,15 @@
+[Unit]
+Description=Collect Data for the rover
+
+[Service]
+ExecStart=/usr/local/bin/node /home/pi/TitanRover/DataTransfer/sensorCollector.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=RoverSensorCollector
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target
