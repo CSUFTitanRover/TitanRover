@@ -3,7 +3,7 @@ from time import sleep
 
 ''' 
 Runt Rover v.01 
-	Motor 1 - right side of the rover
+	Motor 1 - right side of 
 	Moter 2 - left side of rover
 
 	The script will run both pairs of motors for 2 seconds and stop. 
