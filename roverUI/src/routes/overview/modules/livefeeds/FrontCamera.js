@@ -5,9 +5,7 @@ class FrontCamera extends Component {
     render() {
         return (
             <BaseModuleTemplate moduleName="Front Camera">
-                <h1>Front Camera</h1>
-                <video width="1280" height="720" autoplay id="Front" />
-                <script src = ""></script>
+            <img src="http://192.168.1.74:8080/?action=stream" width="1280" height="720"/>
             </BaseModuleTemplate>
         );
     }

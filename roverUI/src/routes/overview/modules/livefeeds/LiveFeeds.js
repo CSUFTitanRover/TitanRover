@@ -7,11 +7,11 @@ class LiveFeeds extends Component {
         return (
             <BaseModuleTemplate moduleName="Live Feeds">
                 <Link activeClassName="active" to="/frontcamera">
-                    <span className="link-text">Front Camera</span>
+                    <button>Front Camera</button>
                 </Link>
 
                 <Link activeClassName="active" to="/rearcamera">
-                    <span className="link-text">Rear Camera</span>
+                    <button>Rear Camera</button>
                 </Link>
                 {this.props.children}
             </BaseModuleTemplate>

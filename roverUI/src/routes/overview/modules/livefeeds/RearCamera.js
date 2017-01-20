@@ -5,9 +5,7 @@ class RearCamera extends Component {
     render() {
         return (
             <BaseModuleTemplate moduleName="Rear Camera">
-                <h1>Rear Camera</h1>
-                <video width="1280" height="720" autoplay id="Rear" />
-                <script src = ""></script>
+            <img src="http://192.168.1.74:8090/?action=stream" width="1280" height="720"/>
             </BaseModuleTemplate>
         );
     }

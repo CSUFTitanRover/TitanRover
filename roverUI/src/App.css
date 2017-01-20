@@ -5,6 +5,10 @@ h3 {
     color: darkorange;
 }
 
+img{
+    background-color: black;
+}
+
 #nav-header {
     min-width: 250px;
     min-height: 100vh; /*might need to change when the main content has srollbars*/
