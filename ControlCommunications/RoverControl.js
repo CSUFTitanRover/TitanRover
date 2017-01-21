@@ -17,10 +17,14 @@
 var express = require('express');
 var fs = require('fs');
 var bodyParser = require('body-parser');
-var app = express();
-var server = require('http').Server(app);
+//var app = express();
+//var server = require('http').Server(app);
+
+var dgram = require('dgram');
+var server = dgram.createSocket('udp4');
 
 var PORT = 3000;
+var HOST = '192.168.1.117';
 
 //console.log('Loading mobility:');
 // var hrarry = []
@@ -144,8 +148,18 @@ var receiveMobility = function(joystickData){
     setMotors(diffSteer[1], right_channel);
 };
 
-//joystick.on('axis', onJoystickData);
+server.bind(PORT, HOST);
 
+server.on('listening', function() {
+    var address = server.address();
+    console.log('Rover running on: ' + address.address);
+})
+
+server.on('message', function(message, remote) {
+    receiveMobility(message);
+})
+//joystick.on('axis', onJoystickData);
+/*
 // Start the server
 server.listen(PORT, function() {
 	console.log("============ Server is up and running on port: ", server.address().port, "=============");
@@ -185,6 +199,8 @@ app.post('/command', function(req, res, next) {
 
 	res.sendStatus(statusCode);
 });
+
+*/
 
 // On SIGINT shutdown the server
 process.on('SIGINT', function() {

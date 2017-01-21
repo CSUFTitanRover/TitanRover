@@ -42,12 +42,15 @@ number = 5: Y top of joystick value is either -32767 up or 32767 down
 var joystick = new (require('joystick'))(0, 3500, 500);
 var request = require('request');
 
+var dgram = require('dgram');
+var client = dgram.createSocket('udp4');
+
 var URL_ROVER = 'http://localhost:3000/command';
 
 joystick.on('button', onJoystickData);
 joystick.on('axis', onJoystickData);
 
-function sendCommand(command) {
+/*function sendCommand(command) {
     console.log(command);
     request.post({
 		url: URL_ROVER,
@@ -63,8 +66,9 @@ function sendCommand(command) {
 		}
 	});
 }
+*/
 
-function onJoystickData(event) {
+/*function onJoystickData(event) {
 
     //console.log(event);
     
@@ -77,4 +81,19 @@ function onJoystickData(event) {
     }
     
     sendCommand(event);
+}*/
+
+function onJoystickData(event) {
+
+	var message = new Buffer(JSON.stringify(event));
+
+	client.send(message, 0, message.length, 5000, "localhost", function(err) {
+		if (err) {
+			console.log("Problem with sending data!!!");
+		}
+		else {
+			console.log("Sent the data!!!")
+		}
+		//client.close();
+	});
 }
