@@ -24,7 +24,7 @@ var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 
 var PORT = 3000;
-var HOST = '192.168.1.117';
+var HOST = 'localhost';
 
 //console.log('Loading mobility:');
 // var hrarry = []
@@ -49,8 +49,10 @@ const servo_mid = 325; // Calculated to be 1500 us
 const servo_max = 409; // Calculated to be 2000 us
 
 // PWM Channel Config:
-const left_channel = 0;
-const right_channel = 1;
+const leftFront_channel = 0;
+const rightFront_channel = 1;
+const leftBack_channel = 2;
+const rightBack_channel = 3;
 
 // Based on J. Stewart's calculations:
 pwm.setPWMFreq(50);
@@ -144,20 +146,34 @@ var receiveMobility = function(joystickData){
     //console.log(diffSteer[0]);
     //console.log("DS1");
     //console.log(diffSteer[1]);
-    setMotors(diffSteer[0], left_channel);
-    setMotors(diffSteer[1], right_channel);
+
+    // Have left and right signal go to two pins
+    setMotors(diffSteer[0], leftFront_channel);
+    setMotors(diffSteer[0], leftBack_channel);
+    setMotors(diffSteer[1], rightFront_channel);
+    setMotors(diffSteer[1], rightBack_channel);
 };
 
-server.bind(PORT, HOST);
 
 server.on('listening', function() {
     var address = server.address();
     console.log('Rover running on: ' + address.address);
-})
+});
 
 server.on('message', function(message, remote) {
-    receiveMobility(message);
-})
+
+    var msg = JSON.parse(message);
+    console.log(msg.commandTyoe);
+    switch(msg.commandTyoe) {
+	case 'mobility':
+		receiveMobility(msg);
+		break;
+	default:
+		console.log("###### Could not find commandType #######");
+    }
+});
+
+server.bind(PORT);
 //joystick.on('axis', onJoystickData);
 /*
 // Start the server
