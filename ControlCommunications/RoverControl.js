@@ -132,13 +132,13 @@ var receiveMobility = function(joystickData){
     var diffSteer;
     // X-Axis
     if (axis === 1) {
-        diffSteer = steerMotors(null, value.map(-35000, 35000, -1, 1), lastY);
-        lastX = value.map(35000, -35000, -1, 1);
+        diffSteer = steerMotors(null, value.map(-32767, 32767, -1, 1), lastY);
+        lastX = value.map(32767, -32767, -1, 1);
     }
     // Y-Axis SWAPPED MIN=1 MAX=-1 FOR INPUT AND OUTPUT FOR MAP
     else if (axis === 0) {
-        diffSteer = steerMotors(null, lastX, value.map(35000, -35000, 1, -1));
-        lastY = value.map(35000, -35000, 1, -1);
+        diffSteer = steerMotors(null, lastX, value.map(32767, -32767, 1, -1));
+        lastY = value.map(32767, -32767, 1, -1);
     }
     //console.log("DS0");
     //console.log(diffSteer[0]);

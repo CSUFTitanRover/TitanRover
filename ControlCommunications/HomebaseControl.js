@@ -47,6 +47,9 @@ var client = dgram.createSocket('udp4');
 
 var URL_ROVER = 'http://localhost:3000/command';
 
+var PORT = 3000;
+var HOST = '192.168.1.117';
+
 joystick.on('button', onJoystickData);
 joystick.on('axis', onJoystickData);
 
@@ -84,10 +87,17 @@ joystick.on('axis', onJoystickData);
 }*/
 
 function onJoystickData(event) {
+    
+    if(event.type == "axis") {
+        if(event.number == 0 || event.number == 1) {
+            event.commandTyoe = "mobility";
+        }
+    }
+
 
 	var message = new Buffer(JSON.stringify(event));
 
-	client.send(message, 0, message.length, 5000, "localhost", function(err) {
+	client.send(message, 0, message.length, PORT, HOST, function(err) {
 		if (err) {
 			console.log("Problem with sending data!!!");
 		}
