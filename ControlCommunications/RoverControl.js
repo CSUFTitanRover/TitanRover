@@ -1,11 +1,11 @@
 /*
   Author: Joseph Porter and Joe Edwards
   Titan Rover - Rover Control
-  Description: 
+  Description:
 		Will be accepting commands from the homebase Controller and relaying
 			these commands to its various sub processes
 
-		Example: 
+		Example:
 			Moblility code will be sent from the homebase controller to here and this will run the input
 				or pass it to another process to run it.
 
@@ -25,6 +25,34 @@ var server = dgram.createSocket('udp4');
 
 var PORT = 3000;
 var HOST = 'localhost';
+
+const HOME_PORT = 5000;
+const HOME_HOST = 'localhost';
+
+// This will be used to zero out the mobility when it has not recieved a message for a certain time.
+// zeroMessage[0] for y axis
+// zeroMessage[1] for x axis
+var zeroMessage = [{
+        commandType: "mobility",
+        time: Date.now(),
+        value: 0,
+        number: 0,
+        type: 'axis',
+        id: 0
+    },
+    {
+        commandType: "mobility",
+        time: Date.now(),
+        value: 0,
+        number: 1,
+        type: 'axis',
+        id: 0
+    }
+];
+
+const CONTROL_MESSAGE = {
+    commandType: "control",
+};
 
 //console.log('Loading mobility:');
 // var hrarry = []
@@ -62,7 +90,7 @@ pwm.setPWMFreq(50);
 //    Docs: https://www.npmjs.com/package/joystick
 //var joystick = new(require('joystick'))(0, 3500, 350);
 
-// NPM Differential Steering Library: 
+// NPM Differential Steering Library:
 //    Docs: https://www.npmjs.com/package/diff-steer
 var steerMotors = require('diff-steer/motor_control');
 
@@ -73,9 +101,9 @@ var lastY = 0;
 
 /**
  * Prototype function.  Map values from range in_min -> in_max to out_min -> out_max
- * @param {Number} in_min 
+ * @param {Number} in_min
  * @param {Number} in_max
- * @param {Number} out_min 
+ * @param {Number} out_min
  * @param {Number} out_max
  * @return {Number} An unnamed value described in range out_min -> out_max
  */
@@ -84,11 +112,11 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
 };
 
 /**
- * TESTING ONLY! Function called on axis change from Joystick.  This function only responds to changes on X or Y, 
- number 0 or 1 respectively.  (1) Gets changed joystick value per X or Y Axis, (3) Calculate 
- differential steering by mappng joystick range to diff-steer range and stores the result in 
+ * TESTING ONLY! Function called on axis change from Joystick.  This function only responds to changes on X or Y,
+ number 0 or 1 respectively.  (1) Gets changed joystick value per X or Y Axis, (3) Calculate
+ differential steering by mappng joystick range to diff-steer range and stores the result in
  lastX or last Y depending on axis changed, (4) Send values with proper channels to send values
- to motors. 
+ to motors.
  * @param {Event} event.  Describes number, value, where number is axis and value is joystick value
  */
 /*var onJoystickData = function(event) {
@@ -107,9 +135,9 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
 };*/
 
 /**
- * Function called on axis change from Joystick.  This function only responds to changes on X or Y, 
- number 0 or 1 respectively.  (1) Gets changed joystick value per X or Y Axis, (3) Calculate 
- differential steering by mappng joystick range to diff-steer range and stores the result in 
+ * Function called on axis change from Joystick.  This function only responds to changes on X or Y,
+ number 0 or 1 respectively.  (1) Gets changed joystick value per X or Y Axis, (3) Calculate
+ differential steering by mappng joystick range to diff-steer range and stores the result in
  lastX or last Y depending on axis changed, (4) Send values with proper channels to send values
  to motors.
   * @param {Int} channel.  Value described by left_channel or right_channel corresponding to pin outs
@@ -125,9 +153,9 @@ var setMotors = function(diffSteer, channel) {
 
 /**
  * Function to be called from rover Server to send proper signals to motors.
-  * @param {JSON} joystickData.  JSON joystick axis and value data.
+ * @param {JSON} joystickData.  JSON joystick axis and value data.
  */
-var receiveMobility = function(joystickData){
+var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
     let value = parseInt(joystickData.value);
@@ -155,6 +183,17 @@ var receiveMobility = function(joystickData){
 };
 
 
+function handleControl(message) {
+  socket.send(message, 0, message.length, HOME_PORT, HOME_HOST, function(err) {
+      if (err) {
+          console.log("Problem with sending data!!!");
+      } else {
+          //console.log("Sent the data!!!")
+      }
+  });
+}
+
+
 server.on('listening', function() {
     var address = server.address();
     console.log('Rover running on: ' + address.address);
@@ -163,17 +202,20 @@ server.on('listening', function() {
 server.on('message', function(message, remote) {
 
     var msg = JSON.parse(message);
-    console.log(msg.commandTyoe);
-    switch(msg.commandTyoe) {
-	case 'mobility':
-		receiveMobility(msg);
-		break;
-	default:
-		console.log("###### Could not find commandType #######");
+    //console.log(msg.commandType);
+    switch (msg.commandType) {
+        case 'mobility':
+            receiveMobility(msg);
+            break;
+        case 'control':
+            handleControl(msg);
+        default:
+            console.log("###### Could not find commandType #######");
     }
 });
 
 server.bind(PORT);
+
 //joystick.on('axis', onJoystickData);
 /*
 // Start the server
@@ -199,7 +241,7 @@ app.post('/command', function(req, res, next) {
 
 	// Find out what this command should do
 	switch(request.commandType) {
-			
+
 			case 'mobility':
 				// Either fork another process or just run code here
 				receiveMobility(request);
@@ -220,9 +262,9 @@ app.post('/command', function(req, res, next) {
 
 // On SIGINT shutdown the server
 process.on('SIGINT', function() {
-	console.log("\n####### Should not have pressed that!! #######\n");
-	console.log("###### Deleting all files now!!! ######\n");
-	console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-	// some other closing procedures go here
-	process.exit( );
+    console.log("\n####### Should not have pressed that!! #######\n");
+    console.log("###### Deleting all files now!!! ######\n");
+    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    // some other closing procedures go here
+    process.exit();
 });

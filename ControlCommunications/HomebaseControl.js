@@ -1,17 +1,17 @@
 /*
   Author: Joseph Porter
   Titan Rover - Command Station Control
-  Description: 
+  Description:
 		Will be capturing events from the UI, Joystick, Keyboard, and etc...
         to transfer this command to the rover controller running on the Rover.
-        
+
         It will send the packet with a commandType parameter to allow the rover system
-        to decifer what kind of command it should be.  This will be added to whatever the input 
+        to decifer what kind of command it should be.  This will be added to whatever the input
         generates.
-        
+
         Example message for mobility
         { commandType: "mobility", time: 1693700, value: 0, number: 0, type: 'axis', id: 0 }
-        
+
  =========== Layout of joystick =============
 
 Buttons:    These values are either 1(pressed) or 0(unpressed)
@@ -37,21 +37,43 @@ number = 4: X top of joystick value is either -32767 left or 32767 right
 number = 5: Y top of joystick value is either -32767 up or 32767 down
 ==================================================  */
 
-// The third parameter in the joystick declariation is the sensitivity of the joystick 
+// The third parameter in the joystick declariation is the sensitivity of the joystick
 // higher the number less events will occur
-var joystick = new (require('joystick'))(0, 3500, 500);
+var joystick = new(require('joystick'))(0, 3500, 500);
 var request = require('request');
 
 var dgram = require('dgram');
-var client = dgram.createSocket('udp4');
+var socket = dgram.createSocket('udp4');
 
-var URL_ROVER = 'http://localhost:3000/command';
+//var URL_ROVER = 'http://localhost:3000/command';
 
-var PORT = 3000;
-var HOST = '192.168.1.117';
+const HOMEBASE_PORT = 5000;
 
+// Port that the rover is hosting the udp server
+const PORT = 3000;
+const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
+
+const CONTROL_MESSAGE = {
+    commandType: "control",
+};
+
+const PACKET_CONTROL_LIMIT = 5;
+var packet_count = 0;
+
+// Joystick event handlers
 joystick.on('button', onJoystickData);
 joystick.on('axis', onJoystickData);
+
+// Socket event handlers
+socket.on('listening', function() {
+    console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
+});
+
+socket.on('message', function(message, remote) {
+
+});
+
+socket.bind(HOMEBASE_PORT);
 
 /*function sendCommand(command) {
     console.log(command);
@@ -61,7 +83,7 @@ joystick.on('axis', onJoystickData);
 		json: true,
 		body: command
 	}, function(error, res, body) {
-		if (error) {        
+		if (error) {
 			console.log('ERROR OCCURED!!');
 		}
 		else {
@@ -74,7 +96,7 @@ joystick.on('axis', onJoystickData);
 /*function onJoystickData(event) {
 
     //console.log(event);
-    
+
     // If it is axis data send as mobility
     if(event.type == "axis") {
 	// If it is X or Y axis
@@ -82,28 +104,41 @@ joystick.on('axis', onJoystickData);
         	event.commandType = "mobility";
 	}
     }
-    
+
     sendCommand(event);
 }*/
 
+/**
+  Will send the data message back to the rover to be process there
+  * @param {Buffer}
+*/
+function send_to_rover(message) {
+    socket.send(message, 0, message.length, PORT, HOST, function(err) {
+        if (err) {
+            console.log("Problem with sending data!!!");
+        } else {
+            //console.log("Sent the data!!!")
+            packet_count++;
+        }
+    });
+}
+
 function onJoystickData(event) {
-    
-    if(event.type == "axis") {
-        if(event.number == 0 || event.number == 1) {
-            event.commandTyoe = "mobility";
+
+    var message;
+
+    if (packet_count > PACKET_CONTROL_LIMIT) {
+      message = new Buffer(JSON.stringify(CONTROL_MESSAGE));
+      send_to_rover(message);
+    }
+
+    if (event.type == "axis") {
+        if (event.number == 0 || event.number == 1) {
+            event.commandType = "mobility";
         }
     }
 
+    message = new Buffer(JSON.stringify(event));
 
-	var message = new Buffer(JSON.stringify(event));
-
-	client.send(message, 0, message.length, PORT, HOST, function(err) {
-		if (err) {
-			console.log("Problem with sending data!!!");
-		}
-		else {
-			console.log("Sent the data!!!")
-		}
-		//client.close();
-	});
+    send_to_rover(message);
 }
