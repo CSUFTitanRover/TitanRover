@@ -53,11 +53,17 @@ const HOMEBASE_PORT = 5000;
 const PORT = 3000;
 const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
 
-const CONTROL_MESSAGE = {
+const CONTROL_MESSAGE_TEST = {
     commandType: "control",
+    type: "test"
 };
 
-const PACKET_CONTROL_LIMIT = 5;
+const CONTROL_MESSAGE_ACK = {
+    commandType: "control",
+    type: "ack"
+};
+
+const SEND_CONTROL_AFTER = 5;
 var packet_count = 0;
 
 // Joystick event handlers
@@ -69,8 +75,14 @@ socket.on('listening', function() {
     console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
 });
 
+// When we recieve a packet from the rover it is acking a control packet
 socket.on('message', function(message, remote) {
+    var msg = JSON.parse(message);
 
+    if (msg.type == "rover_ack") {
+        packet_count = 0;
+        send_to_rover(new Buffer(CONTROL_MESSAGE_ACK));
+    }
 });
 
 socket.bind(HOMEBASE_PORT);
@@ -127,9 +139,9 @@ function onJoystickData(event) {
 
     var message;
 
-    if (packet_count > PACKET_CONTROL_LIMIT) {
-      message = new Buffer(JSON.stringify(CONTROL_MESSAGE));
-      send_to_rover(message);
+    if (packet_count > SEND_CONTROL_AFTER) {
+        message = new Buffer(JSON.stringify(CONTROL_MESSAGE));
+        send_to_rover(message);
     }
 
     if (event.type == "axis") {

@@ -50,9 +50,13 @@ var zeroMessage = [{
     }
 ];
 
-const CONTROL_MESSAGE = {
+const CONTROL_MESSAGE_ROVER = {
     commandType: "control",
+    type: "rover_ack"
 };
+
+var gotAck = true;
+const TIME_TO_STOP = 500;
 
 //console.log('Loading mobility:');
 // var hrarry = []
@@ -182,21 +186,55 @@ var receiveMobility = function(joystickData) {
     setMotors(diffSteer[1], rightBack_channel);
 };
 
+// Send 0 to both the x and y axis to stop the rover from running
+// Will only be invoked if we lose signal
+function stopRover() {
+    receiveMobility(zeroMessage[0]);
+    receiveMobility(zeroMessage[1]);
+}
 
+function sendHome(msg) {
+    socket.send(msg, 0, msg.length, HOME_PORT, HOME_HOST, function(err) {
+        if (err) {
+            console.log("Problem with sending data!!!");
+        } else {
+            //console.log("Sent the data!!!")
+        }
+    });
+}
+
+/**
+  Will handle the control messages that will tell us we have disconnected.
+  * @param {JSON}
+*/
 function handleControl(message) {
-  socket.send(message, 0, message.length, HOME_PORT, HOME_HOST, function(err) {
-      if (err) {
-          console.log("Problem with sending data!!!");
-      } else {
-          //console.log("Sent the data!!!")
-      }
-  });
+    var msg;
+
+    // If the homestation is testing our connection
+    if (message.type == "test") {
+        gotAck = false;
+        msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
+        sendHome(msg);
+
+        // Start a timer to see if we are still connected otherwise stop the rover moving
+        setTimeout(function() {
+            if (gotAck === false) {
+                stopRover();
+            }
+        }, TIME_TO_STOP);
+
+
+    // Home station has responded don't need to stop.
+    } else if (message.type == "ack") {
+        gotAck = true;
+    }
+
 }
 
 
 server.on('listening', function() {
     var address = server.address();
-    console.log('Rover running on: ' + address.address);
+    console.log('Rover running on: ' + address.address + ':' + address.port);
 });
 
 server.on('message', function(message, remote) {
