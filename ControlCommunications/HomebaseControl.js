@@ -39,6 +39,9 @@ number = 5: Y top of joystick value is either -32767 up or 32767 down
 
 // The third parameter in the joystick declariation is the sensitivity of the joystick
 // higher the number less events will occur
+
+// Make sure the joystick is plugged into the computer
+
 var joystick = new(require('joystick'))(0, 3500, 500);
 var request = require('request');
 
@@ -80,6 +83,7 @@ socket.on('message', function(message, remote) {
     var msg = JSON.parse(message);
 
     if (msg.type == "rover_ack") {
+        console.log("Rover sent an ack");
         packet_count = 0;
         send_to_rover(new Buffer(CONTROL_MESSAGE_ACK));
     }
@@ -141,6 +145,7 @@ function onJoystickData(event) {
 
     if (packet_count > SEND_CONTROL_AFTER) {
         message = new Buffer(JSON.stringify(CONTROL_MESSAGE));
+        console.log("Sending Control MESSAGE");
         send_to_rover(message);
     }
 
@@ -154,3 +159,8 @@ function onJoystickData(event) {
 
     send_to_rover(message);
 }
+
+process.on('SIGINT', function() {
+    console.log("\n###### SHUTTING DOWN ######");
+    process.exit();
+});

@@ -56,7 +56,9 @@ const CONTROL_MESSAGE_ROVER = {
 };
 
 var gotAck = true;
+var gotAckRover = true;
 const TIME_TO_STOP = 500;
+const TEST_CONNECTION = 1000;
 
 //console.log('Loading mobility:');
 // var hrarry = []
@@ -203,12 +205,22 @@ function sendHome(msg) {
     });
 }
 
+
+setInterval(function() {
+    if (gotAckRover === false) {
+        console.log("Stopping Rover: TEST CONNECTION from rover")
+        stopRover();
+    }
+}, TEST_CONNECTION);
+
 /**
   Will handle the control messages that will tell us we have disconnected.
   * @param {JSON}
 */
 function handleControl(message) {
     var msg;
+
+    console.log("Control Message with type: " + message.type);
 
     // If the homestation is testing our connection
     if (message.type == "test") {
@@ -219,14 +231,16 @@ function handleControl(message) {
         // Start a timer to see if we are still connected otherwise stop the rover moving
         setTimeout(function() {
             if (gotAck === false) {
+                console.log("Stopping Rover: Test from HOME");
                 stopRover();
             }
         }, TIME_TO_STOP);
 
 
-    // Home station has responded don't need to stop.
+        // Home station has responded don't need to stop.
     } else if (message.type == "ack") {
         gotAck = true;
+        gotAckRover = true;
     }
 
 }
@@ -298,11 +312,18 @@ app.post('/command', function(req, res, next) {
 
 */
 
+process.on('SIGTERM', function() {
+    console.log("STOPPING ROVER");
+    stopRover();
+    process.exit();
+});
+
 // On SIGINT shutdown the server
 process.on('SIGINT', function() {
     console.log("\n####### Should not have pressed that!! #######\n");
     console.log("###### Deleting all files now!!! ######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    stopRover();
     // some other closing procedures go here
     process.exit();
 });
