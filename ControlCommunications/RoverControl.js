@@ -27,7 +27,7 @@ var PORT = 3000;
 var HOST = 'localhost';
 
 const HOME_PORT = 5000;
-const HOME_HOST = 'localhost';
+const HOME_HOST = '192.168.1.143';
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
@@ -57,8 +57,8 @@ const CONTROL_MESSAGE_ROVER = {
 
 var gotAck = true;
 var gotAckRover = true;
-const TIME_TO_STOP = 500;
-const TEST_CONNECTION = 1000;
+const TIME_TO_STOP = 750;
+const TEST_CONNECTION = 3000;
 
 //console.log('Loading mobility:');
 // var hrarry = []
@@ -80,10 +80,10 @@ const pwm = makePwmDriver({
 //    2000 = Full Forward.
 const servo_min = 204; // Calculated to be 1000 us
 const servo_mid = 325; // Calculated to be 1500 us
-const servo_max = 409; // Calculated to be 2000 us
+const servo_max = 459; // Calculated to be 2000 us
 
 // PWM Channel Config:
-const leftFront_channel = 0;
+const leftFront_channel = 4;
 const rightFront_channel = 1;
 const leftBack_channel = 2;
 const rightBack_channel = 3;
@@ -150,6 +150,7 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
   * @param {JSON} diffSteer.  Differntial steering calculations for one side described by channel
  */
 var setMotors = function(diffSteer, channel) {
+
     if (diffSteer.direction === 'rev') {
         pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
     } else {
@@ -196,7 +197,7 @@ function stopRover() {
 }
 
 function sendHome(msg) {
-    socket.send(msg, 0, msg.length, HOME_PORT, HOME_HOST, function(err) {
+    server.send(msg, 0, msg.length, HOME_PORT, HOME_HOST, function(err) {
         if (err) {
             console.log("Problem with sending data!!!");
         } else {
@@ -207,10 +208,15 @@ function sendHome(msg) {
 
 
 setInterval(function() {
+    var msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
+    sendHome(msg);
+    gotAckRover = false;
+    setTimeout(function() {
     if (gotAckRover === false) {
         console.log("Stopping Rover: TEST CONNECTION from rover")
         stopRover();
     }
+    }, TIME_TO_STOP);
 }, TEST_CONNECTION);
 
 /**
@@ -262,7 +268,7 @@ server.on('message', function(message, remote) {
         case 'control':
             handleControl(msg);
         default:
-            console.log("###### Could not find commandType #######");
+            //console.log("###### Could not find commandType #######");
     }
 });
 
