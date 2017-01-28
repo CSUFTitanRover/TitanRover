@@ -47,7 +47,7 @@ class LiveDataTemplate extends Component {
 
         // updating chart
         this.socketClient.on('update: chart data', function(jsonObj) {
-            //console.info(jsonObj);
+            console.info(jsonObj);
 
             let tempColumns = self.state.columns;
 
