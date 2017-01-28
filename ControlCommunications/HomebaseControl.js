@@ -66,7 +66,7 @@ const CONTROL_MESSAGE_ACK = {
     type: "ack"
 };
 
-const SEND_CONTROL_AFTER = 5;
+const SEND_CONTROL_AFTER = 10;
 var packet_count = 0;
 
 // Joystick event handlers
@@ -83,9 +83,9 @@ socket.on('message', function(message, remote) {
     var msg = JSON.parse(message);
 
     if (msg.type == "rover_ack") {
-        console.log("Rover sent an ack");
+        //console.log("Rover sent an ack");
         packet_count = 0;
-        send_to_rover(new Buffer(CONTROL_MESSAGE_ACK));
+        send_to_rover(new Buffer(JSON.stringify(CONTROL_MESSAGE_ACK)));
     }
 });
 
@@ -134,7 +134,7 @@ function send_to_rover(message) {
             console.log("Problem with sending data!!!");
         } else {
             //console.log("Sent the data!!!")
-            packet_count++;
+            packet_count += 1;
         }
     });
 }
@@ -144,8 +144,8 @@ function onJoystickData(event) {
     var message;
 
     if (packet_count > SEND_CONTROL_AFTER) {
-        message = new Buffer(JSON.stringify(CONTROL_MESSAGE));
-        console.log("Sending Control MESSAGE");
+        message = new Buffer(JSON.stringify(CONTROL_MESSAGE_TEST));
+        //console.log("Sending Control MESSAGE: " + packet_count);
         send_to_rover(message);
     }
 
@@ -154,13 +154,10 @@ function onJoystickData(event) {
             event.commandType = "mobility";
         }
     }
+    console.log(event);
 
     message = new Buffer(JSON.stringify(event));
 
     send_to_rover(message);
 }
 
-process.on('SIGINT', function() {
-    console.log("\n###### SHUTTING DOWN ######");
-    process.exit();
-});
