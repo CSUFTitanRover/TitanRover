@@ -78,9 +78,9 @@ const pwm = makePwmDriver({
 //    1000 = Full Reverse
 //    1500 = Stopped
 //    2000 = Full Forward.
-const servo_min = 204; // Calculated to be 1000 us
+const servo_min = 241; // Calculated to be 1000 us
 const servo_mid = 325; // Calculated to be 1500 us
-const servo_max = 459; // Calculated to be 2000 us
+const servo_max = 409; // Calculated to be 2000 us
 
 const Joystick_MIN = -32767;
 const Joystick_MAX = 32767;
@@ -156,6 +156,7 @@ function setRight(speed) {
 var setMotors = function(diffSteer) {
   setLeft(diffSteer.leftSpeed);
   setRight(diffSteer.rightSpeed);
+  console.log(diffSteer);
 };
 
 /**
@@ -189,29 +190,30 @@ var setMotors = function(diffSteer) {
     setMotors(diffSteer[1], rightBack_channel);
 };*/
 
-function calculateDiff(xAxis, yAxis) {
-  xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
-  yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
+function calculateDiff(yAxis, xAxis) {
+  //xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
+  //yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
 
-  xAxis = xAxis * -1;
+  //xAxis = xAxis * -1;
+  //yAxis = yAxis * -1;
 
-  var V = (100 - Math.abs(xAxis)) * (yAxis / 100.0) + yAxis;
-  var W = (100 - Math.abs(yAxis)) * (xAxis / 100.0) + xAxis;
+  var V = (32767 - Math.abs(xAxis)) * (yAxis / 32767.0) + yAxis;
+  var W = (32767 - Math.abs(yAxis)) * (xAxis / 32767.0) + xAxis;
   var right = (V + W) / 2.0;
   var left = (V - W) / 2.0;
 
   if(right <= 0) {
-    right = right.map(-100, 0, servo_min, servo_mid);
+    right = right.map(-32767, 0, servo_min, servo_mid);
   }
   else {
-    right = right.map(0, 100, servo_mid, servo_max);
+    right = right.map(0, 32767, servo_mid, servo_max);
   }
 
   if (left <= 0) {
-    left = left.map(-100, 0, servo_min, servo_mid);
+    left = left.map(-32767, 0, servo_min, servo_mid);
   }
   else {
-    left = left.map(0, 100, servo_mid, servo_max);
+    left = left.map(0, 32767, servo_mid, servo_max);
   }
 
   return {
