@@ -82,11 +82,12 @@ const servo_min = 204; // Calculated to be 1000 us
 const servo_mid = 325; // Calculated to be 1500 us
 const servo_max = 459; // Calculated to be 2000 us
 
+const Joystick_MIN = -32767;
+const Joystick_MAX = 32767;
+
 // PWM Channel Config:
-const leftFront_channel = 4;
-const rightFront_channel = 1;
-const leftBack_channel = 2;
-const rightBack_channel = 3;
+const left_channel = 0;
+const right_channel = 1;
 
 // Based on J. Stewart's calculations:
 pwm.setPWMFreq(50);
@@ -125,20 +126,6 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
  to motors.
  * @param {Event} event.  Describes number, value, where number is axis and value is joystick value
  */
-/*var onJoystickData = function(event) {
-    // X-Axis
-    if (event.number === 0) {
-        diffSteer = steerMotors(null, event.value.map(-35000, 35000, -1, 1), lastY);
-        lastX = event.value.map(-35000, 35000, -1, 1);
-    }
-    // Y-Axis
-    else if (event.number == 1) {
-        diffSteer = steerMotors(null, lastX, event.value.map(-35000, 35000, -1, 1));
-        lastY = event.value.map(-35000, 35000, -1, 1);
-    }
-    setMotors(diffSteer[0], left_channel);
-    setMotors(diffSteer[1], right_channel);
-};*/
 
 /**
  * Function called on axis change from Joystick.  This function only responds to changes on X or Y,
@@ -149,20 +136,33 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
   * @param {Int} channel.  Value described by left_channel or right_channel corresponding to pin outs
   * @param {JSON} diffSteer.  Differntial steering calculations for one side described by channel
  */
-var setMotors = function(diffSteer, channel) {
+/*var setMotors = function(diffSteer, channel) {
 
     if (diffSteer.direction === 'rev') {
         pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
     } else {
         pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
     }
+};*/
+
+function setLeft(speed) {
+  pwm.setPWM(left_channel, 0, parseInt(speed));
+}
+
+function setRight(speed) {
+  pwm.setPWM(right_channel, 0, parseInt(speed));
+}
+
+var setMotors = function(diffSteer) {
+  setLeft(diffSteer.leftSpeed);
+  setRight(diffSteer.rightSpeed);
 };
 
 /**
  * Function to be called from rover Server to send proper signals to motors.
  * @param {JSON} joystickData.  JSON joystick axis and value data.
  */
-var receiveMobility = function(joystickData) {
+/*var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
     let value = parseInt(joystickData.value);
@@ -187,6 +187,58 @@ var receiveMobility = function(joystickData) {
     setMotors(diffSteer[0], leftBack_channel);
     setMotors(diffSteer[1], rightFront_channel);
     setMotors(diffSteer[1], rightBack_channel);
+};*/
+
+function calculateDiff(xAxis, yAxis) {
+  xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
+  yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
+
+  xAxis = xAxis * -1;
+
+  var V = (100 - Math.abs(xAxis)) * (yAxis / 100.0) + yAxis;
+  var W = (100 - Math.abs(yAxis)) * (xAxis / 100.0) + xAxis;
+  var right = (V + W) / 2.0;
+  var left = (V - W) / 2.0;
+
+  if(right <= 0) {
+    right = right.map(-100, 0, servo_min, servo_mid);
+  }
+  else {
+    right = right.map(0, 100, servo_mid, servo_max);
+  }
+
+  if (left <= 0) {
+    left = left.map(-100, 0, servo_min, servo_mid);
+  }
+  else {
+    left = left.map(0, 100, servo_mid, servo_max);
+  }
+
+  return {
+    "leftSpeed": left,
+    "rightSpeed": right
+  };
+}
+
+var receiveMobility = function(joystickData) {
+    // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
+    let axis = parseInt(joystickData.number);
+    let value = parseInt(joystickData.value);
+
+    var diffSteer;
+
+    // X axis
+    if(axis === 0) {
+      diffSteer = calculateDiff(value, lastY);
+      lastX = value;
+    }
+    // Y axis
+    else if(axis === 1) {
+      diffSteer = calculateDiff(lastX, value);
+      lastY = value;
+    }
+
+    setMotors(diffSteer);
 };
 
 // Send 0 to both the x and y axis to stop the rover from running
