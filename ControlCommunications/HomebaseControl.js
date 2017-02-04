@@ -150,14 +150,13 @@ function onJoystickData(event) {
     }
 
     if (event.type == "axis") {
-        if (event.number == 0 || event.number == 1) {
+        if (event.number == 0 || event.number == 1 || event.number == 3) {
             event.commandType = "mobility";
         }
     }
-    console.log(event);
+    //console.log(event);
 
     message = new Buffer(JSON.stringify(event));
 
     send_to_rover(message);
 }
-

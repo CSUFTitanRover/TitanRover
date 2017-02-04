@@ -176,11 +176,13 @@ function setThrottle(adjust_Amount) {
     //console.log(throttleValue);
 }
 
+
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
+
     var diffSteer;
    
     value = parseInt(value * throttleValue);
