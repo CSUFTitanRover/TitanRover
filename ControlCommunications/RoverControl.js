@@ -78,9 +78,9 @@ const pwm = makePwmDriver({
 //    1000 = Full Reverse
 //    1500 = Stopped
 //    2000 = Full Forward.
-const servo_min = 204; // Calculated to be 1000 us
-const servo_mid = 325; // Calculated to be 1500 us
-const servo_max = 459; // Calculated to be 2000 us
+const saber_min = 241; // Calculated to be 1000 us
+const saber_mid = 325; // Calculated to be 1500 us
+const saber_max = 409; // Calculated to be 2000 us
 
 const Joystick_MIN = -32767;
 const Joystick_MAX = 32767;
@@ -106,6 +106,8 @@ var steerMotors = require('diff-steer/motor_control');
 var lastX = 0;
 var lastY = 0;
 
+var throttleValue = 1.0;
+
 /**
  * Prototype function.  Map values from range in_min -> in_max to out_min -> out_max
  * @param {Number} in_min
@@ -118,127 +120,90 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
     return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
 
-/**
- * TESTING ONLY! Function called on axis change from Joystick.  This function only responds to changes on X or Y,
- number 0 or 1 respectively.  (1) Gets changed joystick value per X or Y Axis, (3) Calculate
- differential steering by mappng joystick range to diff-steer range and stores the result in
- lastX or last Y depending on axis changed, (4) Send values with proper channels to send values
- to motors.
- * @param {Event} event.  Describes number, value, where number is axis and value is joystick value
- */
-
-/**
- * Function called on axis change from Joystick.  This function only responds to changes on X or Y,
- number 0 or 1 respectively.  (1) Gets changed joystick value per X or Y Axis, (3) Calculate
- differential steering by mappng joystick range to diff-steer range and stores the result in
- lastX or last Y depending on axis changed, (4) Send values with proper channels to send values
- to motors.
-  * @param {Int} channel.  Value described by left_channel or right_channel corresponding to pin outs
-  * @param {JSON} diffSteer.  Differntial steering calculations for one side described by channel
- */
-/*var setMotors = function(diffSteer, channel) {
-
-    if (diffSteer.direction === 'rev') {
-        pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_max)));
-    } else {
-        pwm.setPWM(channel, 0, parseInt(diffSteer.speed.map(0, 255, servo_mid, servo_min)));
-    }
-};*/
-
 function setLeft(speed) {
-  pwm.setPWM(left_channel, 0, parseInt(speed));
+    pwm.setPWM(left_channel, 0, parseInt(speed));
 }
 
 function setRight(speed) {
-  pwm.setPWM(right_channel, 0, parseInt(speed));
+    pwm.setPWM(right_channel, 0, parseInt(speed));
 }
 
 var setMotors = function(diffSteer) {
-  setLeft(diffSteer.leftSpeed);
-  setRight(diffSteer.rightSpeed);
+    setLeft(diffSteer.leftSpeed);
+    setRight(diffSteer.rightSpeed);
+    //console.log(diffSteer);
 };
 
 /**
- * Function to be called from rover Server to send proper signals to motors.
- * @param {JSON} joystickData.  JSON joystick axis and value data.
- */
-/*var receiveMobility = function(joystickData) {
-    // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = parseInt(joystickData.number);
-    let value = parseInt(joystickData.value);
-    var diffSteer;
-    // X-Axis
-    if (axis === 1) {
-        diffSteer = steerMotors(null, value.map(-32767, 32767, -1, 1), lastY);
-        lastX = value.map(32767, -32767, -1, 1);
+  Differential steering calculations are done here
+  * @param {xAxis}
+  * @param {yAxis}
+  * @return {speed_of_leftandright}
+  */
+function calculateDiff(yAxis, xAxis) {
+    //xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
+    //yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
+
+    //xAxis = xAxis * -1;
+    //yAxis = yAxis * -1;
+
+    var V = (32767 - Math.abs(xAxis)) * (yAxis / 32767.0) + yAxis;
+    var W = (32767 - Math.abs(yAxis)) * (xAxis / 32767.0) + xAxis;
+    var right = (V + W) / 2.0;
+    var left = (V - W) / 2.0;
+
+    if (right <= 0) {
+        right = right.map(-32767, 0, saber_min, saber_mid);
+    } else {
+        right = right.map(0, 32767, saber_mid, saber_max);
     }
-    // Y-Axis SWAPPED MIN=1 MAX=-1 FOR INPUT AND OUTPUT FOR MAP
-    else if (axis === 0) {
-        diffSteer = steerMotors(null, lastX, value.map(32767, -32767, 1, -1));
-        lastY = value.map(32767, -32767, 1, -1);
+
+    if (left <= 0) {
+        left = left.map(-32767, 0, saber_min, saber_mid);
+    } else {
+        left = left.map(0, 32767, saber_mid, saber_max);
     }
-    //console.log("DS0");
-    //console.log(diffSteer[0]);
-    //console.log("DS1");
-    //console.log(diffSteer[1]);
 
-    // Have left and right signal go to two pins
-    setMotors(diffSteer[0], leftFront_channel);
-    setMotors(diffSteer[0], leftBack_channel);
-    setMotors(diffSteer[1], rightFront_channel);
-    setMotors(diffSteer[1], rightBack_channel);
-};*/
-
-function calculateDiff(xAxis, yAxis) {
-  xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
-  yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
-
-  xAxis = xAxis * -1;
-
-  var V = (100 - Math.abs(xAxis)) * (yAxis / 100.0) + yAxis;
-  var W = (100 - Math.abs(yAxis)) * (xAxis / 100.0) + xAxis;
-  var right = (V + W) / 2.0;
-  var left = (V - W) / 2.0;
-
-  if(right <= 0) {
-    right = right.map(-100, 0, servo_min, servo_mid);
-  }
-  else {
-    right = right.map(0, 100, servo_mid, servo_max);
-  }
-
-  if (left <= 0) {
-    left = left.map(-100, 0, servo_min, servo_mid);
-  }
-  else {
-    left = left.map(0, 100, servo_mid, servo_max);
-  }
-
-  return {
-    "leftSpeed": left,
-    "rightSpeed": right
-  };
+    return {
+        "leftSpeed": left,
+        "rightSpeed": right
+    };
 }
 
+// Set the throttle speed
+function setThrottle(adjust_Amount) {
+    throttleValue = adjust_Amount.map(32767, -32767, 0, 1);
+    //console.log(throttleValue);
+}
+
+
+// Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
-    let value = parseInt(joystickData.value);
+    var value = parseInt(joystickData.value);
 
     var diffSteer;
-
+   
+    value = parseInt(value * throttleValue);
     // X axis
-    if(axis === 0) {
-      diffSteer = calculateDiff(value, lastY);
-      lastX = value;
+    if (axis === 0) {
+        diffSteer = calculateDiff(value, lastY);
+        lastX = value;
     }
     // Y axis
-    else if(axis === 1) {
-      diffSteer = calculateDiff(lastX, value);
-      lastY = value;
+    else if (axis === 1) {
+        diffSteer = calculateDiff(lastX, value);
+        lastY = value;
+    }
+    // Throttle axis
+    else if (axis === 3) {
+        setThrottle(value)
     }
 
-    setMotors(diffSteer);
+    if (axis === 0 || axis === 1) {
+	setMotors(diffSteer);
+    }
 };
 
 // Send 0 to both the x and y axis to stop the rover from running
@@ -248,6 +213,7 @@ function stopRover() {
     receiveMobility(zeroMessage[1]);
 }
 
+// Send data to the homebase control for connection information
 function sendHome(msg) {
     server.send(msg, 0, msg.length, HOME_PORT, HOME_HOST, function(err) {
         if (err) {
@@ -258,16 +224,17 @@ function sendHome(msg) {
     });
 }
 
-
+// Will test the connection to the homebase controller every TEST_CONNECTION times
+// Will stop the rover if we have lost connection after TIME_TO_STOP
 setInterval(function() {
     var msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
     sendHome(msg);
     gotAckRover = false;
     setTimeout(function() {
-    if (gotAckRover === false) {
-        console.log("Stopping Rover: TEST CONNECTION from rover")
-        stopRover();
-    }
+        if (gotAckRover === false) {
+            console.log("Stopping Rover: TEST CONNECTION from rover")
+            stopRover();
+        }
     }, TIME_TO_STOP);
 }, TEST_CONNECTION);
 
@@ -278,7 +245,7 @@ setInterval(function() {
 function handleControl(message) {
     var msg;
 
-    console.log("Control Message with type: " + message.type);
+    //console.log("Control Message with type: " + message.type);
 
     // If the homestation is testing our connection
     if (message.type == "test") {
@@ -309,10 +276,13 @@ server.on('listening', function() {
     console.log('Rover running on: ' + address.address + ':' + address.port);
 });
 
+// recieved a message from the homebase control to perform an action
 server.on('message', function(message, remote) {
 
     var msg = JSON.parse(message);
     //console.log(msg.commandType);
+
+    // Seperate the incoming command to its specified subsystem
     switch (msg.commandType) {
         case 'mobility':
             receiveMobility(msg);
@@ -325,50 +295,6 @@ server.on('message', function(message, remote) {
 });
 
 server.bind(PORT);
-
-//joystick.on('axis', onJoystickData);
-/*
-// Start the server
-server.listen(PORT, function() {
-	console.log("============ Server is up and running on port: ", server.address().port, "=============");
-});
-
-// parse application/json
-app.use(bodyParser.json());
-
-// Accept the command
-app.use('/command', function(req, res, next) {
-	next();
-});
-
-
-// Will accept the command and relay to process
-app.post('/command', function(req, res, next) {
-	var request = req.body;
-
-	// Will return OK if everything is fine
-	var statusCode = 200;
-
-	// Find out what this command should do
-	switch(request.commandType) {
-
-			case 'mobility':
-				// Either fork another process or just run code here
-				receiveMobility(request);
-				break;
-			case 'arm':
-				// Do arm stuff
-				break;
-			default:
-				// We did not recognize that commmand send error code
-				console.log("###### Could not find commandType ######");
-				statusCode = 404;
-	}
-
-	res.sendStatus(statusCode);
-});
-
-*/
 
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
