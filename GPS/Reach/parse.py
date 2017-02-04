@@ -2,19 +2,34 @@
 
 reach_file = open("file.llh", "r", -1)
 
-gps_data = ['a']
+nema_data = ['a']
 
-while not gps_data[0].isdigit():
+while not nema_data[0].isdigit():
     data_line = reach_file.readline()
-    gps_data = data_line.split(" ")
+    nema_data = data_line.split(" ")
 
-print data_line
+gps_data = [float(nema_data[4]), float(nema_data[5]), float(nema_data[33])]
 
-print gps_data[0]
-print gps_data[1]
-print gps_data[2]
-print gps_data[3]
-print gps_data[4]
+for i in gps_data:
+    print i
+
+while data_line:
+    data_line = reach_file.readline()
+    #print data_line
+    if not data_line: 
+        break
+    data_line2 = data_line    
+    print 'stuff ' + data_line2    
+    
+print 'final' + data_line2
+
+#Enable this section including for Loop to check data#########
+#print data_line
+#n = 0
+#for i in gps_data:
+#    print str(n) + ' ' + i  # 
+#    n+=1
+##############################################################
 
 reach_file.close()
 
