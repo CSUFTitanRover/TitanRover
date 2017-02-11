@@ -1,5 +1,5 @@
 import os
-import math
+from math import radians, degrees, cos, sin, asin, sqrt, atan2, pi
 import serial, subprocess, os, time, gps, string, sys, pynmea2
 import RPi.GPIO as GPIO
 
@@ -8,9 +8,9 @@ GPSFIX = 18
 GPIO.setup(GPSFIX, GPIO.IN)
 
 #implementing Timothy Parks' math to calculate heading
-pi = math.pi #3.1415926535897932384626433832795
-degToRad = math.pi / 180 #0.017453
-radToDeg = 180 / math.pi #57.29577795
+#pi = math.pi                #Est val of 3.1415926535897932384626433832795
+degToRad = pi / 180    #Est val of 0.017453
+radToDeg = 180 / pi    #Est val of 57.29577795
 #----------------- end
 
 #################################################################
@@ -42,50 +42,78 @@ class waypoint:
     #all stored Longitude, Latitude and Headings need to be in DECIMAL DEGREES
     ###########################################################################
     def __init__(self, targetLongitude, targetLatitude):
-       self.longitude = targetLongitude #stores the target longitude to the waypoint
-       self.latitude = targetLatitude #stores the target latitude to the waypoint
+        self.targetLongitude = targetLongitude  #stores the target longitude to the waypoint
+        self.targetLatitude = targetLatitude    #stores the target latitude to the waypoint
+
+        #initialize Rover storage
+        self.currentLongitudeRad    = 0.0
+        self.currentLatitude        = 0.0
+        self.currentHeading         = 0.0
+        self.targetDistance         = 0.0
+
+        self.newPointFromGPS()                  #Update Rover waypoint
        
     #function takes in all current location data and compares it to the desired location data to determine target heading
     #Most math provided by Timothy Parks
-    def calculateHeading(currentLongitude, currentLatitude, currentHeading): #currentLongitude, currentLatitude, currentHeading):
+    def calculateHeading(self, targetLongitude, targetLatitude, currentLongitude, currentLatitude): #currentLongitude, currentLatitude, currentHeading):
         #convert longitude and lattitude to radians
-        targetLongitudeRad = targetLongitude * degToRad
-        targetLatitudeRad = targetLatitude * degToRad
-        currentLongitudeRad = currentLongitude * degToRad
-        currentLatitude = currentLatitude * degToRad
-		#currentLongitudeRad, currentLatitude = self.newPointFromGPS()         
-		#--------
+        targetLongitudeRad, targetLatitudeRad, currentLongitudeRad, currentLatitudeRad = map(radians, [targetLongitude, targetLatitude, currentLongitude, currentLatitude])
+	#--------
 
-        if (math.cos(targetLatitudeRad)*math.sin(targetLongitudeRad - currentLongitudeRad)) == 0:
-            if targetLatitudeRad > currentLatitude:
-                targetHeading = 0.0 #return 0.0
+        ##  Distance using Haversine Formula
+        distanceLongitudeRad = targetLongitudeRad - currentLongitudeRad
+        distanceLatitudeRad = targetLatitudeRad - targetLatitudeRad
+        a = sin(distanceLatitudeRad/2)**2 + cos(targetLatitudeRad) * cos(targetLatitudeRad) * sin(distanceLongitudeRad/2)**2
+        c = 2 * asin(sqrt(a))
+        r = 6371 #Radius of earth in km
+        self.targetDistance = c * r
+
+        ##  Bearing angle between to points
+        if (cos(targetLatitudeRad)*sin(degToRad*(targetLongitude - currentLongitude))) == 0:
+            if targetLatitudeRad > currentLatitudeRad:
+                return 0.0
             else:
-                targetHeading = 180 #return 180
+                return 180
         else: #this math is necesary to determine the target heading. 
-            angle = math.atan2(math.cos(targetLatitudeRad) * math.sin(targetLongitudeRad - currentLongitudeRad),
-                math.sin(targetLatitudeRad) * math.cos(currentLatitude) - math.sin(currentLatitude) *
-                math.cos(targetLatitudeRad) * math.cos(targetLongitudeRad - currentLongitudeRad))
-        targetHeading = (angle * radToDeg + 360) % 360
+            angle = atan2(cos(targetLatitudeRad) * sin(degToRad*(targetLongitude - currentLongitude)),
+                          sin(targetLatitudeRad) * cos(currentLatitudeRad) - sin(currentLatitudeRad) *
+                          cos(targetLatitudeRad) * cos(degToRad*(targetLongitude - currentLongitude)))
+        return (angle * radToDeg + 360) % 360
 
+
+    #function returns the degree correction
+    #positive means go right and negative go left
+    def calculateHeadingCorrection(self):
         #Returns the degree change needed with currentHeading as a 0 degree using +- 180 degree change 
-        if (360 - currentHeading) + targetHeading < 180: 		
-
-            return ((360 - currentHeading) + targetHeading)
+        self.newPointFromGPS()
+        targetHeading = self.calculateHeading(self.targetLongitude, self.targetLatitude, self.currentLongitude,
+                                              self.currentLatitude)
+        print self.currentHeading
+        print targetHeading
+        if (360 - self.currentHeading) + targetHeading < 180: 		
+            return ((360 - self.currentHeading) + targetHeading)
         else:
-            return targetHeading - currentHeading
-
+            return targetHeading - self.currentHeading
+        
     #Gets the new GPS waypoint from the Adafruit GPS device
-    def newPointFromGPS():
+    def newPointFromGPS(self):
         if GPIO.input(GPSFIX):
-            nmeaSentance = ser.readline()
-            while not nmeaSentance[0:6] == '$GPGGA':
+            nmeaSentance1 = ser.readline()
+            nmeaSentance2 = ser.readline()
+            while not nmeaSentance1[0:6] == '$GPGGA':
                 nmeaSentance = ser.readline()
+            while not nmeaSentance2[0:6] == '$GPGGA':
+                nmeaSentance = ser.readline()
+            #might need try block in case GPS is lost during process here
             nmea_Obj = pynmea2.parse(nmea2)
-            currentLatitude = nmea_obj1.latitude
-            currentLongitude = nmea_obj1.longtitude
-        else:
-            currentLatitude = 33.2222
-            currentLongitude = 110.33434
+            self.currentHeading = self.calculateHeading(nmea_obj2.longtitude, nmea_obj2.latitude,
+                                                        nmea_obj1.longtitude, nmea_obj1.latitude)
+            self.currentLatitude     = nmea_obj2.latitude
+            self.currentLongitude    = nmea_obj2.longtitude
+        else:  #Gyroscope heading or Magnameter heading will go here if gps is unavailable
+            self.currentLatitude    = 33.8352932        #demo number for testing
+            self.currentLongitude   = -117.914503599    #demo number for testing
+            #self.currentHeading     = needed from IMU
 	    #end Timothy Parks' math ---------
 
 #this function prompts for the longitude and lattitude of a desired waypoint.
@@ -99,21 +127,30 @@ def enterWaypoint(waypoints_list = []):
     return waypoints_list #return the appended list
 
 def main():
-    waypointsRecieved = False #logic to determine whether or not our path was recieved
-
+    waypointsReceived = False #logic to determine whether or not our path was recieved
     waypoints_list = []
 
-    while(waypointsRecieved==False): #create waypoints continously until finished. 
+    if len(sys.argv) == 3:
+        #storeWaypoint = waypoint(sys.argv[1], sys.argv[2])
+        waypoints_list.append(waypoint(float(sys.argv[1]), float(sys.argv[2])))
+        waypointsReceived = True
+
+    while not waypointsReceived: #create waypoints continously until finished. 
         waypoints_list = enterWaypoint(waypoints_list)
-        userInput = input("Would you like to store another waypoint?(Y/N): ")
-        if userInput == "N":
-            waypointsRecieved = True
+        userInput = raw_input("Would you like to store another waypoint?(Y/N): ")
+        if userInput.upper() == 'N':
+            waypointsReceived = True
     
     for x in range(len(waypoints_list)):
         #Using this same logic we can call calculateHeading for each waypoint, then start the navigation to turn to the heading
         #Once we've turned, start the navigation towards the wayppoint. Check if there. Then loop until all waypoints are finished
         #Once finished spit back to the user that the loop has been completed OR call tennisBall recognition function/file/etc
-        print (waypoints_list[x].longitude)
-        print (waypoints_list[x].latitude)
+        waypoints_list[x].newPointFromGPS()
+        print "Current Longitude "  + str(waypoints_list[x].currentLongitude)
+        print "Current Latitude "   + str(waypoints_list[x].currentLatitude)
+        print "Target Longitude "   + str(waypoints_list[x].targetLongitude)
+        print "Target Latitude "    + str(waypoints_list[x].targetLatitude)
+        print "Bearing "            + str(waypoints_list[x].calculateHeadingCorrection())   + " Degrees"
+        print "Distance "           + str(waypoints_list[x].targetDistance)                 + " km" 
 
 main()
