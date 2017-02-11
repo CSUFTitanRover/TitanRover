@@ -41,62 +41,60 @@ class waypoint:
     ###########################################################################
     #all stored Longitude, Latitude and Headings need to be in DECIMAL DEGREES
     ###########################################################################
-    def __init__(self, targetLongitude, targetLattitude):
+    def __init__(self, targetLongitude, targetLatitude):
        self.longitude = targetLongitude #stores the target longitude to the waypoint
-       self.lattitude = targetLattitude #stores the target lattitude to the waypoint
-    
+       self.latitude = targetLatitude #stores the target latitude to the waypoint
+       
     #function takes in all current location data and compares it to the desired location data to determine target heading
     #Most math provided by Timothy Parks
-    def calculateHeading(targetLongitude, targetLattitude, currentHeading): #currentLongitude, currentLattitude, currentHeading):
+    def calculateHeading(currentLongitude, currentLatitude, currentHeading): #currentLongitude, currentLatitude, currentHeading):
         #convert longitude and lattitude to radians
         targetLongitudeRad = targetLongitude * degToRad
-        targetLattitudeRad = targetLattitude * degToRad
-        #currentLongitudeRad = currentLongitude * degToRad
-        #currentLattitudeRad = currentLattitude * degToRad
-		currentLongitudeRad, currentLattitudeRad = self.newPointFromGPS()         
+        targetLatitudeRad = targetLatitude * degToRad
+        currentLongitudeRad = currentLongitude * degToRad
+        currentLatitude = currentLatitude * degToRad
+		#currentLongitudeRad, currentLatitude = self.newPointFromGPS()         
 		#--------
 
-        if (math.cos(targetLattitudeRad)*math.sin(targetLongitudeRad - currentLongitudeRad)) == 0:
-            if targetLattitudeRad > currentLattitudeRad:
+        if (math.cos(targetLatitudeRad)*math.sin(targetLongitudeRad - currentLongitudeRad)) == 0:
+            if targetLatitudeRad > currentLatitude:
                 targetHeading = 0.0 #return 0.0
             else:
                 targetHeading = 180 #return 180
-        else:
-            angle = math.atan2(math.cos(targetLattitudeRad) * math.sin(targetLongitudeRad - currentLongitudeRad),
-                math.sin(targetLattitudeRad) * math.cos(currentLattitudeRad) - math.sin(currentLattitudeRad) *
-                math.cos(targetLattitudeRad) * math.cos(targetLongitudeRad - currentLongitudeRad))
+        else: #this math is necesary to determine the target heading. 
+            angle = math.atan2(math.cos(targetLatitudeRad) * math.sin(targetLongitudeRad - currentLongitudeRad),
+                math.sin(targetLatitudeRad) * math.cos(currentLatitude) - math.sin(currentLatitude) *
+                math.cos(targetLatitudeRad) * math.cos(targetLongitudeRad - currentLongitudeRad))
         targetHeading = (angle * radToDeg + 360) % 360
-	
-		#Returns the degree change needed with currentHeading as a 0 degree using +- 180 degree change 
-		if (360 - currentHeading) + targetHeading < 180:
-	    	return (360 - currentHeading) + targetHeading 
-		else:
-	    	return targetHeading - currentHeading
 
-        #end Timothy Parks' math ---------
-        #TODO Compare to current heading, calculate the difference of the two. The function will spit out the change in heading we need to make
-    
-    #New or updating the stored waypoint in the object
-    def newPointFromGPS()
-		if GPIO.input(GPSFIX)
-			nmeaSentance = ser.readline()
-			while not nmeaSentance[0:6] == '$GPGGA':
-	    		nmeaSentance = ser.readline()
-			nmea_Obj = pynmea2.parse(nmea2)
-			return nmea_obj1.latitude, nmea_obj1.longitude
-		else:
-			return 33.2222, 110.33434
+        #Returns the degree change needed with currentHeading as a 0 degree using +- 180 degree change 
+        if (360 - currentHeading) + targetHeading < 180: 		
 
+            return ((360 - currentHeading) + targetHeading)
+        else:
+            return targetHeading - currentHeading
 
-
+    #Gets the new GPS waypoint from the Adafruit GPS device
+    def newPointFromGPS():
+        if GPIO.input(GPSFIX):
+            nmeaSentance = ser.readline()
+            while not nmeaSentance[0:6] == '$GPGGA':
+                nmeaSentance = ser.readline()
+            nmea_Obj = pynmea2.parse(nmea2)
+            currentLatitude = nmea_obj1.latitude
+            currentLongitude = nmea_obj1.longtitude
+        else:
+            currentLatitude = 33.2222
+            currentLongitude = 110.33434
+	    #end Timothy Parks' math ---------
 
 #this function prompts for the longitude and lattitude of a desired waypoint.
 #these will be stored from first entered to last, enter your path in order
 def enterWaypoint(waypoints_list = []):
     print("Please enter waypoint")
     inputLongitude = input("Longitude: ")
-    inputLattitude = input("Lattitude: ")
-    storeWaypoint = waypoint(inputLongitude, inputLattitude)
+    inputLatitude = input("Lattitude: ")
+    storeWaypoint = waypoint(inputLongitude, inputLatitude)
     waypoints_list.append(storeWaypoint) 
     return waypoints_list #return the appended list
 
@@ -116,6 +114,6 @@ def main():
         #Once we've turned, start the navigation towards the wayppoint. Check if there. Then loop until all waypoints are finished
         #Once finished spit back to the user that the loop has been completed OR call tennisBall recognition function/file/etc
         print (waypoints_list[x].longitude)
-        print (waypoints_list[x].lattitude)
+        print (waypoints_list[x].latitude)
 
 main()
