@@ -1,4 +1,15 @@
-
+####################################################################################
+#
+#       Program dependancies the IMU must circuit must be placed either facing up
+#       or facing down for accurate initialization process.  Depending on up/down
+#       several lines of codes need to be commented out or used.  These sections
+#       of code are titled:
+#                       ##########Direction Requirement###########
+#       for the purposes of this project which used the Adafruit 10-DOF the unit
+#       is considered upside down if the IC's on the IMU are facing the direction
+#       of the earth.  Right side up is IC's facing the sky.
+#
+####################################################################################
 
 
 import sys
@@ -20,7 +31,10 @@ AA =  0.40      # Complementary filter constant
 Q_angle = 0.02
 Q_gyro = 0.0015
 R_angle = 0.005
-x_bias = y_bias = XP_00 = XP_01 = XP_10 = XP_11 = YP_00 = YP_01 = YP_10 = YP_11 = KFangleX = KFangleY = 0.0
+x_bias = y_bias = 0.0
+XP_00 = XP_01 = XP_10 = XP_11 = 0.0
+YP_00 = YP_01 = YP_10 = YP_11 = 0.0
+KFangleX = KFangleY = 0.0
 
 def kalmanFilterY ( accAngle, gyroRate, DT):
 	y=0.0
@@ -93,10 +107,25 @@ def kalmanFilterX ( accAngle, gyroRate, DT):
 	
 	return KFangleX
 
+'''
 def writeRegisterAxis(Address, register, value):
 	bus.write_byte_data(Address, register, value)
 	return -1
+'''
 
+def writeACC(register,value):
+        bus.write_byte_data(LSM303_ADDRESS_ACCEL , register, value)
+        return -1
+
+def writeMAG(register,value):
+        bus.write_byte_data(LSM303_ADDRESS_MAG, register, value)
+        return -1
+
+def writeGRY(register,value):
+        bus.write_byte_data(L3GD20_ADDRESS_GYRO, register, value)
+        return -1
+
+'''
 def readACCAxis(axis):
         reg = LSM303_ACCEL_OUT_X_L_A
         if axis == 'x':
@@ -105,7 +134,7 @@ def readACCAxis(axis):
         elif axis == 'y':
                 acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 2)
                 acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 3)
-        else: #axis == 'z':
+        else: #axis == 'z':     #implied since only 3 possible values
                 acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 4)
                 acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, reg + 5)
                 
@@ -120,7 +149,7 @@ def readMAGAxis(axis):
         elif axis == 'z':
                 mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, reg + 2)
                 mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, reg + 3)
-        else: #axis == 'y'
+        else: #axis == 'y'      #implied since only 3 possible values
                 mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, reg + 4)
                 mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, reg + 5)
                 
@@ -141,7 +170,81 @@ def readGYRAxis(axis):
 
         gyr_combined = (gyr_l | gyr_h <<8)
         return gyr_combined  if gyr_combined < 32768 else gyr_combined - 65536
+'''
 
+def readACCx():
+        acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_X_L_A)
+        acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_X_H_A)
+	acc_combined = (acc_l | acc_h <<8)
+
+	return acc_combined  if acc_combined < 32768 else acc_combined - 65536
+
+
+def readACCy():
+        acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_Y_L_A)
+        acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_Y_H_A)
+	acc_combined = (acc_l | acc_h <<8)
+
+	return acc_combined  if acc_combined < 32768 else acc_combined - 65536
+
+
+def readACCz():
+        acc_l = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_Z_L_A)
+        acc_h = bus.read_byte_data(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_OUT_Z_H_A)
+	acc_combined = (acc_l | acc_h <<8)
+
+	return acc_combined  if acc_combined < 32768 else acc_combined - 65536
+
+
+def readMAGx():
+        mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_X_L_M)
+        mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_X_H_M)
+        mag_combined = (mag_l | mag_h <<8)
+
+        return mag_combined  if mag_combined < 32768 else mag_combined - 65536
+
+
+def readMAGy():
+        mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_Y_L_M)
+        mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_Y_H_M)
+        mag_combined = (mag_l | mag_h <<8)
+
+        return mag_combined  if mag_combined < 32768 else mag_combined - 65536
+
+
+def readMAGz():
+        mag_l = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_Z_L_M)
+        mag_h = bus.read_byte_data(LSM303_ADDRESS_MAG, LSM303_MAG_OUT_Z_H_M)
+        mag_combined = (mag_l | mag_h <<8)
+
+        return mag_combined  if mag_combined < 32768 else mag_combined - 65536
+
+
+
+def readGYRx():
+        gyr_l = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_X_L)
+        gyr_h = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_X_H)
+        gyr_combined = (gyr_l | gyr_h <<8)
+
+        return gyr_combined  if gyr_combined < 32768 else gyr_combined - 65536
+  
+
+def readGYRy():
+        gyr_l = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_Y_L)
+        gyr_h = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_Y_H)
+        gyr_combined = (gyr_l | gyr_h <<8)
+
+        return gyr_combined  if gyr_combined < 32768 else gyr_combined - 65536
+
+def readGYRz():
+        gyr_l = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_Z_L)
+        gyr_h = bus.read_byte_data(L3GD20_ADDRESS_GYRO, L3GD20_OUT_Z_H)
+        gyr_combined = (gyr_l | gyr_h <<8)
+
+        return gyr_combined  if gyr_combined < 32768 else gyr_combined - 65536
+
+
+'''
 #initialise the accelerometer
 writeRegisterAxis(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_CTRL_REG1_A, 0b01100111) #z,y,x axis enabled, continuos update,  100Hz data rate
 writeRegisterAxis(LSM303_ADDRESS_ACCEL, LSM303_ACCEL_CTRL_REG2_A, 0b00100000) #+/- 16G full scale
@@ -154,16 +257,36 @@ writeRegisterAxis(LSM303_ADDRESS_MAG, LSM303_MR_REG_M, 0b00000000) #Continuous-c
 #initialise the gyroscope
 writeRegisterAxis(L3GD20_ADDRESS_GYRO, L3GD20_CTRL_REG1, 0b00001111) #Normal power mode, all axes enabled
 writeRegisterAxis(L3GD20_ADDRESS_GYRO, L3GD20_CTRL_REG4, 0b00110000) #Continuos update, 2000 dps full scale
+'''
+
+#initialise the accelerometer
+writeACC(LSM303_ACCEL_CTRL_REG1_A, 0b01100111) #z,y,x axis enabled, continuos update,  100Hz data rate
+writeACC(LSM303_ACCEL_CTRL_REG2_A, 0b00100000) #+/- 16G full scale
+
+#initialise the magnetometer
+writeMAG(LSM303_CRA_REG_M, 0b11110000) #Temp enable, M data rate = 50Hz
+writeMAG(LSM303_CRB_REG_M, 0b01100000) #+/-12gauss
+writeMAG(LSM303_MR_REG_M, 0b00000000) #Continuous-conversion mode
+
+#initialise the gyroscope
+writeGRY(L3GD20_CTRL_REG1, 0b00001111) #Normal power mode, all axes enabled
+writeGRY(L3GD20_CTRL_REG4, 0b00110000) #Continuos update, 2000 dps full scale
 
 
-gyroXangle     = gyroYangle    = gyroZangle     = CFangleX       = CFangleY      = kalmanX        = kalmanY       = 0.0
+gyroXangle = gyroYangle = gyroZangle = 0.0
+CFangleX = CFangleY = 0.0
+kalmanX = kalmanY = 0.0
 
-a = datetime.datetime.now()            #Gyro Timing Control
+a = datetime.datetime.now()                                             #Gyro Timing Control
 
-while True:   #Currently this loop is disabled to allow the Node.js control
-	
+n = 0
+
+while True:                    #Continous run Disabled to allow Node.js control
+
+#for num in range(1,20):	        #Currently this loop runs for 20 reads providing greater accuracy
 	
 	#Read the accelerometer,gyroscope and magnetometer values
+        '''
         ACCx = readACCAxis('x')
 	ACCy = readACCAxis('y')
 	ACCz = readACCAxis('z')
@@ -173,12 +296,22 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 	MAGx = readMAGAxis('x')
 	MAGy = readMAGAxis('y')
 	MAGz = readMAGAxis('z')
+	'''
+        ACCx = readACCx()
+	ACCy = readACCy()
+	ACCz = readACCz()
+	GYRx = readGYRx()
+	GYRy = readGYRy()
+	GYRz = readGYRz()
+	MAGx = readMAGx()
+	MAGy = readMAGy()
+	MAGz = readMAGz()
 	
 	##Calculate loop Period(LP). How long between Gyro Reads
 	b = datetime.datetime.now() - a
 	a = datetime.datetime.now()
 	LP = b.microseconds/(1000000*1.0)
-	print "Loop Time | %5.2f|" % ( LP ),
+	#print "Loop Time | %5.2f|" % ( LP ),   #Error checking stop
 	
 	#Convert Gyro raw to degrees per second
 	rate_gyr_x =  GYRx * G_GAIN
@@ -194,16 +327,15 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 	##Convert Accelerometer values to degrees
 	AccXangle =  (math.atan2(ACCy,ACCz)+M_PI)*RAD_TO_DEG
 	AccYangle =  (math.atan2(ACCz,ACCx)+M_PI)*RAD_TO_DEG
-	
-	
-	####################################################################
-	######################Correct rotation value########################
+
+        ####################################################################	
+	##########Direction Requirement####Correct rotation value###########
 	####################################################################
 	#Change the rotation value of the accelerometer to -/+ 180 and
     	#move the Y axis '0' point to up.
     	#
     	#Two different pieces of code are used depending on how your IMU is mounted.
-	#If IMU is up the correct way, Skull logo is facing down, Use these lines
+	#If IMU is up the correct way, IC's facing the sky, Use these lines
 	AccXangle -= 180.0
 	if AccYangle > 90:
 		AccYangle -= 270.0
@@ -211,9 +343,7 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 		AccYangle += 90.0
 	#
 	#
-	#
-	#
-	#If IMU is upside down E.g Skull logo is facing up;
+	#If IMU is upside down, IC's facing the Earth, using these lines
 	#if AccXangle >180:
     	#        AccXangle -= 360.0
 	#AccYangle-=90
@@ -229,10 +359,9 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 	#Kalman filter used to combine the accelerometer and gyro values.
 	kalmanY = kalmanFilterY(AccYangle, rate_gyr_y,LP)
 	kalmanX = kalmanFilterX(AccXangle, rate_gyr_x,LP)
-	
-	
+
 	####################################################################
-	############################MAG direction ##########################
+	##########Direction Requirement#######MAG direction ################
 	####################################################################
 	#If IMU is upside down, then use this line.  It isnt needed if the
 	# IMU is the correct way up
@@ -241,7 +370,7 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 	############################ END ##################################
 	
 	
-	#Calculate heading
+	#Calculate heading with Radian to Degree conversion
 	heading = 180 * math.atan2(MAGy,MAGx)/M_PI
 
 	#Only have our heading between 0 and 360
@@ -252,15 +381,16 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 	#Normalize accelerometer raw values.
 	accXnorm = ACCx/math.sqrt(ACCx * ACCx + ACCy * ACCy + ACCz * ACCz)
 	accYnorm = ACCy/math.sqrt(ACCx * ACCx + ACCy * ACCy + ACCz * ACCz)
+
 	
 	####################################################################
-	###################Calculate pitch and roll#########################
+	##########Direction Requirement#####Calculate pitch and roll########
 	####################################################################
-	#Us these two lines when the IMU is up the right way. Skull logo is facing down
+	#Us these two lines when the IMU is right side up.  IC's facing sky 
 	pitch = math.asin(accXnorm)
 	roll = -math.asin(accYnorm/math.cos(pitch))
 	#
-	#Us these four lines when the IMU is upside down. Skull logo is facing up
+	#Us these four lines when the IMU is upside down. IC's facing earth
 	#accXnorm = -accXnorm				#flip Xnorm as the IMU is upside down
 	#accYnorm = -accYnorm				#flip Ynorm as the IMU is upside down
 	#pitch = math.asin(accXnorm)
@@ -272,14 +402,14 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 	magXcomp = MAGx*math.cos(pitch)+MAGz*math.sin(pitch)
 	magYcomp = MAGx*math.sin(roll)*math.sin(pitch)+MAGy*math.cos(roll)-MAGz*math.sin(roll)*math.cos(pitch)
 
-	#Calculate tilt compensated heading
+	#Calculate tilt compensated heading w/ Radian to Degree conversion
         tiltCompensatedHeading = 180 * math.atan2(magYcomp,magXcomp)/M_PI
 
         if tiltCompensatedHeading < 0:
                 tiltCompensatedHeading += 360
 
 
-
+        #Error checking Section for trouble shooting
 	if 0: #1:			#Change to '1' to show the angles from the accelerometer
  		print ("\033[1;34;40mACCX Angle %5.2f ACCY Angle %5.2f  \033[0m  " % (AccXangle, AccYangle)),
 	
@@ -297,10 +427,11 @@ while True:   #Currently this loop is disabled to allow the Node.js control
 
 	
 	#slow program down a bit, makes the output more readable
-	#time.sleep(0.03)  #disable while not using loop features
-        break  #this is disabliling the while loop for Node.js Control
-
-
-print("%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f" % (AccXangle, AccYangle, gyroXangle,gyroYangle,gyroZangle,CFangleX,CFangleY, heading, tiltCompensatedHeading, kalmanX,kalmanY))
-sys.stdout.flush()
+	time.sleep(0.5)        #disable while not using loop features
+        #break                  #this is disabliling the while loop for Node.js Control
+        n = n + 1
+        #Output to stdout if running stand alone or passed to node.js control program through flush call
+        #print("%d,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.8f,%5.2f,%5.2f,%5.2f" % (n, AccXangle, AccYangle, gyroXangle,gyroYangle,gyroZangle,CFangleX,CFangleY, heading, tiltCompensatedHeading, kalmanX,kalmanY))
+        print("%5.8f" % (heading))
+        #sys.stdout.flush()
 
