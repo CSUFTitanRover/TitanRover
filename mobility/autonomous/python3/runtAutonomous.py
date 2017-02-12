@@ -75,9 +75,7 @@ class waypoint:
             else:
                 return 180
         else: #this math is necesary to determine the target heading. 
-            angle = atan2(cos(targetLatitudeRad) * sin(degToRad*(targetLongitude - currentLongitude)),
-                          sin(targetLatitudeRad) * cos(currentLatitudeRad) - sin(currentLatitudeRad) *
-                          cos(targetLatitudeRad) * cos(degToRad*(targetLongitude - currentLongitude)))
+            angle = atan2((cos(currentLatitudeRad)*sin(targetLatitudeRad)) - (sin(currentLatitudeRad)*cos(targetLatitudeRad)*cos(targetLongitudeRad-currentLongitudeRad)), sin(targetLongitudeRad - currentLongitudeRad)*cos(targetLatitudeRad))
         return (angle * radToDeg + 360) % 360
 
 
@@ -90,10 +88,12 @@ class waypoint:
                                               self.currentLatitude)
         print self.currentHeading
         print targetHeading
-        if (360 - self.currentHeading) + targetHeading < 180: 		
-            return ((360 - self.currentHeading) + targetHeading)
+        if (self.currentHeading + targetHeading <= 180):
+            return targetHeading
+        elif(targetHeading == 360 || -360):
+            return 0.0
         else:
-            return targetHeading - self.currentHeading
+            return ((self.currentHeading + targetHeading)-360)
         
     #Gets the new GPS waypoint from the Adafruit GPS device
     def newPointFromGPS(self):
@@ -150,7 +150,7 @@ def main():
         print "Current Latitude "   + str(waypoints_list[x].currentLatitude)
         print "Target Longitude "   + str(waypoints_list[x].targetLongitude)
         print "Target Latitude "    + str(waypoints_list[x].targetLatitude)
-        print "Bearing "            + str(waypoints_list[x].calculateHeadingCorrection())   + " Degrees"
+        print "Turn By(Deg): "      + str(waypoints_list[x].calculateHeadingCorrection())   + " Degrees"
         print "Distance "           + str(waypoints_list[x].targetDistance)                 + " km" 
 
 main()
