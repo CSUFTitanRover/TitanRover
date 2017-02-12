@@ -13,8 +13,11 @@ let routes = (
             <Route path="chart1" component={Modules.Overview.Chart1} />
             <Route path="chart2" component={Modules.Overview.Chart2} />
             <Route path="livefeeds" component={Modules.Overview.LiveFeeds}>
-                <Route path="/frontcamera" component={Modules.Overview.FrontCamera} />
-                <Route path="/rearcamera" component={Modules.Overview.RearCamera} />
+                <Route path="/armcamera" component={Modules.Overview.ArmCamera} />
+                <Route path="/mastcamera" component={Modules.Overview.MastCamera} />
+                <Route path="/leftcamera" component={Modules.Overview.LeftCamera} />
+                <Route path="/rightcamera" component={Modules.Overview.RightCamera} />
+                <Route path="/surround" component={Modules.Overview.Surround} />
             </Route>
 
             <Route path="resources" component={Modules.Resources.Resources} />
@@ -28,4 +31,3 @@ ReactDOM.render(
   routes,
   document.getElementById("react-app")
 );
-
