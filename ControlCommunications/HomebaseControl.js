@@ -56,6 +56,7 @@ const HOMEBASE_PORT = 5000;
 const PORT = 3000;
 const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
 
+// Control information
 const CONTROL_MESSAGE_TEST = {
     commandType: "control",
     type: "test"
@@ -68,6 +69,9 @@ const CONTROL_MESSAGE_ACK = {
 
 const SEND_CONTROL_AFTER = 10;
 var packet_count = 0;
+
+// Arm Variables
+var arm_mode = false;
 
 // Joystick event handlers
 joystick.on('button', onJoystickData);
@@ -149,12 +153,27 @@ function onJoystickData(event) {
         send_to_rover(message);
     }
 
-    if (event.type == "axis") {
-        if (event.number == 0 || event.number == 1 || event.number == 3) {
-            event.commandType = "mobility";
+    if (arm_mode) {
+        if (event.type == "axis") {
+            event.commandType = "arm";
+        }
+    } else {
+        if (event.type == "axis") {
+            if (event.number == 0 || event.number == 1 || event.number == 3) {
+                event.commandType = "mobility";
+            }
         }
     }
     //console.log(event);
+
+
+    // Handle button presses
+    if (event.type == "button") {
+        // Change joystick from mobility to arm control
+        if (event.number == 1) {
+            arm_mode = arm_mode ? false : true;
+        }
+    }
 
     message = new Buffer(JSON.stringify(event));
 

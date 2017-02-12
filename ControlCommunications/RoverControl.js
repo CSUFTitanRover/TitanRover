@@ -86,8 +86,8 @@ const Joystick_MIN = -32767;
 const Joystick_MAX = 32767;
 
 // PWM Channel Config:
-const left_channel = 0;
-const right_channel = 1;
+const motor_left_channel = 0;
+const motor_right_channel = 1;
 
 // Based on J. Stewart's calculations:
 pwm.setPWMFreq(50);
@@ -121,11 +121,11 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
 };
 
 function setLeft(speed) {
-    pwm.setPWM(left_channel, 0, parseInt(speed));
+    pwm.setPWM(motor_left_channel, 0, parseInt(speed));
 }
 
 function setRight(speed) {
-    pwm.setPWM(right_channel, 0, parseInt(speed));
+    pwm.setPWM(motor_right_channel, 0, parseInt(speed));
 }
 
 var setMotors = function(diffSteer) {
@@ -153,15 +153,15 @@ function calculateDiff(yAxis, xAxis) {
     var left = (V - W) / 2.0;
 
     if (right <= 0) {
-        right = right.map(-32767, 0, saber_min, saber_mid);
+        right = right.map(Joystick_MIN, 0, saber_min, saber_mid);
     } else {
-        right = right.map(0, 32767, saber_mid, saber_max);
+        right = right.map(0, Joystick_MAX, saber_mid, saber_max);
     }
 
     if (left <= 0) {
-        left = left.map(-32767, 0, saber_min, saber_mid);
+        left = left.map(Joystick_MIN, 0, saber_min, saber_mid);
     } else {
-        left = left.map(0, 32767, saber_mid, saber_max);
+        left = left.map(0, Joystick_MAX, saber_mid, saber_max);
     }
 
     return {
@@ -184,8 +184,11 @@ var receiveMobility = function(joystickData) {
     var value = parseInt(joystickData.value);
 
     var diffSteer;
-   
-    value = parseInt(value * throttleValue);
+
+    if (axis === 0 || axis === 1) {
+        value = parseInt(value * throttleValue);
+    }
+
     // X axis
     if (axis === 0) {
         diffSteer = calculateDiff(value, lastY);
@@ -201,8 +204,9 @@ var receiveMobility = function(joystickData) {
         setThrottle(value)
     }
 
+    // If the Mobility recieved a driving axis.
     if (axis === 0 || axis === 1) {
-	setMotors(diffSteer);
+        setMotors(diffSteer);
     }
 };
 
@@ -270,6 +274,63 @@ function handleControl(message) {
 
 }
 
+function setPWM_HIGH(channel) {
+  // PWM should go from LOW to HIGH right at the begginning
+  // then should not go back down.
+  pwm.setPWM(channel, 4095, 0);
+}
+
+function setPWM_LOW(channel) {
+  // PWM should go from LOW to never going HIGH
+  pwm.setPWM(channel, 0, 0);
+}
+
+function rotatingBase(message) {
+}
+
+function joint1_linear1(message) {
+}
+
+function joint2_linear2(message) {
+}
+
+function joint3(message) {
+}
+
+function joint4(message) {
+}
+
+function joint5(message) {
+}
+
+function joint6(message) {
+}
+
+
+// Will handle control of the arm one to one.
+// Still need to figure out mapping of the joystick controller.
+function armControl(message) {
+    var axis = parseInt(message.number);
+
+    // Determine which axis should be which joint.
+    switch (axis) {
+        case 0:
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        default:
+
+    }
+}
+
 
 server.on('listening', function() {
     var address = server.address();
@@ -289,6 +350,10 @@ server.on('message', function(message, remote) {
             break;
         case 'control':
             handleControl(msg);
+            break;
+        case 'arm':
+            armControl(msg);
+            break;
         default:
             //console.log("###### Could not find commandType #######");
     }
