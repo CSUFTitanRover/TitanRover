@@ -53,21 +53,21 @@ class SensorOptionTemplate extends Component {
     render() {
         let ShowOrHide = this.state.queryByTimeRange ? 'timerange' : 'timerange hidden';
 
-        console.info('queryAllData: ' + this.state.queryAllData + '\nqueryByTimeRange: ' + this.state.queryByTimeRange + '\nqueryStartTime: ' + this.state.queryStartTime + '\nqueryEndTime: ' + this.state.queryEndTime);
+        // console.info('queryAllData: ' + this.state.queryAllData + '\nqueryByTimeRange: ' + this.state.queryByTimeRange + '\nqueryStartTime: ' + this.state.queryStartTime + '\nqueryEndTime: ' + this.state.queryEndTime);
 
         return (
             <div className="sensor-option">
-                <span>{this.props.sensorName} ({this.props.sensorID})</span>
+                <span>{this.props.chartID}</span>
 
 
                 <label for="All Data">
-                    <input type="radio" name={this.props.sensorName + "-" + this.props.sensorID} value="allData" id="All Data" checked={this.state.queryAllData} onChange={this.handleAllDataChange}/>
+                    <input type="radio" name={this.props.chartID} value="allData" id="All Data" checked={this.state.queryAllData} onChange={this.handleAllDataChange}/>
                     Get All Data
                 </label>
 
 
                 <label for="Timestamp Range">
-                    <input type="radio" name={this.props.sensorName + "-" + this.props.sensorID} value="timeRange" id="Timestamp Range" checked={this.state.queryByTimeRange} onChange={this.handleTimeRangeChange}/>
+                    <input type="radio" name={this.props.chartID} value="timeRange" id="Timestamp Range" checked={this.state.queryByTimeRange} onChange={this.handleTimeRangeChange}/>
                     Timestamp Range
                 </label>
                 <div className={ShowOrHide}>
