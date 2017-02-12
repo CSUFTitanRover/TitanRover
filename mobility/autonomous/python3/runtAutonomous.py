@@ -86,12 +86,12 @@ class waypoint:
         self.newPointFromGPS()
         targetHeading = self.calculateHeading(self.targetLongitude, self.targetLatitude, self.currentLongitude,
                                               self.currentLatitude)
-        print self.currentHeading
-        print targetHeading
+        print (self.currentHeading)
+        print (targetHeading)
         if (self.currentHeading + targetHeading <= 180):
             return targetHeading
-        elif(targetHeading == 360 || -360):
-            return 0.0
+        #elif(targetHeading == 360 || -360): We need to implement this logic better
+           # return 0.0
         else:
             return ((self.currentHeading + targetHeading)-360)
         
@@ -146,11 +146,11 @@ def main():
         #Once we've turned, start the navigation towards the wayppoint. Check if there. Then loop until all waypoints are finished
         #Once finished spit back to the user that the loop has been completed OR call tennisBall recognition function/file/etc
         waypoints_list[x].newPointFromGPS()
-        print "Current Longitude "  + str(waypoints_list[x].currentLongitude)
-        print "Current Latitude "   + str(waypoints_list[x].currentLatitude)
-        print "Target Longitude "   + str(waypoints_list[x].targetLongitude)
-        print "Target Latitude "    + str(waypoints_list[x].targetLatitude)
-        print "Turn By(Deg): "      + str(waypoints_list[x].calculateHeadingCorrection())   + " Degrees"
-        print "Distance "           + str(waypoints_list[x].targetDistance)                 + " km" 
+        print ("Current Longitude "  + str(waypoints_list[x].currentLongitude))
+        print ("Current Latitude "   + str(waypoints_list[x].currentLatitude))
+        print ("Target Longitude "   + str(waypoints_list[x].targetLongitude))
+        print ("Target Latitude "    + str(waypoints_list[x].targetLatitude))
+        print ("Turn By(Deg): "      + str(waypoints_list[x].calculateHeadingCorrection())   + " Degrees")
+        print ("Distance "           + str(waypoints_list[x].targetDistance)                 + " km")
 
 main()
