@@ -20,7 +20,7 @@ class LiveDataTemplate extends Component {
             columns: this.props.chartInitialColumns,
             isRunning: true
         };
-        this.divID = this.props.sensorName + '-' + this.sensorID; // creating CSS div id for later use
+        this.chartID = this.props.sensorName + '-' + this.sensorID; // creating CSS div id for later use
         this.handleStartAndPause = this.handleStartAndPause.bind(this);
     }
 
@@ -42,7 +42,7 @@ class LiveDataTemplate extends Component {
         // event for inital socket connection to set client id for future use on server-side
         this.socketClient.on('get: client id', function () {
             console.log("get: client id, CALLED");
-            self.socketClient.emit('set: client id', self.sensorID);
+            self.socketClient.emit('set: client id', self.chartID);
         });
 
         // updating chart
@@ -88,10 +88,10 @@ class LiveDataTemplate extends Component {
 
     _renderChart() {
         this.chart = c3.generate({
-            bindto: '#' + this.divID.toString(),
+            bindto: '#' + this.chartID.toString(),
             data: {
-                columns: this.state.columns, // defaults to 'line' if no chartType is supplied by nature of c3.js behavior
-                type: this.props.chartType
+                columns: this.state.columns,
+                type: this.props.chartType  // defaults to 'line' if no chartType is supplied by nature of c3.js behavior
             },
             zoom: {
                 enabled: true
@@ -122,7 +122,7 @@ class LiveDataTemplate extends Component {
                 <div className="controls">
                     <button onClick={this.handleStartAndPause}>{isRunningState}</button>
                 </div>
-                <div id={this.divID}/>
+                <div id={this.chartID}/>
             </div>
         );
     }

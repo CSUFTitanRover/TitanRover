@@ -17,7 +17,6 @@ class QueryData extends Component {
         super(props);
         this.state = {
             selectedSensorsData: [], // array of Obj {sensorName,sensorID} for each sensor
-
             activeKey: 0,
             data:  []
         };
@@ -30,6 +29,7 @@ class QueryData extends Component {
         this.handleTabClick = this.handleTabClick.bind(this);
         this.setMoveData = this.setMoveData.bind(this);
         this.handleDeleteAllButton = this.handleDeleteAllButton.bind(this);
+        this.handleDeleteCurrentChart = this.handleDeleteCurrentChart.bind(this);
     }
 
     // Tabs Functions
@@ -40,17 +40,12 @@ class QueryData extends Component {
         let data = this.state.data;
         let activeKey = this.state.activeKey;
 
-        console.info('Before--\nActive Key:' + activeKey + '\nLen:' + data.length);
-        console.info(JSON.stringify(data, null, '\t'));
-
         data.splice(activeKey, 1); // delete the selected key
 
         // count the active key
-        if (data.length <= activeKey + 1)
+        if (data.length <= activeKey + 1) {
             activeKey = data.length - 1;
-
-        console.info('After splice--\nActive Key:' + activeKey + '\nLen:' + data.length);
-        console.info(JSON.stringify(data, null, '\t'));
+        }
 
         this.setState({
             data: data,
@@ -67,14 +62,9 @@ class QueryData extends Component {
         this.setState({activeKey: key})
     }
 
-    beginDrag() {
-        console.log('begin drag')
-    }
-
     setMoveData(dragIndex, hoverIndex) {
         let data = this.state.data;
         let dragData = data[dragIndex];
-        console.info(dragData);
         data.splice(dragIndex, 1);
         data.splice(hoverIndex, 0, dragData);
         this.setState({data: data, activeKey: hoverIndex});
@@ -119,7 +109,8 @@ class QueryData extends Component {
                     // push to the content []
                     let keyIndex = tab.content.length;
                     let chartID = sensor.sensorName + '-' + sensor.sensorID + '-Index-' + keyIndex;
-                    tab.content.push(<QueryDataTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID} keyIndex={keyIndex} chartID={chartID}/>);
+                    tab.content.push(<QueryDataTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID} keyIndex={keyIndex}
+                                                        chartID={chartID} handleDeleteCurrentChart={this.handleDeleteCurrentChart}/>);
 
                     // auto-focus the already generated tab
                     this.setState({activeKey: sensorTabActiveKey});
@@ -128,7 +119,8 @@ class QueryData extends Component {
 
             if (!sensorTabAlreadyGenerated) {
                 let chartID = sensor.sensorName + '-' + sensor.sensorID + '-Index-' + 0;
-                let content = [<QueryDataTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID} keyIndex={0} chartID={chartID}/>];
+                let content = [<QueryDataTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID} keyIndex={0}
+                                                  chartID={chartID} handleDeleteCurrentChart={this.handleDeleteCurrentChart}/>];
                 // generate the sensor tab
                 this.handleAddBackTab(sensor.sensorName, content);
             }
@@ -141,7 +133,25 @@ class QueryData extends Component {
         this.setState({data: data, activeKey: data.length-1});
     }
 
+    handleDeleteCurrentChart(sensorName, keyIndex) {
+        let data = this.state.data;
 
+        for (let [index, tab] of data.entries()) {
+            if (sensorName === tab.title) {
+                // we found our tab
+                // now we check if there is only 1 chart panel inside
+                if (tab.content.length === 1) {
+                    // we need to delete the whole tab or else its going to be empty
+                    this.handleTabDeleteButton();
+                }
+                else {
+                    tab.content.splice(keyIndex, 1);
+                }
+            }
+        }
+
+        this.setState({data: data});
+    }
 
     render() {
         let sensor_options_data = this.getSensorOptionsData();
@@ -161,7 +171,7 @@ class QueryData extends Component {
 
         return (
             <BaseModuleTemplate moduleName="Query Chart Data">
-                <div className="controls query-data">
+                <div className="controls sensor-options">
                     <div>
                         <h4>Select Sensors (Multi-Select)</h4>
                         <select multiple name="Sensor Options" size={options_dropdown_size} onChange={this.handleSelectedOptionsChange}>
@@ -169,16 +179,15 @@ class QueryData extends Component {
                         </select>
                     </div>
                     <div className="options-border"/>
-                    <button onClick={this.handleGenerateChart}>Generate Chart</button>
+                    <button className="generate-chart-button" onClick={this.handleGenerateChart}>Generate Chart</button>
                 </div>
 
 
                 <Tabs activeKey={this.state.activeKey}
-                      style={"tabtab__" + 'folder' +"__"}
+                      style="tabtab__folder__"
                       tabDeleteButton={true}
                       handleTabDeleteButton={this.handleTabDeleteButton}
-                      draggable={true}
-                      beginDrag={this.beginDrag}
+                      draggable={false}
                       handleTabClick={this.handleTabClick}
                       setMoveData={this.setMoveData}
                       deleteAllButtonName="Delete All Tabs"

@@ -9,6 +9,10 @@ img{
     background-color: black;
 }
 
+.hidden {
+    display: none !important;
+}
+
 #nav-header {
     min-width: 250px;
     min-height: 100vh; /*might need to change when the main content has srollbars*/
@@ -65,43 +69,104 @@ img{
 .module .controls {
     margin-bottom: 15px;
 }
-.module .controls.query-data {
+.module .controls.sensor-options {
     border: 1px solid gray;
     display: flex;
+    width: 400px;
 }
-.module .controls.query-data h4 {
+.module .controls.sensor-options h4 {
     color: royalblue;
     padding-bottom: 10px;
     font-weight: bold;
 }
-.module .controls.query-data > *{
+.module .controls.sensor-options > *{
     padding: 10px;
 }
 
-.module .controls.query-data .sensor-option {
+.module .controls.sensor-options .sensor-option {
     padding: 7px;
     border-bottom: 1px solid gray;
 }
-.module .controls.query-data .sensor-option:last-child {
+.module .controls.sensor-options .sensor-option:last-child {
     border-bottom: none;
 }
+.module .controls.sensor-options .sensor-option > span {
+    padding: 5px;
+    background: #ffbc52;
+}
 
-.module .controls.query-data .options-border {
+.module .controls .options-border {
     border-left: 1px solid gray;
     padding: 0px;
 }
 
-.module .controls.query-data .options-container {
+.module .controls.sensor-options .options-container {
     border: 1px solid gray;
     min-height: 34px;
 }
 
-.module .controls.query-data .timerange {
+.module .controls.sensor-options .timerange {
     margin-top: 5px;
 }
-.module .controls.query-data .timerange span {
+.module .controls.sensor-options .timerange span {
     padding: 0px 5px;
 }
-.hidden {
-    display: none !important;
+.module .controls.sensor-options .generate-chart-button {
+    height: 50px;
+    margin: 65px 0 0 23px;
+}
+
+.module .query-chart-panel {
+    padding: 5px;
+    border: 1px solid gray;
+    margin-bottom: 20px;
+}
+.module .query-chart-panel:last-child {
+    margin-bottom: 0px;
+}
+
+.module .query-chart-panel .controls {
+    background: #d8d8d8;
+    padding: 5px;
+    display: flex;
+}
+
+.module .query-chart-panel .controls .sensor-label {
+    background: darkorange;
+    color: white;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.module .query-chart-panel .controls .timerange {
+    padding-top: 10px;
+}
+.module .query-chart-panel .controls .timerange > * {
+    padding: 5px;
+}
+
+.module .query-chart-panel .controls .query-data-button {
+    margin-left: 15px;
+}
+
+.module .query-chart-panel .controls .options-border {
+    margin-left: 20px;
+    margin-right: 5px;
+    border-width: 2px;
+}
+
+.module .query-chart-panel .controls .chartType {
+    margin-left: 5px;
+    height: 21px;
+}
+
+.module .query-chart-panel .sensor-option {
+    display: flex;
+}
+
+    /* overwriting tabtab style for the delete all button*/
+.tabtab__folder__delete {
+    right: 0px !important;
+    top: -3px !important;
+    padding: 7px;
 }
