@@ -120,6 +120,20 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
     return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
 
+/**
+ * Adjusts the speed by an exponential factor.  This makes acceleration a function
+ *  of the product of differential steering and distance of joystick from its origin
+ * @param {Number} x
+ * @param {Number} y
+ * @return {Number} A value between 0 and 1 that represents ratio of distance from
+ *      origin to joystick coordinate.  Effectively lowers speed closer to origin. 
+ */
+ var speedAdjust = function(x, y){
+    var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX; 
+    return speed * acceleration;
+}
+
 function setLeft(speed) {
     pwm.setPWM(motor_left_channel, 0, parseInt(speed));
 }
