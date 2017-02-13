@@ -1,4 +1,5 @@
 from Adafruit_PWM_Servo_Driver import PWM
+import signal
 import time
 import RPi.GPIO as GPIO
 from time import sleep
@@ -66,5 +67,9 @@ def left(x):
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)               # Set frequency to 60 H
 
+def graceful_exit(signum, frame):
+    console.log("Stopping Runt")
+    pwm.setPWM(0,0,0)
+    pwm.setPWM(1,0,0)
+    GPIO.cleanup()
 
-GPIO.cleanup()
