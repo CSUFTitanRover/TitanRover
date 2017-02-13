@@ -7,10 +7,6 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import {Tabs, Panel} from 'react-tabtab';
 import 'react-tabtab/public/stylesheets/folder.css';
 
-
-// <QueryDataTemplate sensorName="Template-Tab" sensorID={i} keyIndex={i}/>
-
-
 class QueryData extends Component {
 
     constructor(props) {
@@ -136,7 +132,7 @@ class QueryData extends Component {
     handleDeleteCurrentChart(sensorName, keyIndex) {
         let data = this.state.data;
 
-        for (let [index, tab] of data.entries()) {
+        for (let tab of data) {
             if (sensorName === tab.title) {
                 // we found our tab
                 // now we check if there is only 1 chart panel inside

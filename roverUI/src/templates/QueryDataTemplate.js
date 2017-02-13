@@ -112,7 +112,6 @@ class QueryDataTemplate extends Component {
         console.info(JSON.stringify(dataToBeQueried, null, '\t'));
 
         this.socketClient.disconnect();
-
     }
 
     handleInputChange(name, inputValue) {
