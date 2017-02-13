@@ -131,7 +131,7 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
  var speedAdjust = function(x, y){
     var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX; 
-    return speed * acceleration;
+    return acceleration;
 }
 
 function setLeft(speed) {
