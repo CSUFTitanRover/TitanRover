@@ -23,6 +23,9 @@ var bodyParser = require('body-parser');
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 
+// Allows us to contorl the GPIO pins on the raspberry pi
+var gpio = require('rpi-gpio');
+
 var PORT = 3000;
 var HOST = 'localhost';
 
@@ -82,12 +85,31 @@ const saber_min = 241; // Calculated to be 1000 us
 const saber_mid = 325; // Calculated to be 1500 us
 const saber_max = 409; // Calculated to be 2000 us
 
+// Joystick values
 const Joystick_MIN = -32767;
 const Joystick_MAX = 32767;
 
-// PWM Channel Config:
+// PWM Channel Config Motor:
 const motor_left_channel = 0;
 const motor_right_channel = 1;
+
+// Joint1 rotating base pins
+const joint1_pwm_pin = 8;
+const joint1_gpio_pin = 4;
+
+// joint2_linear1 pins
+const joint2_pwm_pin = 4;
+
+// joint3_linear2 pins
+const joint3_pwm_pin = 5;
+
+// joint 4 Sumtor pins
+const joint4_pwm_pin = 9;
+const joint4_gpio_pin = 17;
+
+// joint 5 Sumtor pins
+const joint5_pwm_pin = 10;
+const joint5_gpio_pin = 12;
 
 // Based on J. Stewart's calculations:
 pwm.setPWMFreq(50);
@@ -126,11 +148,11 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
  * @param {Number} x
  * @param {Number} y
  * @return {Number} A value between 0 and 1 that represents ratio of distance from
- *      origin to joystick coordinate.  Effectively lowers speed closer to origin. 
+ *      origin to joystick coordinate.  Effectively lowers speed closer to origin.
  */
- var speedAdjust = function(x, y){
+var speedAdjust = function(x, y) {
     var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-    var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX; 
+    var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX;
     return acceleration;
 }
 
@@ -289,36 +311,86 @@ function handleControl(message) {
 }
 
 function setPWM_HIGH(channel) {
-  // PWM should go from LOW to HIGH right at the begginning
-  // then should not go back down.
-  pwm.setPWM(channel, 4095, 0);
+    // PWM should go from LOW to HIGH right at the begginning
+    // then should not go back down.
+    pwm.setPWM(channel, 4095, 0);
 }
 
 function setPWM_LOW(channel) {
-  // PWM should go from LOW to never going HIGH
-  pwm.setPWM(channel, 0, 0);
+    // PWM should go from LOW to never going HIGH
+    pwm.setPWM(channel, 0, 0);
 }
 
-function rotatingBase(message) {
+function setLinearSpeed(channel, value) {
+    const linear_min = 241; // Calculated to be 1000 us
+    const linear_mid = 325; // Calculated to be 1500 us
+    const linear_max = 409; // Calculated to be 2000 us
+
+    if (value <= 0) {
+        pwm.setPWM(channel, 0, parseInt(value.map(Joystick_MIN, 0, linear_min, linear_mid)));
+    } else {
+        pwm.setPWM(channel, 0, parseInt(value.map(0, Joystick_MAX, linear_mid, linear_max)));
+    }
 }
 
-function joint1_linear1(message) {
+function setSumtorStepper(channel, value) {
+    const rotate_noMove = 325; // Calculated to be 1500 us
+    const rotate_max = 409;
+
+    if (value < 0) {
+        value *= -1;
+    }
+
+    pwm.setPWM(channel, parseInt(value.map(0, Joystick_MAX, rotate_noMove, rotate_max)));
 }
 
-function joint2_linear2(message) {
+function joint1_rotatingBase(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? false : true;
+
+    gpio.setup(joint1_gpio_pin, gpio.DIR_OUT);
+
+    gpio.write(joint1_gpio_pin, direction);
+
+    setSumtorStepper(joint1_pwm_pin, value);
+
 }
 
-function joint3(message) {
+function joint2_linear1(message) {
+    let value = parseInt(message.value);
+    setLinearSpeed(joint2_pwm_pin, value);
 }
 
-function joint4(message) {
+function joint3_linear2(message) {
+    let value = parseInt(message.value);
+    setLinearSpeed(joint3_pwm_pin, value);
+}
+
+function joint4_axis1(message) {
+  let value = parseInt(message.value);
+  let direction = (value < 0) ? false : true;
+
+  gpio.setup(joint4_gpio_pin, gpio.DIR_OUT);
+
+  gpio.write(joint4_gpio_pin, direction);
+
+  setSumtorStepper(joint4_pwm_pin, value);
 }
 
 function joint5(message) {
+  let value = parseInt(message.value);
+  let direction = (value < 0) ? false : true;
+
+  gpio.setup(joint5_gpio_pin, gpio.DIR_OUT);
+
+  gpio.write(joint5_gpio_pin, direction);
+
+  setSumtorStepper(joint5_pwm_pin, value);
 }
 
-function joint6(message) {
-}
+function joint6(message) {}
+
+function joint7(message) {}
 
 
 // Will handle control of the arm one to one.
@@ -329,10 +401,13 @@ function armControl(message) {
     // Determine which axis should be which joint.
     switch (axis) {
         case 0:
+            //joint3_linear2(message);
             break;
         case 1:
+            //joint2_linear1(message);
             break;
         case 2:
+            joint1_rotatingBase(message);
             break;
         case 3:
             break;

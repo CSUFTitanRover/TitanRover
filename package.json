@@ -23,6 +23,7 @@
     "raspi-io": "^6.1.1",
     "raspi-pwm": "^3.1.2",
     "request": "^2.75.0",
+    "rpi-gpio": "^0.7.0",
     "serialport": "^4.0.6",
     "socket.io": "^1.6.0"
   }
