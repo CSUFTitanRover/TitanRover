@@ -14,7 +14,7 @@ Runt Rover v.01
 '''
 # Initialise the PWM device using the default address
 pwm = PWM(0x40)
-pwm.setPWMFreq(1000) 
+pwm.setPWMFreq(50) 
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
@@ -60,9 +60,9 @@ def right(x):
     pwm.setPWM(1, 0, x)
 
 def left(x):
-	GPIO.output(MOTOR_1A, GPIO.HIGH)
-	GPIO.output(MOTOR_1B, GPIO.LOW)
-	GPIO.output(MOTOR_2A, GPIO.LOW)
+    GPIO.output(MOTOR_1A, GPIO.HIGH)
+    GPIO.output(MOTOR_1B, GPIO.LOW)
+    GPIO.output(MOTOR_2A, GPIO.LOW)
     GPIO.output(MOTOR_2B, GPIO.HIGH)
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)               # Set frequency to 60 H
