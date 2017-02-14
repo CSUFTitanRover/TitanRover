@@ -1,9 +1,6 @@
 from Adafruit_PWM_Servo_Driver import PWM
-import signal
-import time
-import sys
 import RPi.GPIO as GPIO
-from time import sleep
+import sys
 
 '''
 Runt Rover v.01
@@ -17,7 +14,6 @@ Runt Rover v.01
 pwm = PWM(0x40)
 pwm.setPWMFreq(50) 
 
-signal.signal(signal.SIGINT, graceful_exit)
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
@@ -36,6 +32,7 @@ GPIO.setup(Motor2B, GPIO.OUT)
 
 
 def forwards(x):
+    print "moving forwards" 
     GPIO.output(Motor1A, GPIO.HIGH)
     GPIO.output(Motor1B, GPIO.LOW)
     GPIO.output(Motor2A, GPIO.HIGH)
@@ -44,6 +41,7 @@ def forwards(x):
     pwm.setPWM(1, 0, x)
 
 def backwards(x):
+    print "moving backwards"
     GPIO.output(Motor1A, GPIO.LOW)
     GPIO.output(Motor1B, GPIO.HIGH)
     GPIO.output(Motor2A, GPIO.LOW)
@@ -55,23 +53,30 @@ def backwards(x):
     pwm values'''
 
 def right(x):
-    GPIO.output(MOTOR_1A, GPIO.LOW)
-    GPIO.output(MOTOR_1B, GPIO.HIGH)
-    GPIO.output(MOTOR_2A, GPIO.HIGH)
-    GPIO.output(MOTOR_2B, GPIO.LOW)
+    print "moving right"
+    GPIO.output(Motor1A, GPIO.LOW)
+    GPIO.output(Motor1B, GPIO.HIGH)
+    GPIO.output(Motor2A, GPIO.HIGH)
+    GPIO.output(Motor2B, GPIO.LOW)
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)
 
 def left(x):
-    GPIO.output(MOTOR_1A, GPIO.HIGH)
-    GPIO.output(MOTOR_1B, GPIO.LOW)
-    GPIO.output(MOTOR_2A, GPIO.LOW)
-    GPIO.output(MOTOR_2B, GPIO.HIGH)
+    print "moving left"
+    GPIO.output(Motor1A, GPIO.HIGH)
+    GPIO.output(Motor1B, GPIO.LOW)
+    GPIO.output(Motor2A, GPIO.LOW)
+    GPIO.output(Motor2B, GPIO.HIGH)
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)               # Set frequency to 60 H
 
-def graceful_exit(signum, frame):
-    console.log("Stopping Runt")
+def stop():
+    print "stopping"
+    pwm.setPWM(0,0,0)
+    pwm.setPWM(1,0,0)
+    
+def sigint_handler(signum, frame):
+    print "Exiting with cleanup"
     pwm.setPWM(0,0,0)
     pwm.setPWM(1,0,0)
     GPIO.cleanup()
