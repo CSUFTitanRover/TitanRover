@@ -1,6 +1,7 @@
 from Adafruit_PWM_Servo_Driver import PWM
 import signal
 import time
+import sys
 import RPi.GPIO as GPIO
 from time import sleep
 
@@ -15,6 +16,8 @@ Runt Rover v.01
 # Initialise the PWM device using the default address
 pwm = PWM(0x40)
 pwm.setPWMFreq(50) 
+
+signal.signal(signal.SIGINT, graceful_exit)
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
@@ -72,4 +75,4 @@ def graceful_exit(signum, frame):
     pwm.setPWM(0,0,0)
     pwm.setPWM(1,0,0)
     GPIO.cleanup()
-
+    sys.exit(0)
