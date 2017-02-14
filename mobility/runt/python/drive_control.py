@@ -76,3 +76,4 @@ def graceful_exit(signum, frame):
     pwm.setPWM(1,0,0)
     GPIO.cleanup()
     sys.exit(0)
+
