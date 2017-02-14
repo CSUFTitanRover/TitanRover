@@ -174,7 +174,7 @@ io.on('connection', function(socketClient) {
 
     socketClient.on('get: queryByTimerange', function(data) {
         console.info('-----\nget: queryByTimerange CALLED');
-        console.info('SensorID: ' + data['sensorIds'] + '\nqueryByTimeRange: ' + data['queryByTimeRange'] + '\nqueryStartTime: ' + data['queryStartTime'] + '\nqueryEndTime: ' + data['queryEndTime']);
+        console.info('SensorID: ' + data['sensorID'] + '\nqueryByTimeRange: ' + data['queryByTimeRange'] + '\nqueryStartTime: ' + data['queryStartTime'] + '\nqueryEndTime: ' + data['queryEndTime']);
 
         // send a response back to the client
         // here we would query the data we need and set it to dataToSendBack
@@ -183,8 +183,8 @@ io.on('connection', function(socketClient) {
         database.collection('data').find({
             id: data['sensorID'],
             timestamp: {
-                $gt: data['queryStartTime'],
-                $lt: data['queryEndTime']
+                $gt: parseInt(data['queryStartTime']),
+                $lt: parseInt(data['queryEndTime'])
             }
         }).toArray(function(err, result) {
             if (err) {
@@ -194,18 +194,19 @@ io.on('connection', function(socketClient) {
                 console.log("========= Sending back results from timestamp =========");
                 logger.write(Date.now() + ": Found results with id: " + data['sensorID'] + " by queryByTimerange\n");
                 dataToSendBack = result;
+                socketClient.emit('set: queryByTimerange', dataToSendBack);
             } else {
                 dataToSendBack = {
                     "errorMessage": "Invalid ID or incorrect format"
                 };
+                socketClient.emit('set: queryByTimerange', dataToSendBack);
             }
         });
-        socketClient.emit('set: queryByTimerange', dataToSendBack);
     });
 
     socketClient.on('get: queryAllData', function(data) {
         console.info('-----\nget: all data by id, CALLED');
-        console.info('SensorIds: ' + data['sensorIds'] + '\nqueryByTimeRange: ' + data['queryByTimeRange'] + '\nqueryStartTime: ' + data['queryStartTime'] + '\nqueryEndTime: ' + data['queryEndTime']);
+        console.info('SensorIds: ' + data['sensorID'] + '\nqueryByTimeRange: ' + data['queryByTimeRange'] + '\nqueryStartTime: ' + data['queryStartTime'] + '\nqueryEndTime: ' + data['queryEndTime']);
 
         // send a response back to the client
         // here we would query the data we need and set it to dataToSendBack
@@ -222,13 +223,14 @@ io.on('connection', function(socketClient) {
                 console.log("========= Sending back results from timestamp =========");
                 logger.write(Date.now() + ": Found results with id: " + data['sensorID'] + " by queryAllData\n");
                 dataToSendBack = result;
+                socketClient.emit('set: queryAllData', dataToSendBack);
             } else {
                 dataToSendBack = {
                     "errorMessage": "Invalid ID or incorrect format"
                 };
+                socketClient.emit('set: queryAllData', dataToSendBack);
             }
         });
-        socketClient.emit('set: queryAllData', dataToSendBack);
     });
 
 
