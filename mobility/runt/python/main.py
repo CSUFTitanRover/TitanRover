@@ -1,12 +1,14 @@
 import drive_control as dc
-import time 
+import time
 from time import sleep
-
+import signal
 servoMin = 1200 
 servoMax = 4095
 
 
-#dc.graceful_exit(signum,frame)
+    
+signal.signal(signal.SIGINT, dc.sigint_handler)
+
 while (True):
     # Change speed of continuous servo on channel O
     print "Going forwards"

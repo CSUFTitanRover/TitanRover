@@ -1,9 +1,6 @@
 from Adafruit_PWM_Servo_Driver import PWM
-import signal
-import time
-import sys
 import RPi.GPIO as GPIO
-from time import sleep
+import sys
 
 '''
 Runt Rover v.01
@@ -17,7 +14,6 @@ Runt Rover v.01
 pwm = PWM(0x40)
 pwm.setPWMFreq(50) 
 
-signal.signal(signal.SIGINT, graceful_exit)
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
@@ -70,8 +66,9 @@ def left(x):
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)               # Set frequency to 60 H
 
-def graceful_exit(signum, frame):
-    console.log("Stopping Runt")
+
+def sigint_handler(signum, frame):
+    print "stopping runt"
     pwm.setPWM(0,0,0)
     pwm.setPWM(1,0,0)
     GPIO.cleanup()
