@@ -18,34 +18,36 @@ pwm.setPWMFreq(50)
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 
-Motor1A = 36
-Motor1B = 38
+# Right side of rover
+MOTOR1A = 36
+MOTOR1B = 38
 
-Motor2A = 12
-Motor2B = 13
+# Left side of rover 
+MOTOR2A = 12
+MOTOR2B = 13
 
-GPIO.setup(Motor1A, GPIO.OUT)
-GPIO.setup(Motor1B, GPIO.OUT)
+GPIO.setup(MOTOR1A, GPIO.OUT)
+GPIO.setup(MOTOR1B, GPIO.OUT)
 
-GPIO.setup(Motor2A, GPIO.OUT)
-GPIO.setup(Motor2B, GPIO.OUT)
+GPIO.setup(MOTOR2A, GPIO.OUT)
+GPIO.setup(MOTOR2B, GPIO.OUT)
 
 
 def forwards(x):
-    print "moving forwards" 
-    GPIO.output(Motor1A, GPIO.HIGH)
-    GPIO.output(Motor1B, GPIO.LOW)
-    GPIO.output(Motor2A, GPIO.HIGH)
-    GPIO.output(Motor2B, GPIO.LOW)
+    print "moving forwards"
+    GPIO.output(MOTOR1A, GPIO.HIGH)
+    GPIO.output(MOTOR1B, GPIO.LOW)
+    GPIO.output(MOTOR2A, GPIO.HIGH)
+    GPIO.output(MOTOR2B, GPIO.LOW)
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)
 
 def backwards(x):
     print "moving backwards"
-    GPIO.output(Motor1A, GPIO.LOW)
-    GPIO.output(Motor1B, GPIO.HIGH)
-    GPIO.output(Motor2A, GPIO.LOW)
-    GPIO.output(Motor2B, GPIO.HIGH)
+    GPIO.output(MOTOR1A, GPIO.LOW)
+    GPIO.output(MOTOR1B, GPIO.HIGH)
+    GPIO.output(MOTOR2A, GPIO.LOW)
+    GPIO.output(MOTOR2B, GPIO.HIGH)
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)
 
@@ -54,30 +56,60 @@ def backwards(x):
 
 def right(x):
     print "moving right"
-    GPIO.output(Motor1A, GPIO.LOW)
-    GPIO.output(Motor1B, GPIO.HIGH)
-    GPIO.output(Motor2A, GPIO.HIGH)
-    GPIO.output(Motor2B, GPIO.LOW)
+    GPIO.output(MOTOR1A, GPIO.LOW)
+    GPIO.output(MOTOR1B, GPIO.HIGH)
+    GPIO.output(MOTOR2A, GPIO.HIGH)
+    GPIO.output(MOTOR2B, GPIO.LOW)
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)
 
 def left(x):
     print "moving left"
-    GPIO.output(Motor1A, GPIO.HIGH)
-    GPIO.output(Motor1B, GPIO.LOW)
-    GPIO.output(Motor2A, GPIO.LOW)
-    GPIO.output(Motor2B, GPIO.HIGH)
+    GPIO.output(MOTOR1A, GPIO.HIGH)
+    GPIO.output(MOTOR1B, GPIO.LOW)
+    GPIO.output(MOTOR2A, GPIO.LOW)
+    GPIO.output(MOTOR2B, GPIO.HIGH)
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)               # Set frequency to 60 H
 
 def stop():
     print "stopping"
-    pwm.setPWM(0,0,0)
-    pwm.setPWM(1,0,0)
+    pwm.setPWM(0, 0, 0)
+    pwm.setPWM(1, 0, 0)
     
 def sigint_handler(signum, frame):
     print "Exiting with cleanup"
-    pwm.setPWM(0,0,0)
-    pwm.setPWM(1,0,0)
+    pwm.setPWM(0, 0, 0)
+    pwm.setPWM(1, 0, 0)
     GPIO.cleanup()
     sys.exit(0)
+
+def set_left_motors(speed):
+    if speed < 0:
+        GPIO.output(MOTOR1A, GPIO.LOW)
+        GPIO.output(MOTOR1B, GPIO.HIGH)
+        GPIO.output(MOTOR2A, GPIO.LOW)
+        GPIO.output(MOTOR2B, GPIO.HIGH)
+    else:
+        GPIO.output(MOTOR1A, GPIO.HIGH)
+        GPIO.output(MOTOR1B, GPIO.LOW)
+        GPIO.output(MOTOR2A, GPIO.HIGH)
+        GPIO.output(MOTOR2B, GPIO.LOW)
+        # Not sure if this is left!!
+        pwm.setPWM(0, 0, speed)
+
+def set_right_motors(speed):
+    if speed < 0:
+        GPIO.output(MOTOR1A, GPIO.LOW)
+        GPIO.output(MOTOR1B, GPIO.HIGH)
+        GPIO.output(MOTOR2A, GPIO.LOW)
+        GPIO.output(MOTOR2B, GPIO.HIGH)
+    else:
+        GPIO.output(MOTOR1A, GPIO.HIGH)
+        GPIO.output(MOTOR1B, GPIO.LOW)
+        GPIO.output(MOTOR2A, GPIO.HIGH)
+        GPIO.output(MOTOR2B, GPIO.LOW)
+        # Not sure if this is left!!
+        pwm.setPWM(1, 0, speed)
+
+
