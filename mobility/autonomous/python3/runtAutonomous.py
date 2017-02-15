@@ -19,6 +19,12 @@ radToDeg = 180 / pi    #Est val of 57.29577795
 #
 #linked the minicom to port for use by serial
 #sudo minicom -b 9600 -o -D /ttyAMA0
+#
+# Fix serial communication on UART
+#   disable BT
+#
+#   Instructions website forum at bottom easy to follow
+#   raspberrypi.stackexchange.com/questions/45570/how-do-i-make-serial-work-on-the-raspberry-pi3
 #pynmea2 must be downloaded and install
 #TX->RX
 #RX->TX
