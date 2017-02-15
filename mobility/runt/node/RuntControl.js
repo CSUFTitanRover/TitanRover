@@ -4,11 +4,9 @@
   Description:
 		Will be accepting commands from the homebase Controller and relaying
 			these commands to its various sub processes
-
 		Example:
 			Moblility code will be sent from the homebase controller to here and this will run the input
 				or pass it to another process to run it.
-
 		It will be sent as JSON with the format
 		{ commandType: string, ...}
 		each packet will consist of a commandType such as mobility, science, arm and use this to determine
@@ -17,11 +15,15 @@
 var express = require('express');
 var fs = require('fs');
 var bodyParser = require('body-parser');
+var PythonShell = require('python-shell');
 //var app = express();
 //var server = require('http').Server(app);
 
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
+
+// Allows us to contorl the GPIO pins on the raspberry pi
+var gpio = require('rpi-gpio');
 
 var PORT = 3000;
 var HOST = 'localhost';
@@ -78,16 +80,17 @@ const pwm = makePwmDriver({
 //    1000 = Full Reverse
 //    1500 = Stopped
 //    2000 = Full Forward.
-const saber_min = 241; // Calculated to be 1000 us
-const saber_mid = 325; // Calculated to be 1500 us
-const saber_max = 409; // Calculated to be 2000 us
+const saber_min = 1100; // Calculated to be 1000 us
+const saber_max = 4095; // Calculated to be 2000 us
 
+// Joystick values
 const Joystick_MIN = -32767;
 const Joystick_MAX = 32767;
 
-// PWM Channel Config:
-const left_channel = 0;
-const right_channel = 1;
+// PWM Channel Config Motor:
+const motor_left_channel = 0;
+const motor_right_channel = 1;
+
 
 // Based on J. Stewart's calculations:
 pwm.setPWMFreq(50);
@@ -120,18 +123,33 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
     return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
 
-function setLeft(speed) {
-    pwm.setPWM(left_channel, 0, parseInt(speed));
+/**
+ * Adjusts the speed by an exponential factor.  This makes acceleration a function
+ *  of the product of differential steering and distance of joystick from its origin
+ * @param {Number} x
+ * @param {Number} y
+ * @return {Number} A value between 0 and 1 that represents ratio of distance from
+ *      origin to joystick coordinate.  Effectively lowers speed closer to origin.
+ */
+var speedAdjust = function(x, y) {
+    var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX;
+    return acceleration;
 }
 
-function setRight(speed) {
-    pwm.setPWM(right_channel, 0, parseInt(speed));
-}
 
 var setMotors = function(diffSteer) {
-    setLeft(diffSteer.leftSpeed);
-    setRight(diffSteer.rightSpeed);
-    //console.log(diffSteer);
+    var options = {
+            mode: 'JSON',
+            pythonPath: '/usr/bin/python',
+            pythonOptions: ['-u'],
+            scriptPath: '../python/js_control_runt.py',
+            args: [diffSteer]
+        };
+    PythonShell.run('joystick_runt_control.py',function(err){
+        if (err) throw err;
+        console.log('finished');
+    });
 };
 
 /**
@@ -152,17 +170,10 @@ function calculateDiff(yAxis, xAxis) {
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
-    if (right <= 0) {
-        right = right.map(-32767, 0, saber_min, saber_mid);
-    } else {
-        right = right.map(0, 32767, saber_mid, saber_max);
-    }
+ 
+    right = right.map(0, Joystick_MAX, saber_min, saber_max);
+    left = left.map(Joystick_MIN, 0, saber_min, saber_max);
 
-    if (left <= 0) {
-        left = left.map(-32767, 0, saber_min, saber_mid);
-    } else {
-        left = left.map(0, 32767, saber_mid, saber_max);
-    }
 
     return {
         "leftSpeed": left,
@@ -184,8 +195,11 @@ var receiveMobility = function(joystickData) {
     var value = parseInt(joystickData.value);
 
     var diffSteer;
-   
-    value = parseInt(value * throttleValue);
+
+    if (axis === 0 || axis === 1) {
+        value = parseInt(value * throttleValue);
+    }
+
     // X axis
     if (axis === 0) {
         diffSteer = calculateDiff(value, lastY);
@@ -201,16 +215,17 @@ var receiveMobility = function(joystickData) {
         setThrottle(value)
     }
 
+    // If the Mobility recieved a driving axis.
     if (axis === 0 || axis === 1) {
-	setMotors(diffSteer);
+        setMotors(diffSteer);
     }
 };
 
 // Send 0 to both the x and y axis to stop the rover from running
 // Will only be invoked if we lose signal
 function stopRover() {
-    receiveMobility(zeroMessage[0]);
-    receiveMobility(zeroMessage[1]);
+    pwm.setPWM(0, 0, 0);
+    pwm.setPWM(1, 0, 0);
 }
 
 // Send data to the homebase control for connection information
@@ -270,6 +285,30 @@ function handleControl(message) {
 
 }
 
+function setPWM_HIGH(channel) {
+    // PWM should go from LOW to HIGH right at the begginning
+    // then should not go back down.
+    pwm.setPWM(channel, 4095, 0);
+}
+
+function setPWM_LOW(channel) {
+    // PWM should go from LOW to never going HIGH
+    pwm.setPWM(channel, 0, 0);
+}
+
+function setLinearSpeed(channel, value) {
+    const linear_min = 241; // Calculated to be 1000 us
+    const linear_mid = 325; // Calculated to be 1500 us
+    const linear_max = 409; // Calculated to be 2000 us
+
+    if (value <= 0) {
+        pwm.setPWM(channel, 0, parseInt(value.map(Joystick_MIN, 0, linear_min, linear_mid)));
+    } else {
+        pwm.setPWM(channel, 0, parseInt(value.map(0, Joystick_MAX, linear_mid, linear_max)));
+    }
+}
+
+
 
 server.on('listening', function() {
     var address = server.address();
@@ -289,6 +328,10 @@ server.on('message', function(message, remote) {
             break;
         case 'control':
             handleControl(msg);
+            break;
+        case 'arm':
+            armControl(msg);
+            break;
         default:
             //console.log("###### Could not find commandType #######");
     }

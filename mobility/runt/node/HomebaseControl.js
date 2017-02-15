@@ -4,16 +4,12 @@
   Description:
 		Will be capturing events from the UI, Joystick, Keyboard, and etc...
         to transfer this command to the rover controller running on the Rover.
-
         It will send the packet with a commandType parameter to allow the rover system
         to decifer what kind of command it should be.  This will be added to whatever the input
         generates.
-
         Example message for mobility
         { commandType: "mobility", time: 1693700, value: 0, number: 0, type: 'axis', id: 0 }
-
  =========== Layout of joystick =============
-
 Buttons:    These values are either 1(pressed) or 0(unpressed)
 number = 0: Trigger
 number = 1: Thump button
@@ -27,7 +23,6 @@ number = 8: Button 9
 number = 9: Button 10
 number = 10: Button 11
 number = 11: Button 12
-
 Axis:
 number = 0: X of big joystick value between -32767 and 32767
 number = 1: Y of big joystick value between -32767 and 32767
@@ -56,6 +51,7 @@ const HOMEBASE_PORT = 5000;
 const PORT = 3000;
 const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
 
+// Control information
 const CONTROL_MESSAGE_TEST = {
     commandType: "control",
     type: "test"
@@ -68,6 +64,9 @@ const CONTROL_MESSAGE_ACK = {
 
 const SEND_CONTROL_AFTER = 10;
 var packet_count = 0;
+
+// Arm Variables
+var arm_mode = false;
 
 // Joystick event handlers
 joystick.on('button', onJoystickData);
@@ -110,9 +109,7 @@ socket.bind(HOMEBASE_PORT);
 */
 
 /*function onJoystickData(event) {
-
     //console.log(event);
-
     // If it is axis data send as mobility
     if(event.type == "axis") {
 	// If it is X or Y axis
@@ -120,7 +117,6 @@ socket.bind(HOMEBASE_PORT);
         	event.commandType = "mobility";
 	}
     }
-
     sendCommand(event);
 }*/
 
@@ -149,14 +145,28 @@ function onJoystickData(event) {
         send_to_rover(message);
     }
 
-    if (event.type == "axis") {
-        if (event.number == 0 || event.number == 1 || event.number == 3) {
-            event.commandType = "mobility";
+    if (arm_mode) {
+        if (event.type == "axis") {
+            event.commandType = "arm";
+        }
+    } else {
+        if (event.type == "axis") {
+            if (event.number == 0 || event.number == 1 || event.number == 3) {
+                event.commandType = "mobility";
+            }
         }
     }
     //console.log(event);
 
+
+    // Handle button presses
+    if (event.type == "button") {
+        // Change joystick from mobility to arm control
+        if (event.number == 1) {
+            arm_mode = arm_mode ? false : true;
+        }
+    }
+
     message = new Buffer(JSON.stringify(event));
 
     send_to_rover(message);
-}
