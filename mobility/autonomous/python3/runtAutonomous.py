@@ -1,10 +1,10 @@
 import os
 from math import radians, degrees, cos, sin, asin, sqrt, atan2, pi
-import serial, subprocess, os, time, gps, string, sys, pynmea2
+import serial, subprocess, os, time, string, sys, pynmea2 #gps
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BOARD)
-GPSFIX = 18
+GPSFIX = 24
 GPIO.setup(GPSFIX, GPIO.IN)
 
 #implementing Timothy Parks' math to calculate heading
