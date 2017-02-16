@@ -8,12 +8,22 @@ import SensorOption from './SensorOptionTemplate';
  Object {id: "01", timestamp: 1479856462231, EC: 1.03, VWC: 0, TempSoil: 22.9}
 
  Object {id: "02", timestamp: 1479856462281, Humidity: 34, TempOutside: 23}
+
+ Object
+ EC : 1.02
+ TempSoil : 22.6
+ VWC : 0
+ _id : "5834aa6e00a47230d8b5f9ed"
+ id : "01"
+ timestamp : 1479846510000
  */
 
 class QueryDataTemplate extends Component {
 
     constructor(props) {
         super(props);
+
+        this.socketClient = io.connect(rover_settings.homebase_ip);
 
         this.state = {
             columns: [],
@@ -33,6 +43,45 @@ class QueryDataTemplate extends Component {
     componentDidMount() {
         // initial render of the chart
         this._renderChart();
+
+        let self = this; // preserve "this"
+
+        // socket Event handlers
+        // event for inital socket connection to set client id for future use on server-side
+        this.socketClient.on('get: client id', function () {
+            self.socketClient.emit('set: client id', self.props.sensorID);
+        });
+
+        // events for Querying
+        // receiving queried All Data from homebase
+        this.socketClient.on('set: queryAllData', function(jsonObj) {
+            console.info('Receieved data from homebase!');
+            console.info(jsonObj);
+
+            // first check if the query was unsuccessful
+            if('errorMessage' in jsonObj) {
+                console.info('There was an error querying all the data!')
+            }
+            else {
+                // set state of the new columns
+                self.setState({columns: jsonObj})
+            }
+        });
+        // receiving queried Time Range Data from homebase
+        this.socketClient.on('set: queryByTimerange', function(jsonObj) {
+            console.info('Receieved data from homebase!');
+            console.info(jsonObj);
+
+            // first check if the query was unsuccessful
+            if('errorMessage' in jsonObj) {
+                console.info('There was an error querying by timerange!')
+            }
+            else {
+                // set state of the new columns
+                self.setState({columns: jsonObj})
+            }
+        });
+
     }
     componentDidUpdate() {
         // load new data into our chart
@@ -55,45 +104,44 @@ class QueryDataTemplate extends Component {
     }
 
     queryData() {
-        this.socketClient = io.connect(rover_settings.homebase_ip);
 
-        let self = this; // preserve "this"
-
-        // socket Event handlers
-        // event for inital socket connection to set client id for future use on server-side
-        this.socketClient.on('get: client id', function () {
-            self.socketClient.emit('set: client id', self.props.chartID);
-        });
-
-        // events for Querying
-        // receiving queried All Data from homebase
-        this.socketClient.on('set: queryAllData', function(jsonObj) {
-            console.info('Receieved data from homebase!');
-            console.info(jsonObj);
-
-            // first check if the query was unsuccessful
-            if('errorMessage' in jsonObj) {
-                console.info('There was an error querying all the data!')
-            }
-            else {
-                // set state of the new columns
-                self.setState(jsonObj)
-            }
-        });
-        // receiving queried Time Range Data from homebase
-        this.socketClient.on('set: queryByTimerange', function(jsonObj) {
-            console.info('Receieved data from homebase!');
-            console.info(jsonObj);
-
-            // first check if the query was unsuccessful
-            if('errorMessage' in jsonObj) {
-                console.info('There was an error querying all the data!')
-            }
-            else {
-                // set state of the new columns
-                self.setState(jsonObj)
-            }
-        });
+        // let self = this; // preserve "this"
+        //
+        // // socket Event handlers
+        // // event for inital socket connection to set client id for future use on server-side
+        // this.socketClient.on('get: client id', function () {
+        //     self.socketClient.emit('set: client id', self.props.sensorID);
+        // });
+        //
+        // // events for Querying
+        // // receiving queried All Data from homebase
+        // this.socketClient.on('set: queryAllData', function(jsonObj) {
+        //     console.info('Receieved data from homebase!');
+        //     console.info(jsonObj);
+        //
+        //     // first check if the query was unsuccessful
+        //     if('errorMessage' in jsonObj) {
+        //         console.info('There was an error querying all the data!')
+        //     }
+        //     else {
+        //         // set state of the new columns
+        //         self.setState(jsonObj)
+        //     }
+        // });
+        // // receiving queried Time Range Data from homebase
+        // this.socketClient.on('set: queryByTimerange', function(jsonObj) {
+        //     console.info('Receieved data from homebase!');
+        //     console.info(jsonObj);
+        //
+        //     // first check if the query was unsuccessful
+        //     if('errorMessage' in jsonObj) {
+        //         console.info('There was an error querying all the data!')
+        //     }
+        //     else {
+        //         // set state of the new columns
+        //         self.setState(jsonObj)
+        //     }
+        // });
 
 
         let dataToBeQueried = {sensorID: this.props.sensorID};
@@ -111,7 +159,7 @@ class QueryDataTemplate extends Component {
         console.info('Data to be queried:');
         console.info(JSON.stringify(dataToBeQueried, null, '\t'));
 
-        this.socketClient.disconnect();
+        // this.socketClient.disconnect();
     }
 
     handleInputChange(name, inputValue) {

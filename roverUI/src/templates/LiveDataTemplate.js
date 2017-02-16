@@ -41,12 +41,14 @@ class LiveDataTemplate extends Component {
         // socket Event handlers
         // event for inital socket connection to set client id for future use on server-side
         this.socketClient.on('get: client id', function () {
-            console.log("get: client id, CALLED");
-            self.socketClient.emit('set: client id', self.chartID);
+            console.info("get: client id CALLED. Sending...");
+            console.info(self.chartID);
+            self.socketClient.emit('set: client id', self.sensorID);
         });
 
         // updating chart
         this.socketClient.on('update: chart data', function(jsonObj) {
+            console.info('update: chart data CALLED');
             console.info(jsonObj);
 
             let tempColumns = self.state.columns;
@@ -76,9 +78,14 @@ class LiveDataTemplate extends Component {
     }
     componentDidUpdate() {
         // load new data into our chart
-        this.chart.load({
-            columns: this.state.columns
-        });
+        // this.chart.load({
+        //     columns: this.state.columns
+        // });
+
+        // this.chart.flow({
+        //     columns: this.state.columns,
+        //     length: 1,
+        // });
     }
 
     componentWillUnmount() {

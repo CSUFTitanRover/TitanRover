@@ -13,7 +13,7 @@ class Chart2 extends Component {
         return (
             <BaseModuleTemplate moduleName="DHT 11 Chart">
                 <LiveDataTemplate
-                    sensorName="DHT-11-Chart"
+                    sensorName="DHT-11"
                     chartInitialColumns={initialCols}
                     chartType="bar"
                 />
