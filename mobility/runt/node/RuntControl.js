@@ -137,22 +137,19 @@ var speedAdjust = function(x, y) {
     return acceleration;
 }
 
-function setLeft(speed) {
-    pwm.setPWM(motor_left_channel, 0, parseInt(speed));
-
-    // If the number is negative -4095
-    // Initialize Reverse polarity
-    // Set PWM 
-}
-
-function setRight(speed) {
-    pwm.setPWM(motor_right_channel, 0, parseInt(speed));
-}
 
 var setMotors = function(diffSteer) {
-    setLeft(diffSteer.leftSpeed);
-    setRight(diffSteer.rightSpeed);
-    //console.log(diffSteer);
+    var options = {
+            mode: 'JSON',
+            pythonPath: '/usr/bin/python',
+            pythonOptions: ['-u'],
+            scriptPath: '../python/js_control_runt.py',
+            args: [diffSteer]
+        };
+    PythonShell.run('joystick_runt_control.py',function(err){
+        if (err) throw err;
+        console.log('finished');
+    });
 };
 
 /**
@@ -227,8 +224,8 @@ var receiveMobility = function(joystickData) {
 // Send 0 to both the x and y axis to stop the rover from running
 // Will only be invoked if we lose signal
 function stopRover() {
-    receiveMobility(zeroMessage[0]);
-    receiveMobility(zeroMessage[1]);
+    pwm.setPWM(0, 0, 0);
+    pwm.setPWM(1, 0, 0);
 }
 
 // Send data to the homebase control for connection information
