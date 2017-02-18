@@ -171,6 +171,7 @@ function onJoystickData(event) {
     if (event.type == "button") {
         // Change joystick from mobility to arm control
         if (event.number == 1) {
+	    console.log("Entered arm mode");
             arm_mode = arm_mode ? false : true;
         }
     }
