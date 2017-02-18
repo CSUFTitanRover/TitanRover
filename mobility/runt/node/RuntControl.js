@@ -175,7 +175,7 @@ function calculateDiff(yAxis, xAxis) {
 
  
     right = right.map(0, Joystick_MAX, saber_min, saber_max);
-    left = left.map(Joystick_MIN, 0, saber_min, saber_mid);
+    left = left.map(0, Joystick_MIN, saber_min, saber_max);
 
 
     return {

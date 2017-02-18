@@ -170,3 +170,4 @@ function onJoystickData(event) {
     message = new Buffer(JSON.stringify(event));
 
     send_to_rover(message);
+}
