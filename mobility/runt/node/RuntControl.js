@@ -29,7 +29,7 @@ var PORT = 3000;
 var HOST = 'localhost';
 
 const HOME_PORT = 5000;
-const HOME_HOST = '192.168.1.143';
+const HOME_HOST = '127.0.0.1';
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
@@ -102,7 +102,6 @@ pwm.setPWMFreq(50);
 
 // NPM Differential Steering Library:
 //    Docs: https://www.npmjs.com/package/diff-steer
-var steerMotors = require('diff-steer/motor_control');
 
 // Global Variables to Keep Track of Asynchronous Translated
 //    Coordinate Assignment
@@ -135,6 +134,20 @@ var speedAdjust = function(x, y) {
     var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX;
     return acceleration;
+}
+
+
+function setLeft(speed) {
+    pwm.setPWM(motor_left_channel, 0, parseInt(speed));
+    console.log("left speed: " + speed);
+    // If the number is negative -4095
+    // Initialize Reverse polarity
+    // Set PWM 
+}
+
+function setRight(speed) {
+    pwm.setPWM(motor_right_channel, 0, parseInt(speed));
+    console.log("right speed: " + speed);
 }
 
 
@@ -191,7 +204,7 @@ function setThrottle(adjust_Amount) {
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = parseInt(joystickData.number);
+    var axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
 
     var diffSteer;
