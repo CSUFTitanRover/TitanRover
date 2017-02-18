@@ -357,7 +357,7 @@ server.on('listening', function() {
     console.log('Rover running on: ' + address.address + ':' + address.port);
 });
 
-// recieved a message from the homebase control to perform an action
+// recieved a message from the homebase control perform an action
 server.on('message', function(message, remote) {
 
     var msg = JSON.parse(message);
