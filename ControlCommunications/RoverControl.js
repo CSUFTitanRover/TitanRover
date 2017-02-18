@@ -23,8 +23,8 @@ var bodyParser = require('body-parser');
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 
-// Allows us to contorl the GPIO pins on the raspberry pi
-var gpio = require('rpi-gpio');
+// Allows us to contorl the rpio pins on the raspberry pi
+var rpio = require('rpio');
 
 var PORT = 3000;
 var HOST = 'localhost';
@@ -53,19 +53,17 @@ var zeroMessage = [{
     }
 ];
 
+// Message to test if we are still connected to homebase station
 const CONTROL_MESSAGE_ROVER = {
     commandType: "control",
     type: "rover_ack"
 };
 
+// These consts handle connection information with the homebase
 var gotAck = true;
 var gotAckRover = true;
 const TIME_TO_STOP = 750;
 const TEST_CONNECTION = 3000;
-
-//console.log('Loading mobility:');
-// var hrarry = []
-// var sum = 0;
 
 // PWM Config for Pi Hat:
 const makePwmDriver = require('adafruit-i2c-pwm-driver');
@@ -93,23 +91,52 @@ const Joystick_MAX = 32767;
 const motor_left_channel = 0;
 const motor_right_channel = 1;
 
+/** All GPIO pins are the actual pins so 1-40
+ * @param {joint_move_pin}
+ * This pin is used to tell the arduino to send the pulse signals
+ * @param {joint_dir_pin}
+ * Tells the stepper which direction it should go
+ * @param {joint_enab_pin}
+ * Tells the stepper motor to hold its position after movement.
+ *
+ * This applies to joint1, joint4, joint5 which are the sumtor stepper motor drivers
+ */
+
 // Joint1 rotating base pins
-const joint1_pwm_pin = 8;
-const joint1_gpio_pin = 4;
+const joint1_move_pin = 12;
+const joint1_dir_pin = 11;
+const joint1_enab_pin = 13;
 
-// joint2_linear1 pins
-const joint2_pwm_pin = 4;
-
-// joint3_linear2 pins
-const joint3_pwm_pin = 5;
+// Set all pins to low on init
+rpio.open(joint1_dir_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint1_move_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint1_enab_pin, rpio.OUTPUT, rpio.LOW);
 
 // joint 4 Sumtor pins
-const joint4_pwm_pin = 9;
-const joint4_gpio_pin = 17;
+const joint4_move_pin = 33;
+const joint4_dir_pin = 32;
+const joint4_enab_pin = 36;
+
+// Set all pins to low on init
+rpio.open(joint4_dir_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint4_move_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint4_enab_pin, rpio.OUTPUT, rpio.LOW);
 
 // joint 5 Sumtor pins
-const joint5_pwm_pin = 10;
-const joint5_gpio_pin = 12;
+const joint5_move_pin = 16;
+const joint5_dir_pin = 15;
+const joint5_enab_pin = 18;
+
+// Set all pins to low on init
+rpio.open(joint5_dir_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint5_move_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint5_enab_pin, rpio.OUTPUT, rpio.LOW);
+
+
+// Pins to destroy
+// Will be used when program exits to close these pins
+var pins = [12, 11, 13, 33, 32, 36, 16, 15, 18];
+
 
 // Based on J. Stewart's calculations:
 pwm.setPWMFreq(50);
@@ -128,6 +155,7 @@ var steerMotors = require('diff-steer/motor_control');
 var lastX = 0;
 var lastY = 0;
 
+// Sets the speed at which the joystick values will be used
 var throttleValue = 1.0;
 
 /**
@@ -208,7 +236,7 @@ function calculateDiff(yAxis, xAxis) {
 
 // Set the throttle speed
 function setThrottle(adjust_Amount) {
-    throttleValue = adjust_Amount.map(32767, -32767, 0, 1);
+    throttleValue = adjust_Amount.map(Joystick_MAX, Joystick_MIN, 0, 1);
     //console.log(throttleValue);
 }
 
@@ -333,26 +361,27 @@ function setLinearSpeed(channel, value) {
     }
 }
 
-function setSumtorStepper(channel, value) {
-    const rotate_noMove = 325; // Calculated to be 1500 us
-    const rotate_max = 409;
-
-    if (value < 0) {
-        value *= -1;
-    }
-
-    pwm.setPWM(channel, parseInt(value.map(0, Joystick_MAX, rotate_noMove, rotate_max)));
-}
 
 function joint1_rotatingBase(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? false : true;
+    let direction = (value < 0) ? true : false;
 
-    gpio.setup(joint1_gpio_pin, gpio.DIR_OUT);
+    //console.log("rotating with value: " + value);
 
-    gpio.write(joint1_gpio_pin, direction);
+    if (direction) {
+        rpio.write(joint1_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint1_dir_pin, rpio.LOW);
+    }
 
-    setSumtorStepper(joint1_pwm_pin, value);
+    if (value == 0) {
+        joint1_moving = false;
+        //console.log("Stopping Arm");
+        rpio.write(joint1_move_pin, rpio.LOW);
+    } else {
+        joint1_moving = true;
+        rpio.write(joint1_move_pin, rpio.HIGH);
+    }
 
 }
 
@@ -366,26 +395,44 @@ function joint3_linear2(message) {
     setLinearSpeed(joint3_pwm_pin, value);
 }
 
-function joint4_axis1(message) {
-  let value = parseInt(message.value);
-  let direction = (value < 0) ? false : true;
+function joint4_rotateWrist(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? true : false;
 
-  gpio.setup(joint4_gpio_pin, gpio.DIR_OUT);
+    //console.log("rotating with value: " + value);
 
-  gpio.write(joint4_gpio_pin, direction);
+    if (direction) {
+        rpio.write(joint4_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint4_dir_pin, rpio.LOW);
+    }
 
-  setSumtorStepper(joint4_pwm_pin, value);
+    if (value == 0) {
+        //console.log("Stopping Arm");
+        rpio.write(joint4_move_pin, rpio.LOW);
+    } else {
+        rpio.write(joint4_move_pin, rpio.HIGH);
+    }
+
 }
 
-function joint5(message) {
-  let value = parseInt(message.value);
-  let direction = (value < 0) ? false : true;
+function joint5_90degree(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? true : false;
 
-  gpio.setup(joint5_gpio_pin, gpio.DIR_OUT);
+    if (direction) {
+        rpio.write(joint5_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint5_dir_pin, rpio.LOW);
+    }
 
-  gpio.write(joint5_gpio_pin, direction);
+    if (value == 0) {
+        //console.log("Stopping Arm");
+        rpio.write(joint5_move_pin, rpio.LOW);
+    } else {
+        rpio.write(joint5_move_pin, rpio.HIGH);
+    }
 
-  setSumtorStepper(joint5_pwm_pin, value);
 }
 
 function joint6(message) {}
@@ -397,7 +444,7 @@ function joint7(message) {}
 // Still need to figure out mapping of the joystick controller.
 function armControl(message) {
     var axis = parseInt(message.number);
-
+    //console.log("Axis: " + axis);
     // Determine which axis should be which joint.
     switch (axis) {
         case 0:
@@ -412,8 +459,10 @@ function armControl(message) {
         case 3:
             break;
         case 4:
+            joint4_rotateWrist(message);
             break;
         case 5:
+            joint5_90degree(message);
             break;
         default:
 
@@ -450,9 +499,17 @@ server.on('message', function(message, remote) {
 
 server.bind(PORT);
 
+// Will close all the pins that were in use by this process
+function closePins() {
+    pins.forEach(function(value) {
+        rpio.close(value);
+    });
+}
+
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     stopRover();
+    closePins();
     process.exit();
 });
 
@@ -462,6 +519,7 @@ process.on('SIGINT', function() {
     console.log("###### Deleting all files now!!! ######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     stopRover();
+    closePins();
     // some other closing procedures go here
     process.exit();
 });

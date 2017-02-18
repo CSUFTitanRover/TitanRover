@@ -9,7 +9,8 @@ This joystick controller will be JSON.stringify() to send over the network to th
 
 ## Important information  
 HomebaseControl is running on port 5000  
-RoverControl    is running on port 3000
+RoverControl    is running on port 3000  
+The GPIO pins used on the PI are the actual pins not names of pins  
 
 
 ##Joystick Output Mapping  
@@ -34,3 +35,8 @@ number = 2:
 number = 3: Throttle For the Mobility
 number = 4:
 number = 5:
+
+## Problems we faced  
+We first tried getting the pi to generate the GPIO signals needed to drive the stepper motors, but it wasn't fast enough.  
+So we then tried using PWM and set it to its full high over its duty cycle, this seemed to make things worse not better.
+We are now using two controllers a PI to handle the dir and enab pins while the arduino drives the puls needed to move the stepper motor.
