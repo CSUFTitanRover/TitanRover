@@ -40,3 +40,4 @@ number = 5:
 We first tried getting the pi to generate the GPIO signals needed to drive the stepper motors, but it wasn't fast enough.  
 So we then tried using PWM and set it to its full high over its duty cycle, this seemed to make things worse not better.
 We are now using two controllers a PI to handle the dir and enab pins while the arduino drives the puls needed to move the stepper motor.
+We now need to see about going through serial to tell the arduino which motor to operate instead of a on/off pin.  

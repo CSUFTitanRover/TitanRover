@@ -14,7 +14,7 @@ class Chart1 extends Component {
         return (
             <BaseModuleTemplate moduleName="Decagon 5TE Chart">
                 <LiveDataTemplate
-                    sensorName="Decagon-5TE-Chart"
+                    sensorName="Decagon-5TE"
                     chartInitialColumns={initialCols}
                     chartType="line"
                 />
