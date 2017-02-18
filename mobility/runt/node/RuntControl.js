@@ -15,7 +15,16 @@
 var express = require('express');
 var fs = require('fs');
 var bodyParser = require('body-parser');
-var PythonShell = require('python-shell');
+
+var gpio = require('rpi-gpio');
+var MOTOR1A = 36;
+var MOTOR1B = 38;
+var MOTOR2A = 12;
+var MOTOR2B = 13;
+
+
+
+
 //var app = express();
 //var server = require('http').Server(app);
 
@@ -29,7 +38,7 @@ var PORT = 3000;
 var HOST = 'localhost';
 
 const HOME_PORT = 5000;
-const HOME_HOST = '127.0.0.1';
+const HOME_HOST = '192.168.1.143';
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
@@ -102,6 +111,7 @@ pwm.setPWMFreq(50);
 
 // NPM Differential Steering Library:
 //    Docs: https://www.npmjs.com/package/diff-steer
+var steerMotors = require('diff-steer/motor_control');
 
 // Global Variables to Keep Track of Asynchronous Translated
 //    Coordinate Assignment
@@ -134,35 +144,36 @@ var speedAdjust = function(x, y) {
     var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX;
     return acceleration;
-}
-
+};
 
 function setLeft(speed) {
-    pwm.setPWM(motor_left_channel, 0, parseInt(speed));
-    console.log("left speed: " + speed);
-    // If the number is negative -4095
-    // Initialize Reverse polarity
-    // Set PWM 
+    if(speed >=0 ){
+        gpio.setup(MOTOR1A, gpio.DIR_OUT, on);
+        gpio.setup(MOTOR1B, gpio.DIR_OUT, off);
+    }
+    else{
+        gpio.setup(MOTOR1A, gpio.DIR_OUT, off);
+        gpio.setup(MOTOR1B, gpio.DIR_OUT, on);
+    }
+    console.log("speed: " + speed);
+    pwm.setPWM(0, 0, parseInt(speed));
 }
 
 function setRight(speed) {
-    pwm.setPWM(motor_right_channel, 0, parseInt(speed));
-    console.log("right speed: " + speed);
+     if(speed >=0 ){
+        gpio.setup(MOTOR1A, gpio.DIR_OUT, on);
+        gpio.setup(MOTOR1B, gpio.DIR_OUT, off);
+    }
+    else{
+        gpio.setup(MOTOR1A, gpio.DIR_OUT, off);
+        gpio.setup(MOTOR1B, gpio.DIR_OUT, on);
+    }
+    console.log("speed: " + speed);
+    pwm.setPWM(1, 0, parseInt(speed));
 }
-
-
 var setMotors = function(diffSteer) {
-    var options = {
-            mode: 'JSON',
-            pythonPath: '/usr/bin/python',
-            pythonOptions: ['-u'],
-            scriptPath: '../python/js_control_runt.py',
-            args: [diffSteer]
-        };
-    PythonShell.run('joystick_runt_control.py',function(err){
-        if (err) throw err;
-        console.log('finished');
-    });
+    setLeft(diffSteer.leftSpeed);
+    setRight(diffSteer.rightSpeed);
 };
 
 /**
@@ -185,7 +196,7 @@ function calculateDiff(yAxis, xAxis) {
 
  
     right = right.map(0, Joystick_MAX, saber_min, saber_max);
-    left = left.map(0, Joystick_MIN, saber_min, saber_max);
+    left = left.map(Joystick_MIN, 0, saber_min, saber_max);
 
 
     return {
@@ -204,7 +215,7 @@ function setThrottle(adjust_Amount) {
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    var axis = parseInt(joystickData.number);
+    let axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
 
     var diffSteer;
