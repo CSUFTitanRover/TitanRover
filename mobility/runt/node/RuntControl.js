@@ -21,10 +21,14 @@ var MOTOR1A = 36;
 var MOTOR1B = 38;
 var MOTOR2A = 12;
 var MOTOR2B = 13;
+gpio.setup(36, gpio.DIR_OUT);
+gpio.setup(38, gpio.DIR_OUT);
+gpio.setup(12, gpio.DIR_OUT);
+gpio.setup(13, gpio.DIR_OUT);
 
-
-
-
+gpio.on('export', function(channel){
+console.log('Channel set: ' + channel);
+});
 //var app = express();
 //var server = require('http').Server(app);
 
@@ -38,7 +42,7 @@ var PORT = 3000;
 var HOST = 'localhost';
 
 const HOME_PORT = 5000;
-const HOME_HOST = '192.168.1.143';
+const HOME_HOST = '127.0.0.1';
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
@@ -111,7 +115,6 @@ pwm.setPWMFreq(50);
 
 // NPM Differential Steering Library:
 //    Docs: https://www.npmjs.com/package/diff-steer
-var steerMotors = require('diff-steer/motor_control');
 
 // Global Variables to Keep Track of Asynchronous Translated
 //    Coordinate Assignment
@@ -147,29 +150,15 @@ var speedAdjust = function(x, y) {
 };
 
 function setLeft(speed) {
-    if(speed >=0 ){
-        gpio.setup(MOTOR1A, gpio.DIR_OUT, on);
-        gpio.setup(MOTOR1B, gpio.DIR_OUT, off);
-    }
-    else{
-        gpio.setup(MOTOR1A, gpio.DIR_OUT, off);
-        gpio.setup(MOTOR1B, gpio.DIR_OUT, on);
-    }
-    console.log("speed: " + speed);
+
     pwm.setPWM(0, 0, parseInt(speed));
+    
 }
 
 function setRight(speed) {
-     if(speed >=0 ){
-        gpio.setup(MOTOR1A, gpio.DIR_OUT, on);
-        gpio.setup(MOTOR1B, gpio.DIR_OUT, off);
-    }
-    else{
-        gpio.setup(MOTOR1A, gpio.DIR_OUT, off);
-        gpio.setup(MOTOR1B, gpio.DIR_OUT, on);
-    }
-    console.log("speed: " + speed);
+   
     pwm.setPWM(1, 0, parseInt(speed));
+    
 }
 var setMotors = function(diffSteer) {
     setLeft(diffSteer.leftSpeed);
@@ -193,11 +182,37 @@ function calculateDiff(yAxis, xAxis) {
     var W = (32767 - Math.abs(yAxis)) * (xAxis / 32767.0) + xAxis;
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
+	
+console.log('left: ' + left);
+console.log('right: ' +right);
+ if (right < 0) {
+        right = right.map(Joystick_MIN, 0, saber_max, saber_min);
+	gpio.write(MOTOR1A, false)
+        gpio.write(MOTOR1B,true);
+    }else if (right == 0){
+	gpio.write(MOTOR1A, false);
+        gpio.write(MOTOR1B,false);
+     }
 
- 
-    right = right.map(0, Joystick_MAX, saber_min, saber_max);
-    left = left.map(Joystick_MIN, 0, saber_min, saber_max);
+else {
+        right = right.map(0, Joystick_MAX, saber_min, saber_max);
+	gpio.write(MOTOR1A, true);
+        gpio.write(MOTOR1B,false);
+    }
 
+    if (left < 0) {
+        left = left.map(Joystick_MIN, 0, saber_max, saber_min);
+	gpio.write(MOTOR2A, true);
+        gpio.write(MOTOR2B,false);
+	
+    } else if (right == 0){
+	gpio.write(MOTOR2A, false);
+        gpio.write(MOTOR2B,false);
+     }else {
+        left = left.map(0, Joystick_MAX, saber_min, saber_max);
+		gpio.write(MOTOR2A, false);
+	        gpio.write(MOTOR2B,true);
+	    }
 
     return {
         "leftSpeed": left,
@@ -243,6 +258,9 @@ var receiveMobility = function(joystickData) {
     if (axis === 0 || axis === 1) {
         setMotors(diffSteer);
     }
+
+	
+
 };
 
 // Send 0 to both the x and y axis to stop the rover from running
@@ -366,6 +384,7 @@ server.bind(PORT);
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     stopRover();
+	
     process.exit();
 });
 
@@ -375,6 +394,8 @@ process.on('SIGINT', function() {
     console.log("###### Deleting all files now!!! ######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     stopRover();
+    gpio.destroy(function(){
+	console.log('all pins unexported')});
     // some other closing procedures go here
     process.exit();
 });
