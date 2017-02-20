@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BaseModuleTemplate from './templates/BaseModuleTemplate';
+import { Button } from 'antd';
 
 class MissionElapsedTime extends Component {
     constructor(props) {
@@ -86,18 +86,20 @@ class MissionElapsedTime extends Component {
         let resetDisabledState = (this.state.resetDisabled) ? 'disabled' : null;
 
         return (
-            <BaseModuleTemplate id="met" moduleName="Mission Elapsed Time">
-                <span className="utc">UTC</span>
-                <span className="date">{this.date}</span>
-                <time>
-                    {formatted_time}
-                </time>
-                <div className="controls">
-                    <button onClick={this.handleStartAndPause}>{isRunningState}</button>
-                    <button onClick={this.handleReset} disabled={resetDisabledState}>Reset</button>
+            <div id="met">
+                <h3>Mission Elapsed Time</h3>
+                <div className="time-box">
+                    <span className="utc">UTC</span>
+                    <span className="date">{this.date}</span>
+                    <time>
+                        {formatted_time}
+                    </time>
                 </div>
-
-            </BaseModuleTemplate>
+                <div className="controls">
+                    <Button type="primary" onClick={this.handleStartAndPause}>{isRunningState}</Button>
+                    <Button type="danger" onClick={this.handleReset} disabled={resetDisabledState}>Reset</Button>
+                </div>
+            </div>
         )
     }
 

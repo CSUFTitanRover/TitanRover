@@ -1,172 +1,137 @@
-h3 {
-    font-weight: bold;
-    font-size: 20px;
-    padding-bottom: 15px;
-    color: darkorange;
+@import '~antd/dist/antd.css';
+
+/* Stretching the modules vertically all the way */
+html {
+    height: 100vh;
 }
 
-img{
-    background-color: black;
-}
-
-.hidden {
-    display: none !important;
-}
-
-#nav-header {
-    min-width: 250px;
-    min-height: 100vh; /*might need to change when the main content has srollbars*/
-    background: #242424;
-    display: flex;
-    flex-flow: column;
-    color: white;
-    flex-grow: 1;
-}
-
-#main-content {
-    width: 100%;
-    height: 100%;
+body, #react-app, #react-app > * {
+    min-height: 100vh;
     background: white;
-    padding: 20px;
 }
 
-#root {
-    display: flex;
+.logo {
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    font-size: 24px;
+    text-align: center;
+    background: darkorange;
+    color: white;
+    font-weight: bold;
+    box-shadow: inset 0 0 25px orange;
+    transition: ease 300ms;
+    white-space: nowrap;
+}
+
+.logo:hover {
+    box-shadow: inset 0 0 30px 10px #ffaf4d;
+}
+
+.ant-layout-sider-collapsed .logo {
+    font-size: 18px;
+}
+
+.ant-layout-sider-collapsed .ant-menu-submenu-inline > .ant-menu-submenu-title:after {
+    right: 96px;
 }
 
 #met {
-    padding: 10px;
-    width: 330px;
-    border: 1px solid lightgrey;
+    display: flex;
+    color: white;
+}
+#met > * {
+    padding: 0 5px;
 }
 
-#met span {
-    padding-right: 5px;
-    color: #086298;
+#met .time-box > * {
+    padding: 0 5px;
 }
 
-#met .utc {
-    color: black;
-    font-weight: bold;
+#met .time-box:before {
+    content:'';
+    position: absolute;
+    height: 30px;
+    width: 160px;
+    border: 1px solid ghostwhite;
+    margin: 15px 0 0 -3px;
 }
 
-#met .controls {
-    margin: 10px 0 0 0;
+#met .timeBox, .controls > *{
+    margin: 0 3px;
+}
 
-}
-#met .controls button {
-    padding: 2px 10px;
-}
-#met .controls button:last-child {
-    margin-left: 10px;
-}
 .module {
-    padding: 10px;
-    border: 1px solid lightgrey;
-    margin-bottom: 20px;
+    margin: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 5px;
 }
 
 .module .controls {
-    margin-bottom: 15px;
+    margin: 7px 0;
 }
-.module .controls.sensor-options {
-    border: 1px solid gray;
+
+.ant-tag-text {
+     font-size: 14px;
+     font-weight: bold;
+ }
+
+.generation-options {
+    min-width: 200px;
+    max-width: 900px;
+}
+
+.ant-select-selection__placeholder {
+    color: darkgray;
+}
+
+.ant-select-selection__choice {
+    color: white;
+    background: #108ee9 !important;
+}
+
+.queryByTimerange-settings .ant-modal-body {
     display: flex;
-    width: 400px;
 }
-.module .controls.sensor-options h4 {
-    color: royalblue;
+
+.time-picker {
+    float: left;
     padding-bottom: 10px;
-    font-weight: bold;
-}
-.module .controls.sensor-options > *{
-    padding: 10px;
+    margin: 0 100px 0 0;
 }
 
-.module .controls.sensor-options .sensor-option {
-    padding: 7px;
-    border-bottom: 1px solid gray;
+.queryByTimerange-settings .ant-time-picker-input::-webkit-input-placeholder {
+    /* setting the placeholder text color to a darker color */
+    color: rgba(0, 0, 0, 0.4) !important;
 }
-.module .controls.sensor-options .sensor-option:last-child {
-    border-bottom: none;
+
+#chart-panels .controls {
+    margin: 0;
+    display: flex;
+    align-items: center;
 }
-.module .controls.sensor-options .sensor-option > span {
+
+#chart-panels .ant-layout {
+    background: white;
     padding: 5px;
-    background: #ffbc52;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
-
-.module .controls .options-border {
-    border-left: 1px solid gray;
-    padding: 0px;
-}
-
-.module .controls.sensor-options .options-container {
-    border: 1px solid gray;
-    min-height: 34px;
-}
-
-.module .controls.sensor-options .timerange {
-    margin-top: 5px;
-}
-.module .controls.sensor-options .timerange span {
-    padding: 0px 5px;
-}
-.module .controls.sensor-options .generate-chart-button {
-    height: 50px;
-    margin: 25px 0 0 23px;
-}
-
-.module .query-chart-panel {
-    padding: 5px;
-    border: 1px solid gray;
-    margin-bottom: 20px;
-}
-.module .query-chart-panel:last-child {
+#chart-panels .ant-layout:last-child {
     margin-bottom: 0px;
 }
 
-.module .query-chart-panel .controls {
-    background: #d8d8d8;
-    padding: 5px;
-    display: flex;
+#chart-panels .ant-layout-header {
+    border-radius: 5px 5px 0 0;
 }
 
-.module .query-chart-panel .controls .sensor-label {
-    background: darkorange;
-    color: white;
-    padding: 3px;
-    border-radius: 3px;
+#chart-panels .ant-layout-content {
+    padding-top: 20px;
 }
 
-.module .query-chart-panel .controls .timerange {
-    padding-top: 10px;
-}
-.module .query-chart-panel .controls .timerange > * {
-    padding: 5px;
-}
-
-.module .query-chart-panel .controls .query-data-button {
-    margin-left: 15px;
-}
-
-.module .query-chart-panel .controls .options-border {
-    margin-left: 20px;
-    margin-right: 5px;
-    border-width: 2px;
-}
-
-.module .query-chart-panel .controls .chartType {
-    margin-left: 5px;
-    height: 21px;
-}
-
-.module .query-chart-panel .sensor-option {
-    display: flex;
-}
-
-    /* overwriting tabtab style for the delete all button*/
-.tabtab__folder__delete {
-    right: 0px !important;
-    top: -3px !important;
-    padding: 7px;
+/* fixing overflow-x issues with select dropdown */
+.ant-select-dropdown {
+    width: inherit !important;
 }

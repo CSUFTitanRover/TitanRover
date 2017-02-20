@@ -7,13 +7,14 @@ const initialCols = [
     ['TempOutside']
 ];
 
-class Chart2 extends Component {
+class DHT11 extends Component {
 
     render() {
         return (
-            <BaseModuleTemplate moduleName="DHT 11 Chart">
+            <BaseModuleTemplate moduleName="DHT-11 Chart">
                 <LiveDataTemplate
                     sensorName="DHT-11"
+                    sensorID="02"
                     chartInitialColumns={initialCols}
                     chartType="bar"
                 />
@@ -22,4 +23,4 @@ class Chart2 extends Component {
     }
 }
 
-export default Chart2;
+export default DHT11;

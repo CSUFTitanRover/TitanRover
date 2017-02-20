@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import c3 from 'c3';
 import io from 'socket.io-client';
 import rover_settings from '../../rover_settings.json';
+import { Button } from 'antd';
 
 /*
  Object {id: "01", timestamp: 1479856462231, EC: 1.03, VWC: 0, TempSoil: 22.9}
@@ -15,23 +16,19 @@ class LiveDataTemplate extends Component {
         super(props);
 
         this.socketClient = io.connect(rover_settings.homebase_ip); // set client to connect to the port where the homebase server listens on
-        this.sensorID = this.getSensorID(this.props.sensorName);
         this.state = {
             columns: this.props.chartInitialColumns,
             isRunning: true
         };
-        this.chartID = this.props.sensorName + '-' + this.sensorID; // creating CSS div id for later use
+        this.chartID = this.props.sensorName + '-' + this.props.sensorID; // creating CSS div id for later use
         this.handleStartAndPause = this.handleStartAndPause.bind(this);
     }
 
-    getSensorID(sensorName) {
-        for (let sensor of rover_settings.sensorsList) {
-            if (sensor.sensorName === sensorName)
-                return sensor.sensorID;
-        }
-    }
-
     componentDidMount() {
+        // use maxWidth to hardcode chart width for performance
+        // Note: This option should be specified if possible because it can improve its performance because
+        // some size calculations will be skipped by an explicit value.
+        this.maxWidth = document.querySelector('#main-content').clientWidth - 50;
 
         // initial render of the chart
         this._renderChart();
@@ -43,7 +40,7 @@ class LiveDataTemplate extends Component {
         this.socketClient.on('get: client id', function () {
             console.info("get: client id CALLED. Sending...");
             console.info(self.chartID);
-            self.socketClient.emit('set: client id', self.sensorID);
+            self.socketClient.emit('set: client id', self.props.sensorID);
         });
 
         // updating chart
@@ -100,6 +97,9 @@ class LiveDataTemplate extends Component {
                 columns: this.state.columns,
                 type: this.props.chartType  // defaults to 'line' if no chartType is supplied by nature of c3.js behavior
             },
+            size: {
+                width: this.maxWidth
+            },
             zoom: {
                 enabled: true
             },
@@ -127,7 +127,7 @@ class LiveDataTemplate extends Component {
         return (
             <div>
                 <div className="controls">
-                    <button onClick={this.handleStartAndPause}>{isRunningState}</button>
+                    <Button type="primary" onClick={this.handleStartAndPause}>{isRunningState}</Button>
                 </div>
                 <div id={this.chartID}/>
             </div>
