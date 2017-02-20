@@ -130,8 +130,3 @@ body, #react-app, #react-app > * {
 #chart-panels .ant-layout-content {
     padding-top: 20px;
 }
-
-/* fixing overflow-x issues with select dropdown */
-.ant-select-dropdown {
-    width: inherit !important;
-}

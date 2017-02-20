@@ -267,7 +267,7 @@ class ChartPanelTemplate extends Component {
                     <Tag color="blue">{this.props.chartID}</Tag>
                     <PanelOptions setDataToQuery={this.setDataToQuery}/>
 
-                    <Select defaultValue={chartTypes[0]} size="large" onChange={this.handleChartTypeChange}>
+                    <Select defaultValue={chartTypes[0]} style={{ width: 150 }} onChange={this.handleChartTypeChange}>
                         {chartTypeOptions}
                     </Select>
 
