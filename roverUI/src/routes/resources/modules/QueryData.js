@@ -1,241 +1,241 @@
 import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
+import ChartPanelTemplate from '../../../templates/ChartPanelTemplate';
 import rover_settings from '../../../../rover_settings.json';
-import QueryDataTemplate from '../../../templates/QueryDataTemplate';
-import {DragDropContext} from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import {Tabs, Panel} from 'react-tabtab';
-import 'react-tabtab/public/stylesheets/folder.css';
+import { Select, Button, Tabs } from 'antd';
+const TabPane = Tabs.TabPane;
+const Option = Select.Option;
+const sensorsList = rover_settings.sensorsList;
 
-class QueryData extends Component {
-
+class ChartGenerationOptions extends Component {
     constructor(props) {
         super(props);
+
+        this.handleOnSelect = this.handleOnSelect.bind(this);
+        this.handleOnDeselect = this.handleOnDeselect.bind(this);
+    }
+
+    componentWillMount() {
+        // populate Select with Options loaded from sensorsList right before the Component Mounts
+        this.generationOptions = sensorsList.map( (sensor) =>
+            <Option key={sensor.sensorID} sensorName={sensor.sensorName.toLowerCase()}>{sensor.sensorName}</Option>
+        );
+    }
+
+    handleOnSelect(value) {
+        this.props.handleOnSelect(value);
+    }
+
+    handleOnDeselect(value) {
+        this.props.handleOnDeselect(value);
+    }
+
+
+    render() {
+        return (
+            <Select className="generation-options" multiple onSelect={this.handleOnSelect} onDeselect={this.handleOnDeselect}
+                    optionFilterProp="sensorName" placeholder="Select sensors to generate chart">
+                {this.generationOptions}
+            </Select>
+        );
+    }
+}
+
+class QueryData extends Component {
+    constructor(props) {
+        super(props);
+
         this.state = {
-            selectedSensorsData: [], // array of Obj {sensorName,sensorID} for each sensor
-            activeKey: 0,
-            data:  []
+            selectedGenerationOptions: [],
+            panes: [],
         };
 
-        this.handleGenerateChart = this.handleGenerateChart.bind(this);
-        this.handleSelectedOptionsChange = this.handleSelectedOptionsChange.bind(this);
-
-        // Tabs Functions
-        this.handleTabDeleteButton = this.handleTabDeleteButton.bind(this);
-        this.handleTabClick = this.handleTabClick.bind(this);
-        this.setMoveData = this.setMoveData.bind(this);
-        this.handleDeleteAllButton = this.handleDeleteAllButton.bind(this);
-        this.handleDeleteCurrentChart = this.handleDeleteCurrentChart.bind(this);
+        this.uniqueIndexKey = 0; // used for assigning unique keys to Elements inside arrays
+        this.handleOnSelect = this.handleOnSelect.bind(this);
+        this.handleOnDeselect = this.handleOnDeselect.bind(this);
+        this.handleGenerateCharts = this.handleGenerateCharts.bind(this);
+        this.handleOnChange = this.handleOnChange.bind(this);
+        this.handleOnEdit = this.handleOnEdit.bind(this);
+        this.handleDeleteChartPanel = this.handleDeleteChartPanel.bind(this);
     }
 
-    // Tabs Functions
+    // functions for Select and Button
+    handleOnSelect(value) {
+        let selectedGenerationOptions = this.state.selectedGenerationOptions;
+        selectedGenerationOptions.push(value);
 
-    // Because the delete button only show on the active button
-    // so when you receive the action, it means delete the active button data.
-    handleTabDeleteButton() {
-        let data = this.state.data;
+        this.setState({selectedGenerationOptions: selectedGenerationOptions});
+    }
+
+    handleOnDeselect(value) {
+        let selectedGenerationOptions = this.state.selectedGenerationOptions;
+        let index = selectedGenerationOptions.indexOf(value);
+        selectedGenerationOptions.splice(index, 1);
+
+        this.setState({selectedGenerationOptions: selectedGenerationOptions});
+    }
+
+    handleGenerateCharts() {
+        let panes = this.state.panes;
+        let activeKey;
+        let chartPanelInfo = [];
+
+        // assign sensorName and sensorIDs by keyID
+        for(let keyID of this.state.selectedGenerationOptions) {
+            for(let sensor of rover_settings.sensorsList) {
+                if (keyID === sensor.sensorID) {
+                    chartPanelInfo.push(sensor);
+                }
+            }
+        }
+
+        // we loop over every pane
+        for(let sensor of chartPanelInfo) {
+            let paneAlreadyExists = false;
+            for(let pane of panes) {
+                // the pane already exists so we append to its content a new chart panel
+                if (sensor.sensorName === pane.title) {
+                    paneAlreadyExists = true;
+                    // let chartPanelKey = pane.content.length;
+                    let chartPanelKey = this.uniqueIndexKey++;
+
+                    let chartID = (sensor.sensorName + '-' + sensor.sensorID + '-Key-' + chartPanelKey).toString();
+
+                    // we set key and panelIndex to the same value because it's necessary that a unique key is passed
+                    // in when creating an array of elements in React. This prevents any re-render issues on changes
+                    let chartPanelTemplate = (
+                        <ChartPanelTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID}
+                                            chartID={chartID} key={chartPanelKey} panelKey={chartPanelKey}
+                                            handleDeleteChartPanel={this.handleDeleteChartPanel}
+                        />
+                    );
+                    pane.content.push({panel:chartPanelTemplate, panelKey:chartPanelKey});
+                    activeKey = pane.key;
+                }
+            }
+
+            // extra check for paneAlreadyExists
+            if (!paneAlreadyExists) {
+                // this means we need to create a new pane
+                let chartPanelKey = this.uniqueIndexKey++;
+                let chartID = (sensor.sensorName + '-' + sensor.sensorID + '-Key-' + chartPanelKey).toString();
+                let paneKey = (this.uniqueIndexKey++).toString(); // increment newTabIndex to create a new unique key for each pane
+                let chartPanelTemplate = (
+                    <ChartPanelTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID}
+                                        chartID={chartID} key={chartPanelKey} panelKey={chartPanelKey} handleDeleteChartPanel={this.handleDeleteChartPanel}
+                    />
+                );
+                let content = [{panel:chartPanelTemplate, panelKey:chartPanelKey}];
+                panes.push({title: sensor.sensorName, content: content, key: paneKey});
+                activeKey = paneKey;
+            }
+        }
+
+        // update any changes
+        this.setState({panes, activeKey: activeKey});
+    }
+
+    handleDeleteChartPanel(targetName, targetKey) {
+        let panes = this.state.panes;
+
+        for (let pane of panes) {
+            if (targetName === pane.title) {
+                // create new content array without the targetKey's panel
+                let newContent= pane.content.filter(obj => obj.panelKey != targetKey);
+
+                // should delete current tab BUUTT
+                // it doesn't... instead it auto-focuses the prev Tab
+                // Let's just call it a feature ;)
+                // if there's no more content then we auto-focus prev tab
+                if (newContent.length == 0) {
+                    this.remove(pane.key)
+                }
+                pane.content = newContent;
+            }
+        }
+
+        this.setState({panes});
+    };
+
+
+    // functions for Tabs and TabPanes
+    handleOnChange(activeKey) {
+        this.setState({activeKey});
+    }
+
+    handleOnEdit(targetKey, action) {
+        this[action](targetKey);
+    }
+
+    remove(targetKey) {
         let activeKey = this.state.activeKey;
+        let panes;
+        let targetIndex;
 
-        data.splice(activeKey, 1); // delete the selected key
+        // find index of the targetKey
+        for(let [index, pane] of this.state.panes.entries()) {
+            let paneKeyInt = parseInt(pane.key);
+            let targetKeyInt = parseInt(targetKey);
 
-        // count the active key
-        if (data.length <= activeKey + 1) {
-            activeKey = data.length - 1;
-        }
-
-        this.setState({
-            data: data,
-            activeKey: activeKey
-        });
-
-    }
-
-    handleDeleteAllButton() {
-        this.setState({data: [], activeKey:0});
-    }
-
-    handleTabClick(key) {
-        this.setState({activeKey: key})
-    }
-
-    setMoveData(dragIndex, hoverIndex) {
-        let data = this.state.data;
-        let dragData = data[dragIndex];
-        data.splice(dragIndex, 1);
-        data.splice(hoverIndex, 0, dragData);
-        this.setState({data: data, activeKey: hoverIndex});
-    }
-
-    // Sensor Options
-
-    getSensorOptionsData() {
-        let options = [];
-        let size = 0;
-
-        for(let sensor of rover_settings.sensorsList) {
-            options.push(<option value={sensor.sensorID} name={sensor.sensorName}>{sensor.sensorName}</option>);
-            size++;
-        }
-
-        return {options: options, size: size};
-    }
-
-    handleSelectedOptionsChange(event) {
-        let newSelectedSensorsData = [];
-        for(let selectedOption of event.target.selectedOptions) {
-            newSelectedSensorsData.push({sensorName: selectedOption.text, sensorID: selectedOption.value});
-        }
-
-        this.setState({selectedSensorsData: newSelectedSensorsData});
-    }
-
-    handleGenerateChart() {
-        let selectedSensorsData = this.state.selectedSensorsData;
-        let data = this.state.data;
-        let sensorTabActiveKey = 0; // will hold activeKey for already generated tab to autofocus later
-
-        for (let sensor of selectedSensorsData) {
-            let sensorTabAlreadyGenerated = false;
-
-            for (let [index, tab] of data.entries()) {
-                if (sensor.sensorName === tab.title) {
-                    sensorTabAlreadyGenerated = true;
-                    sensorTabActiveKey = index;
-
-                    // push to the content []
-                    let keyIndex = tab.content.length;
-                    let chartID = sensor.sensorName + '-' + sensor.sensorID + '-Index-' + keyIndex;
-                    tab.content.push(<QueryDataTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID} keyIndex={keyIndex}
-                                                        chartID={chartID} handleDeleteCurrentChart={this.handleDeleteCurrentChart}/>);
-
-                    // auto-focus the already generated tab
-                    this.setState({activeKey: sensorTabActiveKey});
-                }
-            }
-
-            if (!sensorTabAlreadyGenerated) {
-                let chartID = sensor.sensorName + '-' + sensor.sensorID + '-Index-' + 0;
-                let content = [<QueryDataTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID} keyIndex={0}
-                                                  chartID={chartID} handleDeleteCurrentChart={this.handleDeleteCurrentChart}/>];
-                // generate the sensor tab
-                this.handleAddBackTab(sensor.sensorName, content);
-            }
-        }
-    }
-
-    handleAddBackTab(title, content) {
-        let data = this.state.data;
-        data.push({title: title, content: content});
-        this.setState({data: data, activeKey: data.length-1});
-    }
-
-    handleDeleteCurrentChart(sensorName, keyIndex) {
-        let data = this.state.data;
-
-        for (let tab of data) {
-            if (sensorName === tab.title) {
-                // we found our tab
-                // now we check if there is only 1 chart panel inside
-                if (tab.content.length === 1) {
-                    // we need to delete the whole tab or else its going to be empty
-                    this.handleTabDeleteButton();
-                }
-                else {
-                    tab.content.splice(keyIndex, 1);
-                }
+            if (paneKeyInt === targetKeyInt) {
+                targetIndex = index;
             }
         }
 
-        this.setState({data: data});
+        // remove the target from panes
+        panes = this.state.panes.filter(pane => pane.key !== targetKey);
+
+        // handle auto-focusing tabs on removal
+        if (targetIndex >= 1 && activeKey === targetKey) {
+            activeKey = panes[targetIndex-1].key;
+        }
+        else if (targetIndex == 0) {
+            if (panes.length == 0) {
+                activeKey = null;
+            }
+            else {
+                activeKey = panes[targetIndex].key;
+            }
+        }
+
+        this.setState({panes: panes, activeKey});
     }
 
     render() {
-        let sensor_options_data = this.getSensorOptionsData();
-        let sensor_options = sensor_options_data['options']; // only get the options for dropdown
-        let options_dropdown_size = sensor_options_data['size']; // only get the size
 
-        let panels = [];
-        let data = this.state.data;
-        for (let i in data) {
-            let k = data[i];
-            panels.push(
-                <Panel title={k.title} key={i}>
-                    {k.content}
-                </Panel>
-            );
+        let panes = [];
+
+        for (let pane of this.state.panes) {
+            // looping through every panel obj and only getting it's panel content
+            let contentPanels = [];
+            for (let obj of pane.content) {
+                contentPanels.push(obj.panel);
+            }
+
+            panes.push(<TabPane tab={pane.title} key={pane.key}>{contentPanels}</TabPane>)
         }
 
         return (
-            <BaseModuleTemplate moduleName="Query Chart Data">
-                <div className="controls sensor-options">
-                    <div>
-                        <h4>Select Sensors (Multi-Select)</h4>
-                        <select multiple name="Sensor Options" size={options_dropdown_size} onChange={this.handleSelectedOptionsChange}>
-                            {sensor_options}
-                        </select>
-                    </div>
-                    <div className="options-border"/>
-                    <button className="generate-chart-button" onClick={this.handleGenerateChart}>Generate Chart</button>
+            <BaseModuleTemplate moduleName="New Query">
+                <div className="controls">
+                    <ChartGenerationOptions handleOnSelect={this.handleOnSelect} handleOnDeselect={this.handleOnDeselect}/>
+                    <Button type="primary" onClick={this.handleGenerateCharts}>Generate Charts</Button>
                 </div>
 
-
-                <Tabs activeKey={this.state.activeKey}
-                      style="tabtab__folder__"
-                      tabDeleteButton={true}
-                      handleTabDeleteButton={this.handleTabDeleteButton}
-                      draggable={false}
-                      handleTabClick={this.handleTabClick}
-                      setMoveData={this.setMoveData}
-                      deleteAllButtonName="Delete All Tabs"
-                      deleteAllButton={true}
-                      handleDeleteAllButton={this.handleDeleteAllButton}
-                >
-                    {panels}
-                </Tabs>
-
+                <div id="chart-panels">
+                    <Tabs
+                        hideAdd
+                        activeKey={this.state.activeKey}
+                        type="editable-card"
+                        onChange={this.handleOnChange}
+                        onEdit={this.handleOnEdit}
+                    >
+                        {panes}
+                    </Tabs>
+                </div>
             </BaseModuleTemplate>
         );
     }
 }
 
-export default DragDropContext(HTML5Backend)(QueryData);
-
-/*
- TODO:
- data being passed through Socket Client to Homebase_Server will look like:
-
- data = [
- {
- sensorInfo: {sensorName: 'Decagon-5TE-Chart', sensorID: '01'},
- queryByTimeRange: true, // bool
- queryStartTime: 1598878971, // int
- queryEndTime: 1599999988 //int
- },
- {
- sensorInfo: {sensorName: 'DHT-11-Chart', sensorID: '02'},
- queryByTimeRange: false, // bool
- queryStartTime: null, // int
- queryEndTime: null //int
- },
- ...
- ];
-
-
- TODO:
- for the content of each tab... we need to generate a chartPanel or append a new chartPanel if the tab is already generated.
- the chartPanel will consist of
-    1) Form to query data
-    2) Actual Chart to render queried data
-
-    Tab
-    |
-    ----- Title
-    |
-    ----- Content
-            |
-            ----- ChartPanel
-                    |
-                    ----- Form to Query Data
-                    |
-                    ----- Chart to render data
- */
+export default QueryData;

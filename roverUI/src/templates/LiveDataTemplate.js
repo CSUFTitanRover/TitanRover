@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import c3 from 'c3';
 import io from 'socket.io-client';
 import rover_settings from '../../rover_settings.json';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
+import moment from 'moment';
 
 /*
  Object {id: "01", timestamp: 1479856462231, EC: 1.03, VWC: 0, TempSoil: 22.9}
@@ -121,6 +122,23 @@ class LiveDataTemplate extends Component {
         }
     }
 
+    handleBookmark = () => {
+        let startTime, endTime, m;
+
+        // startTime = this.state.columns[0][1]; // first real element of data.
+        // startTime = startTime.timestamp;
+
+        // m = moment(startTime);
+        // startTime = m.format('HH:mm:ss');
+
+
+
+        // localStorage.setItem('savedIsRunning', 'true');
+        // localStorage.getItem('savedElapsedTime')
+
+        message.success('[' + this.props.sensorName + '-' + this.props.sensorID + '] Bookmarked: (Timestamp will be here)', 2.5);
+    };
+
     render() {
         let isRunningState = (this.state.isRunning) ? 'Pause Chart' : 'Start Chart';
 
@@ -128,6 +146,7 @@ class LiveDataTemplate extends Component {
             <div>
                 <div className="controls">
                     <Button type="primary" onClick={this.handleStartAndPause}>{isRunningState}</Button>
+                    <Button onClick={this.handleBookmark}>Bookmark Start & End Timestamp</Button>
                 </div>
                 <div id={this.chartID}/>
             </div>

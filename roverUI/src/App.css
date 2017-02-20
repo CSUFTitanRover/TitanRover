@@ -91,12 +91,12 @@ body, #react-app, #react-app > * {
     background: #108ee9 !important;
 }
 
-.queryByTimerange-settings .ant-modal-body {
+.time-pickers {
     display: flex;
+    padding-top: 20px;
 }
 
-.time-picker {
-    float: left;
+.time-pickers > * {
     padding-bottom: 10px;
     margin: 0 100px 0 0;
 }
@@ -129,4 +129,21 @@ body, #react-app, #react-app > * {
 
 #chart-panels .ant-layout-content {
     padding-top: 20px;
+}
+
+/* hotfix for the highlighting the current item selected after page refresh or page load*/
+.ant-menu-item > a {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    padding-left: 50px;
+}
+
+.hotfix-item-selected {
+    background-color: #108ee9;
+    color: white !important;
+    transition: all ease 300ms;
+}
+.hotfix-item-selected > * {
+    color: white !important;
 }

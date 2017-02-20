@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import c3 from 'c3';
 import io from 'socket.io-client';
 import rover_settings from '../../rover_settings.json';
-import { Layout, Button, Radio, Modal, TimePicker, message, Tag, Select } from 'antd';
+import { Layout, Button, Radio, Modal, TimePicker, message, Tag, Select, Cascader } from 'antd';
 const { Content, Header } = Layout;
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -83,7 +83,51 @@ class PanelOptions extends Component {
         this.setState({tempEndTime: time})
     }
 
+    displayRender = (labels, selectedOptions) => labels.map((label, i) => {
+        const option = selectedOptions[i];
+        if (i == 1) {
+            return (
+                <span key={option.value}>
+                    {label} -
+                </span>
+            );
+        }
+        if (i == 2) {
+            return (
+                <span key={option.value}>
+                     &nbsp;{label}
+                </span>
+            );
+        }
+        return <span key={option.value}>{label} / </span>;
+    });
+
     render() {
+        const options = [{
+            value: 'DHT-11',
+            label: 'DHT-11',
+            children: [{
+                value: '12:00:06',
+                label: '12:00:06',
+                children: [{
+                    value: '16:49:06',
+                    label: '16:49:06',
+                }],
+            }],
+        }, {
+            value: 'Decagon-5TE',
+            label: 'Decagon-5TE',
+            children: [{
+                value: '00:04:36',
+                label: '00:04:36',
+                children: [{
+                    value: '00:10:56',
+                    label: '00:10:56',
+                }],
+            }],
+        }];
+
+
         return (
             <div>
                 <RadioGroup onChange={this.handleOnChange} defaultValue="queryAllData">
@@ -96,27 +140,41 @@ class PanelOptions extends Component {
                        okText="Good to go!" cancelText="Don't save settings"
                        maskClosable={false} className="queryByTimerange-settings"
                 >
-                    <div className="time-picker">
-                        <h3>Start Time</h3>
-                        <TimePicker value={this.state.tempStartTime} onChange={this.handleStartTimeChange} placeholder="Start Time"
-                            addon={panel => (
-                                <Button size="small" type="primary" onClick={() => panel.close()}>
-                                    Ok
-                                </Button>
-                            )}
+                    <div>
+                        <h3>Bookmarked Timestamps - Autofill Time Pickers</h3>
+                        <Cascader options={options}
+                                  displayRender={this.displayRender}
+                                  style={{ width: 270 }}
+                                  size="large"
+                                  placeholder="Bookmarked Timestamps"
                         />
                     </div>
 
-                    <div className="time-picker">
-                        <h3>End Time</h3>
-                        <TimePicker value={this.state.tempEndTime} onChange={this.handleEndTimeChange} placeholder="End Time"
-                            addon={panel => (
-                                <Button size="small" type="primary" onClick={() => panel.close()}>
-                                Ok
-                                </Button>
-                            )}
-                        />
+                    <div className="time-pickers">
+                        <div>
+                            <h3>Start Time</h3>
+                            <TimePicker value={this.state.tempStartTime} onChange={this.handleStartTimeChange} placeholder="Start Time"
+                                addon={panel => (
+                                    <Button size="small" type="primary" onClick={() => panel.close()}>
+                                        Ok
+                                    </Button>
+                                )}
+                            />
+                        </div>
+
+                        <div className="time-picker">
+                            <h3>End Time</h3>
+                            <TimePicker value={this.state.tempEndTime} onChange={this.handleEndTimeChange} placeholder="End Time"
+                                addon={panel => (
+                                    <Button size="small" type="primary" onClick={() => panel.close()}>
+                                    Ok
+                                    </Button>
+                                )}
+                            />
+                        </div>
                     </div>
+
+
                 </Modal>
             </div>
         );
@@ -144,7 +202,7 @@ class ChartPanelTemplate extends Component {
         // use maxWidth to hardcode chart width for performance
         // Note: This option should be specified if possible because it can improve its performance because
         // some size calculations will be skipped by an explicit value.
-        this.maxWidth = document.querySelector('#main-content').clientWidth - 60;
+        this.maxWidth = document.querySelector('#main-content').clientWidth - 150;
 
         // initial render of the chart
         this._renderChart();

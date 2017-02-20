@@ -10,20 +10,18 @@ class NavMenu extends Component {
     render() {
         let sensorItemsGroup = sensorsList.map( (sensor) =>
             <Menu.Item key={sensor.sensorName}>
-                <Link to={"/" + sensor.sensorName}>
+                <Link to={"/" + sensor.sensorName} activeClassName="hotfix-item-selected">
                     <Icon type="eye-o" /> {sensor.sensorName}
                 </Link>
             </Menu.Item>
         );
-
-        // let currentLocation = this.props.location.pathname;
-        // console.info('currentLocation: ' + currentLocation);
 
         return (
             <Menu
                 mode="inline"
                 theme="dark"
                 defaultOpenKeys={['mission-critical', 'resources']}
+                id="navMenu"
             >
                 <SubMenu key="mission-critical"
                          title={<span><Icon type="desktop"/> <span>Mission Critical</span></span>}>
@@ -37,13 +35,13 @@ class NavMenu extends Component {
                     {sensorItemsGroup}
 
                     <Menu.Item key="cameras">
-                        <Link to="/livefeeds">
+                        <Link to="/livefeeds" activeClassName="hotfix-item-selected">
                             <Icon type="camera-o" /> Cameras
                         </Link>
                     </Menu.Item>
 
                     <Menu.Item key="arm-control">
-                        <Link to="/arm-control">
+                        <Link to="/arm-control" activeClassName="hotfix-item-selected">
                             <Icon type="user" /> Arm Control
                         </Link>
                     </Menu.Item>
@@ -52,16 +50,11 @@ class NavMenu extends Component {
                 <SubMenu key="resources"
                          title={<span><Icon type="paper-clip"/> <span>Resources</span></span>}>
                     <Menu.Item key="querydata">
-                        <Link to="/querydata">
+                        <Link to="/querydata" activeClassName="hotfix-item-selected">
                             <Icon type="area-chart" /> Query Data
                         </Link>
                     </Menu.Item>
 
-                    <Menu.Item key="new-query">
-                        <Link to="/new-query">
-                            <Icon type="bar-chart" /> New Query
-                        </Link>
-                    </Menu.Item>
                 </SubMenu>
 
             </Menu>

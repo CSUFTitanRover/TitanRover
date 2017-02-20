@@ -1,27 +1,24 @@
 import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../../templates/BaseModuleTemplate';
-import {Tabs, Panel} from 'react-tabtab';
-import 'react-tabtab/public/stylesheets/folder.css';
+import { Tabs } from 'antd';
+const TabPane = Tabs.TabPane;
 
 
 class LeftCamera extends Component {
-  constructor(props) {
-  super(props);
-  }
   render() {
       return (
-          <BaseModuleTemplate moduleName="Left Camera - 180 Degree">
-            <Tabs activeKey={0} style="tabtab__folder__">
-            <Panel title="Stream 1">
-              <img src="http://<IP ADDRESS>/video.mjpg" width="1280" height="720"/>
-            </Panel>
-            <Panel title="Stream 2">
-              <img src="http://<IP ADDRESS>/video2.mjpg" width="1280" height="720"/>
-            </Panel>
-            <Panel title="Stream 3">
-              <img src="http://<IP ADDRESS>/video3.mjpg" width="1280" height="720"/>
-            </Panel>
-          </Tabs>
+          <BaseModuleTemplate moduleName="Left Camera - 180 Degree" tagColor="green">
+              <Tabs defaultActiveKey="1">
+                  <TabPane tab="Stream 1" key="1">
+                      <img src="http://<IP ADDRESS>/video.mjpg" width="1280" height="720"/>
+                  </TabPane>
+                  <TabPane tab="Stream 2" key="2">
+                      <img src="http://<IP ADDRESS>/video2.mjpg" width="1280" height="720"/>
+                  </TabPane>
+                  <TabPane tab="Stream 3" key="3">
+                      <img src="http://<IP ADDRESS>/video3.mjpg" width="1280" height="720"/>
+                  </TabPane>
+              </Tabs>
           </BaseModuleTemplate>
         );
     }
