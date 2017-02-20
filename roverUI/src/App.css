@@ -132,18 +132,18 @@ body, #react-app, #react-app > * {
 }
 
 /* hotfix for the highlighting the current item selected after page refresh or page load*/
-.ant-menu-item > a {
+#navMenu .ant-menu-item > a {
     position: absolute;
     left: 0;
     width: 100%;
     padding-left: 50px;
 }
 
-.hotfix-item-selected {
+#navMenu .hotfix-item-selected {
     background-color: #108ee9;
     color: white !important;
     transition: all ease 300ms;
 }
-.hotfix-item-selected > * {
+#navMenu .hotfix-item-selected > * {
     color: white !important;
 }

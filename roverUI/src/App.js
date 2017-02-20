@@ -3,7 +3,7 @@ import MissionElapsedTime from './MissionElapsedTime';
 import './App.css';
 import '../public/iconfont/iconfont.css';
 import 'd3';
-import { Layout, Affix, LocaleProvider } from  'antd';
+import { Layout, LocaleProvider } from  'antd';
 const { Sider, Content, Header } = Layout;
 import NavMenu from './NavMenu';
 import enUS from 'antd/lib/locale-provider/en_US';
@@ -25,7 +25,7 @@ class App extends Component {
                         <NavMenu/>
                     </Sider>
                     <Content id="main-content">
-                        <Affix><Header><MissionElapsedTime/></Header></Affix>
+                        <Header><MissionElapsedTime/></Header>
                         <Content>
                             {this.props.children}
                         </Content>
