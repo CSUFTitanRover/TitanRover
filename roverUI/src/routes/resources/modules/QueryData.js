@@ -53,10 +53,19 @@ class QueryData extends Component {
         this.uniqueIndexKey = 0; // used for assigning unique keys to Elements inside arrays
         this.handleOnSelect = this.handleOnSelect.bind(this);
         this.handleOnDeselect = this.handleOnDeselect.bind(this);
-        this.handleGenerateCharts = this.handleGenerateCharts.bind(this);
+        this.handleGenerateChartPanels = this.handleGenerateChartPanels.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleOnEdit = this.handleOnEdit.bind(this);
         this.handleDeleteChartPanel = this.handleDeleteChartPanel.bind(this);
+    }
+
+    componentDidMount() {
+        // use maxWidth to hardcode chart width for performance
+        // Note: This option should be specified if possible because it can improve its performance because
+        // some size calculations will be skipped by an explicit value.
+        // set maxWidth to 92% of main-content width. This handles any weird re-sizing quirks.
+        this.maxWidth = document.querySelector('#main-content').clientWidth * 0.92;
+
     }
 
     // functions for Select and Button
@@ -75,7 +84,7 @@ class QueryData extends Component {
         this.setState({selectedGenerationOptions: selectedGenerationOptions});
     }
 
-    handleGenerateCharts() {
+    handleGenerateChartPanels() {
         let panes = this.state.panes;
         let activeKey;
         let chartPanelInfo = [];
@@ -106,7 +115,7 @@ class QueryData extends Component {
                     let chartPanelTemplate = (
                         <ChartPanelTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID}
                                             chartID={chartID} key={chartPanelKey} panelKey={chartPanelKey}
-                                            handleDeleteChartPanel={this.handleDeleteChartPanel}
+                                            handleDeleteChartPanel={this.handleDeleteChartPanel} maxWidth={this.maxWidth}
                         />
                     );
                     pane.content.push({panel:chartPanelTemplate, panelKey:chartPanelKey});
@@ -122,7 +131,8 @@ class QueryData extends Component {
                 let paneKey = (this.uniqueIndexKey++).toString(); // increment newTabIndex to create a new unique key for each pane
                 let chartPanelTemplate = (
                     <ChartPanelTemplate sensorName={sensor.sensorName} sensorID={sensor.sensorID}
-                                        chartID={chartID} key={chartPanelKey} panelKey={chartPanelKey} handleDeleteChartPanel={this.handleDeleteChartPanel}
+                                        chartID={chartID} key={chartPanelKey} panelKey={chartPanelKey}
+                                        handleDeleteChartPanel={this.handleDeleteChartPanel} maxWidth={this.maxWidth}
                     />
                 );
                 let content = [{panel:chartPanelTemplate, panelKey:chartPanelKey}];
@@ -219,7 +229,7 @@ class QueryData extends Component {
             <BaseModuleTemplate moduleName="New Query">
                 <div className="controls">
                     <ChartGenerationOptions handleOnSelect={this.handleOnSelect} handleOnDeselect={this.handleOnDeselect}/>
-                    <Button type="primary" onClick={this.handleGenerateCharts}>Generate Charts</Button>
+                    <Button type="primary" onClick={this.handleGenerateChartPanels}>Generate Charts</Button>
                 </div>
 
                 <div id="chart-panels">
@@ -229,6 +239,7 @@ class QueryData extends Component {
                         type="editable-card"
                         onChange={this.handleOnChange}
                         onEdit={this.handleOnEdit}
+                        animated={false}
                     >
                         {panes}
                     </Tabs>

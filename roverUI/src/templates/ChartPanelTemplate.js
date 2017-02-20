@@ -199,11 +199,6 @@ class ChartPanelTemplate extends Component {
     }
 
     componentDidMount() {
-        // use maxWidth to hardcode chart width for performance
-        // Note: This option should be specified if possible because it can improve its performance because
-        // some size calculations will be skipped by an explicit value.
-        this.maxWidth = document.querySelector('#main-content').clientWidth - 150;
-
         // initial render of the chart
         this._renderChart();
 
@@ -262,7 +257,7 @@ class ChartPanelTemplate extends Component {
                 type: this.chartType// defaults to 'line' if no chartType is supplied by nature of c3.js behavior
             },
             size: {
-                width: this.maxWidth
+                width: this.props.maxWidth
             },
             zoom: {
                 enabled: true

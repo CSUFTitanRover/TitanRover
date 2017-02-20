@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Decagon5TE from './modules/Decagon-5TE';
 import DHT11 from './modules/DHT-11';
+import ArmControl from './modules/ArmControl';
 import LiveFeeds from './modules/livefeeds/LiveFeeds';
 import ArmCamera from './modules/livefeeds/ArmCamera';
 import MastCamera from './modules/livefeeds/MastCamera';
@@ -25,6 +26,7 @@ export default {
     Overview,
     Decagon5TE,
     DHT11,
+    ArmControl,
     LiveFeeds,
     ArmCamera,
     MastCamera,
