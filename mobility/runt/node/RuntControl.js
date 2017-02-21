@@ -17,18 +17,19 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 
 var gpio = require('rpi-gpio');
-var MOTOR1A = 36;
-var MOTOR1B = 38;
-var MOTOR2A = 12;
-var MOTOR2B = 13;
-gpio.setup(36, gpio.DIR_OUT);
-gpio.setup(38, gpio.DIR_OUT);
-gpio.setup(12, gpio.DIR_OUT);
-gpio.setup(13, gpio.DIR_OUT);
 
-gpio.on('export', function(channel){
-console.log('Channel set: ' + channel);
-});
+
+// MOTOR Initialization
+const MOTOR1A = 36;
+const MOTOR1B = 38;
+const MOTOR2A = 12;
+const MOTOR2B = 13;
+gpio.setup(MOTOR1A, gpio.DIR_OUT);
+gpio.setup(MOTOR1B, gpio.DIR_OUT);
+gpio.setup(MOTOR2A, gpio.DIR_OUT);
+gpio.setup(MOTOR2B, gpio.DIR_OUT);
+
+
 //var app = express();
 //var server = require('http').Server(app);
 
@@ -183,36 +184,34 @@ function calculateDiff(yAxis, xAxis) {
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 	
-console.log('left: ' + left);
-console.log('right: ' +right);
- if (right < 0) {
-        right = right.map(Joystick_MIN, 0, saber_max, saber_min);
-	gpio.write(MOTOR1A, false)
-        gpio.write(MOTOR1B,true);
-    }else if (right == 0){
-	gpio.write(MOTOR1A, false);
-        gpio.write(MOTOR1B,false);
-     }
-
-else {
-        right = right.map(0, Joystick_MAX, saber_min, saber_max);
-	gpio.write(MOTOR1A, true);
-        gpio.write(MOTOR1B,false);
-    }
-
-    if (left < 0) {
+ // Refactor this if you have time 
+    if(right < 0){
+            right = right.map(Joystick_MIN, 0, saber_max, saber_min);
+            gpio.write(MOTOR1A, false);
+            gpio.write(MOTOR1B,true);
+        }else if(right === 0){
+            gpio.write(MOTOR1A, false);
+            gpio.write(MOTOR1B,false);
+        }
+    else {
+            right = right.map(0, Joystick_MAX, saber_min, saber_max);
+            gpio.write(MOTOR1A, true);
+            gpio.write(MOTOR1B,false);
+        }
+    
+    
+    if(left < 0) {
         left = left.map(Joystick_MIN, 0, saber_max, saber_min);
-	gpio.write(MOTOR2A, true);
+        gpio.write(MOTOR2A, true);
         gpio.write(MOTOR2B,false);
-	
-    } else if (right == 0){
-	gpio.write(MOTOR2A, false);
+    }else if(right === 0){
+        gpio.write(MOTOR2A, false);
         gpio.write(MOTOR2B,false);
-     }else {
+        }else{
         left = left.map(0, Joystick_MAX, saber_min, saber_max);
-		gpio.write(MOTOR2A, false);
-	        gpio.write(MOTOR2B,true);
-	    }
+        gpio.write(MOTOR2A, false);
+        gpio.write(MOTOR2B,true);
+    }
 
     return {
         "leftSpeed": left,
@@ -230,7 +229,7 @@ function setThrottle(adjust_Amount) {
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = parseInt(joystickData.number);
+    var axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
 
     var diffSteer;

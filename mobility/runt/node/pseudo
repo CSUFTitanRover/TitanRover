@@ -20,3 +20,30 @@ places   degrees          distance
 6        0.000001         11.1 cm
 7        0.0000001        1.11 cm
 8        0.00000001       1.11 mm
+
+
+
+    // if(ll_previous !== null){
+        
+    //     ll_current = gps_packet; 
+    //     ll_previous = nowPoint; 
+    //     var distance = geolib.getDistance(
+    //     {latitude: lat_1, longitude: lon_1}, 
+    //     {latitude: lat_2, longitude: lon_2},
+    //     1, // Setting Accuracy to 1
+    //     3  // Setting precision to centimeters 
+    //     );
+            
+    // hasMoved = function(gps_packet){
+    //     distance =  geolib.getDistance(
+    //         {latitude: lat_1, longitude: lon_1}, 
+    //         {latitude: lat_2, longitude: lon_2},
+    //         1, // Setting Accuracy to 1
+    //         3  // Setting precision to centimeters 
+    //         );
+            
+    //         return distance >= 3;
+    //     };
+    //}
+   
+ 
