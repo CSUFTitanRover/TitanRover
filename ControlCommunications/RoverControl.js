@@ -25,6 +25,11 @@ var server = dgram.createSocket('udp4');
 
 // Allows us to contorl the rpio pins on the raspberry pi
 var rpio = require('rpio');
+var serialPort = require('serialport');
+
+var port = new serialPort('/dev/ttyACM0', {
+    baudRate: 9600
+});
 
 var PORT = 3000;
 var HOST = 'localhost';
@@ -103,39 +108,47 @@ const motor_right_channel = 1;
  */
 
 // Joint1 rotating base pins
-const joint1_move_pin = 12;
 const joint1_dir_pin = 11;
 const joint1_enab_pin = 13;
+const joint1_on = '1';
+const joint1_off = '2';
 
 // Set all pins to low on init
 rpio.open(joint1_dir_pin, rpio.OUTPUT, rpio.LOW);
-rpio.open(joint1_move_pin, rpio.OUTPUT, rpio.LOW);
 rpio.open(joint1_enab_pin, rpio.OUTPUT, rpio.LOW);
 
 // joint 4 Sumtor pins
-const joint4_move_pin = 33;
 const joint4_dir_pin = 32;
 const joint4_enab_pin = 36;
+const joint4_on = '3';
+const joint4_off = '4';
 
 // Set all pins to low on init
 rpio.open(joint4_dir_pin, rpio.OUTPUT, rpio.LOW);
-rpio.open(joint4_move_pin, rpio.OUTPUT, rpio.LOW);
 rpio.open(joint4_enab_pin, rpio.OUTPUT, rpio.LOW);
 
 // joint 5 Sumtor pins
-const joint5_move_pin = 16;
 const joint5_dir_pin = 15;
 const joint5_enab_pin = 18;
+const joint5_on = '5';
+const joint5_off = '6';
 
 // Set all pins to low on init
 rpio.open(joint5_dir_pin, rpio.OUTPUT, rpio.LOW);
-rpio.open(joint5_move_pin, rpio.OUTPUT, rpio.LOW);
 rpio.open(joint5_enab_pin, rpio.OUTPUT, rpio.LOW);
+
+// Joint 6 Pololu pins
+const joint6_dir_pin = 12;
+const joint6_on = '7';
+const joint6_off = '8';
+
+// Set all pins to low on init
+rpio.open(joint6_dir_pin, rpio.OUTPUT, rpio.LOW);
 
 
 // Pins to destroy
 // Will be used when program exits to close these pins
-var pins = [12, 11, 13, 33, 32, 36, 16, 15, 18];
+var pins = [11, 12, 13, 15, 18, 32, 36];
 
 
 // Based on J. Stewart's calculations:
@@ -375,12 +388,12 @@ function joint1_rotatingBase(message) {
     }
 
     if (value == 0) {
-        joint1_moving = false;
         //console.log("Stopping Arm");
-        rpio.write(joint1_move_pin, rpio.LOW);
+        //rpio.write(joint1_move_pin, rpio.LOW);
+        port.write(joint1_off);
     } else {
-        joint1_moving = true;
-        rpio.write(joint1_move_pin, rpio.HIGH);
+        //rpio.write(joint1_move_pin, rpio.HIGH);
+        port.write(joint1_on);
     }
 
 }
@@ -409,9 +422,11 @@ function joint4_rotateWrist(message) {
 
     if (value == 0) {
         //console.log("Stopping Arm");
-        rpio.write(joint4_move_pin, rpio.LOW);
+        //rpio.write(joint4_move_pin, rpio.LOW);
+        port.write(joint4_off);
     } else {
-        rpio.write(joint4_move_pin, rpio.HIGH);
+        //rpio.write(joint4_move_pin, rpio.HIGH);
+        port.write(joint4_on);
     }
 
 }
@@ -428,14 +443,31 @@ function joint5_90degree(message) {
 
     if (value == 0) {
         //console.log("Stopping Arm");
-        rpio.write(joint5_move_pin, rpio.LOW);
+        //rpio.write(joint5_move_pin, rpio.LOW);
+        port.write(joint5_off);
     } else {
-        rpio.write(joint5_move_pin, rpio.HIGH);
+        //rpio.write(joint5_move_pin, rpio.HIGH);
+        port.write(joint5_on);
     }
 
 }
 
-function joint6(message) {}
+function joint6_360Unlimited(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? true : false;
+
+    if (direction) {
+        rpio.write(joint6_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint6_dir_pin, rpio.LOW);
+    }
+
+    if (value == 0) {
+        port.write(joint6_off);
+    } else {
+        port.write(joint6_on);
+    }
+}
 
 function joint7(message) {}
 
@@ -451,7 +483,7 @@ function armControl(message) {
             //joint3_linear2(message);
             break;
         case 1:
-            //joint2_linear1(message);
+            joint6_360Unlimited(message);
             break;
         case 2:
             joint1_rotatingBase(message);
