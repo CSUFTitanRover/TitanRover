@@ -8,7 +8,7 @@ class ArmCamera extends Component {
   render() {
       return (
           <BaseModuleTemplate moduleName="Arm Camera" tagColor="green">
-              <Tabs defaultActiveKey="1">
+              <Tabs defaultActiveKey="1" >
                   <TabPane tab="Stream 1" key="1">
                       <img src="http://<IP ADDRESS>/video.mjpg" width="1280" height="720"/>
                   </TabPane>

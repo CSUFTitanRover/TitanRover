@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
 import LiveDataTemplate from '../../../templates/LiveDataTemplate';
 
-const initialCols = [
-    ['Humidity'],
-    ['TempOutside']
-];
-
 class DHT11 extends Component {
 
     render() {
@@ -15,8 +10,7 @@ class DHT11 extends Component {
                 <LiveDataTemplate
                     sensorName="DHT-11"
                     sensorID="02"
-                    chartInitialColumns={initialCols}
-                    chartType="bar"
+                    chartType="line"
                 />
             </BaseModuleTemplate>
         );

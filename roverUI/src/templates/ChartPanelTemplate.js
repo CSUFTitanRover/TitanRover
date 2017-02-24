@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import c3 from 'c3';
 import io from 'socket.io-client';
 import rover_settings from '../../rover_settings.json';
+import moment from 'moment';
 import { Layout, Button, Radio, Modal, TimePicker, message, Tag, Select, Cascader } from 'antd';
 const { Content, Header } = Layout;
 const RadioGroup = Radio.Group;
@@ -186,7 +187,8 @@ class ChartPanelTemplate extends Component {
         super(props);
 
         this.state = {
-            columns: [],
+            data: null,
+            dataKeys: null,
             queryAllData: true, // defualt value
             queryByTimerange: false // default value
         };
@@ -212,31 +214,57 @@ class ChartPanelTemplate extends Component {
 
         // events for Querying
         // receiving queried All Data from homebase
-        this.socketClient.on('set: queryAllData', function(jsonObj) {
+        this.socketClient.on('set: queryAllData', function(dataArray) {
             console.info('Receieved data from homebase!');
-            console.info(jsonObj);
+            console.info(dataArray);
 
             // first check if the query was unsuccessful
-            if('errorMessage' in jsonObj) {
+            if('errorMessage' in dataArray) {
                 console.info('There was an error querying all the data!')
             }
             else {
-                // set state of the new columns
-                self.setState({columns: jsonObj})
+                // building keys to display data by
+                let keys = [];
+
+                for(let key in dataArray[0]) {
+                    if (dataArray[0].hasOwnProperty(key)) {
+                        // add all keys in except for ID
+                        if (!(key === 'id' || key === '_id')) {
+                            keys.push(key);
+                        }
+                    }
+                }
+
+                self.setState({data: dataArray, dataKeys: keys})
             }
         });
+
+        // So querying by timerange works but for some reason the time is 4 hours ahead?! Is it EST? Probelm with UTC?!
+        // the data coming into the DB from the PI sensors is 4 hours ahead of the current time (Epoch time)...
+
         // receiving queried Time Range Data from homebase
-        this.socketClient.on('set: queryByTimerange', function(jsonObj) {
+        this.socketClient.on('set: queryByTimerange', function(dataArray) {
             console.info('Receieved data from homebase!');
-            console.info(jsonObj);
+            console.info(dataArray);
 
             // first check if the query was unsuccessful
-            if('errorMessage' in jsonObj) {
+            if('errorMessage' in dataArray) {
                 console.info('There was an error querying by timerange!')
             }
             else {
-                // set state of the new columns
-                self.setState({columns: jsonObj})
+                // building keys to display data by
+                let keys = [];
+
+                for(let key in dataArray[0]) {
+                    if (dataArray[0].hasOwnProperty(key)) {
+                        // add all keys in except for ID
+                        if (!(key === 'id' || key === '_id')) {
+                            keys.push(key);
+                        }
+                    }
+                }
+
+                self.setState({data: dataArray, dataKeys: keys})
             }
         });
 
@@ -245,7 +273,11 @@ class ChartPanelTemplate extends Component {
     componentDidUpdate() {
         // load new data into our chart
         this.chart.load({
-            columns: this.state.columns
+            json: this.state.data,
+            keys: {
+                x: 'timestamp',
+                value: this.state.dataKeys,
+            },
         });
     }
 
@@ -253,7 +285,7 @@ class ChartPanelTemplate extends Component {
         this.chart = c3.generate({
             bindto: '#' + this.props.chartID,
             data: {
-                columns: this.state.columns,
+                columns: [],
                 type: this.chartType// defaults to 'line' if no chartType is supplied by nature of c3.js behavior
             },
             size: {
@@ -261,7 +293,18 @@ class ChartPanelTemplate extends Component {
             },
             zoom: {
                 enabled: true
-            }
+            },
+            subchart: {
+                show: true
+            },
+            axis: {
+                x: {
+                    type: 'timeseries',
+                    tick: {
+                        format: '%H:%M:%S' // Error displaying Hour. It's not the correct hour
+                    }
+                }
+            },
         });
     }
 
@@ -270,16 +313,13 @@ class ChartPanelTemplate extends Component {
     };
 
     queryData() {
-
-        //    to be COMPLETED
-        console.info(this.state);
-
         let dataToBeQueried = {sensorID: this.props.sensorID};
 
         if (this.state.queryAllData) {
             this.socketClient.emit('get: queryAllData', dataToBeQueried)
         }
-        else {
+
+        if (this.state.queryByTimerange) {
 
             // additional check if trying to queryByTimerange when no time is set
             if (this.state.queryStartTime == null || this.state.queryEndTime == null) {
@@ -290,9 +330,10 @@ class ChartPanelTemplate extends Component {
                 // ...dataToBeQueried uses the spread operator in es2015
                 dataToBeQueried = {
                     ...dataToBeQueried,
-                    queryStartTime: this.state.queryStartTime,
-                    queryEndTime: this.state.queryEndTime
+                    queryStartTime: moment.utc(this.state.queryStartTime).valueOf(), // need to convert to epoch time
+                    queryEndTime: moment.utc(this.state.queryEndTime).valueOf() // need to convert to epoch time
                 };
+
                 this.socketClient.emit('get: queryByTimerange', dataToBeQueried)
             }
         }

@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
 import LiveDataTemplate from '../../../templates/LiveDataTemplate';
 
-const initialCols = [
-    ['EC'],
-    ['VWC'],
-    ['TempSoil']
-];
-
 class Decagon5TE extends Component {
 
     render() {
@@ -16,7 +10,6 @@ class Decagon5TE extends Component {
                 <LiveDataTemplate
                     sensorName="Decagon-5TE"
                     sensorID="01"
-                    chartInitialColumns={initialCols}
                     chartType="line"
                 />
             </BaseModuleTemplate>

@@ -2,23 +2,12 @@ import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
 import LiveDataTemplate from '../../../templates/LiveDataTemplate';
 
-const initialCols = [
-    ['First'],
-    ['Second'],
-    ['Third']
-];
-
 class SonicRangeFinder extends Component {
 
     render() {
         return (
             <BaseModuleTemplate moduleName="Sonic-Range-Finder Chart">
-                <LiveDataTemplate
-                    sensorName="Sonic-Range-Finder"
-                    sensorID="03"
-                    chartInitialColumns={initialCols}
-                    chartType="line"
-                />
+                <p>Range Values will go here</p>
             </BaseModuleTemplate>
         );
     }

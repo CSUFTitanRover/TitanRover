@@ -9,6 +9,12 @@ import moment from 'moment';
  Object {id: "01", timestamp: 1479856462231, EC: 1.03, VWC: 0, TempSoil: 22.9}
 
  Object {id: "02", timestamp: 1479856462281, Humidity: 34, TempOutside: 23}
+
+ this.state.columns  = [
+     ['EC', ...Values],
+     ['VWC', ...Values],
+     ['TempSoil', ..Values]
+ ];
  */
 
 class LiveDataTemplate extends Component {
@@ -18,9 +24,12 @@ class LiveDataTemplate extends Component {
 
         this.socketClient = io.connect(rover_settings.homebase_ip); // set client to connect to the port where the homebase server listens on
         this.state = {
-            columns: this.props.chartInitialColumns,
-            isRunning: true
+            isRunning: true,
+            dataObj: null,
+            dataKeys: null
         };
+        this.dataPointsCounter = 0;
+
         this.chartID = this.props.sensorName + '-' + this.props.sensorID; // creating CSS div id for later use
         this.handleStartAndPause = this.handleStartAndPause.bind(this);
     }
@@ -45,45 +54,42 @@ class LiveDataTemplate extends Component {
         });
 
         // updating chart
-        this.socketClient.on('update: chart data', function(jsonObj) {
+        this.socketClient.on('update: chart data', function(dataObj) {
             console.info('update: chart data CALLED');
-            console.info(jsonObj);
+            console.info(dataObj);
 
-            let tempColumns = self.state.columns;
+            let keys = [];
 
-            // loop over each col in columns
-            for(let col of tempColumns) {
-
-                let data_name = col[0]; // e.g. Humidity or TempSoil
-
-                // only allow 6 entries to be visible on the chart
-                // remove first entry and append new entry
-                if(col.length >= 16) {
-                    col.splice(1, 1); // remove entry in index: 1 (first data entry)
-                    col.push(jsonObj[data_name]);
-
-                }
-                // append new entry
-                else {
-                    col.push(jsonObj[data_name]);
+            for(let key in dataObj) {
+                if (dataObj.hasOwnProperty(key)) {
+                    // add all keys in except for ID
+                    if (!(key === 'id')) {
+                        keys.push(key);
+                    }
                 }
             }
 
-            // update columns state
-            self.setState({columns: tempColumns});
+            // When using new Date() the label works but formats the wrong Hour
+            // When using just Date() the label doesnt work but formats the correct Hour
+            // dataObj.timestamp     = Date(dataObj.timestamp);
+            // console.info(dataObj.timestamp);
+
+            self.setState({dataObj: dataObj, dataKeys: keys});
+
+            self.dataPointsCounter++;
         });
 
     }
-    componentDidUpdate() {
-        // load new data into our chart
-        // this.chart.load({
-        //     columns: this.state.columns
-        // });
 
-        // this.chart.flow({
-        //     columns: this.state.columns,
-        //     length: 1,
-        // });
+    componentDidUpdate() {
+        this.chart.flow({
+            json: [this.state.dataObj],
+            keys: {
+                x: 'timestamp',
+                value: this.state.dataKeys,
+            },
+            length: (this.dataPointsCounter > 10) ? 1 : 0
+        });
     }
 
     componentWillUnmount() {
@@ -95,14 +101,22 @@ class LiveDataTemplate extends Component {
         this.chart = c3.generate({
             bindto: '#' + this.chartID.toString(),
             data: {
-                columns: this.state.columns,
-                type: this.props.chartType  // defaults to 'line' if no chartType is supplied by nature of c3.js behavior
+                columns: [],
+                type: this.props.chartType,  // defaults to 'line' if no chartType is supplied by nature of c3.js behavior
             },
             size: {
                 width: this.maxWidth
             },
             zoom: {
                 enabled: true
+            },
+            axis: {
+                x: {
+                    type: 'timeseries',
+                    tick: {
+                        format: '%H:%M:%S' // Error displaying Hour. It's not the correct hour
+                    }
+                }
             },
             ...this.props.chartProps // additional chart properties
         });
