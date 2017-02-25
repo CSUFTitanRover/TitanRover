@@ -49,7 +49,7 @@ const HOMEBASE_PORT = 5000;
 
 // Port that the rover is hosting the udp server
 const PORT = 3000;
-const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
+const HOST = '127.0.0.1'; // Needs to be the IP address of the rover
 
 // Control information
 const CONTROL_MESSAGE_TEST = {
@@ -66,7 +66,7 @@ const SEND_CONTROL_AFTER = 10;
 var packet_count = 0;
 
 // Arm Variables
-var arm_mode = false;
+var arm_mode = true;
 
 // Joystick event handlers
 joystick.on('button', onJoystickData);
@@ -170,3 +170,4 @@ function onJoystickData(event) {
     message = new Buffer(JSON.stringify(event));
 
     send_to_rover(message);
+}

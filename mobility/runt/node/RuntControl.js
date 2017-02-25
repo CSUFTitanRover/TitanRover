@@ -1,6 +1,6 @@
 /*
   Author: Joseph Porter and Joe Edwards
-  Titan Rover - Rover Control
+  Titan Rover - Rover Control (Adapted to the runt)
   Description:
 		Will be accepting commands from the homebase Controller and relaying
 			these commands to its various sub processes
@@ -15,7 +15,21 @@
 var express = require('express');
 var fs = require('fs');
 var bodyParser = require('body-parser');
-var PythonShell = require('python-shell');
+
+var gpio = require('rpi-gpio');
+
+
+// MOTOR Initialization
+const MOTOR1A = 36;
+const MOTOR1B = 38;
+const MOTOR2A = 12;
+const MOTOR2B = 13;
+gpio.setup(MOTOR1A, gpio.DIR_OUT);
+gpio.setup(MOTOR1B, gpio.DIR_OUT);
+gpio.setup(MOTOR2A, gpio.DIR_OUT);
+gpio.setup(MOTOR2B, gpio.DIR_OUT);
+
+
 //var app = express();
 //var server = require('http').Server(app);
 
@@ -29,7 +43,7 @@ var PORT = 3000;
 var HOST = 'localhost';
 
 const HOME_PORT = 5000;
-const HOME_HOST = '192.168.1.143';
+const HOME_HOST = '127.0.0.1';
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
@@ -102,7 +116,6 @@ pwm.setPWMFreq(50);
 
 // NPM Differential Steering Library:
 //    Docs: https://www.npmjs.com/package/diff-steer
-var steerMotors = require('diff-steer/motor_control');
 
 // Global Variables to Keep Track of Asynchronous Translated
 //    Coordinate Assignment
@@ -135,21 +148,24 @@ var speedAdjust = function(x, y) {
     var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX;
     return acceleration;
+};
+
+
+function setLeft(speed) {
+
+    pwm.setPWM(0, 0, parseInt(speed));
+    
 }
 
-
+function setRight(speed) {
+   
+    pwm.setPWM(1, 0, parseInt(speed));
+    
+}
 var setMotors = function(diffSteer) {
-    var options = {
-            mode: 'JSON',
-            pythonPath: '/usr/bin/python',
-            pythonOptions: ['-u'],
-            scriptPath: '../python/js_control_runt.py',
-            args: [diffSteer]
-        };
-    PythonShell.run('joystick_runt_control.py',function(err){
-        if (err) throw err;
-        console.log('finished');
-    });
+    setLeft(diffSteer.leftSpeed);
+    setRight(diffSteer.rightSpeed);
+
 };
 
 /**
@@ -170,9 +186,41 @@ function calculateDiff(yAxis, xAxis) {
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
+
  
     right = right.map(0, Joystick_MAX, saber_min, saber_max);
     left = left.map(Joystick_MIN, 0, saber_min, saber_max);
+
+
+	
+ // Refactor this if you have time 
+    if(right < 0){
+            right = right.map(Joystick_MIN, 0, saber_max, saber_min);
+            gpio.write(MOTOR1A, false);
+            gpio.write(MOTOR1B,true);
+        }else if(right === 0){
+            gpio.write(MOTOR1A, false);
+            gpio.write(MOTOR1B,false);
+        }
+    else {
+            right = right.map(0, Joystick_MAX, saber_min, saber_max);
+            gpio.write(MOTOR1A, true);
+            gpio.write(MOTOR1B,false);
+        }
+    
+    
+    if(left < 0) {
+        left = left.map(Joystick_MIN, 0, saber_max, saber_min);
+        gpio.write(MOTOR2A, true);
+        gpio.write(MOTOR2B,false);
+    }else if(right === 0){
+        gpio.write(MOTOR2A, false);
+        gpio.write(MOTOR2B,false);
+        }else{
+        left = left.map(0, Joystick_MAX, saber_min, saber_max);
+        gpio.write(MOTOR2A, false);
+        gpio.write(MOTOR2B,true);
+    }
 
 
     return {
@@ -191,7 +239,7 @@ function setThrottle(adjust_Amount) {
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = parseInt(joystickData.number);
+    var axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
 
     var diffSteer;
@@ -219,6 +267,9 @@ var receiveMobility = function(joystickData) {
     if (axis === 0 || axis === 1) {
         setMotors(diffSteer);
     }
+
+	
+
 };
 
 // Send 0 to both the x and y axis to stop the rover from running
@@ -315,7 +366,7 @@ server.on('listening', function() {
     console.log('Rover running on: ' + address.address + ':' + address.port);
 });
 
-// recieved a message from the homebase control to perform an action
+// recieved a message from the homebase control perform an action
 server.on('message', function(message, remote) {
 
     var msg = JSON.parse(message);
@@ -342,6 +393,7 @@ server.bind(PORT);
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     stopRover();
+	
     process.exit();
 });
 
@@ -351,6 +403,8 @@ process.on('SIGINT', function() {
     console.log("###### Deleting all files now!!! ######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     stopRover();
+    gpio.destroy(function(){
+	console.log('all pins unexported')});
     // some other closing procedures go here
     process.exit();
 });
