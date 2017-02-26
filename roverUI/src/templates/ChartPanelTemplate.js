@@ -279,6 +279,7 @@ class ChartPanelTemplate extends Component {
                 x: 'timestamp',
                 value: this.state.dataKeys,
             },
+            unload: true // unload any previous data before loading new data
         });
     }
 
