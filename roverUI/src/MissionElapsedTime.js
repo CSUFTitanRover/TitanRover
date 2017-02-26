@@ -9,7 +9,7 @@ class MissionElapsedTime extends Component {
         // load in savedElapsedTime or default to 0
         let savedElapsedTime = parseInt(localStorage.getItem('savedElapsedTime'), 10) || 0;
         // load in savedIsRunning or default to false
-        let savedIsRunning = (localStorage.getItem('savedIsRunning') == 'true') || false;  // convert savedIsRunning (str) to a bool type
+        let savedIsRunning = (localStorage.getItem('savedIsRunning') === 'true') || false;  // convert savedIsRunning (str) to a bool type
 
         this.date = moment().format("MM/DD/YYYY"); // date for current day
         this.tick = this.tick.bind(this);
@@ -60,7 +60,7 @@ class MissionElapsedTime extends Component {
 
     componentDidMount() {
         // check if isRunning is true via loaded from localStorage.savedIsRunning
-        if (this.state.isRunning == true) {
+        if (this.state.isRunning === true) {
             // if so we auto-start the timer
             this.setState({resetDisabled: true});
             //set the interval for every second

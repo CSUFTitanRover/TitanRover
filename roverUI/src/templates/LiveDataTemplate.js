@@ -27,7 +27,8 @@ class LiveDataTemplate extends Component {
         // use maxWidth to hardcode chart width for performance
         // Note: This option should be specified if possible because it can improve its performance because
         // some size calculations will be skipped by an explicit value.
-        this.maxWidth = document.querySelector('#main-content').clientWidth - 50;
+        // set maxWidth to 97% of main-content width. This handles any weird re-sizing quirks.
+        this.maxWidth = document.querySelector('#main-content').clientWidth * 0.97;
 
         // initial render of the chart
         this.renderChart();
@@ -92,9 +93,6 @@ class LiveDataTemplate extends Component {
             },
             size: {
                 width: this.maxWidth
-            },
-            zoom: {
-                enabled: true
             },
             axis: {
                 x: {

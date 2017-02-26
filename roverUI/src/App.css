@@ -154,3 +154,21 @@ body, #react-app, #react-app > * {
     border-radius: 5px;
     border: 2px solid #108ee9;
 }
+
+#bookmark-options {
+    display: flex;
+    align-items: baseline;
+    border-bottom: 1px solid gray;
+}
+#bookmark-options .bookmarks:first-child {
+    margin-right: 75px;
+}
+
+#bookmark-options > * {
+    padding: 0 20px 10px 0;
+}
+
+#bookmark-options .options button{
+    margin: 5px 0;
+    width: 180px;
+}
