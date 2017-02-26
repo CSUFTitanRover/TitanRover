@@ -18,9 +18,7 @@ class App extends Component {
         return (
             <LocaleProvider locale={enUS}>
                 <Layout>
-                    <Sider collapsible
-                           collapsedWidth="115"
-                    >
+                    <Sider>
                         <Header><div className="logo">Titan Rover</div></Header>
                         <NavMenu/>
                     </Sider>

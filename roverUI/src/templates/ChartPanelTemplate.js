@@ -23,16 +23,46 @@ class PanelOptions extends Component {
             tempStartTime: null, // temporary time holders for the time-pickers
             tempEndTime: null    // temporary time holders for the time-pickers
         };
-
-        this.handleOnChange = this.handleOnChange.bind(this);
+        this.options = [];
+        this.uniqueKey = 0; // used so React doesn't yell at you for not suppling a unique key to an obj in an array
+        this.handleRadioChange = this.handleRadioChange.bind(this);
         this.showModal = this.showModal.bind(this);
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.handleStartTimeChange = this.handleStartTimeChange.bind(this);
         this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
+        this.handleBookmarkChange = this.handleBookmarkChange.bind(this);
+        this.displayRender = this.displayRender.bind(this);
     }
 
-    handleOnChange(event) {
+    // helper method with formatting bookmark options
+    buildBookmarkOption(parentArr, objList) {
+        for(let startTimeKey in objList) {
+            let temp = {
+                value: moment(parseInt(startTimeKey)),
+                label: moment(parseInt(startTimeKey)).format("HH:mm:ss"),
+                children: objList[startTimeKey].map(endTime => {
+                    let endTimeObj = {value: moment(endTime), label: moment(endTime).format("HH:mm:ss")};
+                    return endTimeObj;
+                })
+            };
+
+            parentArr.push(temp);
+        }
+    }
+
+    componentDidMount() {
+        // Build bookmark options on mount
+        let timerangeBookmarks = JSON.parse(localStorage.getItem("timerangeBookmarks"));
+
+        for (let key in timerangeBookmarks) {
+            let obj = {value: key, label: key, children: [], key: this.uniqueKey++};
+            this.buildBookmarkOption(obj.children, timerangeBookmarks[key]);
+            this.options.push(obj);
+        }
+    }
+
+    handleRadioChange(event) {
         // swapping values based on event.target.value
         if (event.target.value == 'queryAllData') {
             this.setState({
@@ -84,54 +114,24 @@ class PanelOptions extends Component {
         this.setState({tempEndTime: time})
     }
 
-    displayRender = (labels, selectedOptions) => labels.map((label, i) => {
-        const option = selectedOptions[i];
-        if (i == 1) {
-            return (
-                <span key={option.value}>
-                    {label} -
-                </span>
-            );
+    displayRender(label) {
+        if (label.length == 0) {
+            return <span/>
         }
-        if (i == 2) {
-            return (
-                <span key={option.value}>
-                     &nbsp;{label}
-                </span>
-            );
+        else {
+            return <span>{label[0] + ': ' + label[1] + ' - ' + label[2]}</span>
         }
-        return <span key={option.value}>{label} / </span>;
-    });
+    }
+
+    handleBookmarkChange(value) {
+        this.setState({tempStartTime: value[1], tempEndTime: value[2]})
+    }
+
 
     render() {
-        const options = [{
-            value: 'DHT-11',
-            label: 'DHT-11',
-            children: [{
-                value: '12:00:06',
-                label: '12:00:06',
-                children: [{
-                    value: '16:49:06',
-                    label: '16:49:06',
-                }],
-            }],
-        }, {
-            value: 'Decagon-5TE',
-            label: 'Decagon-5TE',
-            children: [{
-                value: '00:04:36',
-                label: '00:04:36',
-                children: [{
-                    value: '00:10:56',
-                    label: '00:10:56',
-                }],
-            }],
-        }];
-
-
         return (
             <div>
-                <RadioGroup onChange={this.handleOnChange} defaultValue="queryAllData">
+                <RadioGroup onChange={this.handleRadioChange} defaultValue="queryAllData">
                     <RadioButton value="queryAllData">Query All Data</RadioButton>
                     <RadioButton value="queryByTimerange" onClick={this.showModal}>Query By Timerange</RadioButton>
                 </RadioGroup>
@@ -143,11 +143,12 @@ class PanelOptions extends Component {
                 >
                     <div>
                         <h3>Bookmarked Timestamps - Autofill Time Pickers</h3>
-                        <Cascader options={options}
-                                  displayRender={this.displayRender}
+                        <Cascader options={this.options}
                                   style={{ width: 270 }}
                                   size="large"
                                   placeholder="Bookmarked Timestamps"
+                                  onChange={this.handleBookmarkChange}
+                                  displayRender={this.displayRender}
                         />
                     </div>
 
@@ -168,7 +169,7 @@ class PanelOptions extends Component {
                             <TimePicker value={this.state.tempEndTime} onChange={this.handleEndTimeChange} placeholder="End Time"
                                 addon={panel => (
                                     <Button size="small" type="primary" onClick={() => panel.close()}>
-                                    Ok
+                                        Ok
                                     </Button>
                                 )}
                             />
@@ -192,7 +193,7 @@ class ChartPanelTemplate extends Component {
             queryAllData: true, // defualt value
             queryByTimerange: false // default value
         };
-
+        this.uniqueKey = 0;
         this.socketClient = io.connect(rover_settings.homebase_ip);
         this.handleDeleteChartPanel = this.handleDeleteChartPanel.bind(this);
         this.queryData = this.queryData.bind(this);
@@ -202,7 +203,7 @@ class ChartPanelTemplate extends Component {
 
     componentDidMount() {
         // initial render of the chart
-        this._renderChart();
+        this.renderChart();
 
         let self = this; // preserve "this"
 
@@ -281,7 +282,7 @@ class ChartPanelTemplate extends Component {
         });
     }
 
-    _renderChart() {
+    renderChart() {
         this.chart = c3.generate({
             bindto: '#' + this.props.chartID,
             data: {
@@ -330,8 +331,8 @@ class ChartPanelTemplate extends Component {
                 // ...dataToBeQueried uses the spread operator in es2015
                 dataToBeQueried = {
                     ...dataToBeQueried,
-                    queryStartTime: moment.utc(this.state.queryStartTime).valueOf(), // need to convert to epoch time
-                    queryEndTime: moment.utc(this.state.queryEndTime).valueOf() // need to convert to epoch time
+                    queryStartTime: moment(this.state.queryStartTime).valueOf(), // need to convert to epoch time
+                    queryEndTime: moment(this.state.queryEndTime).valueOf() // need to convert to epoch time
                 };
 
                 this.socketClient.emit('get: queryByTimerange', dataToBeQueried)
@@ -353,7 +354,7 @@ class ChartPanelTemplate extends Component {
 
     render() {
         let chartTypes = ['line','spline','step','area','area-spline','area-step','bar','scatter','pie','donut','gauge'];
-        let chartTypeOptions = chartTypes.map(type => <Option value={type}>{type} chart</Option>);
+        let chartTypeOptions = chartTypes.map(type => <Option value={type} key={this.uniqueKey++}>{type} chart</Option>);
 
         return (
             <Layout>

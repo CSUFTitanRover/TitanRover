@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'antd';
+import moment from 'moment';
 
 class MissionElapsedTime extends Component {
     constructor(props) {
@@ -10,8 +11,7 @@ class MissionElapsedTime extends Component {
         // load in savedIsRunning or default to false
         let savedIsRunning = (localStorage.getItem('savedIsRunning') == 'true') || false;  // convert savedIsRunning (str) to a bool type
 
-        let _d = new Date(); // temp date obj
-        this.date = _d.getFullYear() + '/' + _d.getDate() + '/' + (_d.getMonth()+1); // date for current day
+        this.date = moment().format("MM/DD/YYYY"); // date for current day
         this.tick = this.tick.bind(this);
         this.handleStartAndPause = this.handleStartAndPause.bind(this);
         this.handleReset = this.handleReset.bind(this);
@@ -24,10 +24,7 @@ class MissionElapsedTime extends Component {
     }
 
     tick() {
-        this.setState((prevState) => ({
-            elapsedTotalTime: prevState.elapsedTotalTime + 1
-        }));
-
+        this.setState({elapsedTotalTime: this.state.elapsedTotalTime + 1});
         localStorage.setItem('savedElapsedTime', this.state.elapsedTotalTime);
     }
 
@@ -58,16 +55,7 @@ class MissionElapsedTime extends Component {
     }
 
     formatTime(passed_time) {
-        let sec_num = passed_time;
-        let hours   = Math.floor(sec_num / 3600);
-        let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-        let seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-        if (hours   < 10) {hours   = "0" + hours;}
-        if (minutes < 10) {minutes = "0" + minutes;}
-        if (seconds < 10) {seconds = "0" + seconds;}
-
-        return hours+':'+minutes+':'+seconds;
+        return moment().hour(0).minute(0).second(passed_time).format('HH:mm:ss');
     }
 
     componentDidMount() {
