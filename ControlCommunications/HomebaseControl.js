@@ -42,7 +42,8 @@ number = 5: Y top of joystick value is either -32767 up or 32767 down
 
 // Make sure the joystick is plugged into the computer
 
-var joystick = new(require('joystick'))(0, 3500, 500);
+var joystick_0 = new(require('joystick'))(0, 3500, 500);
+var joystick_1 = new(require('joystick'))(1, 3500, 500);
 var request = require('request');
 
 var dgram = require('dgram');
@@ -67,15 +68,17 @@ const CONTROL_MESSAGE_ACK = {
     type: "ack"
 };
 
-const SEND_CONTROL_AFTER = 10;
+const SEND_CONTROL_AFTER = 20;
 var packet_count = 0;
 
 // Arm Variables
 var arm_mode = false;
 
 // Joystick event handlers
-joystick.on('button', onJoystickData);
-joystick.on('axis', onJoystickData);
+joystick_0.on('button', handleJoystick_0);
+joystick_0.on('axis', handleJoystick_0);
+joystick_1.on('button', handleJoystick_1);
+joystick_1.on('axis', handleJoystick_1);
 
 // Socket event handlers
 socket.on('listening', function() {
@@ -95,44 +98,12 @@ socket.on('message', function(message, remote) {
 
 socket.bind(HOMEBASE_PORT);
 
-/*function sendCommand(command) {
-    console.log(command);
-    request.post({
-		url: URL_ROVER,
-		method: 'POST',
-		json: true,
-		body: command
-	}, function(error, res, body) {
-		if (error) {
-			console.log('ERROR OCCURED!!');
-		}
-		else {
-			console.log(res.statusCode);
-		}
-	});
-}
-*/
-
-/*function onJoystickData(event) {
-
-    //console.log(event);
-
-    // If it is axis data send as mobility
-    if(event.type == "axis") {
-	// If it is X or Y axis
-	if(event.number == 0 || event.number == 1) {
-        	event.commandType = "mobility";
-	}
-    }
-
-    sendCommand(event);
-}*/
-
 /**
   Will send the data message back to the rover to be process there
   * @param {Buffer}
 */
 function send_to_rover(message) {
+    message = new Buffer(JSON.stringify(message));
     socket.send(message, 0, message.length, PORT, HOST, function(err) {
         if (err) {
             console.log("Problem with sending data!!!");
@@ -143,39 +114,31 @@ function send_to_rover(message) {
     });
 }
 
-function onJoystickData(event) {
+
+// Joystick for Mobility
+function handleJoystick_0(event) {
 
     var message;
 
-    if (packet_count > SEND_CONTROL_AFTER) {
-        message = new Buffer(JSON.stringify(CONTROL_MESSAGE_TEST));
-        //console.log("Sending Control MESSAGE: " + packet_count);
-        send_to_rover(message);
-    }
-
-    if (arm_mode) {
-        if (event.type == "axis") {
-            event.commandType = "arm";
-        }
-    } else {
-        if (event.type == "axis") {
-            if (event.number == 0 || event.number == 1 || event.number == 3) {
-                event.commandType = "mobility";
-            }
+    if (event.type == "axis") {
+        if (event.number == 0 || event.number == 1 || event.number == 3) {
+            event.commandType = "mobility";
+            send_to_rover(event);
         }
     }
-    //console.log(event);
+}
 
 
-    // Handle button presses
-    if (event.type == "button") {
-        // Change joystick from mobility to arm control
-        if (event.number == 1 && event.value == 1) {
-            arm_mode = arm_mode ? false : true;
+// Joystick for Arm
+function handleJoystick_1(event) {
+
+    if (event.type == 'axis') {
+        event.commandType = 'arm';
+        send_to_rover(event);
+    } else if (event.type == 'button') {
+        if (event.number == 0 || event.number == 1) {
+            event.commandType = 'arm';
+            send_to_rover(event);
         }
     }
-
-    message = new Buffer(JSON.stringify(event));
-
-    send_to_rover(message);
 }

@@ -22,6 +22,12 @@ const char joint6_on = '7';
 const char joint6_off = '8';
 bool joint6_isOn = false;
 
+const uint8_t joint7_out = 6;
+const uint8_t joint7_ss = 4;
+const char joint7_on = '9';
+const char joint7_off = '0';
+bool joint7_isOn = false;
+
 AMIS30543 joint6_stepper;
 AMIS30543 joint7_stepper;
 
@@ -74,6 +80,10 @@ void loop() {
     {
       joint6_isOn = true;
     }
+    else if(num == joint7_on)
+    {
+      joint7_isOn = true;
+    }
     else if(num == joint1_off)
     {
       joint1_isOn = false;
@@ -89,6 +99,10 @@ void loop() {
     else if(num == joint6_off)
     {
       joint6_isOn = false;
+    }
+    else if(num == joint7_off)
+    {
+      joint7_isOn = true;
     }
   }
 
@@ -114,6 +128,12 @@ void loop() {
   {
     digitalWrite(joint6_out, HIGH);
     digitalWrite(joint6_out, LOW);
+  }
+
+  if(joint7_isOn)
+  {
+    digitalWrite(joint7_out, HIGH);
+    digitalWrite(joint7_out, LOW);
   }
 
   delay(1);

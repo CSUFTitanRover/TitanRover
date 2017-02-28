@@ -91,6 +91,8 @@ const saber_max = 409; // Calculated to be 2000 us
 // Joystick values
 const Joystick_MIN = -32767;
 const Joystick_MAX = 32767;
+var triggerPressed = false;
+var thumbPressed = false;
 
 // PWM Channel Config Motor:
 const motor_left_channel = 0;
@@ -116,6 +118,12 @@ const joint1_off = '2';
 // Set all pins to low on init
 rpio.open(joint1_dir_pin, rpio.OUTPUT, rpio.LOW);
 rpio.open(joint1_enab_pin, rpio.OUTPUT, rpio.LOW);
+
+// Joint2 PWM pins
+const joint2_pwm_pin = 4;
+
+// Joint3 PWM pins
+const joint3_pwm_pin = 5;
 
 // joint 4 Sumtor pins
 const joint4_dir_pin = 32;
@@ -144,6 +152,14 @@ const joint6_off = '8';
 
 // Set all pins to low on init
 rpio.open(joint6_dir_pin, rpio.OUTPUT, rpio.LOW);
+
+// Joint 7 Pololu pins
+const joint7_dir_pin = 0;
+const joint7_on = '9';
+const joint7_off = '0';
+
+// Set all pins to low on init
+rpio.open(joint7_dir_pin, rpio.OUPTUT, rpio.LOW);
 
 
 // Pins to destroy
@@ -292,6 +308,18 @@ var receiveMobility = function(joystickData) {
 function stopRover() {
     receiveMobility(zeroMessage[0]);
     receiveMobility(zeroMessage[1]);
+
+    // Shutdown the arm
+    /*y
+    port.write(joint1_off);
+    port.write(joint2_off);
+    port.write(joint3_off);
+    port.write(joint4_off);
+    port.write(joint5_off);
+    port.write(joint6_off);
+    port.write(joint7_off);
+    */
+
 }
 
 // Send data to the homebase control for connection information
@@ -313,7 +341,7 @@ setInterval(function() {
     gotAckRover = false;
     setTimeout(function() {
         if (gotAckRover === false) {
-            console.log("Stopping Rover: TEST CONNECTION from rover")
+            console.log("Stopping Rover: ROVER lost connection to HOME")
             stopRover();
         }
     }, TIME_TO_STOP);
@@ -321,7 +349,7 @@ setInterval(function() {
 
 /**
   Will handle the control messages that will tell us we have disconnected.
-  * @param {JSON}
+  * @param {JSON} message
 */
 function handleControl(message) {
     var msg;
@@ -337,7 +365,7 @@ function handleControl(message) {
         // Start a timer to see if we are still connected otherwise stop the rover moving
         setTimeout(function() {
             if (gotAck === false) {
-                console.log("Stopping Rover: Test from HOME");
+                console.log("Stopping Rover: HOME tried to test us");
                 stopRover();
             }
         }, TIME_TO_STOP);
@@ -351,35 +379,35 @@ function handleControl(message) {
 
 }
 
-function setPWM_HIGH(channel) {
-    // PWM should go from LOW to HIGH right at the begginning
-    // then should not go back down.
-    pwm.setPWM(channel, 4095, 0);
-}
-
-function setPWM_LOW(channel) {
-    // PWM should go from LOW to never going HIGH
-    pwm.setPWM(channel, 0, 0);
-}
-
+/**
+ * Sends a PWM signal to the appropriate Linear Actuator
+ * @param {int} channel PWM pin of linear Actuator
+ * @param {int} value Will be between -32767 and 32767
+ */
 function setLinearSpeed(channel, value) {
     const linear_min = 241; // Calculated to be 1000 us
     const linear_mid = 325; // Calculated to be 1500 us
     const linear_max = 409; // Calculated to be 2000 us
 
+    var pwmSig;
+
     if (value <= 0) {
-        pwm.setPWM(channel, 0, parseInt(value.map(Joystick_MIN, 0, linear_min, linear_mid)));
+        pwmSig = parseInt(value.map(Joystick_MIN, 0, linear_min, linear_mid));
+        pwm.setPWM(channel, 0, pwmSig);
     } else {
-        pwm.setPWM(channel, 0, parseInt(value.map(0, Joystick_MAX, linear_mid, linear_max)));
+        pwmSig = parseInt(value.map(0, Joystick_MAX, linear_mid, linear_max));
+        pwm.setPWM(channel, 0, pwmSig);
     }
 }
 
-
+/**
+ * Joint1: Phantom Menace
+ * The rotating base for the arm
+ * Driver: Sumtor mb450a
+ */
 function joint1_rotatingBase(message) {
     let value = parseInt(message.value);
     let direction = (value < 0) ? true : false;
-
-    //console.log("rotating with value: " + value);
 
     if (direction) {
         rpio.write(joint1_dir_pin, rpio.HIGH);
@@ -388,31 +416,41 @@ function joint1_rotatingBase(message) {
     }
 
     if (value == 0) {
-        //console.log("Stopping Arm");
-        //rpio.write(joint1_move_pin, rpio.LOW);
         port.write(joint1_off);
     } else {
-        //rpio.write(joint1_move_pin, rpio.HIGH);
         port.write(joint1_on);
     }
 
 }
 
+/**
+ * Joint2: Attack of the Clones
+ * Will be the longer first linear Actuator
+ * Driver: Actobotics Dual Motor Controller
+ */
 function joint2_linear1(message) {
     let value = parseInt(message.value);
     setLinearSpeed(joint2_pwm_pin, value);
 }
 
+/**
+ * Joint3: Revenge of the Sith
+ * Will be the smaller second linear Actuator
+ * Driver: Actobotics Dual Motor Controller
+ */
 function joint3_linear2(message) {
     let value = parseInt(message.value);
     setLinearSpeed(joint3_pwm_pin, value);
 }
 
+/**
+ * Joint4: A New Hope
+ * The 180 degree wrist
+ * Driver: Sumtor mb450a
+ */
 function joint4_rotateWrist(message) {
     let value = parseInt(message.value);
     let direction = (value < 0) ? true : false;
-
-    //console.log("rotating with value: " + value);
 
     if (direction) {
         rpio.write(joint4_dir_pin, rpio.HIGH);
@@ -421,16 +459,18 @@ function joint4_rotateWrist(message) {
     }
 
     if (value == 0) {
-        //console.log("Stopping Arm");
-        //rpio.write(joint4_move_pin, rpio.LOW);
         port.write(joint4_off);
     } else {
-        //rpio.write(joint4_move_pin, rpio.HIGH);
         port.write(joint4_on);
     }
 
 }
 
+/**
+ * Joint5: Empire Strikes Back
+ * The 90 degree joint
+ * Driver: Sumtor mb450a
+ */
 function joint5_90degree(message) {
     let value = parseInt(message.value);
     let direction = (value < 0) ? true : false;
@@ -442,16 +482,18 @@ function joint5_90degree(message) {
     }
 
     if (value == 0) {
-        //console.log("Stopping Arm");
-        //rpio.write(joint5_move_pin, rpio.LOW);
         port.write(joint5_off);
     } else {
-        //rpio.write(joint5_move_pin, rpio.HIGH);
         port.write(joint5_on);
     }
 
 }
 
+/**
+ * Joint6: Return of the Jedi
+ * 360 degree rotation of this joint no need for limit switches
+ * Driver is a Pololu
+ */
 function joint6_360Unlimited(message) {
     let value = parseInt(message.value);
     let direction = (value < 0) ? true : false;
@@ -469,35 +511,117 @@ function joint6_360Unlimited(message) {
     }
 }
 
-function joint7(message) {}
+/**
+ * Joint7: The Force Awakings
+ * The gripper that is a linear actuator
+ * Driver: Pololu AMIS-30543
+ */
+function joint7_gripper(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? true : false;
+
+    if (direction) {
+        rpio.write(joint7_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint7_dir_pin, rpio.LOW);
+    }
+
+    if (value == 0) {
+        port.write(joint7_off);
+    } else {
+        port.write(joint7_on);
+    }
+}
+
+/**
+ * Tell this joint to stop moving
+ * @param {int} jointNum 1 - 7
+ */
+function stopJoint(jointNum) {
+    switch (jointNum) {
+        case 1:
+            port.write(joint1_off);
+            break;
+        case 2:
+            port.write(joint2_off);
+            break;
+        case 3:
+            port.write(joint3_off);
+            break;
+        case 4:
+            port.write(joint4_off);
+            break;
+        case 5:
+            port.write(joint5_off);
+            break;
+        case 6:
+            port.write(joint6_off);
+            break;
+        case 7:
+            port.write(joint7_off);
+            break;
+        default:
+            console.log(jointNum + " joint does not exist");
+    }
+}
 
 
 // Will handle control of the arm one to one.
 // Still need to figure out mapping of the joystick controller.
 function armControl(message) {
-    var axis = parseInt(message.number);
-    //console.log("Axis: " + axis);
-    // Determine which axis should be which joint.
-    switch (axis) {
-        case 0:
-            //joint3_linear2(message);
-            break;
-        case 1:
-            joint6_360Unlimited(message);
-            break;
-        case 2:
-            joint1_rotatingBase(message);
-            break;
-        case 3:
-            break;
-        case 4:
-            joint4_rotateWrist(message);
-            break;
-        case 5:
-            joint5_90degree(message);
-            break;
-        default:
 
+    if (message.type == 'axis') {
+        var axis = parseInt(message.number);
+        // Determine which axis should be which joint.
+        switch (axis) {
+            case 0:
+                if (thumbPressed) {
+                    joint3_linear2(message);
+                } else {
+                    joint6_360Unlimited(message);
+                }
+                break;
+            case 1:
+                if (thumbPressed) {
+                    joint2_linear1(message);
+                } else {
+                    joint4_rotateWrist(message);
+                }
+                break;
+            case 2:
+                joint1_rotatingBase(message);
+                break;
+            case 3:
+                break;
+            case 4:
+                joint5_90degree(message);
+                break;
+            case 5:
+                joint7_gripper(message);
+                break;
+            default:
+
+        }
+    } else if (message.type == 'button') {
+        var button = parseInt(message.number);
+        var val = parseInt(message.value);
+
+        switch (button) {
+            case 0:
+                triggerPressed = val;
+                break;
+            case 1:
+                thumbPressed = val;
+                if (thumbPressed) {
+                    stopJoint(2);
+                    stopJoint(3);
+                } else {
+                    stopJoint(4);
+                    stopJoint(6);
+                }
+                break;
+            default:
+        }
     }
 }
 
@@ -547,8 +671,7 @@ process.on('SIGTERM', function() {
 
 // On SIGINT shutdown the server
 process.on('SIGINT', function() {
-    console.log("\n####### Should not have pressed that!! #######\n");
-    console.log("###### Deleting all files now!!! ######\n");
+    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     stopRover();
     closePins();

@@ -75,6 +75,9 @@ MOSI: 11 Master Out Slave In
 MISO: 12 Master In Slave Out  
 SCK: 13 Clock to Synchronize data transfer  
 
+![alt text][pinout]  
+[pinout]:https://github.com/CSUFTitanRover/TitanRover/tree/master2017/ControlCommunications/pics/RoverControl.png "Pinout"
+
 ## Problems we faced  
 We first tried getting the pi to generate the GPIO signals needed to drive the stepper motors, but it wasn't fast enough.  
 So we then tried using PWM and set it to its full high over its duty cycle, this seemed to make things worse not better.
