@@ -1,4 +1,5 @@
 /*
+  Author: Joseph Porter
   Titan Rover - Command Station Control
   Description:
 		Will be capturing events from the UI, Joystick, Keyboard, and etc...
