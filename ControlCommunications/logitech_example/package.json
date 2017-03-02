@@ -1,0 +1,11 @@
+{
+  "name": "autonomous",
+  "version": "1.0.0",
+  "description": "Using sabretooth code for autonomous drive",
+  "main": "autonomousControl.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
