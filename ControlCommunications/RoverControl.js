@@ -35,7 +35,7 @@ var PORT = 3000;
 var HOST = 'localhost';
 
 const HOME_PORT = 5000;
-const HOME_HOST = '192.168.1.143';
+var HOME_HOST = '';
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
@@ -154,12 +154,12 @@ const joint6_off = '8';
 rpio.open(joint6_dir_pin, rpio.OUTPUT, rpio.LOW);
 
 // Joint 7 Pololu pins
-const joint7_dir_pin = 0;
+const joint7_dir_pin = 16;
 const joint7_on = '9';
 const joint7_off = '0';
 
 // Set all pins to low on init
-rpio.open(joint7_dir_pin, rpio.OUPTUT, rpio.LOW);
+rpio.open(joint7_dir_pin, rpio.OUTPUT, rpio.LOW);
 
 
 // Pins to destroy
@@ -238,7 +238,7 @@ function calculateDiff(yAxis, xAxis) {
     //yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
 
     //xAxis = xAxis * -1;
-    //yAxis = yAxis * -1;
+    yAxis = yAxis * -1;
 
     var V = (32767 - Math.abs(xAxis)) * (yAxis / 32767.0) + yAxis;
     var W = (32767 - Math.abs(yAxis)) * (xAxis / 32767.0) + xAxis;
@@ -310,20 +310,19 @@ function stopRover() {
     receiveMobility(zeroMessage[1]);
 
     // Shutdown the arm
-    /*y
     port.write(joint1_off);
-    port.write(joint2_off);
-    port.write(joint3_off);
+    setLinearSpeed(joint2_pwm_pin, 0);
+    setLinearSpeed(joint3_pwm_pin, 0);
     port.write(joint4_off);
     port.write(joint5_off);
     port.write(joint6_off);
     port.write(joint7_off);
-    */
 
 }
 
 // Send data to the homebase control for connection information
 function sendHome(msg) {
+    msg = new Buffer(JSON.stringify(msg));
     server.send(msg, 0, msg.length, HOME_PORT, HOME_HOST, function(err) {
         if (err) {
             console.log("Problem with sending data!!!");
@@ -336,8 +335,7 @@ function sendHome(msg) {
 // Will test the connection to the homebase controller every TEST_CONNECTION times
 // Will stop the rover if we have lost connection after TIME_TO_STOP
 setInterval(function() {
-    var msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
-    sendHome(msg);
+    sendHome(CONTROL_MESSAGE_ROVER);
     gotAckRover = false;
     setTimeout(function() {
         if (gotAckRover === false) {
@@ -352,15 +350,13 @@ setInterval(function() {
   * @param {JSON} message
 */
 function handleControl(message) {
-    var msg;
 
     //console.log("Control Message with type: " + message.type);
 
     // If the homestation is testing our connection
     if (message.type == "test") {
         gotAck = false;
-        msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
-        sendHome(msg);
+        sendHome(CONTROL_MESSAGE_ROVER);
 
         // Start a timer to see if we are still connected otherwise stop the rover moving
         setTimeout(function() {
@@ -543,10 +539,10 @@ function stopJoint(jointNum) {
             port.write(joint1_off);
             break;
         case 2:
-            port.write(joint2_off);
+            setLinearSpeed(joint2_pwm_pin, 0);
             break;
         case 3:
-            port.write(joint3_off);
+            setLinearSpeed(joint3_pwm_pin, 0);
             break;
         case 4:
             port.write(joint4_off);
@@ -575,23 +571,26 @@ function armControl(message) {
         // Determine which axis should be which joint.
         switch (axis) {
             case 0:
+                // Thumb button had to be pressed in order to use joint6
                 if (thumbPressed) {
-                    joint3_linear2(message);
-                } else {
                     joint6_360Unlimited(message);
+                } else {
+                    joint3_linear2(message);
                 }
                 break;
             case 1:
+                // Thumb button had to be pressed in order to use joint4
                 if (thumbPressed) {
-                    joint2_linear1(message);
-                } else {
                     joint4_rotateWrist(message);
+                } else {
+                    joint2_linear1(message);
                 }
                 break;
             case 2:
                 joint1_rotatingBase(message);
                 break;
             case 3:
+                // This is the throttle
                 break;
             case 4:
                 joint5_90degree(message);
@@ -611,7 +610,8 @@ function armControl(message) {
                 triggerPressed = val;
                 break;
             case 1:
-                thumbPressed = val;
+                // Switch our config to use other arm joints
+                thumbPressed = (thumbPressed) ? false : true;
                 if (thumbPressed) {
                     stopJoint(2);
                     stopJoint(3);
@@ -633,6 +633,8 @@ server.on('listening', function() {
 
 // recieved a message from the homebase control to perform an action
 server.on('message', function(message, remote) {
+
+    HOME_HOST = remote.address;
 
     var msg = JSON.parse(message);
     //console.log(msg.commandType);

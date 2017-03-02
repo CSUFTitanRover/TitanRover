@@ -72,7 +72,7 @@ const SEND_CONTROL_AFTER = 20;
 var packet_count = 0;
 
 // Arm Variables
-var arm_mode = false;
+var arm_joint = false;
 
 // Joystick event handlers
 joystick_0.on('button', handleJoystick_0);
@@ -92,7 +92,7 @@ socket.on('message', function(message, remote) {
     if (msg.type == "rover_ack") {
         //console.log("Rover sent an ack");
         packet_count = 0;
-        send_to_rover(new Buffer(JSON.stringify(CONTROL_MESSAGE_ACK)));
+        send_to_rover(CONTROL_MESSAGE_ACK);
     }
 });
 
@@ -118,12 +118,14 @@ function send_to_rover(message) {
 // Joystick for Mobility
 function handleJoystick_0(event) {
 
-    var message;
-
     if (event.type == "axis") {
         if (event.number == 0 || event.number == 1 || event.number == 3) {
             event.commandType = "mobility";
             send_to_rover(event);
+        }
+    } else if (event.type == 'button') {
+        if (event.number == 10 && event.value == 1) {
+            console.log("Mobility Joystick!!");
         }
     }
 }
@@ -136,9 +138,25 @@ function handleJoystick_1(event) {
         event.commandType = 'arm';
         send_to_rover(event);
     } else if (event.type == 'button') {
-        if (event.number == 0 || event.number == 1) {
+
+        // Handle each button seperatly since they could have different uses such as
+        // hold down of press once
+
+        // Trigger
+        if (event.number == 0) {
             event.commandType = 'arm';
             send_to_rover(event);
+        } else if (event.number == 1 && event.value == 1) { // Thumb
+            event.commandType == 'arm';
+            arm_joint = (arm_joint) ? false : true;
+            if (arm_joint) {
+                console.log("Joint 4 and 6 ## ONLINE ##\nJoint 2 and 3 ## OFFLINE ##");
+            } else {
+                console.log("Joint 2 and 3 ## ONLINE ##\nJoint 4 and 6 ## OFFLINE ##");
+            }
+            send_to_rover(event);
+        } else if (event.number == 10 && event.value == 1) { // Button 11: Determine which joystick is what
+            console.log("Arm Joystick!!");
         }
     }
 }
