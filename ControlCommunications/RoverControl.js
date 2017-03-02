@@ -89,8 +89,8 @@ const saber_mid = 325; // Calculated to be 1500 us
 const saber_max = 409; // Calculated to be 2000 us
 
 // Joystick values
-const Joystick_MIN = -32767;
-const Joystick_MAX = 32767;
+const Joystick_MIN = -1.0;
+const Joystick_MAX = 1.0;
 var triggerPressed = false;
 var thumbPressed = false;
 
@@ -240,8 +240,8 @@ function calculateDiff(yAxis, xAxis) {
     //xAxis = xAxis * -1;
     //yAxis = yAxis * -1;
 
-    var V = (32767 - Math.abs(xAxis)) * (yAxis / 32767.0) + yAxis;
-    var W = (32767 - Math.abs(yAxis)) * (xAxis / 32767.0) + xAxis;
+    var V = (Joystick_MAX - Math.abs(xAxis)) * (yAxis / Joystick_MAX) + yAxis;
+    var W = (Joystick_MAX - Math.abs(yAxis)) * (xAxis / Joystick_MAX) + xAxis;
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
@@ -273,7 +273,7 @@ function setThrottle(adjust_Amount) {
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = parseInt(joystickData.number);
+    let axis = parseInt(joystickData.axis);
     var value = parseInt(joystickData.value);
 
     var diffSteer;
@@ -382,7 +382,7 @@ function handleControl(message) {
 /**
  * Sends a PWM signal to the appropriate Linear Actuator
  * @param {int} channel PWM pin of linear Actuator
- * @param {int} value Will be between -32767 and 32767
+ * @param {int} value Will be between -1 and Joystick_MAX
  */
 function setLinearSpeed(channel, value) {
     const linear_min = 241; // Calculated to be 1000 us

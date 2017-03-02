@@ -42,12 +42,14 @@ number = 5: Y top of joystick value is either -32767 up or 32767 down
 
 // Make sure the joystick is plugged into the computer
 
-var joystick_0 = new(require('joystick'))(0, 3500, 500);
-var joystick_1 = new(require('joystick'))(1, 3500, 500);
+var gamepad = require('gamepad');
 var request = require('request');
 
 var dgram = require('dgram');
 var socket = dgram.createSocket('udp4');
+
+// Initialize the library
+gamepad.init();
 
 //var URL_ROVER = 'http://localhost:3000/command';
 
@@ -73,12 +75,6 @@ var packet_count = 0;
 
 // Arm Variables
 var arm_mode = false;
-
-// Joystick event handlers
-joystick_0.on('button', handleJoystick_0);
-joystick_0.on('axis', handleJoystick_0);
-joystick_1.on('button', handleJoystick_1);
-joystick_1.on('axis', handleJoystick_1);
 
 // Socket event handlers
 socket.on('listening', function() {
@@ -114,31 +110,26 @@ function send_to_rover(message) {
     });
 }
 
+// Listen for move events  
+gamepad.on("move", function (id, axis, value) {
+    
+    event =  {
+        id: id,
+        axis: axis,
+        value: value,
+        commandType: null
+    };
 
-// Joystick for Mobility
-function handleJoystick_0(event) {
-
-    var message;
-
-    if (event.type == "axis") {
-        if (event.number == 0 || event.number == 1 || event.number == 3) {
-            event.commandType = "mobility";
-            send_to_rover(event);
-        }
+    // If the axis is 0 or 1 it is the left joystick
+    if(axis <= 1){
+        event.commandType = "mobility";
     }
-}
-
-
-// Joystick for Arm
-function handleJoystick_1(event) {
-
-    if (event.type == 'axis') {
-        event.commandType = 'arm';
-        send_to_rover(event);
-    } else if (event.type == 'button') {
-        if (event.number == 0 || event.number == 1) {
-            event.commandType = 'arm';
-            send_to_rover(event);
-        }
+    // Axis 2 and 3 (right joystick) controls inverse kinematics limb 1 and 2
+    // Axis 4 and 5 (d-pad) will be used to control the rotating base and last limb
+    else if(axis <= 5){
+        event.commandType = "arm";
     }
-}
+    send_to_rover(event);
+});
+
+
