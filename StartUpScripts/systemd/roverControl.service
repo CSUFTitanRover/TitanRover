@@ -1,0 +1,15 @@
+[Unit]
+Description=Rover Control Server
+
+[Service]
+ExecStart=/usr/local/bin/node /home/pi/TitanRover/ControlCommunications/RoverControl.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=RoverControl
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target

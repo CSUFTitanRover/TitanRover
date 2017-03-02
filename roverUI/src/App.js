@@ -1,19 +1,35 @@
 import React, { Component } from 'react';
-import Navbar from './Navbar';
 import MissionElapsedTime from './MissionElapsedTime';
 import './App.css';
+import '../public/iconfont/iconfont.css';
 import 'd3';
+import { Layout, LocaleProvider } from  'antd';
+const { Sider, Content, Header } = Layout;
+import NavMenu from './NavMenu';
+import enUS from 'antd/lib/locale-provider/en_US';
+
+/*
+    Need to wrap in LocaleProvider to set default language to en_US
+ */
 
 class App extends Component {
+
     render() {
         return (
-            <div id="root">
-                <Navbar/>
-                <div id="main-content">
-                    <MissionElapsedTime/>
-                    {this.props.children}
-                </div>
-            </div>
+            <LocaleProvider locale={enUS}>
+                <Layout>
+                    <Sider>
+                        <Header><div className="logo">Titan Rover</div></Header>
+                        <NavMenu/>
+                    </Sider>
+                    <Content id="main-content">
+                        <Header><MissionElapsedTime/></Header>
+                        <Content>
+                            {this.props.children}
+                        </Content>
+                    </Content>
+                </Layout>
+            </LocaleProvider>
         );
     }
 }

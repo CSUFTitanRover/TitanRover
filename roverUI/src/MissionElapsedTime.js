@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import BaseModuleTemplate from './templates/BaseModuleTemplate';
+import { Button } from 'antd';
+import moment from 'moment';
 
 class MissionElapsedTime extends Component {
     constructor(props) {
@@ -8,10 +9,9 @@ class MissionElapsedTime extends Component {
         // load in savedElapsedTime or default to 0
         let savedElapsedTime = parseInt(localStorage.getItem('savedElapsedTime'), 10) || 0;
         // load in savedIsRunning or default to false
-        let savedIsRunning = (localStorage.getItem('savedIsRunning') == 'true') || false;  // convert savedIsRunning (str) to a bool type
+        let savedIsRunning = (localStorage.getItem('savedIsRunning') === 'true') || false;  // convert savedIsRunning (str) to a bool type
 
-        let _d = new Date(); // temp date obj
-        this.date = _d.getFullYear() + '/' + _d.getDate() + '/' + (_d.getMonth()+1); // date for current day
+        this.date = moment().format("MM/DD/YYYY"); // date for current day
         this.tick = this.tick.bind(this);
         this.handleStartAndPause = this.handleStartAndPause.bind(this);
         this.handleReset = this.handleReset.bind(this);
@@ -24,10 +24,7 @@ class MissionElapsedTime extends Component {
     }
 
     tick() {
-        this.setState((prevState) => ({
-            elapsedTotalTime: prevState.elapsedTotalTime + 1
-        }));
-
+        this.setState({elapsedTotalTime: this.state.elapsedTotalTime + 1});
         localStorage.setItem('savedElapsedTime', this.state.elapsedTotalTime);
     }
 
@@ -58,21 +55,12 @@ class MissionElapsedTime extends Component {
     }
 
     formatTime(passed_time) {
-        let sec_num = passed_time;
-        let hours   = Math.floor(sec_num / 3600);
-        let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-        let seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-        if (hours   < 10) {hours   = "0" + hours;}
-        if (minutes < 10) {minutes = "0" + minutes;}
-        if (seconds < 10) {seconds = "0" + seconds;}
-
-        return hours+':'+minutes+':'+seconds;
+        return moment().hour(0).minute(0).second(passed_time).format('HH:mm:ss');
     }
 
     componentDidMount() {
         // check if isRunning is true via loaded from localStorage.savedIsRunning
-        if (this.state.isRunning == true) {
+        if (this.state.isRunning === true) {
             // if so we auto-start the timer
             this.setState({resetDisabled: true});
             //set the interval for every second
@@ -86,18 +74,20 @@ class MissionElapsedTime extends Component {
         let resetDisabledState = (this.state.resetDisabled) ? 'disabled' : null;
 
         return (
-            <BaseModuleTemplate id="met" moduleName="Mission Elapsed Time">
-                <span className="utc">UTC</span>
-                <span className="date">{this.date}</span>
-                <time>
-                    {formatted_time}
-                </time>
-                <div className="controls">
-                    <button onClick={this.handleStartAndPause}>{isRunningState}</button>
-                    <button onClick={this.handleReset} disabled={resetDisabledState}>Reset</button>
+            <div id="met">
+                <h3>Mission Elapsed Time</h3>
+                <div className="time-box">
+                    <span className="utc">UTC</span>
+                    <span className="date">{this.date}</span>
+                    <time>
+                        {formatted_time}
+                    </time>
                 </div>
-
-            </BaseModuleTemplate>
+                <div className="controls">
+                    <Button type="primary" onClick={this.handleStartAndPause}>{isRunningState}</Button>
+                    <Button type="danger" onClick={this.handleReset} disabled={resetDisabledState}>Reset</Button>
+                </div>
+            </div>
         )
     }
 
