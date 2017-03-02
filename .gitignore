@@ -1,5 +1,6 @@
 .vscode
-*.json
 node_modules
 .DS_STORE
 *.txt
+*.log
+*.pid
