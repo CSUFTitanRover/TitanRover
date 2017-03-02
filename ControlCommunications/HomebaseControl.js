@@ -1,5 +1,4 @@
 /*
-  Author: Joseph Porter
   Titan Rover - Command Station Control
   Description:
 		Will be capturing events from the UI, Joystick, Keyboard, and etc...
@@ -9,38 +8,11 @@
         to decifer what kind of command it should be.  This will be added to whatever the input
         generates.
 
-        Example message for mobility
-        { commandType: "mobility", time: 1693700, value: 0, number: 0, type: 'axis', id: 0 }
-
  =========== Layout of joystick =============
 
-Buttons:    These values are either 1(pressed) or 0(unpressed)
-number = 0: Trigger
-number = 1: Thump button
-number = 2: Button 3
-number = 3: Button 4
-number = 4: Button 5
-number = 5: Button 6
-number = 6: Button 7
-number = 7: Button 8
-number = 8: Button 9
-number = 9: Button 10
-number = 10: Button 11
-number = 11: Button 12
+https://docs.google.com/document/d/1WDijduTZjryv08eI5N0dVvTw98pcXWOBMx0P8Qr28a8/edit?usp=sharing
 
-Axis:
-number = 0: X of big joystick value between -32767 and 32767
-number = 1: Y of big joystick value between -32767 and 32767
-number = 2: Twist of big joystick value between -32767 and 32767
-number = 3: Throttle on bottom value between -32767 and 32767
-number = 4: X top of joystick value is either -32767 left or 32767 right
-number = 5: Y top of joystick value is either -32767 up or 32767 down
-==================================================  */
-
-// The third parameter in the joystick declariation is the sensitivity of the joystick
-// higher the number less events will occur
-
-// Make sure the joystick is plugged into the computer
+*/
 
 var gamepad = require('gamepad');
 var request = require('request');
