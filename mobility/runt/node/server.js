@@ -3,7 +3,7 @@ var app = require("express")();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var jsonfile = require('jsonfile');
-var file = '/Users/insight/workspace/github/TitanRover/mobility/runt/node/gps.json';
+var file = '/home/pi/TitanRover/mobility/runt/node/gps.json';
 
 app.get('/', function(req,res){
     res.sendFile(__dirname + '/map.html');
