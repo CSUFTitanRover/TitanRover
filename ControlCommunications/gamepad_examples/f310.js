@@ -9,7 +9,7 @@ for (var i = 0, l = gamepad.numDevices(); i < l; i++) {
 }
  
 // Create a game loop and poll for events 
-setInterval(gamepad.processEvents, 16);
+setInterval(gamepad.processEvents, 1);
 // Scan for new gamepads as a slower rate 
 //setInterval(gamepad.detectDevices, 500);
  

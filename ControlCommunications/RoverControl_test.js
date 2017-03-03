@@ -335,6 +335,19 @@ function sendHome(msg) {
     });
 }
 
+// Will test the connection to the homebase controller every TEST_CONNECTION times
+// Will stop the rover if we have lost connection after TIME_TO_STOP
+setInterval(function() {
+    var msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
+    sendHome(msg);
+    gotAckRover = false;
+    setTimeout(function() {
+        if (gotAckRover === false) {
+            console.log("Stopping Rover: ROVER lost connection to HOME")
+            stopRover();
+        }
+    }, TIME_TO_STOP);
+}, TEST_CONNECTION);
 
 /**
   Will handle the control messages that will tell us we have disconnected.
