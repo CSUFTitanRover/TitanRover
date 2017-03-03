@@ -23,7 +23,7 @@ var socket = dgram.createSocket('udp4');
 
 // Initialize the library
 gamepad.init();
-
+setInterval(gamepad.processEvents, 16);
 //var URL_ROVER = 'http://localhost:3000/command';
 
 const HOMEBASE_PORT = 5000;
@@ -73,7 +73,7 @@ socket.bind(HOMEBASE_PORT);
 */
 function send_to_rover(message) {
     message = new Buffer(JSON.stringify(message));
-    socket.send(message, 0, message.length, PORT, HOST, function(err) {
+    socket.send(message, 0, message.length, PORT, "192.168.1.125", function(err) {
         if (err) {
             console.log("Problem with sending data!!!");
         } else {
@@ -85,7 +85,7 @@ function send_to_rover(message) {
 
 // Listen for move events  
 gamepad.on("move", function (id, axis, value) {
-    
+    console.log(value);
     event =  {
         id: id,
         axis: axis,
