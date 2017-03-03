@@ -247,8 +247,8 @@ function calculateDiff(yAxis, xAxis) {
     //xAxis = xAxis * -1;
     yAxis = yAxis * -1;
 
-    var V = (32767 - Math.abs(xAxis)) * (yAxis / config.Joystick_MAX) + yAxis;
-    var W = (32767 - Math.abs(yAxis)) * (xAxis / config.Joystick_MAX) + xAxis;
+    var V = (config.Joystick_MAX - Math.abs(xAxis)) * (yAxis / config.Joystick_MAX) + yAxis;
+    var W = (config.Joystick_MAX - Math.abs(yAxis)) * (xAxis / config.Joystick_MAX) + xAxis;
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
@@ -379,8 +379,9 @@ function handleControl(message) {
         gotAck = true;
         gotAckRover = true;
     } else if (message.type == "config") {
-        config.Joystick_MAX = message.Joystick_MAX;
-        config.Joystick_MIN = message.Joystick_MIN;
+        console.log(message);
+        config.Joystick_MAX = parseInt(message.Joystick_MAX);
+        config.Joystick_MIN = parseInt(message.Joystick_MIN);
         config.debug = message.debug;
         config.arm_on = message.arm_on;
         config.mobility_on = message.mobility_on;
@@ -400,10 +401,10 @@ function setLinearSpeed(channel, value) {
     var pwmSig;
 
     if (value <= 0) {
-        pwmSig = parseInt(value.map(Joystick_MIN, 0, linear_min, linear_mid));
+        pwmSig = parseInt(value.map(config.Joystick_MIN, 0, linear_min, linear_mid));
         pwm.setPWM(channel, 0, pwmSig);
     } else {
-        pwmSig = parseInt(value.map(0, Joystick_MAX, linear_mid, linear_max));
+        pwmSig = parseInt(value.map(0, config.Joystick_MAX, linear_mid, linear_max));
         pwm.setPWM(channel, 0, pwmSig);
     }
 }
@@ -696,4 +697,4 @@ process.on('SIGINT', function() {
     closePins();
     // some other closing procedures go here
     process.exit();
-});
+});;
