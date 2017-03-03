@@ -60,8 +60,8 @@ const CONTROL_MESSAGE_ACK = {
 const CHANGE_CONFIG = {
     commandType: "control",
     type: "config",
-    Joystick_MAX: 1,
-    Joystick_MIN: -1,
+    Joystick_MAX: 32767,
+    Joystick_MIN: -32767,
     arm_on: true,
     mobility_on: true,
     debug: false
@@ -137,7 +137,9 @@ function handleJoystick_1(event) {
     if (event.type == 'axis') {
         event.commandType = 'arm';
         send_to_rover(event);
-    } else if (event.type == 'button') {
+    }
+
+    if (event.type == 'button') {
 
         // Handle each button seperatly since they could have different uses such as
         // hold down of press once
@@ -147,7 +149,7 @@ function handleJoystick_1(event) {
             event.commandType = 'arm';
             send_to_rover(event);
         } else if (event.number == 1 && event.value == 1) { // Thumb
-            event.commandType == 'arm';
+            event.commandType = 'arm';
             arm_joint = (arm_joint) ? false : true;
             if (arm_joint) {
                 console.log("Joint 4 and 6 ## ONLINE ##\nJoint 2 and 3 ## OFFLINE ##");
