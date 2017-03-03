@@ -32,11 +32,15 @@ const HOMEBASE_PORT = 5000;
 const PORT = 3000;
 const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
 
-// Control information
-const CONTROL_MESSAGE_TEST = {
+const CHANGE_CONFIG = {
     commandType: "control",
-    type: "test"
-};
+    type: "config",
+    Joystick_MAX: 1,
+    Joystick_MIN: -1,
+    arm_on: true,
+    mobility_on: true,
+    debug: false
+}
 
 const CONTROL_MESSAGE_ACK = {
     commandType: "control",
@@ -52,6 +56,7 @@ var arm_mode = false;
 // Socket event handlers
 socket.on('listening', function() {
     console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
+    send_to_rover(CHANGE_CONFIG);
 });
 
 // When we recieve a packet from the rover it is acking a control packet
@@ -61,7 +66,7 @@ socket.on('message', function(message, remote) {
     if (msg.type == "rover_ack") {
         //console.log("Rover sent an ack");
         packet_count = 0;
-        send_to_rover(new Buffer(JSON.stringify(CONTROL_MESSAGE_ACK)));
+        send_to_rover(CONTROL_MESSAGE_ACK);
     }
 });
 
@@ -83,10 +88,10 @@ function send_to_rover(message) {
     });
 }
 
-// Listen for move events  
-gamepad.on("move", function (id, axis, value) {
+// Listen for move events
+gamepad.on("move", function(id, axis, value) {
     console.log(value);
-    event =  {
+    event = {
         id: id,
         axis: axis,
         value: value,
@@ -94,15 +99,13 @@ gamepad.on("move", function (id, axis, value) {
     };
 
     // If the axis is 0 or 1 it is the left joystick
-    if(axis <= 1){
+    if (axis <= 1) {
         event.commandType = "mobility";
     }
     // Axis 2 and 3 (right joystick) controls inverse kinematics limb 1 and 2
     // Axis 4 and 5 (d-pad) will be used to control the rotating base and last limb
-    else if(axis <= 5){
+    else if (axis <= 5) {
         event.commandType = "arm";
     }
     send_to_rover(event);
 });
-
-
