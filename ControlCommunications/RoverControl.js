@@ -647,7 +647,6 @@ server.on('listening', function() {
 // recieved a message from the homebase control to perform an action
 server.on('message', function(message, remote) {
 
-    // Allow hotswappable HOMEBASE stations
     HOME_HOST = remote.address;
 
     var msg = JSON.parse(message);
