@@ -310,7 +310,7 @@ function stopRover() {
     receiveMobility(zeroMessage[1]);
 
     // Shutdown the arm
-    /*y
+    /*
     port.write(joint1_off);
     port.write(joint2_off);
     port.write(joint3_off);
@@ -571,7 +571,7 @@ function stopJoint(jointNum) {
 function armControl(message) {
 
     if (message.type == 'axis') {
-        var axis = parseInt(message.number);
+        var axis = parseInt(message.axis);
         // Determine which axis should be which joint.
         switch (axis) {
             case 0:
@@ -603,7 +603,7 @@ function armControl(message) {
 
         }
     } else if (message.type == 'button') {
-        var button = parseInt(message.number);
+        var button = parseInt(message.axis);
         var val = parseInt(message.value);
 
         switch (button) {

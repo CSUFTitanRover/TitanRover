@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "dualshock-controller": "^1.1.1",
-    "gamepad": "^1.4.2"
+    "gamepad": "^1.4.2",
+    "node-gamepad": "^0.1.15"
   }
 }

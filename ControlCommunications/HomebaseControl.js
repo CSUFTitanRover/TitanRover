@@ -73,7 +73,7 @@ socket.bind(HOMEBASE_PORT);
 */
 function send_to_rover(message) {
     message = new Buffer(JSON.stringify(message));
-    socket.send(message, 0, message.length, PORT, "192.168.1.125", function(err) {
+    socket.send(message, 0, message.length, PORT, "localhost", function(err) {
         if (err) {
             console.log("Problem with sending data!!!");
         } else {
@@ -85,13 +85,14 @@ function send_to_rover(message) {
 
 // Listen for move events  
 gamepad.on("move", function (id, axis, value) {
-    console.log(value);
     event =  {
         id: id,
         axis: axis,
         value: value,
         commandType: null
     };
+    // DEBUG 
+    // console.log(event);
 
     // If the axis is 0 or 1 it is the left joystick
     if(axis <= 1){
@@ -103,6 +104,18 @@ gamepad.on("move", function (id, axis, value) {
         event.commandType = "arm";
     }
     send_to_rover(event);
+});
+
+
+gamepad.on("down", function (id, num) {
+    console.log(num);
+    event =  {
+        id: id,
+        type: "down",
+        axis: num,
+        //value: value,
+        commandType: "arm"
+    };
 });
 
 
