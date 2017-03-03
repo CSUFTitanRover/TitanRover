@@ -280,7 +280,7 @@ function setThrottle(adjust_Amount) {
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = parseInt(joystickData.number);
+    let axis = parseInt(joystickData.axis);
     var value = parseInt(joystickData.value);
 
     var diffSteer;
@@ -390,7 +390,7 @@ function handleControl(message) {
 /**
  * Sends a PWM signal to the appropriate Linear Actuator
  * @param {int} channel PWM pin of linear Actuator
- * @param {int} value Will be between -32767 and 32767
+ * @param {int} value Will be between -1 and Joystick_MAX
  */
 function setLinearSpeed(channel, value) {
     const linear_min = 241; // Calculated to be 1000 us

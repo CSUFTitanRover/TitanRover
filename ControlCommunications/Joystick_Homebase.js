@@ -4,16 +4,12 @@
   Description:
 		Will be capturing events from the UI, Joystick, Keyboard, and etc...
         to transfer this command to the rover controller running on the Rover.
-
         It will send the packet with a commandType parameter to allow the rover system
         to decifer what kind of command it should be.  This will be added to whatever the input
         generates.
-
         Example message for mobility
         { commandType: "mobility", time: 1693700, value: 0, number: 0, type: 'axis', id: 0 }
-
  =========== Layout of joystick =============
-
 Buttons:    These values are either 1(pressed) or 0(unpressed)
 number = 0: Trigger
 number = 1: Thump button
@@ -27,7 +23,6 @@ number = 8: Button 9
 number = 9: Button 10
 number = 10: Button 11
 number = 11: Button 12
-
 Axis:
 number = 0: X of big joystick value between -32767 and 32767
 number = 1: Y of big joystick value between -32767 and 32767
@@ -57,20 +52,20 @@ const HOMEBASE_PORT = 5000;
 const PORT = 3000;
 const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
 
-const CHANGE_CONFIG = {
-    commandType: "control",
-    type: "config",
-    Joystick_MAX: 32767,
-    Joystick_MIN: -32767,
-    arm_on: true,
-    mobility_on: true,
-    debug: false
-}
-
 const CONTROL_MESSAGE_ACK = {
     commandType: "control",
     type: "ack"
 };
+
+const CHANGE_CONFIG = {
+    commandType: "control",
+    type: "config",
+    Joystick_MAX: 1,
+    Joystick_MIN: -1,
+    arm_on: true,
+    mobility_on: true,
+    debug: false
+}
 
 const SEND_CONTROL_AFTER = 20;
 var packet_count = 0;
