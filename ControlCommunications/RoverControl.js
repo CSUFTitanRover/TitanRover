@@ -37,6 +37,16 @@ var HOST = 'localhost';
 const HOME_PORT = 5000;
 var HOME_HOST = '';
 
+var config = {
+    TIME_TO_STOP: 750,
+    TEST_CONNECTION: 3000,
+    Joystick_MIN: -32767,
+    Joystick_MAX: 32767,
+    arm_on: true,
+    mobility_on: true,
+    debug: false
+};
+
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
 // zeroMessage[1] for x axis
@@ -88,9 +98,6 @@ const saber_min = 241; // Calculated to be 1000 us
 const saber_mid = 325; // Calculated to be 1500 us
 const saber_max = 409; // Calculated to be 2000 us
 
-// Joystick values
-const Joystick_MIN = -32767;
-const Joystick_MAX = 32767;
 var triggerPressed = false;
 var thumbPressed = false;
 
@@ -240,21 +247,21 @@ function calculateDiff(yAxis, xAxis) {
     //xAxis = xAxis * -1;
     yAxis = yAxis * -1;
 
-    var V = (32767 - Math.abs(xAxis)) * (yAxis / 32767.0) + yAxis;
-    var W = (32767 - Math.abs(yAxis)) * (xAxis / 32767.0) + xAxis;
+    var V = (config.Joystick_MAX - Math.abs(xAxis)) * (yAxis / config.Joystick_MAX) + yAxis;
+    var W = (config.Joystick_MAX - Math.abs(yAxis)) * (xAxis / config.Joystick_MAX) + xAxis;
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
     if (right <= 0) {
-        right = right.map(Joystick_MIN, 0, saber_min, saber_mid);
+        right = right.map(config.Joystick_MIN, 0, saber_min, saber_mid);
     } else {
-        right = right.map(0, Joystick_MAX, saber_mid, saber_max);
+        right = right.map(0, config.Joystick_MAX, saber_mid, saber_max);
     }
 
     if (left <= 0) {
-        left = left.map(Joystick_MIN, 0, saber_min, saber_mid);
+        left = left.map(config.Joystick_MIN, 0, saber_min, saber_mid);
     } else {
-        left = left.map(0, Joystick_MAX, saber_mid, saber_max);
+        left = left.map(0, config.Joystick_MAX, saber_mid, saber_max);
     }
 
     return {
@@ -265,7 +272,7 @@ function calculateDiff(yAxis, xAxis) {
 
 // Set the throttle speed
 function setThrottle(adjust_Amount) {
-    throttleValue = adjust_Amount.map(Joystick_MAX, Joystick_MIN, 0, 1);
+    throttleValue = adjust_Amount.map(config.Joystick_MAX, config.Joystick_MIN, 0, 1);
     //console.log(throttleValue);
 }
 
@@ -273,7 +280,7 @@ function setThrottle(adjust_Amount) {
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = parseInt(joystickData.number);
+    let axis = parseInt(joystickData.axis);
     var value = parseInt(joystickData.value);
 
     var diffSteer;
@@ -342,8 +349,8 @@ setInterval(function() {
             console.log("Stopping Rover: ROVER lost connection to HOME")
             stopRover();
         }
-    }, TIME_TO_STOP);
-}, TEST_CONNECTION);
+    }, config.TIME_TO_STOP);
+}, config.TEST_CONNECTION);
 
 /**
   Will handle the control messages that will tell us we have disconnected.
@@ -364,21 +371,27 @@ function handleControl(message) {
                 console.log("Stopping Rover: HOME tried to test us");
                 stopRover();
             }
-        }, TIME_TO_STOP);
+        }, config.TIME_TO_STOP);
 
 
         // Home station has responded don't need to stop.
     } else if (message.type == "ack") {
         gotAck = true;
         gotAckRover = true;
+    } else if (message.type == "config") {
+        console.log(message);
+        config.Joystick_MAX = parseInt(message.Joystick_MAX);
+        config.Joystick_MIN = parseInt(message.Joystick_MIN);
+        config.debug = message.debug;
+        config.arm_on = message.arm_on;
+        config.mobility_on = message.mobility_on;
     }
-
 }
 
 /**
  * Sends a PWM signal to the appropriate Linear Actuator
  * @param {int} channel PWM pin of linear Actuator
- * @param {int} value Will be between -32767 and 32767
+ * @param {int} value Will be between -1 and Joystick_MAX
  */
 function setLinearSpeed(channel, value) {
     const linear_min = 241; // Calculated to be 1000 us
@@ -388,10 +401,10 @@ function setLinearSpeed(channel, value) {
     var pwmSig;
 
     if (value <= 0) {
-        pwmSig = parseInt(value.map(Joystick_MIN, 0, linear_min, linear_mid));
+        pwmSig = parseInt(value.map(config.Joystick_MIN, 0, linear_min, linear_mid));
         pwm.setPWM(channel, 0, pwmSig);
     } else {
-        pwmSig = parseInt(value.map(0, Joystick_MAX, linear_mid, linear_max));
+        pwmSig = parseInt(value.map(0, config.Joystick_MAX, linear_mid, linear_max));
         pwm.setPWM(channel, 0, pwmSig);
     }
 }
@@ -642,13 +655,17 @@ server.on('message', function(message, remote) {
     // Seperate the incoming command to its specified subsystem
     switch (msg.commandType) {
         case 'mobility':
-            receiveMobility(msg);
+            if (config.mobility_on) {
+                receiveMobility(msg);
+            }
             break;
         case 'control':
             handleControl(msg);
             break;
         case 'arm':
-            armControl(msg);
+            if (config.arm_on) {
+                armControl(msg);
+            }
             break;
         default:
             //console.log("###### Could not find commandType #######");
@@ -679,4 +696,4 @@ process.on('SIGINT', function() {
     closePins();
     // some other closing procedures go here
     process.exit();
-});
+});;
