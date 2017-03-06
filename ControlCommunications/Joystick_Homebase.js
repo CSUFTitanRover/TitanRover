@@ -60,9 +60,9 @@ const CONTROL_MESSAGE_ACK = {
 const CHANGE_CONFIG = {
     commandType: "control",
     type: "config",
-    Joystick_MAX: 32767,
-    Joystick_MIN: -32767,
     arm_on: true,
+    Joystick_MIN: -32767,
+    Joystick_MAX: 32767,
     mobility_on: true,
     debug: false
 }
@@ -93,6 +93,8 @@ socket.on('message', function(message, remote) {
         //console.log("Rover sent an ack");
         packet_count = 0;
         send_to_rover(CONTROL_MESSAGE_ACK);
+    } else if (msg.type == "debug") {
+        console.log(msg);
     }
 });
 
