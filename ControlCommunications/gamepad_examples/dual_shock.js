@@ -1,5 +1,11 @@
-var dualShock = require('dualshock-controller');
 
+var dualShock = require('dualshock-controller');
+//var gamepad = require("gamepad");
+ 
+// Initialize the library 
+//gamepad.init();
+setInterval(function(){
+}, 5000);
 //pass options to init the controller.
 var controller = dualShock(
     {
@@ -32,7 +38,7 @@ console.log('right Moved: ' + data.x + ' | ' + data.y);
     controller.setExtras({rumbleRight: 120});
     
     setTimeout(function(){
-        controller.setExtras({rumbleRight: 0})
+        controller.setExtras({rumbleRight: 0});
     },200);
 });
 
@@ -43,8 +49,13 @@ controller.on('square:press', ()=> console.log('square press'));
 controller.on('square:release', () => console.log('square release'));
 
 controller.on('x:press', ()=> console.log('x press'));
-
 controller.on('x:release', () => console.log('x release'));
+
+controller.on('triangle:press', () => console.log('triangle release'));
+controller.on('triangle:release', () => console.log('triangle release'));
+
+controller.on('circle:press', () => console.log('circle release'));
+controller.on('circle:release', () => console.log('circle release'));
 
 //sixasis motion events:
 //the object returned from each of the movement events is as follows:
