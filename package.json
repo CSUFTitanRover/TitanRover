@@ -14,6 +14,7 @@
     "dgram": "^1.0.1",
     "diff-steer": "0.0.2",
     "express": "^4.14.0",
+    "gamepad": "^1.4.2",
     "johnny-five": "^0.10.0",
     "joystick": "^0.1.2",
     "microseconds": "^0.1.0",
@@ -25,7 +26,7 @@
     "request": "^2.75.0",
     "rpi-gpio": "^0.7.0",
     "rpio": "^0.9.15",
-    "serialport": "^4.0.6",
+    "serialport": "^4.0.7",
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3"
   }

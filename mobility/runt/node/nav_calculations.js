@@ -3,8 +3,8 @@ var jsonfile = require('jsonfile');
 var now = require("performance-now")
 
 // Get coordinate
-var timestamp_in_micro = now() ;  // Converting from microseconds to miliseconds. 
-var timestamp_in_milli = timestamp_in_micro / 1000;
+//var timestamp_in_micro = now() ;  // Converting from microseconds to miliseconds. 
+//var timestamp_in_milli = timestamp_in_micro / 1000;
 // End get coordinate 
 
 
@@ -14,18 +14,24 @@ lon_2 = -117.882490224;
 
 lat_1 =  33.88174266;
 lon_1=  -117.882489185;
+var unit = 'ft';
+var file = '/Users/insight/workspace/github/TitanRover/mobility/runt/node/gps.json';
 
-var file = '/Users/insight/workspace/github/TitanRover/mobility/runt/node/gps.json'
-jsonfile.readFile(file, function(err, obj) {
-  console.dir(obj)
-});
-
-var distance = geolib.getDistance(
-    {latitude: lat_1, longitude: lon_1}, 
-    {latitude: lat_2, longitude: lon_2},
+setInterval(function(){
+    jsonfile.readFile(file, function(err, obj) {
+   var distance = geolib.getDistance(
+    {latitude: 33.88374071, longitude: -117.884992}, 
+    {latitude: obj.latitude, longitude: obj.longitude},
     1, // Setting Accuracy to 1
-    3  // Setting precision to centimeters 
-);
+    8  // Setting precision to centimeters 
+    );
+
+   distance =  geolib.convertUnit(unit,distance);
+
+    console.log(distance + unit);
+});
+},1000);
+
 
 // Bearing is the direction from lat_1 -----> lat_2
 var gc_bearing = geolib.getBearing(
@@ -49,13 +55,12 @@ var destination_bearing = geolib.getRhumbLineBearing(
 */
 
 // JS timestamp is in Miliseconds. Peformance-Now time is in microseconds. 
-var current_speed = geolib.getSpeed(
-    {latitude: lat_1, longitude: lon_1, time: timestamp_in_milli},
-    {latitude: lat_2, longitude: lon_2, time: timestamp_in_milli +1000 }
-);
+// var current_speed = geolib.getSpeed(
+//     {latitude: lat_1, longitude: lon_1, time: timestamp_in_milli},
+//     {latitude: lat_2, longitude: lon_2, time: timestamp_in_milli +1000 }
+// );
 
-console.log("Great circle bearing: " + gc_bearing);
-console.log("Distance: " + distance);
-console.log("Speed " + current_speed);
-console.log("timestamp in microseconds: " + timestamp_in_micro);
-console.log("timestamp in milliseconds " + timestamp_in_milli);
+//console.log("Great circle bearing: " + gc_bearing);
+// console.log("Speed " + current_speed);
+// console.log("timestamp in microseconds: " + timestamp_in_micro);
+// console.log("timestamp in milliseconds " + timestamp_in_milli);

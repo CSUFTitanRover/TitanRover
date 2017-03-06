@@ -15,7 +15,7 @@ setInterval(gamepad.processEvents, 1);
  
 // Listen for move events on all gamepads 
 gamepad.on("move", function (id, axis, value) {
-        if(axis <= 3 && Math.abs(value) > 0.019999){
+        if(axis <= 3 && Math.abs(value) > 0.05){
           console.log("move", {
             id: id,
             axis: axis,

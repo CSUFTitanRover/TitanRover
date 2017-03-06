@@ -14,16 +14,23 @@
 https://docs.google.com/document/d/1WDijduTZjryv08eI5N0dVvTw98pcXWOBMx0P8Qr28a8/edit?usp=sharing
 
 */
-
-var gamepad = require('gamepad');
+var dualShock = require('dualshock-controller');
 var request = require('request');
 
 var dgram = require('dgram');
 var socket = dgram.createSocket('udp4');
 
+var controller = dualShock(
+    {
+        config : "dualShock3",
+        //smooths the output from the acelerometers (moving averages) defaults to true
+        accelerometerSmoothing : true,
+        //smooths the output from the analog sticks (moving averages) defaults to false
+        analogStickSmoothing : false
+    });
+
 // Initialize the library
-gamepad.init();
-setInterval(gamepad.processEvents, 16);
+
 //var URL_ROVER = 'http://localhost:3000/command';
 
 const HOMEBASE_PORT = 5000;
@@ -83,27 +90,44 @@ function send_to_rover(message) {
     });
 }
 
-// Listen for move events  
-gamepad.on("move", function (id, axis, value) {
+controller.on('left:move', function(data){
+    console.log('left Moved: ' + data.x + ' | ' + data.y);
+    
     event =  {
         id: id,
-        axis: axis,
-        value: value,
-        commandType: null
+        axis: 0,
+        value: data.x,
+        commandType: "mobility"
     };
-    // DEBUG 
-    // console.log(event);
-
-    // If the axis is 0 or 1 it is the left joystick
-    if(axis <= 1){
-        event.commandType = "mobility";
-    }
-    // Axis 2 and 3 (right joystick) controls inverse kinematics limb 1 and 2
-    else{
-        event.commandType = "arm";
-    }
+    send_to_rover(event);
+    event =  {
+        id: id,
+        axis: 1,
+        value: data.y,
+        commandType: "mobility"
+    };
     send_to_rover(event);
 });
+
+controller.on('right:move', function(data){
+    console.log('right Moved: ' + data.x + ' | ' + data.y);
+    
+    event =  {
+        id: id,
+        axis: 0,
+        value: data.x,
+        commandType: "arm"
+    };
+    send_to_rover(event);
+    event =  {
+        id: id,
+        axis: 1,
+        value: data.y,
+        commandType: "arm"
+    };
+    send_to_rover(event);
+});
+
 
 
 gamepad.on("down", function (id, num) {

@@ -8,8 +8,9 @@
 var net = require('net');
 var fs = require("fs");
 var jsonfile = require('jsonfile');
+var file = '/Users/insight/workspace/github/TitanRover/mobility/runt/node/gps.json';
 
-var file = '/home/pi/TitanRover/mobility/runt/node/gps.json' ; 
+//var file = '/home/pi/TitanRover/mobility/runt/node/gps.json' ; 
 var reachIP = '192.168.1.112';
 var reach_shans_hotspot = '172.20.10.7';
 
@@ -37,10 +38,10 @@ client.on('data', function(data,err) {
         1934 433341.500   33.882028059 -117.882559268    38.7224   5   4   3.9905   3.7742   9.1639   2.7016   4.4366   4.2998   0.00    0.0
     
     */
-
+    
     // Parse the data into an array
     data = data.toString().split(" ").filter(the_spaces);
-
+    
     var gps_packet = {
             time: data[1],
             latitude: data[2],
@@ -48,6 +49,7 @@ client.on('data', function(data,err) {
             height: data[4],
             q: data[5]
         };
+    console.log(gps_packet.latitude);
     jsonfile.writeFileSync(file, gps_packet);
 });
 

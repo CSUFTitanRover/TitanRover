@@ -24,18 +24,18 @@ var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 
 // Allows us to contorl the rpio pins on the raspberry pi
-//var rpio = require('rpio');
-//var serialPort = require('serialport');
+var rpio = require('rpio');
+var serialPort = require('serialport');
 
-// var port = new serialPort('/dev/ttyACM0', {
-//     baudRate: 9600
-// });
+var port = new serialPort('/dev/ttyACM0', {
+    baudRate: 9600
+});
 
 var PORT = 3000;
-var HOST = '192.168.1.125';
+var HOST = 'localhost';
 
 const HOME_PORT = 5000;
-const HOME_HOST = '192.168.1.125';
+const HOME_HOST = '192.168.1.143';
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
@@ -71,12 +71,12 @@ const TIME_TO_STOP = 750;
 const TEST_CONNECTION = 3000;
 
 // PWM Config for Pi Hat:
-//const makePwmDriver = require('adafruit-i2c-pwm-driver');
-// const pwm = makePwmDriver({
-//     address: 0x40,
-//     device: '/dev/i2c-1',
-//     debug: false
-// });
+const makePwmDriver = require('adafruit-i2c-pwm-driver');
+const pwm = makePwmDriver({
+    address: 0x40,
+    device: '/dev/i2c-1',
+    debug: false
+});
 
 // Based on J. Stewart's calculations:
 // May need to be adjusted/recalculated
@@ -89,8 +89,8 @@ const saber_mid = 325; // Calculated to be 1500 us
 const saber_max = 409; // Calculated to be 2000 us
 
 // Joystick values
-const Joystick_MIN = -1.0;
-const Joystick_MAX = 1.0;
+const Joystick_MIN = 0;
+const Joystick_MAX = 255;
 var triggerPressed = false;
 var thumbPressed = false;
 
@@ -116,8 +116,8 @@ const joint1_on = '1';
 const joint1_off = '2';
 
 // Set all pins to low on init
-//rpio.open(joint1_dir_pin, //rpio.OUTPUT, rpio.LOW);
-//rpio.open(joint1_enab_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint1_dir_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint1_enab_pin, rpio.OUTPUT, rpio.LOW);
 
 // Joint2 PWM pins
 const joint2_pwm_pin = 4;
@@ -132,8 +132,8 @@ const joint4_on = '3';
 const joint4_off = '4';
 
 // Set all pins to low on init
-//rpio.open(joint4_dir_pin, rpio.OUTPUT, rpio.LOW);
-//rpio.open(joint4_enab_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint4_dir_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint4_enab_pin, rpio.OUTPUT, rpio.LOW);
 
 // joint 5 Sumtor pins
 const joint5_dir_pin = 15;
@@ -142,8 +142,8 @@ const joint5_on = '5';
 const joint5_off = '6';
 
 // Set all pins to low on init
-// rpio.open(joint5_dir_pin, rpio.OUTPUT, rpio.LOW);
-// rpio.open(joint5_enab_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint5_dir_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint5_enab_pin, rpio.OUTPUT, rpio.LOW);
 
 // Joint 6 Pololu pins
 const joint6_dir_pin = 12;
@@ -151,7 +151,7 @@ const joint6_on = '7';
 const joint6_off = '8';
 
 // Set all pins to low on init
-// rpio.open(joint6_dir_pin, rpio.OUTPUT, rpio.LOW);
+rpio.open(joint6_dir_pin, rpio.OUTPUT, rpio.LOW);
 
 // Joint 7 Pololu pins
 const joint7_dir_pin = 0;
@@ -159,7 +159,7 @@ const joint7_on = '9';
 const joint7_off = '0';
 
 // Set all pins to low on init
-//rpio.open(joint7_dir_pin, rpio.OUPTUT, rpio.LOW);
+rpio.open(joint7_dir_pin, rpio.OUPTUT, rpio.LOW);
 
 
 // Pins to destroy
@@ -168,7 +168,7 @@ var pins = [11, 12, 13, 15, 18, 32, 36];
 
 
 // Based on J. Stewart's calculations:
-//pwm.setPWMFreq(50);
+pwm.setPWMFreq(50);
 
 // NPM Library for USB Logitech Extreme 3D Pro Joystick input:
 //    See: https://titanrover.slack.com/files/joseph_porter/F2DS4GBUM/Got_joystick_working_here_is_the_code.js
@@ -177,7 +177,7 @@ var pins = [11, 12, 13, 15, 18, 32, 36];
 
 // NPM Differential Steering Library:
 //    Docs: https://www.npmjs.com/package/diff-steer
-//var steerMotors = require('diff-steer/motor_control');
+var steerMotors = require('diff-steer/motor_control');
 
 // Global Variables to Keep Track of Asynchronous Translated
 //    Coordinate Assignment
@@ -211,16 +211,14 @@ var speedAdjust = function(x, y) {
     var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX;
     return acceleration;
-}
+};
 
 function setLeft(speed) {
-    //pwm.setPWM(motor_left_channel, 0, parseInt(speed));
-    console.log("left speed:" + speed);
+    pwm.setPWM(motor_left_channel, 0, parseInt(speed));
 }
 
 function setRight(speed) {
-    //pwm.setPWM(motor_right_channel, 0, parseInt(speed));
-    console.log("right speed:" + speed);
+    pwm.setPWM(motor_right_channel, 0, parseInt(speed));
 }
 
 var setMotors = function(diffSteer) {
@@ -296,7 +294,7 @@ var receiveMobility = function(joystickData) {
     }
     // Throttle axis
     else if (axis === 3) {
-        setThrottle(value);
+        setThrottle(value)
     }
 
     // If the Mobility recieved a driving axis.
@@ -312,7 +310,7 @@ function stopRover() {
     receiveMobility(zeroMessage[1]);
 
     // Shutdown the arm
-    /*y
+    /*
     port.write(joint1_off);
     port.write(joint2_off);
     port.write(joint3_off);
@@ -326,7 +324,7 @@ function stopRover() {
 
 // Send data to the homebase control for connection information
 function sendHome(msg) {
-    server.send(msg, 0, msg.length, HOME_PORT, HOST, function(err) {
+    server.send(msg, 0, msg.length, HOME_PORT, HOME_HOST, function(err) {
         if (err) {
             console.log("Problem with sending data!!!");
         } else {
@@ -395,13 +393,260 @@ function setLinearSpeed(channel, value) {
 
     if (value <= 0) {
         pwmSig = parseInt(value.map(Joystick_MIN, 0, linear_min, linear_mid));
-        //pwm.setPWM(channel, 0, pwmSig);
+        pwm.setPWM(channel, 0, pwmSig);
     } else {
         pwmSig = parseInt(value.map(0, Joystick_MAX, linear_mid, linear_max));
-        //pwm.setPWM(channel, 0, pwmSig);
+        pwm.setPWM(channel, 0, pwmSig);
     }
 }
 
+/**
+ * Joint1: Phantom Menace
+ * The rotating base for the arm
+ * Driver: Sumtor mb450a
+ */
+function joint1_rotatingBase(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? true : false;
+
+    if (direction) {
+        rpio.write(joint1_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint1_dir_pin, rpio.LOW);
+    }
+
+    if (value == 0) {
+        port.write(joint1_off);
+    } else {
+        port.write(joint1_on);
+    }
+
+}
+
+/**
+ * Joint2: Attack of the Clones
+ * Will be the longer first linear Actuator
+ * Driver: Actobotics Dual Motor Controller
+ */
+function joint2_linear1(message) {
+    let value = parseInt(message.value);
+    setLinearSpeed(joint2_pwm_pin, value);
+}
+
+/**
+ * Joint3: Revenge of the Sith
+ * Will be the smaller second linear Actuator
+ * Driver: Actobotics Dual Motor Controller
+ */
+function joint3_linear2(message) {
+    let value = parseInt(message.value);
+    setLinearSpeed(joint3_pwm_pin, value);
+}
+
+/**
+ * Joint4: A New Hope
+ * The 180 degree wrist
+ * Driver: Sumtor mb450a
+ */
+function joint4_rotateWrist(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? true : false;
+
+    if (direction) {
+        rpio.write(joint4_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint4_dir_pin, rpio.LOW);
+    }
+
+    if (value == 0) {
+        port.write(joint4_off);
+    } else {
+        port.write(joint4_on);
+    }
+
+}
+
+/**
+ * Joint5: Empire Strikes Back
+ * The 90 degree joint
+ * Driver: Sumtor mb450a
+ */
+function joint5_90degree(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? true : false;
+
+    if (direction) {
+        rpio.write(joint5_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint5_dir_pin, rpio.LOW);
+    }
+
+    if (value == 0) {
+        port.write(joint5_off);
+    } else {
+        port.write(joint5_on);
+    }
+
+}
+
+/**
+ * Joint6: Return of the Jedi
+ * 360 degree rotation of this joint no need for limit switches
+ * Driver is a Pololu
+ */
+function joint6_360Unlimited(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? true : false;
+
+    if (direction) {
+        rpio.write(joint6_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint6_dir_pin, rpio.LOW);
+    }
+
+    if (value == 0) {
+        port.write(joint6_off);
+    } else {
+        port.write(joint6_on);
+    }
+}
+
+/**
+ * Joint7: The Force Awakings
+ * The gripper that is a linear actuator
+ * Driver: Pololu AMIS-30543
+ */
+function joint7_gripper(message) {
+    let value = parseInt(message.value);
+    let direction = (value < 0) ? true : false;
+
+    if (direction) {
+        rpio.write(joint7_dir_pin, rpio.HIGH);
+    } else {
+        rpio.write(joint7_dir_pin, rpio.LOW);
+    }
+
+    if (value == 0) {
+        port.write(joint7_off);
+    } else {
+        port.write(joint7_on);
+    }
+}
+
+/**
+ * Tell this joint to stop moving
+ * @param {int} jointNum 1 - 7
+ */
+function stopJoint(jointNum) {
+    switch (jointNum) {
+        case 1:
+            port.write(joint1_off);
+            break;
+        case 2:
+            port.write(joint2_off);
+            break;
+        case 3:
+            port.write(joint3_off);
+            break;
+        case 4:
+            port.write(joint4_off);
+            break;
+        case 5:
+            port.write(joint5_off);
+            break;
+        case 6:
+            port.write(joint6_off);
+            break;
+        case 7:
+            port.write(joint7_off);
+            break;
+        default:
+            console.log(jointNum + " joint does not exist");
+    }
+}
+
+
+// Will handle control of the arm one to one.
+// Still need to figure out mapping of the joystick controller.
+function armControl(message) {
+    
+    triangle_press = 12; 
+    circle_press = 13; 
+    x_press = 14;
+    square_press = 15;
+
+    if (message.type == 'press') {
+        var num = parseInt(message.num);
+        // Determine which axis should be which joint.
+        switch (num){
+            case triangle_press: // Move last limb up
+                joint5_90degree(message);
+                break;
+            case circle_press: // Turn base clockwise
+                message.value = 1;
+                joint1_rotatingBase(message);
+                break;
+            case x_press: // Move last limb down
+            case square_press: // Turn base counter clockwise
+                message.value = -1;
+                joint1_rotatingBase(message);
+                break;
+            default:
+                console.log("invalid button press");
+        }
+        
+        
+        switch (axis) {
+            case 0:
+                if (thumbPressed) {
+                    joint3_linear2(message);
+                } else {
+                    joint6_360Unlimited(message);
+                }
+                break;
+            case 1:
+                if (thumbPressed) {
+                    joint2_linear1(message);
+                } else {
+                    joint4_rotateWrist(message);
+                }
+                break;
+            case 2:
+                joint1_rotatingBase(message);
+                break;
+            case 3:
+                break;
+            case 4:
+                joint5_90degree(message);
+                break;
+            case 5:
+                joint7_gripper(message);
+                break;
+            default:
+
+        }
+    } else if (message.type == 'button') {
+        var button = parseInt(message.axis);
+        var val = parseInt(message.value);
+
+        switch (button) {
+            case 0:
+                triggerPressed = val;
+                break;
+            case 1:
+                thumbPressed = val;
+                if (thumbPressed) {
+                    stopJoint(2);
+                    stopJoint(3);
+                } else {
+                    stopJoint(4);
+                    stopJoint(6);
+                }
+                break;
+            default:
+        }
+    }
+}
 
 
 server.on('listening', function() {
@@ -424,7 +669,7 @@ server.on('message', function(message, remote) {
             handleControl(msg);
             break;
         case 'arm':
-            //armControl(msg);
+            armControl(msg);
             break;
         default:
             //console.log("###### Could not find commandType #######");
