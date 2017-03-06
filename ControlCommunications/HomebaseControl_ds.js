@@ -94,14 +94,12 @@ controller.on('left:move', function(data){
     console.log('left Moved: ' + data.x + ' | ' + data.y);
     
     event =  {
-        id: id,
         axis: 0,
         value: data.x,
         commandType: "mobility"
     };
     send_to_rover(event);
     event =  {
-        id: id,
         axis: 1,
         value: data.y,
         commandType: "mobility"
@@ -113,14 +111,12 @@ controller.on('right:move', function(data){
     console.log('right Moved: ' + data.x + ' | ' + data.y);
     
     event =  {
-        id: id,
         axis: 0,
         value: data.x,
         commandType: "arm"
     };
     send_to_rover(event);
     event =  {
-        id: id,
         axis: 1,
         value: data.y,
         commandType: "arm"
@@ -130,16 +126,5 @@ controller.on('right:move', function(data){
 
 
 
-gamepad.on("down", function (id, num) {
-    console.log(num);
-
-    event =  {
-        id: id,
-        type: "down",
-        axis: num,
-        commandType: "arm"
-    };
-     send_to_rover(event);
-});
 
 
