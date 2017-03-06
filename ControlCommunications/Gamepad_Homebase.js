@@ -67,6 +67,8 @@ socket.on('message', function(message, remote) {
         //console.log("Rover sent an ack");
         packet_count = 0;
         send_to_rover(CONTROL_MESSAGE_ACK);
+    } else if (msg.type == "debug") {
+        console.log(msg);
     }
 });
 

@@ -37,14 +37,29 @@ var HOST = 'localhost';
 const HOME_PORT = 5000;
 var HOME_HOST = '';
 
+// The global Config of the RoverControl can be changed by homebase control on the fly
 var config = {
-    TIME_TO_STOP: 750,
-    TEST_CONNECTION: 3000,
     Joystick_MIN: -32767,
     Joystick_MAX: 32767,
     arm_on: true,
     mobility_on: true,
-    debug: false
+    debug: false,
+    TIME_TO_STOP: 1000,
+    TEST_CONNECTION: 2000
+};
+
+var time = new Date();
+
+// If debug is true will send this info back to homebase control.
+var debug = {
+    type: "debug",
+    Number_Commands: 0,
+    Num_Mobility_Commands: 0,
+    Num_Arm_Commands: 0,
+    Tested_Connection_Num: 0,
+    Lost_Connection_Num: 0,
+    Start_Time: time.toString(),
+    Curr_Time: time.toString(),
 };
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
@@ -77,8 +92,6 @@ const CONTROL_MESSAGE_ROVER = {
 // These consts handle connection information with the homebase
 var gotAck = true;
 var gotAckRover = true;
-const TIME_TO_STOP = 750;
-const TEST_CONNECTION = 3000;
 
 // PWM Config for Pi Hat:
 const makePwmDriver = require('adafruit-i2c-pwm-driver');
@@ -247,8 +260,8 @@ function calculateDiff(yAxis, xAxis) {
     //xAxis = xAxis * -1;
     yAxis = yAxis * -1;
 
-    var V = (config.Joystick_MAX - Math.abs(xAxis)) * (yAxis / config.Joystick_MAX) + yAxis;
-    var W = (config.Joystick_MAX - Math.abs(yAxis)) * (xAxis / config.Joystick_MAX) + xAxis;
+    var V = (Number(config.Joystick_MAX) - Math.abs(xAxis)) * (yAxis / Number(config.Joystick_MAX)) + yAxis;
+    var W = (Number(config.Joystick_MAX) - Math.abs(yAxis)) * (xAxis / Number(config.Joystick_MAX)) + xAxis;
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
@@ -280,8 +293,10 @@ function setThrottle(adjust_Amount) {
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = parseInt(joystickData.axis);
+    let axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
+
+    debug.Num_Mobility_Commands += 1;
 
     var diffSteer;
 
@@ -343,10 +358,17 @@ function sendHome(msg) {
 // Will stop the rover if we have lost connection after TIME_TO_STOP
 setInterval(function() {
     sendHome(CONTROL_MESSAGE_ROVER);
+    debug.Tested_Connection_Num += 1;
+    time = new Date();
+    debug.Curr_Time = time.toString();
+    if (config.debug) {
+        sendHome(debug);
+    }
     gotAckRover = false;
     setTimeout(function() {
         if (gotAckRover === false) {
             console.log("Stopping Rover: ROVER lost connection to HOME")
+            debug.Lost_Connection_Num += 1;
             stopRover();
         }
     }, config.TIME_TO_STOP);
@@ -379,12 +401,12 @@ function handleControl(message) {
         gotAck = true;
         gotAckRover = true;
     } else if (message.type == "config") {
-        console.log(message);
-        config.Joystick_MAX = parseInt(message.Joystick_MAX);
-        config.Joystick_MIN = parseInt(message.Joystick_MIN);
         config.debug = message.debug;
         config.arm_on = message.arm_on;
         config.mobility_on = message.mobility_on;
+        config.Joystick_MAX = message.Joystick_MAX;
+        config.Joystick_MIN = message.Joystick_MIN;
+        console.log(config);
     }
 }
 
@@ -579,6 +601,8 @@ function stopJoint(jointNum) {
 // Still need to figure out mapping of the joystick controller.
 function armControl(message) {
 
+    debug.Num_Arm_Commands += 1;
+
     if (message.type == 'axis') {
         var axis = parseInt(message.number);
         // Determine which axis should be which joint.
@@ -651,6 +675,8 @@ server.on('message', function(message, remote) {
 
     var msg = JSON.parse(message);
     //console.log(msg.commandType);
+
+    debug.Number_Commands += 1;
 
     // Seperate the incoming command to its specified subsystem
     switch (msg.commandType) {
