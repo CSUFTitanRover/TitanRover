@@ -33,8 +33,8 @@ controller.on('error', err => console.log(err));
 const config = {
     commandType: "control",
     type: "config",
-    Joystick_MAX: 127.5,
-    Joystick_MIN: -127.5,
+    Joystick_MAX: -127.5,
+    Joystick_MIN: 127.5,
     arm_on: true,
     mobility_on: true,
     debug: false
@@ -46,8 +46,8 @@ function calculateDiff(yAxis, xAxis) {
 
     //xAxis = xAxis * -1;
   
-    yAxis = yAxis * -1;
-    xAxis = xAxis * -1;
+    //yAxis = yAxis * -1;
+    //xAxis = xAxis * -1;
     var V = (config.Joystick_MAX - Math.abs(xAxis)) * (yAxis / config.Joystick_MAX) + yAxis;
     var W = (config.Joystick_MAX - Math.abs(yAxis)) * (xAxis / config.Joystick_MAX) + xAxis;
     var right = (V + W) / 2.0;
@@ -73,47 +73,18 @@ function calculateDiff(yAxis, xAxis) {
     };
 }
 
-function myDiff(x_axis,y_axis){
- 
- // filter out a centered joystick - no action
-  if (x_axis < 126 || x_axis > 128) {
-    if (y_axis < 126 || y_axis > 128) {
-      // Map values from potentiometers to a smaller range for the PWM motor controllers (0-255)
-      x_axis = x_axis.map(0,255, saber_min, saber_max);
-      y_axis = y_axis.map(0,255, saber_min, saber_max);
-      
-      let ly_axis = y_axis;
-      let ry_axis = y_axis;
-
-      if (x_axis < saber_mid-2) { // turning left, so slow-down left track
-        if (y_axis > saber_mid+2) { // moving forward
-          ly_axis -= (saber_max - x_axis); // decreasing the value - moving it closer to the center-point - slows it down
-        }
-
-        if (y_axis < saber_mid-2) { // moving in reverse
-          ly_axis += (saber_max - x_axis); // increasing the value - moving it closer to the center-point - slows it down
-        }
-      }
-
-      if (x_axis < saber_mid+2) { // turning right, so slow-down right track
-        if (y_axis > saber_mid+2) { // moving forward
-          ry_axis -= (saber_max - x_axis); // decreasing the value - moving it closer to the center-point - slows it down
-        }
-
-        if (y_axis < saber_mid-2) { // moving in reverse
-          ry_axis += (saber_max - x_axis); // increasing the value - moving it closer to the center-point - slows it down
-        }
-      }
-
-     console.log(ly_axis + ' ' + ry_axis);
-    }
-  }
-}
 
 
 
 
-controller.on('right:move', function(data){
+// controller.on('right:move', function(data){
+//     //console.log(data.x +' ' + data.y);
+//     // myDiff(data.x,data.y);  
+//     calculateDiff(data.y-127.5,data.x-127.5);
+    
+// });
+
+controller.on('left:move', function(data){
     //console.log(data.x +' ' + data.y);
     // myDiff(data.x,data.y);  
     calculateDiff(data.y-127.5,data.x-127.5);

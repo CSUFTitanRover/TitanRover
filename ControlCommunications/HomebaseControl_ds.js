@@ -37,7 +37,7 @@ const HOMEBASE_PORT = 5000;
 
 // Port that the rover is hosting the udp server
 const PORT = 3000;
-const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
+const HOST = 'localhost'; // Needs to be the IP address of the rover
 
 // Control information
 const CONTROL_MESSAGE_TEST = {
@@ -93,21 +93,14 @@ function send_to_rover(message) {
 //Shifting values from 0 -255 to -127.5 to 127.5
 
 controller.on('left:move', function(data){
-    console.log('left Moved: ' + data.x + ' | ' + data.y);
+    
     
     event =  {
-        id: id,
-        axis: 0,
-        value: data.x-127.5,
+        x: (data.x-127.5),
+        y: (data.y-127.5),
         commandType: "mobility"
     };
-    send_to_rover(event);
-    event =  {
-        id: id,
-        axis: 1,
-        value: data.y-127.5,    
-        commandType: "mobility"
-    };
+   console.log(event.x + " " + event.y);
     send_to_rover(event);
 });
 
@@ -115,14 +108,12 @@ controller.on('right:move', function(data){
     console.log('right Moved: ' + data.x + ' | ' + data.y);
     
     event =  {
-        id: id,
         axis: 0,
         value: data.x-127.5,
         commandType: "arm"
     };
     send_to_rover(event);
     event =  {
-        id: id,
         axis: 1,
         value: data.y-127.5,
         commandType: "arm"
@@ -132,16 +123,5 @@ controller.on('right:move', function(data){
 
 
 
-gamepad.on("down", function (id, num) {
-    console.log(num);
-
-    event =  {
-        id: id,
-        type: "down",
-        axis: num,
-        commandType: "arm"
-    };
-     send_to_rover(event);
-});
 
 
