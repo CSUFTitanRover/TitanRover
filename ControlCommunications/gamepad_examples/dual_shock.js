@@ -25,7 +25,7 @@ controller.on('error', err => console.log(err));
 // });
 
 //add event handlers:
-controller.on('left:move', data => console.log('left Moved: ' + data.x + ' | ' + data.y));
+controller.on('left:move', data => console.log('left Moved: ' + data));
 
 controller.on('right:move', data => 
 {
