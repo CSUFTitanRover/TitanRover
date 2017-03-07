@@ -13,11 +13,11 @@ class ChartPanelTemplate extends Component {
         super(props);
 
         this.state = {
-            data: null,
-            dataKeys: null,
             queryAllData: true, // defualt value
             queryByTimerange: false // default value
         };
+        this.data = null;
+        this.dataKeys = null;
         this.uniqueKey = 0;
         this.socketClient = io.connect(rover_settings.homebase_ip);
         this.handleDeleteChartPanel = this.handleDeleteChartPanel.bind(this);
@@ -123,6 +123,9 @@ class ChartPanelTemplate extends Component {
             },
             subchart: {
                 show: true
+            },
+            transition: {
+                duration: 0 // turn off transitions which may improve load times for querying lots of data
             },
             axis: {
                 x: {
