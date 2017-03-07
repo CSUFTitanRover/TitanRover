@@ -33,8 +33,8 @@ var HOME_HOST = '';
 
 // The global Config of the RoverControl can be changed by homebase control on the fly
 var config = {
-    Joystick_MIN: 127.5,
-    Joystick_MAX: -127.5,
+    Joystick_MIN: -127.5,
+    Joystick_MAX: 127.5,
     arm_on: true,
     mobility_on: true,
     debug: false,
@@ -157,7 +157,7 @@ var speedAdjust = function(x, y) {
     var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX;
     return acceleration;
-}
+};
 
 /**
   Differential steering calculations are done here
@@ -169,11 +169,11 @@ function calculateDiff(yAxis, xAxis) {
     //xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
     //yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
 
-    // xAxis = xAxis * -1;
-    // yAxis = yAxis * -1;
+     xAxis = xAxis * -1;
+     yAxis = yAxis * -1;
 
-    var V = config.Joystick_MAX - Math.abs(xAxis) * (yAxis / config.Joystick_MAX) + yAxis;
-    var W = config.Joystick_MAX - Math.abs(yAxis) * (xAxis / config.Joystick_MAX) + xAxis;
+    var V = (Number(config.Joystick_MAX) - Math.abs(xAxis)) * (yAxis / Number(config.Joystick_MAX)) + yAxis;
+    var W = (Number(config.Joystick_MAX) - Math.abs(yAxis)) * (xAxis / Number(config.Joystick_MAX)) + xAxis;
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
@@ -188,35 +188,23 @@ function calculateDiff(yAxis, xAxis) {
     } else {
         left = left.map(0, config.Joystick_MAX, saber_mid, saber_max);
     }
-    console.log(left + " " + right);
+    
     return {
         "leftSpeed": left,
         "rightSpeed": right
     };
 }
 
-// Set the throttle speed
-function setThrottle(adjust_Amount) {
-    throttleValue = adjust_Amount.map(config.Joystick_MAX, config.Joystick_MIN, 0, 1);
-    //console.log(throttleValue);
-}
-
 
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-
     debug.Num_Mobility_Commands += 1;
 
-    var diffSteer;
-    console.log(joystickData.x +" "+ joystickData.y);
-    diffSteer = calculateDiff(parseFloat(joystickData.y),parseFloat(joystickData.x));
+    diffSteer = calculateDiff(joystickData.y,joystickData.x);
+    
     // pwm.setPWM(motor_left_channel, 0, parseInt(diffSteer.leftSpeed));
     // pwm.setPWM(motor_right_channel, 0, parseInt(diffSteer.rightSpeed));
-   
-    
-
-    
 };
 
 // Send 0 to both the x and y axis to stop the rover from running

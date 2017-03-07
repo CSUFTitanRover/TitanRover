@@ -93,14 +93,13 @@ function send_to_rover(message) {
 //Shifting values from 0 -255 to -127.5 to 127.5
 
 controller.on('left:move', function(data){
-    
-    
-    event =  {
-        x: (data.x-127.5),
-        y: (data.y-127.5),
+     event =  {
+        axis: 0,
+        x: data.x-127.5,
+        y: data.y-127.5,
         commandType: "mobility"
+        
     };
-   console.log(event.x + " " + event.y);
     send_to_rover(event);
 });
 

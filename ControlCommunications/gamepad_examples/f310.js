@@ -33,8 +33,8 @@ controller.on('error', err => console.log(err));
 const config = {
     commandType: "control",
     type: "config",
-    Joystick_MAX: -127.5,
-    Joystick_MIN: 127.5,
+    Joystick_MAX: 127.5,
+    Joystick_MIN: -127.5,
     arm_on: true,
     mobility_on: true,
     debug: false
@@ -46,10 +46,10 @@ function calculateDiff(yAxis, xAxis) {
 
     //xAxis = xAxis * -1;
   
-    //yAxis = yAxis * -1;
-    //xAxis = xAxis * -1;
-    var V = (config.Joystick_MAX - Math.abs(xAxis)) * (yAxis / config.Joystick_MAX) + yAxis;
-    var W = (config.Joystick_MAX - Math.abs(yAxis)) * (xAxis / config.Joystick_MAX) + xAxis;
+    yAxis = yAxis * -1;
+    xAxis = xAxis * -1;
+    var V = (Number(config.Joystick_MAX) - Math.abs(xAxis)) * (yAxis / Number(config.Joystick_MAX)) + yAxis;
+    var W = (Number(config.Joystick_MAX) - Math.abs(yAxis)) * (xAxis / Number(config.Joystick_MAX)) + xAxis;
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
