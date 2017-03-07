@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "diff-steer": "0.0.2",
     "dualshock-controller": "^1.1.1",
     "gamepad": "^1.4.2",
     "node-gamepad": "^0.1.15"

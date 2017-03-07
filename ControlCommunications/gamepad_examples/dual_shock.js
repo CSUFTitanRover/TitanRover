@@ -2,10 +2,7 @@
 var dualShock = require('dualshock-controller');
 //var gamepad = require("gamepad");
  
-// Initialize the library 
-//gamepad.init();
-setInterval(function(){
-}, 5000);
+
 //pass options to init the controller.
 var controller = dualShock(
     {
@@ -35,11 +32,6 @@ controller.on('right:move', data =>
 
 console.log('right Moved: ' + data.x + ' | ' + data.y);
     
-    controller.setExtras({rumbleRight: 120});
-    
-    setTimeout(function(){
-        controller.setExtras({rumbleRight: 0});
-    },200);
 });
 
 controller.on('connected', () => console.log('connected'));

@@ -90,20 +90,22 @@ function send_to_rover(message) {
     });
 }
 
+//Shifting values from 0 -255 to -127.5 to 127.5
+
 controller.on('left:move', function(data){
     console.log('left Moved: ' + data.x + ' | ' + data.y);
     
     event =  {
         id: id,
         axis: 0,
-        value: data.x,
+        value: data.x-127.5,
         commandType: "mobility"
     };
     send_to_rover(event);
     event =  {
         id: id,
         axis: 1,
-        value: data.y,
+        value: data.y-127.5,    
         commandType: "mobility"
     };
     send_to_rover(event);
@@ -115,14 +117,14 @@ controller.on('right:move', function(data){
     event =  {
         id: id,
         axis: 0,
-        value: data.x,
+        value: data.x-127.5,
         commandType: "arm"
     };
     send_to_rover(event);
     event =  {
         id: id,
         axis: 1,
-        value: data.y,
+        value: data.y-127.5,
         commandType: "arm"
     };
     send_to_rover(event);
