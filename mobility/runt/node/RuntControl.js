@@ -98,8 +98,8 @@ const saber_min = 1100; // Calculated to be 1000 us
 const saber_max = 4095; // Calculated to be 2000 us
 
 // Joystick values
-const Joystick_MIN = -32767;
-const Joystick_MAX = 32767;
+const Joystick_MIN = -127.5;
+const Joystick_MAX = 127.5;
 
 // PWM Channel Config Motor:
 const motor_left_channel = 0;
@@ -178,11 +178,11 @@ function calculateDiff(yAxis, xAxis) {
     //xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
     //yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
 
-    //xAxis = xAxis * -1;
-    //yAxis = yAxis * -1;
+    xAxis = xAxis * -1;
+    yAxis = yAxis * -1;
 
-    var V = (32767 - Math.abs(xAxis)) * (yAxis / 32767.0) + yAxis;
-    var W = (32767 - Math.abs(yAxis)) * (xAxis / 32767.0) + xAxis;
+    var V = (127.5 - Math.abs(xAxis)) * (yAxis / 127.5) + yAxis;
+    var W = (127.5  - Math.abs(yAxis)) * (xAxis / 127.5 ) + xAxis;
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
@@ -239,35 +239,13 @@ function setThrottle(adjust_Amount) {
 // Function that handles all mobility from the joystick
 var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    var axis = parseInt(joystickData.number);
-    var value = parseInt(joystickData.value);
+   // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
+    debug.Num_Mobility_Commands += 1;
 
-    var diffSteer;
-
-    if (axis === 0 || axis === 1) {
-        value = parseInt(value * throttleValue);
-    }
-
-    // X axis
-    if (axis === 0) {
-        diffSteer = calculateDiff(value, lastY);
-        lastX = value;
-    }
-    // Y axis
-    else if (axis === 1) {
-        diffSteer = calculateDiff(lastX, value);
-        lastY = value;
-    }
-    // Throttle axis
-    else if (axis === 3) {
-        setThrottle(value)
-    }
-
-    // If the Mobility recieved a driving axis.
-    if (axis === 0 || axis === 1) {
-        setMotors(diffSteer);
-    }
-
+    diffSteer = calculateDiff(joystickData.y,joystickData.x);
+    console.log(diffSteer);
+     pwm.setPWM(motor_left_channel, 0, parseInt(diffSteer.leftSpeed));
+     pwm.setPWM(motor_right_channel, 0, parseInt(diffSteer.rightSpeed));
 	
 
 };
@@ -381,7 +359,7 @@ server.on('message', function(message, remote) {
             handleControl(msg);
             break;
         case 'arm':
-            armControl(msg);
+            //armControl(msg);
             break;
         default:
             //console.log("###### Could not find commandType #######");
