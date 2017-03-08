@@ -157,7 +157,7 @@ function stopRover() {
 
     // Stopping all joints
     for(i = 1; i<=7; i++){
-        stopJoint(i);
+        arm.stopJoint(i);
     }
   
 }
