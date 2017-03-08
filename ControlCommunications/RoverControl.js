@@ -95,6 +95,44 @@ var gotAckRover = true;
 var triggerPressed = false;
 var thumbPressed = false;
 
+/**
+ * Every movement command will be represented in 4 bytes
+ * The first byte will be the object that needs to movement
+ * in case of pwm signal object byte 3 and 4 will represent the signal between 1000 - 2000
+ * in case of stepper motor byte 2 will be direction. Byte 3 will be on or off.  Byte 4 is still
+ * up for grabs but will probably be steps
+ */
+var x_Axis_arr = new Uint16Array(2);
+x_Axis_arr[0] = 0x0800;
+var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
+
+var y_Axis_arr = new Uint16Array(2);
+y_Axis_arr[0] = 0x0900;
+var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
+
+var joint1_arr = new Uint16Array(2);
+var joint1_buff = Buffer.from(joint1_arr.buffer);
+
+var joint2_arr = new Uint16Array(2);
+joint2_arr[0] = 0x0200;
+var joint2_buff = Buffer.from(joint2_arr.buffer);
+
+var joint3_arr = new Uint16Array(2);
+joint3_arr[0] = 0x0300;
+var joint3_buff = Buffer.from(joint3_arr.buffer);
+
+var joint4_arr = new Uint16Array(2);
+var joint4_buff = Buffer.from(joint4_arr.buffer);
+
+var joint5_arr = new Uint16Array(2);
+var joint5_buff = Buffer.from(joint5_arr.buffer);
+
+var joint6_arr = new Uint16Array(2);
+var joint6_buff = Buffer.from(joint6_arr.buffer);
+
+var joint7_arr = new Uint16Array(2);
+var joint7_buff = Buffer.from(joint7_arr.buffer);
+
 
 
 /**
