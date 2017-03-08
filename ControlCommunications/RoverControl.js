@@ -24,7 +24,6 @@ var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 
 // Allows us to contorl the rpio pins on the raspberry pi
-var rpio = require('rpio');
 var serialPort = require('serialport');
 
 var port = new serialPort('/dev/ttyACM0', {
@@ -93,119 +92,46 @@ const CONTROL_MESSAGE_ROVER = {
 var gotAck = true;
 var gotAckRover = true;
 
-// PWM Config for Pi Hat:
-const makePwmDriver = require('adafruit-i2c-pwm-driver');
-const pwm = makePwmDriver({
-    address: 0x40,
-    device: '/dev/i2c-1',
-    debug: false
-});
-
-// Based on J. Stewart's calculations:
-// May need to be adjusted/recalculated
-// Values for Sabertooth 2X60:
-//    1000 = Full Reverse
-//    1500 = Stopped
-//    2000 = Full Forward.
-const saber_min = 241; // Calculated to be 1000 us
-const saber_mid = 325; // Calculated to be 1500 us
-const saber_max = 409; // Calculated to be 2000 us
-
 var triggerPressed = false;
 var thumbPressed = false;
 
-// PWM Channel Config Motor:
-const motor_left_channel = 0;
-const motor_right_channel = 1;
-
-/** All GPIO pins are the actual pins so 1-40
- * @param {joint_move_pin}
- * This pin is used to tell the arduino to send the pulse signals
- * @param {joint_dir_pin}
- * Tells the stepper which direction it should go
- * @param {joint_enab_pin}
- * Tells the stepper motor to hold its position after movement.
- *
- * This applies to joint1, joint4, joint5 which are the sumtor stepper motor drivers
+/**
+ * Every movement command will be represented in 4 bytes
+ * The first byte will be the object that needs to movement
+ * in case of pwm signal object byte 3 and 4 will represent the signal between 1000 - 2000
+ * in case of stepper motor byte 2 will be direction. Byte 3 will be on or off.  Byte 4 is still
+ * up for grabs but will probably be steps
  */
+var x_Axis_arr = new Uint16Array(2);
+x_Axis_arr[0] = 0x0800;
+var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
 
-// Joint1 rotating base pins
-const joint1_dir_pin = 11;
-const joint1_enab_pin = 13;
-const joint1_on = '1';
-const joint1_off = '2';
+var y_Axis_arr = new Uint16Array(2);
+y_Axis_arr[0] = 0x0900;
+var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
-// Set all pins to low on init
-rpio.open(joint1_dir_pin, rpio.OUTPUT, rpio.LOW);
-rpio.open(joint1_enab_pin, rpio.OUTPUT, rpio.LOW);
+var joint1_arr = new Uint16Array(2);
+var joint1_buff = Buffer.from(joint1_arr.buffer);
 
-// Joint2 PWM pins
-const joint2_pwm_pin = 4;
+var joint2_arr = new Uint16Array(2);
+joint2_arr[0] = 0x0200;
+var joint2_buff = Buffer.from(joint2_arr.buffer);
 
-// Joint3 PWM pins
-const joint3_pwm_pin = 5;
+var joint3_arr = new Uint16Array(2);
+joint3_arr[0] = 0x0300;
+var joint3_buff = Buffer.from(joint3_arr.buffer);
 
-// joint 4 Sumtor pins
-const joint4_dir_pin = 32;
-const joint4_enab_pin = 36;
-const joint4_on = '3';
-const joint4_off = '4';
+var joint4_arr = new Uint16Array(2);
+var joint4_buff = Buffer.from(joint4_arr.buffer);
 
-// Set all pins to low on init
-rpio.open(joint4_dir_pin, rpio.OUTPUT, rpio.LOW);
-rpio.open(joint4_enab_pin, rpio.OUTPUT, rpio.LOW);
+var joint5_arr = new Uint16Array(2);
+var joint5_buff = Buffer.from(joint5_arr.buffer);
 
-// joint 5 Sumtor pins
-const joint5_dir_pin = 15;
-const joint5_enab_pin = 18;
-const joint5_on = '5';
-const joint5_off = '6';
+var joint6_arr = new Uint16Array(2);
+var joint6_buff = Buffer.from(joint6_arr.buffer);
 
-// Set all pins to low on init
-rpio.open(joint5_dir_pin, rpio.OUTPUT, rpio.LOW);
-rpio.open(joint5_enab_pin, rpio.OUTPUT, rpio.LOW);
-
-// Joint 6 Pololu pins
-const joint6_dir_pin = 12;
-const joint6_on = '7';
-const joint6_off = '8';
-
-// Set all pins to low on init
-rpio.open(joint6_dir_pin, rpio.OUTPUT, rpio.LOW);
-
-// Joint 7 Pololu pins
-const joint7_dir_pin = 16;
-const joint7_on = '9';
-const joint7_off = '0';
-
-// Set all pins to low on init
-rpio.open(joint7_dir_pin, rpio.OUTPUT, rpio.LOW);
-
-
-// Pins to destroy
-// Will be used when program exits to close these pins
-var pins = [11, 12, 13, 15, 18, 32, 36];
-
-
-// Based on J. Stewart's calculations:
-pwm.setPWMFreq(50);
-
-// NPM Library for USB Logitech Extreme 3D Pro Joystick input:
-//    See: https://titanrover.slack.com/files/joseph_porter/F2DS4GBUM/Got_joystick_working_here_is_the_code.js
-//    Docs: https://www.npmjs.com/package/joystick
-//var joystick = new(require('joystick'))(0, 3500, 350);
-
-// NPM Differential Steering Library:
-//    Docs: https://www.npmjs.com/package/diff-steer
-var steerMotors = require('diff-steer/motor_control');
-
-// Global Variables to Keep Track of Asynchronous Translated
-//    Coordinate Assignment
-var lastX = 0;
-var lastY = 0;
-
-// Sets the speed at which the joystick values will be used
-var throttleValue = 1.0;
+var joint7_arr = new Uint16Array(2);
+var joint7_buff = Buffer.from(joint7_arr.buffer);
 
 /**
  * Prototype function.  Map values from range in_min -> in_max to out_min -> out_max
@@ -219,111 +145,36 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
     return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
 
-/**
- * Adjusts the speed by an exponential factor.  This makes acceleration a function
- *  of the product of differential steering and distance of joystick from its origin
- * @param {Number} x
- * @param {Number} y
- * @return {Number} A value between 0 and 1 that represents ratio of distance from
- *      origin to joystick coordinate.  Effectively lowers speed closer to origin.
- */
-var speedAdjust = function(x, y) {
-    var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-    var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX;
-    return acceleration;
-}
-
-function setLeft(speed) {
-    pwm.setPWM(motor_left_channel, 0, parseInt(speed));
-}
-
-function setRight(speed) {
-    pwm.setPWM(motor_right_channel, 0, parseInt(speed));
-}
-
-var setMotors = function(diffSteer) {
-    setLeft(diffSteer.leftSpeed);
-    setRight(diffSteer.rightSpeed);
-    //console.log(diffSteer);
-};
-
-/**
-  Differential steering calculations are done here
-  * @param {xAxis}
-  * @param {yAxis}
-  * @return {speed_of_leftandright}
-  */
-function calculateDiff(yAxis, xAxis) {
-    //xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
-    //yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
-
-    //xAxis = xAxis * -1;
-    yAxis = yAxis * -1;
-
-    var V = (Number(config.Joystick_MAX) - Math.abs(xAxis)) * (yAxis / Number(config.Joystick_MAX)) + yAxis;
-    var W = (Number(config.Joystick_MAX) - Math.abs(yAxis)) * (xAxis / Number(config.Joystick_MAX)) + xAxis;
-    var right = (V + W) / 2.0;
-    var left = (V - W) / 2.0;
-
-    if (right <= 0) {
-        right = right.map(config.Joystick_MIN, 0, saber_min, saber_mid);
+function getPwmValue(value) {
+    if (value <= 0) {
+        value = value.map(config.Joystick_MIN, 0, 1000, 1500);
     } else {
-        right = right.map(0, config.Joystick_MAX, saber_mid, saber_max);
+        value = value.map(0, config.Joystick_MAX, 1500, 2000);
     }
 
-    if (left <= 0) {
-        left = left.map(config.Joystick_MIN, 0, saber_min, saber_mid);
-    } else {
-        left = left.map(0, config.Joystick_MAX, saber_mid, saber_max);
-    }
-
-    return {
-        "leftSpeed": left,
-        "rightSpeed": right
-    };
-}
-
-// Set the throttle speed
-function setThrottle(adjust_Amount) {
-    throttleValue = adjust_Amount.map(config.Joystick_MAX, config.Joystick_MIN, 0, 1);
-    //console.log(throttleValue);
+    return value;
 }
 
 
 // Function that handles all mobility from the joystick
-var receiveMobility = function(joystickData) {
+function receiveMobility(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
 
+    value = getPwmValue(value);
+
     debug.Num_Mobility_Commands += 1;
 
-    var diffSteer;
-
-    if (axis === 0 || axis === 1) {
-        value = parseInt(value * throttleValue);
-    }
-
-    // X axis
     if (axis === 0) {
-        diffSteer = calculateDiff(value, lastY);
-        lastX = value;
-    }
-    // Y axis
-    else if (axis === 1) {
-        diffSteer = calculateDiff(lastX, value);
-        lastY = value;
-    }
-    // Throttle axis
-    else if (axis === 3) {
-        setThrottle(value)
+        x_Axis_arr[1] = value;
+        port.write(x_Axis_buff);
+    } else if (axis === 1) {
+        y_Axis_arr[1] = value;
+        port.write(y_Axis_buff);
     }
 
-    // If the Mobility recieved a driving axis.
-    if (axis === 0 || axis === 1) {
-        setMotors(diffSteer);
-    }
-};
+}
 
 // Send 0 to both the x and y axis to stop the rover from running
 // Will only be invoked if we lose signal
@@ -331,15 +182,21 @@ function stopRover() {
     receiveMobility(zeroMessage[0]);
     receiveMobility(zeroMessage[1]);
 
-    // Shutdown the arm
-    port.write(joint1_off);
-    setLinearSpeed(joint2_pwm_pin, 0);
-    setLinearSpeed(joint3_pwm_pin, 0);
-    port.write(joint4_off);
-    port.write(joint5_off);
-    port.write(joint6_off);
-    port.write(joint7_off);
+    joint1_arr[1] = 0x0000;
+    joint2_arr[1] = 0x05dc;
+    joint3_arr[1] = 0x05dc;
+    joint4_arr[1] = 0x0000;
+    joint5_arr[1] = 0x0000;
+    joint6_arr[1] = 0x0000;
+    joint7_arr[1] = 0x0000;
 
+    port.write(joint1_buff);
+    port.write(joint2_buff);
+    port.write(joint3_buff);
+    port.write(joint4_buff);
+    port.write(joint5_buff);
+    port.write(joint6_buff);
+    port.write(joint7_buff);
 }
 
 // Send data to the homebase control for connection information
@@ -411,27 +268,6 @@ function handleControl(message) {
 }
 
 /**
- * Sends a PWM signal to the appropriate Linear Actuator
- * @param {int} channel PWM pin of linear Actuator
- * @param {int} value Will be between -1 and Joystick_MAX
- */
-function setLinearSpeed(channel, value) {
-    const linear_min = 241; // Calculated to be 1000 us
-    const linear_mid = 325; // Calculated to be 1500 us
-    const linear_max = 409; // Calculated to be 2000 us
-
-    var pwmSig;
-
-    if (value <= 0) {
-        pwmSig = parseInt(value.map(config.Joystick_MIN, 0, linear_min, linear_mid));
-        pwm.setPWM(channel, 0, pwmSig);
-    } else {
-        pwmSig = parseInt(value.map(0, config.Joystick_MAX, linear_mid, linear_max));
-        pwm.setPWM(channel, 0, pwmSig);
-    }
-}
-
-/**
  * Joint1: Phantom Menace
  * The rotating base for the arm
  * Driver: Sumtor mb450a
@@ -441,16 +277,18 @@ function joint1_rotatingBase(message) {
     let direction = (value < 0) ? true : false;
 
     if (direction) {
-        rpio.write(joint1_dir_pin, rpio.HIGH);
+        joint1_arr[0] = 0x0101;
     } else {
-        rpio.write(joint1_dir_pin, rpio.LOW);
+        joint1_arr[0] = 0x0100;
     }
 
-    if (value == 0) {
-        port.write(joint1_off);
+    if (value === 0) {
+        joint1_arr[1] = 0x0000;
     } else {
-        port.write(joint1_on);
+        joint1_arr[1] = 0x0100;
     }
+
+    port.write(joint1_buff);
 
 }
 
@@ -461,7 +299,13 @@ function joint1_rotatingBase(message) {
  */
 function joint2_linear1(message) {
     let value = parseInt(message.value);
-    setLinearSpeed(joint2_pwm_pin, value);
+
+    value = getPwmValue(value);
+
+    joint2_arr[1] = value;
+
+    port.write(joint2_buff);
+
 }
 
 /**
@@ -471,7 +315,12 @@ function joint2_linear1(message) {
  */
 function joint3_linear2(message) {
     let value = parseInt(message.value);
-    setLinearSpeed(joint3_pwm_pin, value);
+
+    value = getPwmValue(value);
+
+    joint2_arr[1] = value;
+
+    port.write(joint2_buff);
 }
 
 /**
@@ -484,17 +333,18 @@ function joint4_rotateWrist(message) {
     let direction = (value < 0) ? true : false;
 
     if (direction) {
-        rpio.write(joint4_dir_pin, rpio.HIGH);
+        joint4_arr[0] = 0x0401;
     } else {
-        rpio.write(joint4_dir_pin, rpio.LOW);
+        joint4_arr[0] = 0x0400;
     }
 
-    if (value == 0) {
-        port.write(joint4_off);
+    if (value === 0) {
+        joint4_arr[1] = 0x0000;
     } else {
-        port.write(joint4_on);
+        joint4_arr[1] = 0x0100;
     }
 
+    port.write(joint4_buff);
 }
 
 /**
@@ -507,17 +357,18 @@ function joint5_90degree(message) {
     let direction = (value < 0) ? true : false;
 
     if (direction) {
-        rpio.write(joint5_dir_pin, rpio.HIGH);
+        joint5_arr[0] = 0x0501;
     } else {
-        rpio.write(joint5_dir_pin, rpio.LOW);
+        joint5_arr[0] = 0x0500;
     }
 
-    if (value == 0) {
-        port.write(joint5_off);
+    if (value === 0) {
+        joint5_arr[1] = 0x0000;
     } else {
-        port.write(joint5_on);
+        joint5_arr[1] = 0x0100;
     }
 
+    port.write(joint5_buff);
 }
 
 /**
@@ -530,16 +381,18 @@ function joint6_360Unlimited(message) {
     let direction = (value < 0) ? true : false;
 
     if (direction) {
-        rpio.write(joint6_dir_pin, rpio.HIGH);
+        joint6_arr[0] = 0x0601;
     } else {
-        rpio.write(joint6_dir_pin, rpio.LOW);
+        joint6_arr[0] = 0x0600;
     }
 
-    if (value == 0) {
-        port.write(joint6_off);
+    if (value === 0) {
+        joint6_arr[1] = 0x0000;
     } else {
-        port.write(joint6_on);
+        joint6_arr[1] = 0x0100;
     }
+
+    port.write(joint6_buff);
 }
 
 /**
@@ -552,16 +405,18 @@ function joint7_gripper(message) {
     let direction = (value < 0) ? true : false;
 
     if (direction) {
-        rpio.write(joint7_dir_pin, rpio.HIGH);
+        joint7_arr[0] = 0x0701;
     } else {
-        rpio.write(joint7_dir_pin, rpio.LOW);
+        joint7_arr[0] = 0x0700;
     }
 
-    if (value == 0) {
-        port.write(joint7_off);
+    if (value === 0) {
+        joint7_arr[1] = 0x0000;
     } else {
-        port.write(joint7_on);
+        joint7_arr[1] = 0x0100;
     }
+
+    port.write(joint7_buff);
 }
 
 /**
@@ -571,25 +426,32 @@ function joint7_gripper(message) {
 function stopJoint(jointNum) {
     switch (jointNum) {
         case 1:
-            port.write(joint1_off);
+            joint1_arr[1] = 0x0000;
+            port.write(joint1_buff);
             break;
         case 2:
-            setLinearSpeed(joint2_pwm_pin, 0);
+            joint2_arr[1] = 0x05dc;
+            port.write(joint2_buff);
             break;
         case 3:
-            setLinearSpeed(joint3_pwm_pin, 0);
+            joint3_arr[1] = 0x05dc;
+            port.write(joint3_buff);
             break;
         case 4:
-            port.write(joint4_off);
+            joint4_arr[1] = 0x0000;
+            port.write(joint4_buff);
             break;
         case 5:
-            port.write(joint5_off);
+            joint5_arr[1] = 0x0000;
+            port.write(joint5_buff);
             break;
         case 6:
-            port.write(joint6_off);
+            joint6_arr[1] = 0x0000;
+            port.write(joint6_buff);
             break;
         case 7:
-            port.write(joint7_off);
+            joint7_arr[1] = 0x0000;
+            port.write(joint7_buff);
             break;
         default:
             console.log(jointNum + " joint does not exist");
@@ -700,17 +562,9 @@ server.on('message', function(message, remote) {
 
 server.bind(PORT);
 
-// Will close all the pins that were in use by this process
-function closePins() {
-    pins.forEach(function(value) {
-        rpio.close(value);
-    });
-}
-
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     stopRover();
-    closePins();
     process.exit();
 });
 
@@ -719,7 +573,6 @@ process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     stopRover();
-    closePins();
     // some other closing procedures go here
     process.exit();
 });;

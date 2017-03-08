@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "adafruit-i2c-pwm-driver": "^0.2.0",
     "body-parser": "^1.15.2",
     "dgram": "^1.0.1",
     "diff-steer": "0.0.2",
@@ -18,15 +17,11 @@
     "joystick": "^0.1.2",
     "microseconds": "^0.1.0",
     "mongodb": "^2.2.10",
-    "pubnub": "^4.0.8",
-    "raspi": "^3.0.4",
-    "raspi-io": "^6.1.1",
-    "raspi-pwm": "^3.1.2",
     "request": "^2.75.0",
-    "rpi-gpio": "^0.7.0",
-    "rpio": "^0.9.15",
     "serialport": "^4.0.6",
     "socket.io": "^1.7.3",
-    "socket.io-client": "^1.7.3"
+    "socket.io-client": "^1.7.3",
+    "dualshock-controller": "^1.1.1",
+    "gamepad": "^1.4.2"
   }
 }
