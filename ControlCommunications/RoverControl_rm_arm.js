@@ -155,21 +155,11 @@ function stopRover() {
     receiveMobility(zeroMessage[0]);
     receiveMobility(zeroMessage[1]);
 
-    joint1_arr[1] = 0x0000;
-    joint2_arr[1] = 0x05dc;
-    joint3_arr[1] = 0x05dc;
-    joint4_arr[1] = 0x0000;
-    joint5_arr[1] = 0x0000;
-    joint6_arr[1] = 0x0000;
-    joint7_arr[1] = 0x0000;
-
-    port.write(joint1_buff);
-    port.write(joint2_buff);
-    port.write(joint3_buff);
-    port.write(joint4_buff);
-    port.write(joint5_buff);
-    port.write(joint6_buff);
-    port.write(joint7_buff);
+    // Stopping all joints
+    for(i = 1; i<=7; i++){
+        stopJoint(i);
+    }
+  
 }
 
 // Send data to the homebase control for connection information
