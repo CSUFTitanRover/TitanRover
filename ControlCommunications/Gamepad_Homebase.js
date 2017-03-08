@@ -15,15 +15,13 @@ https://docs.google.com/document/d/1WDijduTZjryv08eI5N0dVvTw98pcXWOBMx0P8Qr28a8/
 
 */
 
-var gamepad = require('gamepad');
+var dualShock = require('dualshock-controller');
 var request = require('request');
 
 var dgram = require('dgram');
 var socket = dgram.createSocket('udp4');
 
-// Initialize the library
-gamepad.init();
-setInterval(gamepad.processEvents, 16);
+
 //var URL_ROVER = 'http://localhost:3000/command';
 
 const HOMEBASE_PORT = 5000;
@@ -32,11 +30,20 @@ const HOMEBASE_PORT = 5000;
 const PORT = 3000;
 const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
 
+var controller = dualShock(
+    {
+        config : "dualShock3",
+        //smooths the output from the acelerometers (moving averages) defaults to true
+        accelerometerSmoothing : true,
+        //smooths the output from the analog sticks (moving averages) defaults to false
+        analogStickSmoothing : false
+    });
+
 const CHANGE_CONFIG = {
     commandType: "control",
     type: "config",
-    Joystick_MAX: 1,
-    Joystick_MIN: -1,
+    Joystick_MAX: 127.50,
+    Joystick_MIN: -127.50,
     arm_on: true,
     mobility_on: true,
     debug: false
@@ -90,24 +97,13 @@ function send_to_rover(message) {
     });
 }
 
-// Listen for move events
-gamepad.on("move", function(id, axis, value) {
-    console.log(value);
-    event = {
-        id: id,
-        axis: axis,
-        value: value,
-        commandType: null
+controller.on('left:move', function(data){
+     event =  {
+        number: null,
+        x: data.x-127.5,
+        y: data.y-127.5,
+        commandType: "mobility"
+        
     };
-
-    // If the axis is 0 or 1 it is the left joystick
-    if (axis <= 1) {
-        event.commandType = "mobility";
-    }
-    // Axis 2 and 3 (right joystick) controls inverse kinematics limb 1 and 2
-    // Axis 4 and 5 (d-pad) will be used to control the rotating base and last limb
-    else if (axis <= 5) {
-        event.commandType = "arm";
-    }
     send_to_rover(event);
 });

@@ -23,6 +23,8 @@ var bodyParser = require('body-parser');
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 
+// Importing arm functions 
+var arm = require('./arm');
 // Allows us to contorl the rpio pins on the raspberry pi
 var serialPort = require('serialport');
 
@@ -94,7 +96,6 @@ var gotAckRover = true;
 
 var triggerPressed = false;
 var thumbPressed = false;
-
 
 
 /**
@@ -239,196 +240,6 @@ function handleControl(message) {
     }
 }
 
-/**
- * Joint1: Phantom Menace
- * The rotating base for the arm
- * Driver: Sumtor mb450a
- */
-function joint1_rotatingBase(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        joint1_arr[0] = 0x0101;
-    } else {
-        joint1_arr[0] = 0x0100;
-    }
-
-    if (value === 0) {
-        joint1_arr[1] = 0x0000;
-    } else {
-        joint1_arr[1] = 0x0100;
-    }
-
-    port.write(joint1_buff);
-
-}
-
-/**
- * Joint2: Attack of the Clones
- * Will be the longer first linear Actuator
- * Driver: Actobotics Dual Motor Controller
- */
-function joint2_linear1(message) {
-    let value = parseInt(message.value);
-
-    value = getPwmValue(value);
-
-    joint2_arr[1] = value;
-
-    port.write(joint2_buff);
-
-}
-
-/**
- * Joint3: Revenge of the Sith
- * Will be the smaller second linear Actuator
- * Driver: Actobotics Dual Motor Controller
- */
-function joint3_linear2(message) {
-    let value = parseInt(message.value);
-
-    value = getPwmValue(value);
-
-    joint2_arr[1] = value;
-
-    port.write(joint2_buff);
-}
-
-/**
- * Joint4: A New Hope
- * The 180 degree wrist
- * Driver: Sumtor mb450a
- */
-function joint4_rotateWrist(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        joint4_arr[0] = 0x0401;
-    } else {
-        joint4_arr[0] = 0x0400;
-    }
-
-    if (value === 0) {
-        joint4_arr[1] = 0x0000;
-    } else {
-        joint4_arr[1] = 0x0100;
-    }
-
-    port.write(joint4_buff);
-}
-
-/**
- * Joint5: Empire Strikes Back
- * The 90 degree joint
- * Driver: Sumtor mb450a
- */
-function joint5_90degree(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        joint5_arr[0] = 0x0501;
-    } else {
-        joint5_arr[0] = 0x0500;
-    }
-
-    if (value === 0) {
-        joint5_arr[1] = 0x0000;
-    } else {
-        joint5_arr[1] = 0x0100;
-    }
-
-    port.write(joint5_buff);
-}
-
-/**
- * Joint6: Return of the Jedi
- * 360 degree rotation of this joint no need for limit switches
- * Driver is a Pololu
- */
-function joint6_360Unlimited(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        joint6_arr[0] = 0x0601;
-    } else {
-        joint6_arr[0] = 0x0600;
-    }
-
-    if (value === 0) {
-        joint6_arr[1] = 0x0000;
-    } else {
-        joint6_arr[1] = 0x0100;
-    }
-
-    port.write(joint6_buff);
-}
-
-/**
- * Joint7: The Force Awakings
- * The gripper that is a linear actuator
- * Driver: Pololu AMIS-30543
- */
-function joint7_gripper(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        joint7_arr[0] = 0x0701;
-    } else {
-        joint7_arr[0] = 0x0700;
-    }
-
-    if (value === 0) {
-        joint7_arr[1] = 0x0000;
-    } else {
-        joint7_arr[1] = 0x0100;
-    }
-
-    port.write(joint7_buff);
-}
-
-/**
- * Tell this joint to stop moving
- * @param {int} jointNum 1 - 7
- */
-function stopJoint(jointNum) {
-    switch (jointNum) {
-        case 1:
-            joint1_arr[1] = 0x0000;
-            port.write(joint1_buff);
-            break;
-        case 2:
-            joint2_arr[1] = 0x05dc;
-            port.write(joint2_buff);
-            break;
-        case 3:
-            joint3_arr[1] = 0x05dc;
-            port.write(joint3_buff);
-            break;
-        case 4:
-            joint4_arr[1] = 0x0000;
-            port.write(joint4_buff);
-            break;
-        case 5:
-            joint5_arr[1] = 0x0000;
-            port.write(joint5_buff);
-            break;
-        case 6:
-            joint6_arr[1] = 0x0000;
-            port.write(joint6_buff);
-            break;
-        case 7:
-            joint7_arr[1] = 0x0000;
-            port.write(joint7_buff);
-            break;
-        default:
-            console.log(jointNum + " joint does not exist");
-    }
-}
 
 
 // Will handle control of the arm one to one.
@@ -444,30 +255,30 @@ function armControl(message) {
             case 0:
                 // Thumb button had to be pressed in order to use joint6
                 if (thumbPressed) {
-                    joint6_360Unlimited(message);
+                    arm.joint6_360Unlimited(message);
                 } else {
-                    joint3_linear2(message);
+                    arm.joint3_linear2(message);
                 }
                 break;
             case 1:
                 // Thumb button had to be pressed in order to use joint4
                 if (thumbPressed) {
-                    joint4_rotateWrist(message);
-                } else {
-                    joint2_linear1(message);
+                    arm.joint4_rotateWrist(message);
+                } else {    
+                    arm.joint2_linear1(message);
                 }
                 break;
             case 2:
-                joint1_rotatingBase(message);
+                arm.joint1_rotatingBase(message);
                 break;
             case 3:
                 // This is the throttle
                 break;
             case 4:
-                joint5_90degree(message);
+                arm.joint5_90degree(message);
                 break;
             case 5:
-                joint7_gripper(message);
+                arm.joint7_gripper(message);
                 break;
             default:
 
@@ -484,11 +295,11 @@ function armControl(message) {
                 // Switch our config to use other arm joints
                 thumbPressed = (thumbPressed) ? false : true;
                 if (thumbPressed) {
-                    stopJoint(2);
-                    stopJoint(3);
+                    arm.stopJoint(2);
+                    arm.stopJoint(3);
                 } else {
-                    stopJoint(4);
-                    stopJoint(6);
+                    arm.stopJoint(4);
+                    arm.stopJoint(6);
                 }
                 break;
             default:
@@ -547,4 +358,4 @@ process.on('SIGINT', function() {
     stopRover();
     // some other closing procedures go here
     process.exit();
-});;
+});
