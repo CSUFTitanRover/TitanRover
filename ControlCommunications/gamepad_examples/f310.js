@@ -3,8 +3,6 @@ var gamepad = require("gamepad");
 // Initialize the library 
 gamepad.init();
 
-var temp = 0;
-var bound = 0;
 // List the state of all currently attached devices 
 for (var i = 0, l = gamepad.numDevices(); i < l; i++) {
   console.log(i, gamepad.deviceAtIndex());
@@ -17,11 +15,14 @@ setInterval(gamepad.processEvents, 16);
  
 // Listen for move events on all gamepads 
 gamepad.on("move", function (id, axis, value) {
-        console.log("move", {
-        id: id,
-        axis: axis,
-        value: value,
-    });
+        if(axis <= 3 && Math.abs(value) > 0.019999){
+          console.log("move", {
+            id: id,
+            axis: axis,
+            value: value,
+        });
+        }
+        
 });
  
 // Listen for button up events on all gamepads 

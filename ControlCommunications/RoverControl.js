@@ -35,7 +35,32 @@ var PORT = 3000;
 var HOST = 'localhost';
 
 const HOME_PORT = 5000;
-const HOME_HOST = '192.168.1.143';
+var HOME_HOST = '';
+
+// The global Config of the RoverControl can be changed by homebase control on the fly
+var config = {
+    Joystick_MIN: -32767,
+    Joystick_MAX: 32767,
+    arm_on: true,
+    mobility_on: true,
+    debug: false,
+    TIME_TO_STOP: 1000,
+    TEST_CONNECTION: 2000
+};
+
+var time = new Date();
+
+// If debug is true will send this info back to homebase control.
+var debug = {
+    type: "debug",
+    Number_Commands: 0,
+    Num_Mobility_Commands: 0,
+    Num_Arm_Commands: 0,
+    Tested_Connection_Num: 0,
+    Lost_Connection_Num: 0,
+    Start_Time: time.toString(),
+    Curr_Time: time.toString(),
+};
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
@@ -67,8 +92,6 @@ const CONTROL_MESSAGE_ROVER = {
 // These consts handle connection information with the homebase
 var gotAck = true;
 var gotAckRover = true;
-const TIME_TO_STOP = 750;
-const TEST_CONNECTION = 3000;
 
 // PWM Config for Pi Hat:
 const makePwmDriver = require('adafruit-i2c-pwm-driver');
@@ -88,9 +111,6 @@ const saber_min = 241; // Calculated to be 1000 us
 const saber_mid = 325; // Calculated to be 1500 us
 const saber_max = 409; // Calculated to be 2000 us
 
-// Joystick values
-const Joystick_MIN = -32767;
-const Joystick_MAX = 32767;
 var triggerPressed = false;
 var thumbPressed = false;
 
@@ -154,12 +174,12 @@ const joint6_off = '8';
 rpio.open(joint6_dir_pin, rpio.OUTPUT, rpio.LOW);
 
 // Joint 7 Pololu pins
-const joint7_dir_pin = 0;
+const joint7_dir_pin = 16;
 const joint7_on = '9';
 const joint7_off = '0';
 
 // Set all pins to low on init
-rpio.open(joint7_dir_pin, rpio.OUPTUT, rpio.LOW);
+rpio.open(joint7_dir_pin, rpio.OUTPUT, rpio.LOW);
 
 
 // Pins to destroy
@@ -238,23 +258,23 @@ function calculateDiff(yAxis, xAxis) {
     //yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
 
     //xAxis = xAxis * -1;
-    //yAxis = yAxis * -1;
+    yAxis = yAxis * -1;
 
-    var V = (32767 - Math.abs(xAxis)) * (yAxis / 32767.0) + yAxis;
-    var W = (32767 - Math.abs(yAxis)) * (xAxis / 32767.0) + xAxis;
+    var V = (Number(config.Joystick_MAX) - Math.abs(xAxis)) * (yAxis / Number(config.Joystick_MAX)) + yAxis;
+    var W = (Number(config.Joystick_MAX) - Math.abs(yAxis)) * (xAxis / Number(config.Joystick_MAX)) + xAxis;
     var right = (V + W) / 2.0;
     var left = (V - W) / 2.0;
 
     if (right <= 0) {
-        right = right.map(Joystick_MIN, 0, saber_min, saber_mid);
+        right = right.map(config.Joystick_MIN, 0, saber_min, saber_mid);
     } else {
-        right = right.map(0, Joystick_MAX, saber_mid, saber_max);
+        right = right.map(0, config.Joystick_MAX, saber_mid, saber_max);
     }
 
     if (left <= 0) {
-        left = left.map(Joystick_MIN, 0, saber_min, saber_mid);
+        left = left.map(config.Joystick_MIN, 0, saber_min, saber_mid);
     } else {
-        left = left.map(0, Joystick_MAX, saber_mid, saber_max);
+        left = left.map(0, config.Joystick_MAX, saber_mid, saber_max);
     }
 
     return {
@@ -265,7 +285,7 @@ function calculateDiff(yAxis, xAxis) {
 
 // Set the throttle speed
 function setThrottle(adjust_Amount) {
-    throttleValue = adjust_Amount.map(Joystick_MAX, Joystick_MIN, 0, 1);
+    throttleValue = adjust_Amount.map(config.Joystick_MAX, config.Joystick_MIN, 0, 1);
     //console.log(throttleValue);
 }
 
@@ -275,6 +295,8 @@ var receiveMobility = function(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
+
+    debug.Num_Mobility_Commands += 1;
 
     var diffSteer;
 
@@ -310,20 +332,19 @@ function stopRover() {
     receiveMobility(zeroMessage[1]);
 
     // Shutdown the arm
-    /*y
     port.write(joint1_off);
-    port.write(joint2_off);
-    port.write(joint3_off);
+    setLinearSpeed(joint2_pwm_pin, 0);
+    setLinearSpeed(joint3_pwm_pin, 0);
     port.write(joint4_off);
     port.write(joint5_off);
     port.write(joint6_off);
     port.write(joint7_off);
-    */
 
 }
 
 // Send data to the homebase control for connection information
 function sendHome(msg) {
+    msg = new Buffer(JSON.stringify(msg));
     server.send(msg, 0, msg.length, HOME_PORT, HOME_HOST, function(err) {
         if (err) {
             console.log("Problem with sending data!!!");
@@ -336,31 +357,35 @@ function sendHome(msg) {
 // Will test the connection to the homebase controller every TEST_CONNECTION times
 // Will stop the rover if we have lost connection after TIME_TO_STOP
 setInterval(function() {
-    var msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
-    sendHome(msg);
+    sendHome(CONTROL_MESSAGE_ROVER);
+    debug.Tested_Connection_Num += 1;
+    time = new Date();
+    debug.Curr_Time = time.toString();
+    if (config.debug) {
+        sendHome(debug);
+    }
     gotAckRover = false;
     setTimeout(function() {
         if (gotAckRover === false) {
             console.log("Stopping Rover: ROVER lost connection to HOME")
+            debug.Lost_Connection_Num += 1;
             stopRover();
         }
-    }, TIME_TO_STOP);
-}, TEST_CONNECTION);
+    }, config.TIME_TO_STOP);
+}, config.TEST_CONNECTION);
 
 /**
   Will handle the control messages that will tell us we have disconnected.
   * @param {JSON} message
 */
 function handleControl(message) {
-    var msg;
 
     //console.log("Control Message with type: " + message.type);
 
     // If the homestation is testing our connection
     if (message.type == "test") {
         gotAck = false;
-        msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
-        sendHome(msg);
+        sendHome(CONTROL_MESSAGE_ROVER);
 
         // Start a timer to see if we are still connected otherwise stop the rover moving
         setTimeout(function() {
@@ -368,21 +393,27 @@ function handleControl(message) {
                 console.log("Stopping Rover: HOME tried to test us");
                 stopRover();
             }
-        }, TIME_TO_STOP);
+        }, config.TIME_TO_STOP);
 
 
         // Home station has responded don't need to stop.
     } else if (message.type == "ack") {
         gotAck = true;
         gotAckRover = true;
+    } else if (message.type == "config") {
+        config.debug = message.debug;
+        config.arm_on = message.arm_on;
+        config.mobility_on = message.mobility_on;
+        config.Joystick_MAX = message.Joystick_MAX;
+        config.Joystick_MIN = message.Joystick_MIN;
+        console.log(config);
     }
-
 }
 
 /**
  * Sends a PWM signal to the appropriate Linear Actuator
  * @param {int} channel PWM pin of linear Actuator
- * @param {int} value Will be between -32767 and 32767
+ * @param {int} value Will be between -1 and Joystick_MAX
  */
 function setLinearSpeed(channel, value) {
     const linear_min = 241; // Calculated to be 1000 us
@@ -392,10 +423,10 @@ function setLinearSpeed(channel, value) {
     var pwmSig;
 
     if (value <= 0) {
-        pwmSig = parseInt(value.map(Joystick_MIN, 0, linear_min, linear_mid));
+        pwmSig = parseInt(value.map(config.Joystick_MIN, 0, linear_min, linear_mid));
         pwm.setPWM(channel, 0, pwmSig);
     } else {
-        pwmSig = parseInt(value.map(0, Joystick_MAX, linear_mid, linear_max));
+        pwmSig = parseInt(value.map(0, config.Joystick_MAX, linear_mid, linear_max));
         pwm.setPWM(channel, 0, pwmSig);
     }
 }
@@ -543,10 +574,10 @@ function stopJoint(jointNum) {
             port.write(joint1_off);
             break;
         case 2:
-            port.write(joint2_off);
+            setLinearSpeed(joint2_pwm_pin, 0);
             break;
         case 3:
-            port.write(joint3_off);
+            setLinearSpeed(joint3_pwm_pin, 0);
             break;
         case 4:
             port.write(joint4_off);
@@ -570,28 +601,33 @@ function stopJoint(jointNum) {
 // Still need to figure out mapping of the joystick controller.
 function armControl(message) {
 
+    debug.Num_Arm_Commands += 1;
+
     if (message.type == 'axis') {
         var axis = parseInt(message.number);
         // Determine which axis should be which joint.
         switch (axis) {
             case 0:
+                // Thumb button had to be pressed in order to use joint6
                 if (thumbPressed) {
-                    joint3_linear2(message);
-                } else {
                     joint6_360Unlimited(message);
+                } else {
+                    joint3_linear2(message);
                 }
                 break;
             case 1:
+                // Thumb button had to be pressed in order to use joint4
                 if (thumbPressed) {
-                    joint2_linear1(message);
-                } else {
                     joint4_rotateWrist(message);
+                } else {
+                    joint2_linear1(message);
                 }
                 break;
             case 2:
                 joint1_rotatingBase(message);
                 break;
             case 3:
+                // This is the throttle
                 break;
             case 4:
                 joint5_90degree(message);
@@ -611,7 +647,8 @@ function armControl(message) {
                 triggerPressed = val;
                 break;
             case 1:
-                thumbPressed = val;
+                // Switch our config to use other arm joints
+                thumbPressed = (thumbPressed) ? false : true;
                 if (thumbPressed) {
                     stopJoint(2);
                     stopJoint(3);
@@ -634,19 +671,27 @@ server.on('listening', function() {
 // recieved a message from the homebase control to perform an action
 server.on('message', function(message, remote) {
 
+    HOME_HOST = remote.address;
+
     var msg = JSON.parse(message);
     //console.log(msg.commandType);
+
+    debug.Number_Commands += 1;
 
     // Seperate the incoming command to its specified subsystem
     switch (msg.commandType) {
         case 'mobility':
-            receiveMobility(msg);
+            if (config.mobility_on) {
+                receiveMobility(msg);
+            }
             break;
         case 'control':
             handleControl(msg);
             break;
         case 'arm':
-            armControl(msg);
+            if (config.arm_on) {
+                armControl(msg);
+            }
             break;
         default:
             //console.log("###### Could not find commandType #######");
@@ -677,4 +722,4 @@ process.on('SIGINT', function() {
     closePins();
     // some other closing procedures go here
     process.exit();
-});
+});;

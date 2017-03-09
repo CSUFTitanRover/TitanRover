@@ -4,16 +4,12 @@
   Description:
 		Will be capturing events from the UI, Joystick, Keyboard, and etc...
         to transfer this command to the rover controller running on the Rover.
-
         It will send the packet with a commandType parameter to allow the rover system
         to decifer what kind of command it should be.  This will be added to whatever the input
         generates.
-
         Example message for mobility
         { commandType: "mobility", time: 1693700, value: 0, number: 0, type: 'axis', id: 0 }
-
  =========== Layout of joystick =============
-
 Buttons:    These values are either 1(pressed) or 0(unpressed)
 number = 0: Trigger
 number = 1: Thump button
@@ -27,7 +23,6 @@ number = 8: Button 9
 number = 9: Button 10
 number = 10: Button 11
 number = 11: Button 12
-
 Axis:
 number = 0: X of big joystick value between -32767 and 32767
 number = 1: Y of big joystick value between -32767 and 32767
@@ -57,22 +52,26 @@ const HOMEBASE_PORT = 5000;
 const PORT = 3000;
 const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
 
-// Control information
-const CONTROL_MESSAGE_TEST = {
-    commandType: "control",
-    type: "test"
-};
-
 const CONTROL_MESSAGE_ACK = {
     commandType: "control",
     type: "ack"
 };
 
+const CHANGE_CONFIG = {
+    commandType: "control",
+    type: "config",
+    arm_on: true,
+    Joystick_MIN: -32767,
+    Joystick_MAX: 32767,
+    mobility_on: true,
+    debug: false
+}
+
 const SEND_CONTROL_AFTER = 20;
 var packet_count = 0;
 
 // Arm Variables
-var arm_mode = false;
+var arm_joint = false;
 
 // Joystick event handlers
 joystick_0.on('button', handleJoystick_0);
@@ -83,6 +82,7 @@ joystick_1.on('axis', handleJoystick_1);
 // Socket event handlers
 socket.on('listening', function() {
     console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
+    send_to_rover(CHANGE_CONFIG);
 });
 
 // When we recieve a packet from the rover it is acking a control packet
@@ -92,7 +92,9 @@ socket.on('message', function(message, remote) {
     if (msg.type == "rover_ack") {
         //console.log("Rover sent an ack");
         packet_count = 0;
-        send_to_rover(new Buffer(JSON.stringify(CONTROL_MESSAGE_ACK)));
+        send_to_rover(CONTROL_MESSAGE_ACK);
+    } else if (msg.type == "debug") {
+        console.log(msg);
     }
 });
 
@@ -118,12 +120,14 @@ function send_to_rover(message) {
 // Joystick for Mobility
 function handleJoystick_0(event) {
 
-    var message;
-
     if (event.type == "axis") {
         if (event.number == 0 || event.number == 1 || event.number == 3) {
             event.commandType = "mobility";
             send_to_rover(event);
+        }
+    } else if (event.type == 'button') {
+        if (event.number == 10 && event.value == 1) {
+            console.log("Mobility Joystick!!");
         }
     }
 }
@@ -135,10 +139,28 @@ function handleJoystick_1(event) {
     if (event.type == 'axis') {
         event.commandType = 'arm';
         send_to_rover(event);
-    } else if (event.type == 'button') {
-        if (event.number == 0 || event.number == 1) {
+    }
+
+    if (event.type == 'button') {
+
+        // Handle each button seperatly since they could have different uses such as
+        // hold down of press once
+
+        // Trigger
+        if (event.number == 0) {
             event.commandType = 'arm';
             send_to_rover(event);
+        } else if (event.number == 1 && event.value == 1) { // Thumb
+            event.commandType = 'arm';
+            arm_joint = (arm_joint) ? false : true;
+            if (arm_joint) {
+                console.log("Joint 4 and 6 ## ONLINE ##\nJoint 2 and 3 ## OFFLINE ##");
+            } else {
+                console.log("Joint 2 and 3 ## ONLINE ##\nJoint 4 and 6 ## OFFLINE ##");
+            }
+            send_to_rover(event);
+        } else if (event.number == 10 && event.value == 1) { // Button 11: Determine which joystick is what
+            console.log("Arm Joystick!!");
         }
     }
 }
