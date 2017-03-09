@@ -1,5 +1,7 @@
 
+
 /**
+ * 
  * Every movement command will be represented in 4 bytes
  * The first byte will be the object that needs to movement
  * in case of pwm signal object byte 3 and 4 will represent the signal between 1000 - 2000
@@ -59,7 +61,7 @@ joint1_rotatingBase: function joint1_rotatingBase(message) {
         joint1_arr[1] = 0x0100;
     }
 
-    port.write(joint1_buff);
+   return joint1_buff;
 
 },
 
@@ -75,7 +77,7 @@ joint2_linear1: function joint2_linear1(message) {
 
     joint2_arr[1] = value;
 
-    port.write(joint2_buff);
+   return (joint2_buff);
 
 },
 
@@ -91,7 +93,7 @@ joint3_linear2: function joint3_linear2(message) {
 
     joint2_arr[1] = value;
 
-    port.write(joint2_buff);
+   return (joint2_buff);
 },
 
 /**
@@ -115,7 +117,7 @@ joint4_rotateWrist: function joint4_rotateWrist(message) {
         joint4_arr[1] = 0x0100;
     }
 
-    port.write(joint4_buff);
+   return (joint4_buff);
 },
 
 /**
@@ -139,7 +141,7 @@ joint5_90degree: function joint5_90degree(message) {
         joint5_arr[1] = 0x0100;
     }
 
-    port.write(joint5_buff);
+   return (joint5_buff);
 },
 
 /**
@@ -163,7 +165,7 @@ joint6_360Unlimited: function joint6_360Unlimited(message) {
         joint6_arr[1] = 0x0100;
     }
 
-    port.write(joint6_buff);
+   return (joint6_buff);
 },
 
 /**
@@ -187,7 +189,7 @@ joint7_gripper: function joint7_gripper(message) {
         joint7_arr[1] = 0x0100;
     }
 
-    port.write(joint7_buff);
+   return (joint7_buff);
 },
 
 /**
@@ -195,37 +197,40 @@ joint7_gripper: function joint7_gripper(message) {
  * @param {int} jointNum 1 - 7
  */
 stopJoint: function stopJoint(jointNum) {
+    let send_buff;
     switch (jointNum) {
         case 1:
             joint1_arr[1] = 0x0000;
-            port.write(joint1_buff);
+           send_buff = joint1_buff ;
             break;
         case 2:
             joint2_arr[1] = 0x05dc;
-            port.write(joint2_buff);
+           send_buff = joint2_buff ;
             break;
         case 3:
             joint3_arr[1] = 0x05dc;
-            port.write(joint3_buff);
+           send_buff = joint3_buff ;
             break;
         case 4:
             joint4_arr[1] = 0x0000;
-            port.write(joint4_buff);
+           send_buff = joint4_buff ;
             break;
         case 5:
             joint5_arr[1] = 0x0000;
-            port.write(joint5_buff);
+           send_buff = joint5_buff ;
             break;
         case 6:
             joint6_arr[1] = 0x0000;
-            port.write(joint6_buff);
+           send_buff = joint6_buff ;
             break;
         case 7:
             joint7_arr[1] = 0x0000;
-            port.write(joint7_buff);
+           send_buff = joint7_buff ;
             break;
         default:
             console.log(jointNum + " joint does not exist");
     }
+
+    return send_buff;
 }
 };

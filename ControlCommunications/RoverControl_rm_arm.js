@@ -157,7 +157,7 @@ function stopRover() {
 
     // Stopping all joints
     for(i = 1; i<=7; i++){
-        arm.stopJoint(i);
+        port.write(arm.stopJoint(i));
     }
   
 }
@@ -245,30 +245,30 @@ function armControl(message) {
             case 0:
                 // Thumb button had to be pressed in order to use joint6
                 if (thumbPressed) {
-                    arm.joint6_360Unlimited(message);
+                    port.write(arm.joint6_360Unlimited(message));
                 } else {
-                    arm.joint3_linear2(message);
+                    port.write(arm.joint3_linear2(message));
                 }
                 break;
             case 1:
                 // Thumb button had to be pressed in order to use joint4
                 if (thumbPressed) {
-                    arm.joint4_rotateWrist(message);
+                    port.write(arm.joint4_rotateWrist(message));
                 } else {    
-                    arm.joint2_linear1(message);
+                    port.write(arm.joint2_linear1(message));
                 }
                 break;
             case 2:
-                arm.joint1_rotatingBase(message);
+                port.write(arm.joint1_rotatingBase(message));
                 break;
             case 3:
                 // This is the throttle
                 break;
             case 4:
-                arm.joint5_90degree(message);
+                port.write(arm.joint5_90degree(message));
                 break;
             case 5:
-                arm.joint7_gripper(message);
+                port.write(arm.joint7_gripper(message));
                 break;
             default:
 
@@ -285,11 +285,11 @@ function armControl(message) {
                 // Switch our config to use other arm joints
                 thumbPressed = (thumbPressed) ? false : true;
                 if (thumbPressed) {
-                    arm.stopJoint(2);
-                    arm.stopJoint(3);
+                    port.write(arm.stopJoint(2));
+                    port.write(arm.stopJoint(3));
                 } else {
-                    arm.stopJoint(4);
-                    arm.stopJoint(6);
+                    port.write(arm.stopJoint(4));
+                    port.write(arm.stopJoint(6));
                 }
                 break;
             default:

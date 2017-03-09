@@ -192,21 +192,11 @@ function stopRover() {
     receiveMobility(zeroMessage[0]);
     receiveMobility(zeroMessage[1]);
 
-    joint1_arr[1] = 0x0000;
-    joint2_arr[1] = 0x05dc;
-    joint3_arr[1] = 0x05dc;
-    joint4_arr[1] = 0x0000;
-    joint5_arr[1] = 0x0000;
-    joint6_arr[1] = 0x0000;
-    joint7_arr[1] = 0x0000;
-
-    port.write(joint1_buff);
-    port.write(joint2_buff);
-    port.write(joint3_buff);
-    port.write(joint4_buff);
-    port.write(joint5_buff);
-    port.write(joint6_buff);
-    port.write(joint7_buff);
+    // Stopping all joints
+    for(i = 1; i<=7; i++){
+        arm.stopJoint(i);
+    }
+   
 }
 
 // Send data to the homebase control for connection information
@@ -284,7 +274,7 @@ function handleControl(message) {
  */
 function joint1_rotatingBase(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
     if (direction) {
         joint1_arr[0] = 0x0101;
@@ -340,7 +330,7 @@ function joint3_linear2(message) {
  */
 function joint4_rotateWrist(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
     if (direction) {
         joint4_arr[0] = 0x0401;
@@ -364,7 +354,7 @@ function joint4_rotateWrist(message) {
  */
 function joint5_90degree(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
     if (direction) {
         joint5_arr[0] = 0x0501;
@@ -388,7 +378,7 @@ function joint5_90degree(message) {
  */
 function joint6_360Unlimited(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
     if (direction) {
         joint6_arr[0] = 0x0601;
@@ -412,7 +402,7 @@ function joint6_360Unlimited(message) {
  */
 function joint7_gripper(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
     if (direction) {
         joint7_arr[0] = 0x0701;
@@ -471,6 +461,17 @@ function stopJoint(jointNum) {
 
 // Will handle control of the arm one to one.
 // Still need to figure out mapping of the joystick controller.
+
+/**
+ *  Message has type and val parameters 
+ * @param{JSON} message has values type, number, and val
+ *      @param {Number} val The actuating value 
+ *      @param {Bool} number Holding this button down lets us reuse button mappings
+ *      @param {String} type Is it a button or axis message?
+    button:
+ */ 
+    
+
 function armControl(message) {
 
     debug.Num_Arm_Commands += 1;
@@ -520,7 +521,7 @@ function armControl(message) {
                 break;
             case 1:
                 // Switch our config to use other arm joints
-                thumbPressed = (thumbPressed) ? false : true;
+                thumbPressed = !thumbPressed;
                 if (thumbPressed) {
                     stopJoint(2);
                     stopJoint(3);
