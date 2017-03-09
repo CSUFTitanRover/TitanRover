@@ -52,6 +52,68 @@ function getPwmValue(value) {
 }
 
 module.exports = {
+
+    /**
+     * Move a joint a certain number of steps
+     * @param {Number} jointNum values 1 - 7
+     * @param {bool} direction true for clockwise false for counter clockwise
+     * @param {Number} steps # of steps to move that joint between 1 - 200 since stepper motors have 200 steps to go 360degrees
+     */
+    stepJoint: function(jointNum, direction, steps) {
+        if (steps > 200 || steps <= 0) {
+            throw new RangeError('Steps must be between ' + 1 + ' and ' + 200);
+        }
+
+        switch (jointNum) {
+            case 1:
+                joint1_arr[0] = 0x0100;
+                if (direction) {
+                    joint1_arr[0] += 1; // Should be 0x0101
+                }
+                // Place the steps in 4 byte of 4 byte command
+                // joint_arr[1] should be between 0x0001 and 0x00c8
+                joint1_arr[1] = steps;
+                break;
+            case 4:
+                joint4_arr[0] = 0x0400;
+                if (direction) {
+                    joint4_arr[0] += 1; // Should be 0x0401
+                }
+                // Place the steps in 4 byte of 4 byte command
+                // joint_arr[1] should be between 0x0001 and 0x00c8
+                joint4_arr[1] = steps;
+                break;
+            case 5:
+                joint5_arr[0] = 0x0500;
+                if (direction) {
+                    joint5_arr[0] += 1; // Should be 0x0501
+                }
+                // Place the steps in 4 byte of 4 byte command
+                // joint_arr[1] should be between 0x0001 and 0x00c8
+                joint5_arr[1] = steps;
+                break;
+            case 6:
+                joint6_arr[0] = 0x0600;
+                if (direction) {
+                    joint6_arr[0] += 1; // Should be 0x0601
+                }
+                // Place the steps in 4 byte of 4 byte command
+                // joint_arr[1] should be between 0x0001 and 0x00c8
+                joint6_arr[1] = steps;
+                break;
+            case 7:
+                joint7_arr[0] = 0x0700;
+                if (direction) {
+                    joint7_arr[0] += 1; // Should be 0x0701
+                }
+                // Place the steps in 4 byte of 4 byte command
+                // joint_arr[1] should be between 0x0001 and 0x00c8
+                joint7_arr[1] = steps;
+                break;
+            default:
+                throw new RangeError('Dumbass Joint must either 1, 4, 5, 6, 7');
+        }
+    },
     /**
      * Joint1: Phantom Menace
      * The rotating base for the arm
