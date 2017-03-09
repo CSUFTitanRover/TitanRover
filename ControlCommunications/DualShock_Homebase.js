@@ -103,7 +103,6 @@ controller.on('left:move', function(data) {
         x: data.x - 127.5,
         y: data.y - 127.5,
         commandType: "mobility"
-
     };
     send_to_rover(event);
 });
@@ -115,7 +114,6 @@ controller.on('l2:press', function(data) {
         type: 'axis',
         value: null,
         commandType: "mobility"
-
     };
     send_to_rover(event);
 });
@@ -126,7 +124,6 @@ controller.on('l2:release', function(data) {
         type: 'axis',
         value: null,
         commandType: "mobility"
-
     };
     send_to_rover(event);
 });
@@ -138,7 +135,6 @@ controller.on('square:press', function(data) {
         type: 'axis',
         value: -1,
         commandType: "mobility"
-
     };
     send_to_rover(event);
 });
@@ -150,7 +146,6 @@ controller.on('square:release', function(data) {
         type: 'axis',
         value: 0,
         commandType: "mobility"
-
     };
     send_to_rover(event);
 });
@@ -162,7 +157,6 @@ controller.on('circle:press', function(data) {
         type: 'axis',
         value: 1,
         commandType: "mobility"
-
     };
     send_to_rover(event);
 });
@@ -174,7 +168,6 @@ controller.on('circle:release', function(data) {
         type: 'axis',
         value: 0,
         commandType: "mobility"
-
     };
     send_to_rover(event);
 });
