@@ -58,6 +58,8 @@ class RoboticArmUI extends Component {
         });
     };
 
+    // Hold on lemme get my mic
+
     onBoneTwoChange = (value) => {
         const boneTwo = this.state.boneTwo;
         boneTwo.rotation = value;
@@ -122,15 +124,30 @@ class RoboticArmUI extends Component {
         // flipping mouse.y coordinates to "cartesian"
         mouse.y *= -1;
 
-        if (mouse.x < 0 || mouse.x > 390)
-            return;
-
         console.info(mouse.x, mouse.y);
+        //
+        // if (mouse.x > arm_settings.boneOne.height &&
+        //     (mouse.y < arm_settings.boneOne.width &&
+        //         mouse.y > -1 * (arm_settings.boneOne.width + arm_settings.boneTwo.width)
+        //     )) {
+        //
+        // }
 
         let result = this.inverse_kinematics(mouse.x, mouse.y);
         console.info(result);
 
         if (result) {
+
+            // constraints ?!
+            if (result.boneOneAngle < -90)
+                result.boneOneAngle = -90;
+            if (result.boneOneAngle > 0)
+                result.boneOneAngle = 0;
+            if (result.boneTwoAngle > 90)
+                result.boneTwoAngle = 90;
+            if (result.boneTwoAngle < 0)
+                result.boneTwoAngle = 0;
+
             const b1 = this.refs.boneOne, b2 = this.refs.boneTwo;
             b1.to({
                 rotation: result.boneOneAngle,
@@ -140,13 +157,19 @@ class RoboticArmUI extends Component {
                 rotation: result.boneTwoAngle,
                 duration: 0.3
             });
+
+            const boneOne = this.state.boneOne, boneTwo = this.state.boneTwo;
+            boneOne.rotation = result.boneOneAngle;
+            boneTwo.rotation = result.boneTwoAngle;
+            this.setState({boneOne, boneTwo});
         }
+
     };
 
 
     // Given the XY, output the Thetas
     inverse_kinematics = (X,Y) => {
-        let l1 = arm_settings.boneOne.width, l2 = arm_settings.boneTwo.width;
+        let l1 = 287.5, l2 = 143.7;
 
         let c2 = (Math.pow(X,2) + Math.pow(Y,2) - Math.pow(l1,2) - Math.pow(l2,2))/(2*l1*l2);
         let s2 =  Math.sqrt(1 - Math.pow(c2,2));
@@ -157,10 +180,14 @@ class RoboticArmUI extends Component {
         let gamma = math.atan2(k2, k1);
         let THETA1D =  math.atan2(Y, X) - gamma; // Theta 1 deduced
 
-        if (THETA1D || THETA2D)
-            return {boneOneAngle: THETA1D * -90, boneTwoAngle: THETA2D * -90};
-        else
-            return null;
+        THETA1D = -1 * (THETA1D) * (180 / Math.PI);
+        THETA2D = -1 * (THETA2D) * (180 / Math.PI);
+
+        if (THETA1D && THETA2D) {
+            // hard coding in constraints
+            return {boneOneAngle: THETA1D, boneTwoAngle: THETA2D};
+        }
+        return null;
     };
 
     // initially set the target's x position to the tip of the arm
@@ -169,7 +196,6 @@ class RoboticArmUI extends Component {
     }
 
     render() {
-
         return (
             <div>
                 <div>
@@ -200,7 +226,7 @@ class RoboticArmUI extends Component {
                             <Group x={this.baseWidth / 2} ref="boneOne"
                                    offsetX={15} offsetY={arm_settings.boneOne.height / 2}
                             >
-                                <Circle width={10} height={10} fill="orange" x={15} y={arm_settings.boneOne.height / 2}/>
+                                <Circle width={10} height={10} fill="black" x={15} y={arm_settings.boneOne.height / 2}/>
                                 <Rect
                                     x={0} y={0}
                                     offsetX={0} offsetY={0}
@@ -213,12 +239,16 @@ class RoboticArmUI extends Component {
                                     fontSize={18}
                                     fill="darkgreen"
                                 />
+                                {/* Bounds Bone One Circle */}
+                                <Circle width={arm_settings.boneOne.width } height={arm_settings.boneOne.width } stroke="rgba(0, 255, 4, 0.5)" dash={[10, 15]}
+                                        x={arm_settings.boneOne.width / 2} y={arm_settings.boneOne.height / 2} rotation={0}
+                                />
 
                                 {/*Bone Two*/}
                                 <Group ref="boneTwo" x={this.state.boneTwo.group.x - 15} y={arm_settings.boneTwo.height / 2}
                                        offsetX={15} offsetY={arm_settings.boneTwo.height / 2}
                                 >
-                                    <Circle width={10} height={10} fill="orange" x={15} y={arm_settings.boneTwo.height / 2}/>
+                                    <Circle width={10} height={10} fill="black" x={15} y={arm_settings.boneTwo.height / 2}/>
                                     <Rect
                                         x={0} y={0}
                                         offsetX={0} offsetY={0}
@@ -232,21 +262,33 @@ class RoboticArmUI extends Component {
                                         fontSize={18}
                                         fill="darkblue"
                                     />
+
+                                    {/* Bounds Bone Two Circle */}
+                                    <Circle width={arm_settings.boneTwo.width } height={arm_settings.boneTwo.width } stroke="rgba(0, 187, 255, 0.5)" dash={[10, 15]}
+                                            x={arm_settings.boneTwo.width / 2} y={arm_settings.boneTwo.height / 2} rotation={0}
+                                    />
                                 </Group>
                             </Group>
 
+
                             {/*Our End Target*/}
-                            <Circle width={20} height={20} fill="red" draggable={true}
-                                    offsetX={-this.baseWidth / 2}
-                                    onDragMove={this.handleDragMoveTarget}
-                                    ref="target"
-                            />
+                            <Group onDragMove={this.handleDragMoveTarget} ref="target" draggable={true} offsetX={-this.baseWidth / 2}>
+                                <Circle width={20} height={20} fill="red" />
+                                <Text
+                                    x={15} y={-20}
+                                    text="Drag Me"
+                                    fontSize={14}
+                                    fill="red"
+                                />
+                                <Rect width={75} height={3} x={0} y={0} fill="red"/>
+                            </Group>
 
                         </Group>
                     </Layer>
                 </Stage>
             </div>
         );
+
     }
 }
 
