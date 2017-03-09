@@ -154,7 +154,6 @@ function receiveMobility(joystickData) {
 function stopRover() {
     receiveMobility(zeroMessage[0]);
     receiveMobility(zeroMessage[1]);
-
     // Stopping all joints
     for(i = 1; i<=7; i++){
         port.write(arm.stopJoint(i));

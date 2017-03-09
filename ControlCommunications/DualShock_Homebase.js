@@ -97,6 +97,7 @@ function send_to_rover(message) {
     });
 }
 
+// Shifting joystick values from 0-255 to -127.5 to 127.5
 controller.on('left:move', function(data){
      event =  {
         number: null,
@@ -107,3 +108,75 @@ controller.on('left:move', function(data){
     };
     send_to_rover(event);
 });
+
+//l2 should map to thumbPressed
+controller.on('l2:press', function(data){
+     event =  {
+        number: null,
+        type: 'axis',
+        val: null,
+        commandType: "mobility"
+        
+    };
+    send_to_rover(event);
+});
+
+controller.on('l2:release', function(data){
+     event =  {
+        number: null,
+        type: 'axis',
+        val: null,
+        commandType: "mobility"
+        
+    };
+    send_to_rover(event);
+});
+
+// Turn rotatingbase counter clockwise
+controller.on('square:press', function(data){
+     event =  {
+        number: 2,
+        type: 'axis',
+        val: -1,
+        commandType: "mobility"
+        
+    };
+    send_to_rover(event);
+});
+
+// Stop turning counter clockwise
+controller.on('square:release', function(data){
+     event =  {
+        number: 2,
+        type: 'axis',
+        val: 0,
+        commandType: "mobility"
+        
+    };
+    send_to_rover(event);
+});
+
+// Turn rotatingbase  clockwise
+controller.on('circle:press', function(data){
+     event =  {
+        number: 2,
+        type: 'axis',
+        val: 1,
+        commandType: "mobility"
+        
+    };
+    send_to_rover(event);
+});
+
+// Stop turning rotatingbase  clockwise
+controller.on('circle:release', function(data){
+     event =  {
+        number: 2,
+        type: 'axis',
+        val: 0,
+        commandType: "mobility"
+        
+    };
+    send_to_rover(event);
+});
+

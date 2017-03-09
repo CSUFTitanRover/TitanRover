@@ -45,16 +45,18 @@ module.exports = {
  * The rotating base for the arm
  * Driver: Sumtor mb450a
  */
-joint1_rotatingBase: function joint1_rotatingBase(message) {
+joint1_rotatingBase: function (message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
+    // Turn counter clockwise
     if (direction) {
         joint1_arr[0] = 0x0101;
     } else {
         joint1_arr[0] = 0x0100;
     }
 
+    //Stop else move a certain amount of steps
     if (value === 0) {
         joint1_arr[1] = 0x0000;
     } else {
@@ -70,7 +72,7 @@ joint1_rotatingBase: function joint1_rotatingBase(message) {
  * Will be the longer first linear Actuator
  * Driver: Actobotics Dual Motor Controller
  */
-joint2_linear1: function joint2_linear1(message) {
+joint2_linear1: function(message) {
     let value = parseInt(message.value);
 
     value = getPwmValue(value);
@@ -86,7 +88,7 @@ joint2_linear1: function joint2_linear1(message) {
  * Will be the smaller second linear Actuator
  * Driver: Actobotics Dual Motor Controller
  */
-joint3_linear2: function joint3_linear2(message) {
+joint3_linear2: function(message) {
     let value = parseInt(message.value);
 
     value = getPwmValue(value);
@@ -101,9 +103,9 @@ joint3_linear2: function joint3_linear2(message) {
  * The 180 degree wrist
  * Driver: Sumtor mb450a
  */
-joint4_rotateWrist: function joint4_rotateWrist(message) {
+joint4_rotateWrist: function(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
     if (direction) {
         joint4_arr[0] = 0x0401;
@@ -125,9 +127,9 @@ joint4_rotateWrist: function joint4_rotateWrist(message) {
  * The 90 degree joint
  * Driver: Sumtor mb450a
  */
-joint5_90degree: function joint5_90degree(message) {
+joint5_90degree: function(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
     if (direction) {
         joint5_arr[0] = 0x0501;
@@ -149,9 +151,9 @@ joint5_90degree: function joint5_90degree(message) {
  * 360 degree rotation of this joint no need for limit switches
  * Driver is a Pololu
  */
-joint6_360Unlimited: function joint6_360Unlimited(message) {
+joint6_360Unlimited: function(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
     if (direction) {
         joint6_arr[0] = 0x0601;
@@ -173,9 +175,9 @@ joint6_360Unlimited: function joint6_360Unlimited(message) {
  * The gripper that is a linear actuator
  * Driver: Pololu AMIS-30543
  */
-joint7_gripper: function joint7_gripper(message) {
+joint7_gripper: function(message) {
     let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
+    let direction = value < 0;
 
     if (direction) {
         joint7_arr[0] = 0x0701;
@@ -196,7 +198,7 @@ joint7_gripper: function joint7_gripper(message) {
  * Tell this joint to stop moving
  * @param {int} jointNum 1 - 7
  */
-stopJoint: function stopJoint(jointNum) {
+stopJoint: function(jointNum) {
     let send_buff;
     switch (jointNum) {
         case 1:
@@ -217,7 +219,7 @@ stopJoint: function stopJoint(jointNum) {
             break;
         case 5:
             joint5_arr[1] = 0x0000;
-           send_buff = joint5_buff ;
+            send_buff = joint5_buff ;
             break;
         case 6:
             joint6_arr[1] = 0x0000;
@@ -230,7 +232,7 @@ stopJoint: function stopJoint(jointNum) {
         default:
             console.log(jointNum + " joint does not exist");
     }
-
+    
     return send_buff;
 }
 };
