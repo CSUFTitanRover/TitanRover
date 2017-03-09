@@ -14,9 +14,9 @@ Servo y_mobility;
 const uint8_t y_pwm_pin = 3;
 
 // Joint #1
-const uint8_t joint1_dir_pin = 5;
-const uint8_t joint1_enab_pin = 6;
-const uint8_t joint1_pulse_pin = 7;
+const uint8_t joint1_dir_pin = 30;
+const uint8_t joint1_enab_pin = 31;
+const uint8_t joint1_pulse_pin = 32;
 bool joint1_on = false;
 
 // Joint #2
@@ -28,33 +28,35 @@ Servo joint3;
 const uint8_t joint3_pwm_pin = 5;
 
 // Joint #4
-const uint8_t joint4_dir_pin = 5;
-const uint8_t joint4_enab_pin = 6;
-const uint8_t joint4_pulse_pin = 7;
+const uint8_t joint4_dir_pin = 34;
+const uint8_t joint4_enab_pin = 35;
+const uint8_t joint4_pulse_pin = 36;
 bool joint4_on = false;
 
 // Joint #5
-const uint8_t joint5_dir_pin = 5;
-const uint8_t joint5_enab_pin = 6;
-const uint8_t joint5_pulse_pin = 7;
+const uint8_t joint5_dir_pin = 38;
+const uint8_t joint5_enab_pin = 39;
+const uint8_t joint5_pulse_pin = 40;
 bool joint5_on = false;
 
 // Joint #6
 AMIS30543 joint6_stepper;
-const uint8_t joint6_ss = 5;
-const uint8_t joint6_dir_pin = 6;
-const uint8_t joint6_pulse_pin = 6;
+const uint8_t joint6_ss = 44;
+const uint8_t joint6_dir_pin = 42;
+const uint8_t joint6_pulse_pin = 43;
 bool joint6_on = false;
 
 // Joint #7
 AMIS30543 joint7_stepper;
-const uint8_t joint7_ss = 5;
-const uint8_t joint7_dir_pin = 6;
-const uint8_t joint7_pulse_pin = 6;
+const uint8_t joint7_ss = 48;
+const uint8_t joint7_dir_pin = 46;
+const uint8_t joint7_pulse_pin = 47;
 bool joint7_on = false;
 
 // Will hold the bytes from the pi
 uint8_t val[4];
+int i;
+uint16_t pwmVal;
 
 void setup()
 {
@@ -102,7 +104,7 @@ void setup()
   joint6_stepper.enableDriver();
 
   // Deselect the slave select pin for joint6 to allow joint7 to communicate
-  digitalWrite(joint6_ss, LOW);
+  digitalWrite(joint6_ss, HIGH);
 
   joint7_stepper.init(joint7_ss);
   joint7_stepper.resetSettings();
@@ -119,14 +121,14 @@ void loop()
   {
 
     // Grap the 4 bytes from the raspberry pi
-    int i = 0;
+    i = 0;
     while(i < 4)
     {
       val[i++] = Serial.read();
     }
 
-    // Convert the last to bytes into a 16 bit number to represent 1500 - 2000
-    uint16_t pwmVal;
+    // Convert the last two bytes into a 16 bit number to represent 1500 - 2000
+    pwmVal = 0x0000;
     pwmVal = (uint16_t)val[2];
     pwmVal = pwmVal | ((uint16_t)val[3] << 8);
 

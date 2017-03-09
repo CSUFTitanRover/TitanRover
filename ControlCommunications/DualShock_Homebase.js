@@ -30,14 +30,13 @@ const HOMEBASE_PORT = 5000;
 const PORT = 3000;
 const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
 
-var controller = dualShock(
-    {
-        config : "dualShock3",
-        //smooths the output from the acelerometers (moving averages) defaults to true
-        accelerometerSmoothing : true,
-        //smooths the output from the analog sticks (moving averages) defaults to false
-        analogStickSmoothing : false
-    });
+var controller = dualShock({
+    config: "dualShock3",
+    //smooths the output from the acelerometers (moving averages) defaults to true
+    accelerometerSmoothing: true,
+    //smooths the output from the analog sticks (moving averages) defaults to false
+    analogStickSmoothing: false
+});
 
 const CHANGE_CONFIG = {
     commandType: "control",
@@ -98,85 +97,84 @@ function send_to_rover(message) {
 }
 
 // Shifting joystick values from 0-255 to -127.5 to 127.5
-controller.on('left:move', function(data){
-     event =  {
+controller.on('left:move', function(data) {
+    event = {
         number: null,
-        x: data.x-127.5,
-        y: data.y-127.5,
+        x: data.x - 127.5,
+        y: data.y - 127.5,
         commandType: "mobility"
-        
+
     };
     send_to_rover(event);
 });
 
 //l2 should map to thumbPressed
-controller.on('l2:press', function(data){
-     event =  {
+controller.on('l2:press', function(data) {
+    event = {
         number: null,
         type: 'axis',
-        val: null,
+        value: null,
         commandType: "mobility"
-        
+
     };
     send_to_rover(event);
 });
 
-controller.on('l2:release', function(data){
-     event =  {
+controller.on('l2:release', function(data) {
+    event = {
         number: null,
         type: 'axis',
-        val: null,
+        value: null,
         commandType: "mobility"
-        
+
     };
     send_to_rover(event);
 });
 
 // Turn rotatingbase counter clockwise
-controller.on('square:press', function(data){
-     event =  {
+controller.on('square:press', function(data) {
+    event = {
         number: 2,
         type: 'axis',
-        val: -1,
+        value: -1,
         commandType: "mobility"
-        
+
     };
     send_to_rover(event);
 });
 
 // Stop turning counter clockwise
-controller.on('square:release', function(data){
-     event =  {
+controller.on('square:release', function(data) {
+    event = {
         number: 2,
         type: 'axis',
-        val: 0,
+        value: 0,
         commandType: "mobility"
-        
+
     };
     send_to_rover(event);
 });
 
 // Turn rotatingbase  clockwise
-controller.on('circle:press', function(data){
-     event =  {
+controller.on('circle:press', function(data) {
+    event = {
         number: 2,
         type: 'axis',
-        val: 1,
+        value: 1,
         commandType: "mobility"
-        
+
     };
     send_to_rover(event);
 });
 
 // Stop turning rotatingbase  clockwise
-controller.on('circle:release', function(data){
-     event =  {
+controller.on('circle:release', function(data) {
+    event = {
         number: 2,
         type: 'axis',
-        val: 0,
+        value: 0,
         commandType: "mobility"
-        
+
     };
     send_to_rover(event);
 });
-
