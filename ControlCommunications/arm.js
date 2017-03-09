@@ -37,6 +37,20 @@ var joint6_buff = Buffer.from(joint6_arr.buffer);
 var joint7_arr = new Uint16Array(2);
 var joint7_buff = Buffer.from(joint7_arr.buffer);
 
+Number.prototype.map = function(in_min, in_max, out_min, out_max) {
+    return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+};
+
+function getPwmValue(value) {
+    if (value <= 0) {
+        value = value.map(config.Joystick_MIN, 0, 1000, 1500);
+    } else {
+        value = value.map(0, config.Joystick_MAX, 1500, 2000);
+    }
+
+    return value;
+}
+
 module.exports = {
     /**
      * Joint1: Phantom Menace
