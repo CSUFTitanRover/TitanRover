@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
 import { Rect, Circle, Group } from 'react-konva';
 
-class JointOne extends Component {
+class Bone extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             mouseFocus: false,
             mouseMove: false,
-            JointOneDegrees: 360 //starting degree
         };
 
     }
 
-    componentDidMount() {
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.rotation !== this.state.rotation) {
+            this.setState({rotation: nextProps.rotation});
+        }
+    }
 
+    componentDidMount() {
         // setInterval( () => {
         //     this.setState({rotation: this.state.rotation+1});
         //     console.info(this.state.rotation);
         // }, 10);
-
     }
 
     // we need to write our own "drag" function because the native one is wonky
@@ -99,19 +102,18 @@ class JointOne extends Component {
                 <Circle width={10} height={10} fill="red" x={0} y={0}/>
                 <Rect
                     ref="rect"
-                    x={0} y={0}
+                    x={this.props.x || 0} y={this.props.y || 0}
                     offsetX={this.props.width} offsetY={this.props.height / 2}
                     width={this.props.width} height={this.props.height}
                     fill={this.props.fill}
-                    rotation={this.props.rotation}
                     onMouseDown={this.handleMouseDown}
                     onMouseUp={this.handleMouseUp}
                     onMouseMove={this.handleMouseMove}
-                    onMouseLeave={this.handleMouseLeave}
+                    rotation={this.props.rotation}
                 />
             </Group>
         );
     }
 }
 
-export default JointOne;
+export default Bone;
