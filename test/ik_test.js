@@ -15,7 +15,7 @@ for(i = 0.01; i <= J1_BOUND; i += 0.01){
   }
 }
 
-// Given the XY, output the Thetas
+// Given the XY, outputs the Thetas ***** IN RADIANS *****
 function inverse_kinematics(X,Y,l1,l2){
   let c2 = (Math.pow(X,2) + Math.pow(Y,2) - Math.pow(l1,2) - Math.pow(l2,2))/(2*l1*l2);
   let s2 =  Math.sqrt(1 - Math.pow(c2,2));
@@ -40,7 +40,7 @@ test_cases.forEach(function(test){
 	var X, Y;
 	var THETA1;
 	var THETA2;  
-	describe('IK test for given Theta1: ' + test[0].toFixed(2) + ' Theta2: ' + test[1].toFixed(2),function(){    
+	describe('Cross validating IK with FK. Given Theta1: ' + test[0].toFixed(2) + ' Theta2: ' + test[1].toFixed(2),function(){    
 		it('should return XY coordinates using forward kinematics',function(done){
 			Coords = forward_kinematics(test[0],test[1],l1,l2);
 			X = Coords[0];
@@ -56,8 +56,8 @@ test_cases.forEach(function(test){
 		it('is equal to the given theta values',function(done){
 			//Uncomment to see full float value
 			//console.log('\tDeduced Theta1: ' + THETA1 + ' Theta2: ' + THETA2);
-			assert.deepEqual(THETA1.toFixed(2),test[0].toFixed(2), "THETA1D SHOULD BE EQUAL");
-			assert.deepEqual(THETA2.toFixed(2),test[1].toFixed(2),"THETA2D SHOULD BE EQUAL");
+			assert.deepEqual(THETA1.toFixed(2),test[0].toFixed(2), "THETA1D should be equal to test value");
+			assert.deepEqual(THETA2.toFixed(2),test[1].toFixed(2),"THETA2D should be equal to test value");
 			done();
 		});
 	});
