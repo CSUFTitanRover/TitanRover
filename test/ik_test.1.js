@@ -14,6 +14,12 @@ var THETA1D;
 var THETA2D;
 
 test_cases = [];
+// Chai Test
+for(i = 0.01; i <= J1_BOUND; i += 0.01){
+  for(j = -0.01; j >= J2_BOUND; j -= 0.01){
+   test_cases.push([i,j]);
+  }
+}
 
 // Given the XY, output the Thetas
 function inverse_kinematics(X,Y,l1,l2){
@@ -35,31 +41,19 @@ function forward_kinematics(THETA1D,THETA2D,l1,l2){
 }
 
 
-
-function test(i,j){
-   describe("IK test for given Theta1D: " ,function(){
-     
-      it('should equal the deduced theta',function(done){
-        console.log(i + " " + j);
-        forward_kinematics(i,j,l1,l2);
-        inverse_kinematics(X,Y,l1,l2);
-        
-        console.log("THetas: " + THETA1D + " "+ THETA2D);
-       
-        assert.deepEqual(THETA1D.toFixed(2),i.toFixed(2), "THETA1D SHOULD BE EQUAL");
-        assert.deepEqual(THETA2D.toFixed(2),j.toFixed(2),"THETA2D SHOULD BE EQUAL");
-        done();
+test_cases.forEach(function(test){
+   describe('IK test for Given Theta1: ' + test[0] + 'Theta2:' + test[1] ,function(){
+          forward_kinematics(test[0],test[1],l1,l2);
+          inverse_kinematics(X,Y,l1,l2);
+          it('should equal the deduced theta1: ' + THETA1D + 'theta2d: ' + THETA2D  ,function(done){
+            console.log('theta1: ' + THETA1D + 'theta2d: ' + THETA2D);
+            assert.deepEqual(THETA1D.toFixed(2),test[0].toFixed(2), "THETA1D SHOULD BE EQUAL");
+            assert.deepEqual(THETA2D.toFixed(2),test[1].toFixed(2),"THETA2D SHOULD BE EQUAL");
+            done();
+        });
       });
-    });
-}
-// Chai Test
-for(i = 0.01; i <= J1_BOUND; i += 0.01){
-  
-  for(j = -0.01; j >= J2_BOUND; j -= 0.01){
-   test_cases.push([i,j]);
-    //test(i,j);
-  }
-}
+    });   
 
-console.log(test_cases)
+
+
 
