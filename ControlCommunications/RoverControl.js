@@ -270,6 +270,7 @@ function armControl(message) {
                 port.write(arm.joint7_gripper(message));
                 break;
             default:
+            throw new RangeError('invalid armcontrol axis');
 
         }
     } else if (message.type == 'button') {
@@ -328,8 +329,8 @@ server.on('message', function(message, remote) {
             }
             break;
         default:
-            //console.log("###### Could not find commandType #######");
             debug.Num_Unknown_Commands += 1;
+            throw new RangeError('commandType invalid');
     }
 });
 

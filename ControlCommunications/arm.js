@@ -211,7 +211,7 @@ module.exports = {
      * @param {int} jointNum 1 - 7
      */
     stopJoint: function(jointNum) {
-        let send_buff;
+        let send_buff = null;
         switch (jointNum) {
             case 1:
                 joint1_arr[1] = 0x0000;
@@ -242,7 +242,7 @@ module.exports = {
                 send_buff = joint7_buff;
                 break;
             default:
-                console.log(jointNum + " joint does not exist");
+                throw new RangeError('Joint must be between ' + 1 + ' and ' + 7);
         }
 
         return send_buff;
