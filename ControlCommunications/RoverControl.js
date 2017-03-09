@@ -57,6 +57,7 @@ var debug = {
     Number_Commands: 0,
     Num_Mobility_Commands: 0,
     Num_Arm_Commands: 0,
+    Num_Unknown_Commands: 0,
     Tested_Connection_Num: 0,
     Lost_Connection_Num: 0,
     Start_Time: time.toString(),
@@ -139,8 +140,8 @@ function receiveMobility(joystickData) {
         port.write(y_Axis_buff);
     } else if (axis === null) //If sent from Gamepad
     {
-        x_Axis_arr[1] = joystickData.x;
-        y_Axis_arr[1] = joystickData.y;
+        x_Axis_arr[1] = getPwmValue(joystickData.x);
+        y_Axis_arr[1] = getPwmValue(joystickData.y);
 
         port.write(x_Axis_buff);
         port.write(y_Axis_buff);
@@ -328,6 +329,7 @@ server.on('message', function(message, remote) {
             break;
         default:
             //console.log("###### Could not find commandType #######");
+            debug.Num_Unknown_Commands += 1;
     }
 });
 
