@@ -148,6 +148,9 @@ class RoboticArmUI extends Component {
             if (result.boneTwoAngle < 0)
                 result.boneTwoAngle = 0;
 
+            // stupid hack here for centering bone two
+            result.boneTwoAngle -= 4;
+
             const b1 = this.refs.boneOne, b2 = this.refs.boneTwo;
             b1.to({
                 rotation: result.boneOneAngle,
@@ -169,7 +172,8 @@ class RoboticArmUI extends Component {
 
     // Given the XY, output the Thetas
     inverse_kinematics = (X,Y) => {
-        let l1 = 287.5, l2 = 143.7;
+        // compensate for group offset of bones
+        let l1 = arm_settings.boneOne.width - 15, l2 = arm_settings.boneTwo.width - 15;
 
         let c2 = (Math.pow(X,2) + Math.pow(Y,2) - Math.pow(l1,2) - Math.pow(l2,2))/(2*l1*l2);
         let s2 =  Math.sqrt(1 - Math.pow(c2,2));
