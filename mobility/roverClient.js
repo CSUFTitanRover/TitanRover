@@ -10,6 +10,13 @@ var wayPoints = [
 
 var current_wayPoint = 0;
 
+var nav_stream  = setInterval(function(){
+    if(current_waypoint > waypoints.length){
+        clearInterval(nav_stream);
+    }
+},200);
+
+
 while(current_wayPoint < wayPoints.length - 1){
     //if(no_list)
       //  load list

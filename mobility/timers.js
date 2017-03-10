@@ -1,66 +1,75 @@
 var geolib = require('geolib');
-var runt = require('runt');
+var rover = require('runt');
+var winston = require('winston');
+
 
 var current_waypoint;
 var current_heading;
 
-var next_waypoint; 
-var distance_to_waypoint;
+var target; // The next waypoint to travel to
+var distance_to_target;
+
+const STOP_DISTANCE = 50; // Stop within 50cm of target 
 
 
 /**
- * @param {JSON} current_heading current longitude and latitude 
- * @param {JSON} next_waypoint next longitude and latitude, ideal destination
+ * @param {JSON} current_heading current heading in degrees. Ranges from 0 - 360 
+ * @param {JSON} target destination longitude and latitude
+ * 
+ * Uses the current heading and target to calculate which direction to turn.
+ * If we are within 1 degree of our desired heading. stop.  
+ * If not, take the shortest clockwise or counter clockwise turn. 
  */   
-var turn_to_heading = setInterval(function(current_heading, next_waypoint){
-        heading_delta =current_heading - geolib.getBearing(current_waypoint,next_waypoint);
-        delta_isPositve = heading_delta > 0;
-        // If we are within 1 degree of the desired heading
-        if(Math.abs.apply(heading_delta) <= 1){
-            runt.stop();
-            clearInterval(check_heading);
+
+var turn_toward_target = setInterval(function(current_heading, target){
+        heading_delta = current_heading - geolib.getBearing(current_waypoint,target);
+        delta_is_positive = heading_delta > 0;
+        // If we are within 1 degree of the desired heading stop, else turn
+        if(Math.abs(heading_delta) <= 1){
+            rover.stop();
+            clearInterval(turn_toward_target);
         }
         else{
-             take_shortest_turn(heading_delta,delta_isPositive);
-        }
+            // If we have turn more than halfway in one direction, its quicker to move the other direction.
+            // This can probably be simplified. Refactor later
+             if(delta_is_positive){
+                if(Math.abs(heading_delta) > 180){
+                    rover.turn_left();
+                }else{
+                    rover.turn_right();
+                    }
+            }else{
+                if(Math.abs(heading_delta) > 180){
+                    rover.turn_left();
+                }else{
+                    rover.turn_right();
+                    }
+                }
+            }
     },200);
 
+
 /**
- * @param {Number} distance_to_waypoint The INITIAL distance to way point 
+ * @param {Number} distance_to_target The INITIAL distance to way point 
+ * 
+ * Uses the intial distance to next waypoint.
  */ 
-var drive_to_next = setInterval(function(distance_to_waypoint){
+var drive_toward_target = setInterval(function(current_waypoint,distance_to_target,target){
     
     previous_distance = null;
-    rover_overshot = previous_distance < distance_to_waypoint;
-
-    // if distance to next is less than 50cm
-    if(distance_to_waypoint < 50){
-        runt.stop();
-        clearInterval(drive_to_next);
+    rover_overshot = false;
+    if(previous_distance !== null){
+        rover_overshot = current_distance_to_target > previous_distance;
+    }
+    
+    if(current_distance_to_target < STOP_DISTANCE){
+        rover.stop();
+        clearInterval(drive_toward_target);
     } else if(rover_overshot){
-            runt.stop();
-            turn_to_heading();
+            rover.stop();
+            turn_toward_target();
     } else{
-        runt.drive();
-        distance_to_waypoint = geolib.getDistance(current_waypoint,next_waypoint);
+        rover.forward();
+        current_distance_to_target = geolib.getDistance(current_waypoint,target);
     }
 },200);
-
-/* HELPER FUNCTIONS */
-// If we have to move more than half a turn. Its quicker to move the other direction. 
-// This can probably be simplified. Refactor later 
-function take_shortest_turn(heading_delta,delta_is_positive){  
-    if(delta_is_positive){
-        if(Math.abs(heading_delta) > 180){
-            runt.turn_left();
-        }else{
-            runt.turn_right();
-            }
-    }else{
-        if(Math.abs(heading_delta) > 180){
-            runt.turn_left();
-        }else{
-            runt.turn_right();
-            }
-        }
-}
