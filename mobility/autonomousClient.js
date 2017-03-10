@@ -80,7 +80,7 @@ class Atlas {
     move(left, right, forward, backward) { //should take booleans, for example if right, move(false,true,false,false)
         console.log("--ATLAS EXECUTING A MOVEMENT COMMAND--");
         if (!left && !right && !forward && !backward) {
-            console.log("--STOPPING--")
+            console.log("--HALTING--")
         }
         else if(left) {
             console.log("--ROTATING LEFT--");
@@ -103,10 +103,10 @@ class Atlas {
     }
 
     /*Stops all motors at 0 to bring the rover to a halt*/
-    stopMove() {
-        console.log("--ATLAS EXECUTING STOP--")
+    halt() {
+        console.log("--ATLAS EXECUTING HALT--")
         move(false,false,false,false);
-        console.log("--EXECUTED STOP--");
+        console.log("--EXECUTED HALT--");
     }
     
     get myHeading() {
