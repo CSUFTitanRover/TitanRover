@@ -1,6 +1,5 @@
-
 const makePwmDriver = require('adafruit-i2c-pwm-driver');
-var gpio = require('rpi-gpio');
+const gpio = require('rpi-gpio');
 
 // MOTOR Initialization
 const MOTOR1A = 36;
@@ -28,15 +27,15 @@ const pwm = makePwmDriver({
         pwm.setPWM(1, 0, parseInt(speed)); - RIGHT MOTOR 
  */
 module.exports = {
-    drive: function (speed){
+    forward: function(throttle){
         GPIO.write(MOTOR1A, GPIO.HIGH);
         GPIO.write(MOTOR1B, GPIO.LOW);
         GPIO.write(MOTOR2A, GPIO.HIGH);
         GPIO.write(MOTOR2B, GPIO.LOW);
-        pwm.setPWM(0, 0, parseInt(speed));
-        pwm.setPWM(1, 0, parseInt(speed));
+        pwm.setPWM(0, 0, parseInt(throttle));
+        pwm.setPWM(1, 0, parseInt(throttle));
     },
-    stop: function (){
+    stop: function(){
         pwm.setPWM(0, 0, 0);
         pwm.setPWM(1, 0, 0);
     },
@@ -56,7 +55,7 @@ module.exports = {
         pwm.setPWM(0, 0, parseInt(throttle));
         pwm.setPWM(1, 0, parseInt(throttle));
     },
-    cleanup: function () {
+    cleanup: function(){
         pwm.setPWM(0, 0, 0);
         pwm.setPWM(1, 0, 0);
         gpio.destroy(function() {
