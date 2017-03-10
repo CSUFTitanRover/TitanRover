@@ -13,15 +13,15 @@ var distance_to_waypoint;
  * @param {JSON} next_waypoint next longitude and latitude, ideal destination
  */   
 var turn_to_heading = setInterval(function(current_heading, next_waypoint){
-        heading_delta = Math.abs(current_heading - geolib.getBearing(current_waypoint,next_waypoint));
+        heading_delta =current_heading - geolib.getBearing(current_waypoint,next_waypoint);
         delta_isPositve = heading_delta > 0;
         // If we are within 1 degree of the desired heading
-        if(heading_delta <= 1){
+        if(Math.abs.apply(heading_delta) <= 1){
             runt.stop();
             clearInterval(check_heading);
         }
         else{
-             take_shortest_turn();
+             take_shortest_turn(heading_delta,delta_isPositive);
         }
     },200);
 
@@ -49,7 +49,7 @@ var drive_to_next = setInterval(function(distance_to_waypoint){
 /* HELPER FUNCTIONS */
 // If we have to move more than half a turn. Its quicker to move the other direction. 
 // This can probably be simplified. Refactor later 
-function take_shortest_turn(){  
+function take_shortest_turn(heading_delta,delta_is_positive){  
     if(delta_is_positive){
         if(Math.abs(heading_delta) > 180){
             runt.turn_left();
