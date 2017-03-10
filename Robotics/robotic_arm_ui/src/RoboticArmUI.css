@@ -2,3 +2,11 @@
     max-width: 90%;
     margin: 10px;
 }
+
+#controls {
+    padding: 10px;
+}
+
+#controls > div {
+    padding-bottom: 20px;
+}

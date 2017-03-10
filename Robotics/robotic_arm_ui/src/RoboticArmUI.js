@@ -3,9 +3,8 @@ import './RoboticArmUI.css';
 import Base from './arm_shapes/Base';
 import arm_settings from './arm_settings.json';
 import '../node_modules/antd/dist/antd.min.css';
-import { Slider, InputNumber } from 'antd';
+import { Slider, InputNumber, Button } from 'antd';
 import { Stage, Layer, Group, Rect, Circle, Text } from 'react-konva';
-import math from 'mathjs';
 
 class RoboticArmUI extends Component {
     constructor(props) {
@@ -34,8 +33,8 @@ class RoboticArmUI extends Component {
         this.baseHeight = 30;
 
         this.stage = {
-            width: 1000,
-            height: 700,
+            width: 950,
+            height: 600,
         };
 
         // bottom centering
@@ -72,52 +71,6 @@ class RoboticArmUI extends Component {
         });
     };
 
-    getRandomIntInclusive(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    // ignore this... just to randomly move both joints
-    // componentDidMount() {
-    //     const boneOne = this.state.boneOne, boneTwo = this.state.boneTwo;
-    //     boneOne.rotation = this.getRandomIntInclusive(-90, 0);
-    //     boneTwo.rotation = this.getRandomIntInclusive(0, 90);
-    //
-    //     this.setState({boneOne, boneTwo});
-    //
-    //     this.incOne = -0.1, this.incTwo = -0.1;
-    //     setInterval( () => {
-    //
-    //         if (this.state.boneOne.rotation > 0 || this.state.boneOne.rotation < -90)
-    //             this.incOne *= -1;
-    //
-    //         if (this.state.boneTwo.rotation > 90 || this.state.boneTwo.rotation < 0)
-    //             this.incTwo *= -1;
-    //
-    //         const boneOne = this.state.boneOne,
-    //             boneTwo = this.state.boneTwo;
-    //
-    //         boneOne.rotation += this.incOne;
-    //         boneTwo.rotation += this.incTwo;
-    //
-    //         // const b1 = this.refs.boneOne;
-    //         // b1.to({
-    //         //     rotation: boneOne.rotation,
-    //         //     duration: 0.3
-    //         // });
-    //         //
-    //         // const b2 = this.refs.boneTwo;
-    //         // b2.to({
-    //         //     rotation: boneTwo.rotation,
-    //         //     duration: 0.3
-    //         // });
-    //
-    //         this.setState({boneOne, boneTwo});
-    //
-    //     }, 0.01);
-    // }
-
     handleDragMoveTarget = (event) => {
         let mouse = {x: event.target.attrs.x, y: event.target.attrs.y};
 
@@ -134,7 +87,7 @@ class RoboticArmUI extends Component {
         // }
 
         let result = this.inverse_kinematics(mouse.x, mouse.y);
-        console.info(result);
+        // console.info(result);
 
         if (result) {
 
@@ -177,12 +130,12 @@ class RoboticArmUI extends Component {
 
         let c2 = (Math.pow(X,2) + Math.pow(Y,2) - Math.pow(l1,2) - Math.pow(l2,2))/(2*l1*l2);
         let s2 =  Math.sqrt(1 - Math.pow(c2,2));
-        let THETA2D = -math.atan2(s2, c2); // theta2 is deduced
+        let THETA2D = -Math.atan2(s2, c2); // theta2 is deduced
 
-        let k1 = l1 + l2*math.cos(THETA2D);
-        let k2 = l2*(math.sin(THETA2D));
-        let gamma = math.atan2(k2, k1);
-        let THETA1D =  math.atan2(Y, X) - gamma; // Theta 1 deduced
+        let k1 = l1 + l2*Math.cos(THETA2D);
+        let k2 = l2*(Math.sin(THETA2D));
+        let gamma = Math.atan2(k2, k1);
+        let THETA1D =  Math.atan2(Y, X) - gamma; // Theta 1 deduced
 
         THETA1D = -1 * (THETA1D) * (180 / Math.PI);
         THETA2D = -1 * (THETA2D) * (180 / Math.PI);
@@ -194,26 +147,77 @@ class RoboticArmUI extends Component {
         return null;
     };
 
+    getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     // initially set the target's x position to the tip of the arm
     componentDidMount() {
         this.refs.target.x(390);
     }
 
+
+    handleClick = () => {
+
+        if (!this.state.toggle) {
+            this.interval = setInterval(() => {
+
+                let randomX = this.getRandomIntInclusive(40, 400);
+                let randomY = this.getRandomIntInclusive(0, 300);
+
+                this.refs.target.x(randomX);
+                this.refs.target.y(-randomY);
+
+                console.info(randomX, randomY);
+                let result = this.inverse_kinematics(randomX, randomY);
+
+                if (result) {
+                    // constraints ?!
+                    if (result.boneOneAngle < -90)
+                        result.boneOneAngle = -90;
+                    if (result.boneOneAngle > 0)
+                        result.boneOneAngle = 0;
+                    if (result.boneTwoAngle > 90)
+                        result.boneTwoAngle = 90;
+                    if (result.boneTwoAngle < 0)
+                        result.boneTwoAngle = 0;
+
+                    // stupid hack here for centering bone two
+                    result.boneTwoAngle -= 4;
+
+                    const b1 = this.refs.boneOne, b2 = this.refs.boneTwo;
+                    b1.to({
+                        rotation: result.boneOneAngle,
+                        duration: 0.3
+                    });
+                    b2.to({
+                        rotation: result.boneTwoAngle,
+                        duration: 0.3
+                    });
+
+                    const boneOne = this.state.boneOne, boneTwo = this.state.boneTwo;
+                    boneOne.rotation = result.boneOneAngle;
+                    boneTwo.rotation = result.boneTwoAngle;
+                    this.setState({boneOne, boneTwo});
+                }
+
+            }, 1500);
+
+            this.setState({toggle: true})
+        }
+        else {
+            clearInterval(this.interval);
+            this.setState({toggle: false});
+        }
+    };
+
     render() {
         return (
             <div>
-                <div>
-                    <h3>Bone One Values</h3>
-                    <Slider min={-90} max={0} step={0.01} value={this.state.boneOne.rotation} onChange={this.onBoneOneChange} />
-                    <InputNumber min={-90} max={0} step={0.01} value={this.state.boneOne.rotation} onChange={this.onBoneOneChange}/>
-                </div>
 
-                <div>
-                    <h3>Bone Two Values</h3>
-                    <Slider min={0} max={90} step={0.01} value={this.state.boneTwo.rotation} onChange={this.onBoneTwoChange} />
-                    <InputNumber min={0} max={90} step={0.01} value={this.state.boneTwo.rotation} onChange={this.onBoneTwoChange}/>
-                </div>
-
+                <h1>Inverse Kinematics - 2 DOF</h1>
                 <Stage width={this.stage.width} height={this.stage.height}>
                     {/* This is just to draw a border around our drawing canvas Stage */}
                     <Layer>
@@ -223,7 +227,7 @@ class RoboticArmUI extends Component {
 
                     {/* Actual drawn elements */}
                     <Layer >
-                        <Group x={this.layergroup.x} y={this.layergroup.y * 0.75}>
+                        <Group x={this.layergroup.x * 0.75} y={this.layergroup.y * 0.75}>
                             <Base width={this.baseWidth} height={this.baseHeight}/>
 
                             {/*Bone One*/}
@@ -244,8 +248,9 @@ class RoboticArmUI extends Component {
                                     fill="darkgreen"
                                 />
                                 {/* Bounds Bone One Circle */}
-                                <Circle width={arm_settings.boneOne.width } height={arm_settings.boneOne.width } stroke="rgba(0, 255, 4, 0.5)" dash={[10, 15]}
-                                        x={arm_settings.boneOne.width / 2} y={arm_settings.boneOne.height / 2} rotation={0}
+                                <Circle width={arm_settings.boneOne.width } height={arm_settings.boneOne.width }
+                                        stroke="rgba(0, 255, 4, 0.5)" dash={[10, 15]}
+                                        x={arm_settings.boneOne.width / 2} y={arm_settings.boneOne.height / 2}
                                 />
 
                                 {/*Bone Two*/}
@@ -269,7 +274,7 @@ class RoboticArmUI extends Component {
 
                                     {/* Bounds Bone Two Circle */}
                                     <Circle width={arm_settings.boneTwo.width } height={arm_settings.boneTwo.width } stroke="rgba(0, 187, 255, 0.5)" dash={[10, 15]}
-                                            x={arm_settings.boneTwo.width / 2} y={arm_settings.boneTwo.height / 2} rotation={0}
+                                            x={arm_settings.boneTwo.width / 2} y={arm_settings.boneTwo.height / 2}
                                     />
                                 </Group>
                             </Group>
@@ -290,6 +295,22 @@ class RoboticArmUI extends Component {
                         </Group>
                     </Layer>
                 </Stage>
+
+                <div id="controls">
+                    <Button onClick={this.handleClick}>Toggle Random IK</Button>
+                    <div>
+                        <h3>Bone One Degree Values</h3>
+                        <Slider min={-90} max={0} step={0.01} value={this.state.boneOne.rotation} onChange={this.onBoneOneChange} />
+                        <InputNumber min={-90} max={0} step={0.01} value={this.state.boneOne.rotation} onChange={this.onBoneOneChange}/>
+                    </div>
+
+                    <div>
+                        <h3>Bone Two Degree Values</h3>
+                        <Slider min={0} max={90} step={0.01} value={this.state.boneTwo.rotation} onChange={this.onBoneTwoChange} />
+                        <InputNumber min={0} max={90} step={0.01} value={this.state.boneTwo.rotation} onChange={this.onBoneTwoChange}/>
+                    </div>
+                </div>
+
             </div>
         );
 
