@@ -1,75 +1,169 @@
 var geolib = require('geolib');
-var rover = require('runt');
-var winston = require('winston');
+//var rover = require('runt');
+const EventEmitter = require('events');
+class MyEmitter extends EventEmitter {}
+const autonomous_control = new MyEmitter();
+const Winston = require('winston');
+ var winston = new (Winston.Logger)({
+    transports: [
+      new (Winston.transports.Console)(),
+      new (Winston.transports.File)({ 
+          filename: './autonomous.log',
+          options:{flags: 'w'} // Overwrite logfile. Remove if you want to append 
+     })
+    ]
+  });
 
-
+var i = 0; 
 var current_waypoint;
-var current_heading;
-
-var target; // The next waypoint to travel to
+var current_heading = 45;
+var target_waypoint; // The next waypoint to travel to
 var distance_to_target;
+const STOP_DISTANCE = 50; // Stop within 50m (change to cm during integration) of target 
 
-const STOP_DISTANCE = 50; // Stop within 50cm of target 
+/* 
+You can plot these points here. Just copy paste. 
+https://www.darrinward.com/lat-long/?id=2727099
+
+33.64995,-117.612345
+33.650316,-117.612109
+33.6492,-117.610199
+33.64945,-117.609674
+33.650781,-117.611884
+33.649968,-117.612367
+
+
+To get your own test points you can use
+http://www.findlatitudeandlongitude.com/click-lat-lng-list/
+
+*/
+
+var wayPoints = [
+    {latitude: 33.64995,   longitude: -117.612345},
+    {latitude: 33.64995,longitude: -117.612345},
+    {latitude: 33.650316,longitude: -117.612109},
+    {latitude: 33.6492,longitude: -117.610199},
+    {latitude: 33.64945,longitude: -117.609674},
+    {latitude: 33.650781,longitude: -117.611884},
+    {latitude: 33.649968,longitude: -117.612367}
+    ];
+
+
+autonomous_control.on('on_target',function(target_waypoint){
+    distance_to_target = geolib.getDistance(current_waypoint,target_waypoint);   
+    //console.log("distance: " + distance_to_target);
+    drive_toward_target();
+});
+
+autonomous_control.on('get_waypoint',function(){
+    // Assuming the first point is the current waypoint. This wont be true for the runt. 
+    current_waypoint = wayPoints[i];
+    winston.log('info', 'Got new waypoint: ' + JSON.stringify(current_waypoint));
+    i++;
+    if(i < wayPoints.length){
+        target_waypoint = wayPoints[i];
+        turn_toward_target();
+    }
+    else{
+        console.log("Arrived at endpoint!");
+    }
+    
+});
 
 
 /**
- * @param {JSON} current_heading current heading in degrees. Ranges from 0 - 360 
- * @param {JSON} target destination longitude and latitude
  * 
  * Uses the current heading and target to calculate which direction to turn.
- * If we are within 1 degree of our desired heading. stop.  
- * If not, take the shortest clockwise or counter clockwise turn. 
+ * If we are within 1 degree of the desired heading. stop.  
+ * If not, take the shortest turn to get the desired heading. 
  */   
 
-var turn_toward_target = setInterval(function(current_heading, target){
-        heading_delta = current_heading - geolib.getBearing(current_waypoint,target);
-        delta_is_positive = heading_delta > 0;
+var turn_toward_target = function(){
+    
+    var turn_timer = setInterval(function(){
+
+        target_heading = geolib.getBearing(current_waypoint,target_waypoint);
+        heading_delta = current_heading - target_heading;
+        //winston.log('info', 'Target heading: ' + target_heading);
         // If we are within 1 degree of the desired heading stop, else turn
         if(Math.abs(heading_delta) <= 1){
-            rover.stop();
-            clearInterval(turn_toward_target);
+            //rover.stop();
+            clearInterval(turn_timer);
+            winston.log('info', 'On target: ' + current_heading);
+            autonomous_control.emit('on_target',target_waypoint);
         }
         else{
-            // If we have turn more than halfway in one direction, its quicker to move the other direction.
+            winston.log('info', 'Turning..current heading: ' + current_heading + ' degrees');
+            
+            // We have to loop the degrees around manually for testing 
+             if(current_heading < 0){
+                 current_heading = 359;
+             }
+
+             if(current_heading > 360){
+                 current_heading = 0;
+             }
+
+             // If we have turn more than halfway, its quicker to turn the other direction.
             // This can probably be simplified. Refactor later
-             if(delta_is_positive){
+             if(current_heading > target_heading){
                 if(Math.abs(heading_delta) > 180){
-                    rover.turn_right();
+                    //rover.turn_right();
+                    current_heading = current_heading + 1;
                 }else{
-                    rover.turn_left();
+                    //rover.turn_left();
+                    current_heading = current_heading - 1;
                     }
             }else{
                 if(Math.abs(heading_delta) > 180){
-                    rover.turn_left();
+                    //rover.turn_left();
+                    current_heading = current_heading - 1;
                 }else{
-                    rover.turn_right();
+                    //rover.turn_right();
+                    current_heading = current_heading + 1;
                     }
-                }
             }
-    },200);
-
+           
+        }
+    },1);
+};
 
 /**
- * @param {Number} distance_to_target The INITIAL distance to way point 
- * 
- * Uses the intial distance to next waypoint.
+ * Updates current_distance while driving toward target
  */ 
-var drive_toward_target = setInterval(function(current_waypoint,distance_to_target,target){
+var drive_toward_target = function(){
     
     previous_distance = null;
-    rover_overshot = false;
-    if(previous_distance !== null){
-        rover_overshot = current_distance_to_target > previous_distance;
-    }
-    
-    if(current_distance_to_target < STOP_DISTANCE){
-        rover.stop();
-        clearInterval(drive_toward_target);
-    } else if(rover_overshot){
-            rover.stop();
-            turn_toward_target();
-    } else{
-        rover.forward();
-        current_distance_to_target = geolib.getDistance(current_waypoint,target);
-    }
-},200);
+    var drive_timer = setInterval(function(){
+        rover_overshot = false;
+        if(previous_distance !== null){
+            
+            rover_overshot = distance_to_target > previous_distance;
+        }
+        if(distance_to_target < STOP_DISTANCE){
+            //rover.stop();
+            clearInterval(drive_timer);
+            winston.log('info', 'Arrived...within ' + distance_to_target + ' meters');
+            autonomous_control.emit('get_waypoint');
+        } else if(rover_overshot){
+                //rover.stop();
+                clearInterval(drive_timer);
+                winston.log('info', '**** Overshot: ' + distance_to_target);
+                turn_toward_target(current_heading,target_waypoint);
+        } else{
+            //rover.forward(); 
+            //distance_to_target = geolib.getDistance(current_waypoint,target);
+            previous_distance = distance_to_target;
+            distance_to_target--;
+            winston.log('info', 'driving...distance to target: ' + distance_to_target + ' meters');
+            winston.log('info', 'previous: ' + previous_distance + ' meters');
+        }
+
+    },1);
+
+};
+
+
+
+// Start the autonomous sequence.
+autonomous_control.emit('get_waypoint');
