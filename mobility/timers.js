@@ -58,9 +58,9 @@ autonomous_control.on('on_target',function(target_waypoint){
 autonomous_control.on('get_waypoint',function(){
     // Assuming the first point is the current waypoint. This wont be true for the runt. 
     current_waypoint = wayPoints[i];
-    winston.log('info', 'Got new waypoint: ' + JSON.stringify(current_waypoint));
     i++;
     if(i < wayPoints.length){
+        winston.log('info', 'Got new waypoint: ' + JSON.stringify(current_waypoint));
         target_waypoint = wayPoints[i];
         turn_toward_target();
     }
