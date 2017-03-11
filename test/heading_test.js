@@ -16,9 +16,9 @@ function turn_heading(test){
     var delta_is_positive = heading_delta > 0;
     if(delta_is_positive){
         if(Math.abs(heading_delta) > 180){
-            return 'current : ' + test[0] + ' target : ' + target_heading+ ' turn left';
-        }else{
             return 'current : ' + test[0] + ' target : ' + target_heading+ ' turn right';
+        }else{
+            return 'current : ' + test[0] + ' target : ' + target_heading+ ' turn left';
         }
     }else{
         if(Math.abs(heading_delta) > 180){
@@ -30,6 +30,7 @@ function turn_heading(test){
 }
 
 test_cases.forEach(function(test){
+    
     console.log(turn_heading(test));	
 });
 
