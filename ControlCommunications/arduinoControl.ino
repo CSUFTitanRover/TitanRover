@@ -7,11 +7,11 @@ const int stepsPerRevolution = 200;
 
 // X Axis Mobility
 Servo x_mobility;
-const uint8_t x_pwm_pin = 2;
+const uint8_t x_pwm_pin = 6;
 
 // Y Axis Mobility
 Servo y_mobility;
-const uint8_t y_pwm_pin = 3;
+const uint8_t y_pwm_pin = 7;
 
 // Joint #1
 const uint8_t joint1_dir_pin = 30;
@@ -135,7 +135,7 @@ void loop()
 
     if (val[0] == 0x01) // Joint1
     {
-      setDirection(joint1_dir_pin, (bool)val[1]);
+      setDirection(joint1_dir_pin, val[1]);
       joint1_on = val[2];
       if (val[3] != 0x00)
         stepJoint(joint1_pulse_pin, val[3]);
@@ -150,28 +150,28 @@ void loop()
     }
     else if (val[0] == 0x04) // Joint4
     {
-      setDirection(joint4_dir_pin, (bool)val[1]);
+      setDirection(joint4_dir_pin, val[1]);
       joint4_on = val[2];
       if (val[3] != 0x00)
         stepJoint(joint4_pulse_pin, val[3]);
     }
     else if (val[0] == 0x05) // Joint5
     {
-      setDirection(joint5_dir_pin, (bool)val[1]);
+      setDirection(joint5_dir_pin, val[1]);
       joint5_on = val[2];
       if (val[3] != 0x00)
         stepJoint(joint5_pulse_pin, val[3]);
     }
     else if (val[0] == 0x06) // Joint6
     {
-      setDirection(joint6_dir_pin, (bool)val[1]);
+      setDirection(joint6_dir_pin, val[1]);
       joint6_on = val[2];
       if (val[3] != 0x00)
         stepJoint(joint6_pulse_pin, val[3]);
     }
     else if (val[0] == 0x07) // Joint7
     {
-      setDirection(joint7_dir_pin, (bool)val[1]);
+      setDirection(joint7_dir_pin, val[1]);
       joint7_on = val[2];
       if (val[3] != 0x00)
         stepJoint(joint7_pulse_pin, val[3]);
@@ -235,13 +235,13 @@ void stepJoint(uint8_t pinValue, uint8_t steps)
 }
 
 // Will switch the pin based on what byte is sent from the pi
-void setDirection(uint8_t pinValue, bool val)
+void setDirection(uint8_t pinValue, uint8_t val)
 {
-  if (val)
+  if (val == 0x00)
   {
     digitalWrite(pinValue, LOW);
   }
-  else
+  else if (val == 0x01)
   {
     digitalWrite(pinValue, HIGH);
   }
