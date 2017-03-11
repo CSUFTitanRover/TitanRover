@@ -3,14 +3,13 @@ var geolib = require('geolib');
 const EventEmitter = require('events');
 class MyEmitter extends EventEmitter {}
 const autonomous_control = new MyEmitter();
-
+var sleep = require('sleep');
 var now = require("performance-now");
+
 const Winston = require('winston');
  var winston = new (Winston.Logger)({
     transports: [
       new (Winston.transports.Console)({
-          timestamp: function () {
-          return now().toFixed(2);},
           'colorize': true
           
      }),
@@ -59,21 +58,40 @@ var wayPoints = [
     ];
 
 
-autonomous_control.on('on_target',function(target_waypoint){
-    distance_to_target = geolib.getDistance(current_waypoint,target_waypoint);   
+autonomous_control.on('on_target',function(target_waypoint){ 
     //console.log("distance: " + distance_to_target);
-    drive_toward_target();
+     winston.info('Reached desired heading: ' + current_heading + ' degrees');
+     winston.info('Initiating drive toward ' +JSON.stringify(target_waypoint));
+     sleep.sleep(3);
+     process.stdout.write('\033c');
+     drive_toward_target();
+    
 });
 
 autonomous_control.on('get_waypoint',function(){
     // Assuming the first point is the current waypoint. This wont be true for the runt. 
     current_waypoint = wayPoints[i];
     i++;
+   
     if(i < wayPoints.length){
         target_waypoint = wayPoints[i];
+        distance_to_target = geolib.getDistance(current_waypoint,target_waypoint);  
+        winston.info( 'Getting next waypoint!');
         winston.info( 'Current Location: ' + JSON.stringify(current_waypoint));
         winston.info( 'Target Location: ' + JSON.stringify(target_waypoint));
-        turn_toward_target();
+        sleep.sleep(3);
+        process.stdout.write('\033c');
+        if(distance_to_target < STOP_DISTANCE){
+            winston.info( 'Already near waypoint. Skipping.');
+            autonomous_control.emit('get_waypoint');
+        }
+        else{
+            winston.info( 'Initiating turn');
+            sleep.sleep(3);
+            process.stdout.write('\033c');;
+            turn_toward_target();
+        }
+        
     }
     else{
         console.log("Arrived at endpoint!");
@@ -101,12 +119,13 @@ var turn_toward_target = function(){
         if(Math.abs(heading_delta) <= 1){
             //rover.stop();
             clearInterval(turn_timer);
-            winston.info('Reached desired heading: ' + current_heading);
+           
             autonomous_control.emit('on_target',target_waypoint);
         }
         else{
-            winston.info('Turning..current heading: ' + current_heading + ' degrees');
             
+            process.stdout.write('\033c');
+            winston.info('Turning..current heading: ' + current_heading + ' degrees');
             // We have to loop the degrees around manually for testing 
              if(current_heading < 0){
                  current_heading = 359;
@@ -137,7 +156,7 @@ var turn_toward_target = function(){
             }
            
         }
-    },1);
+    },40);
 };
 
 /**
@@ -156,21 +175,29 @@ var drive_toward_target = function(){
             //rover.stop();
             clearInterval(drive_timer);
             winston.info( 'Arrived...within ' + distance_to_target + ' meters');
+            sleep.sleep(2);
+            process.stdout.write('\033c');
             autonomous_control.emit('get_waypoint');
         } else if(rover_overshot){
+                
                 //rover.stop();
                 clearInterval(drive_timer);
                 winston.info( '**** Overshot: ' + distance_to_target);
                 turn_toward_target(current_heading,target_waypoint);
+                
         } else{
             //rover.forward(); 
             //distance_to_target = geolib.getDistance(current_waypoint,target);
+            
             previous_distance = distance_to_target;
             distance_to_target--;
+            process.stdout.write('\033c');
             winston.info( 'driving...distance to target: ' + distance_to_target + ' meters');
+            
+            
         }
 
-    },1);
+    },30);
 
 };
 
