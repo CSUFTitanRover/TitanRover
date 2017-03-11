@@ -3,16 +3,26 @@ var geolib = require('geolib');
 const EventEmitter = require('events');
 class MyEmitter extends EventEmitter {}
 const autonomous_control = new MyEmitter();
+
+var now = require("performance-now");
 const Winston = require('winston');
  var winston = new (Winston.Logger)({
     transports: [
-      new (Winston.transports.Console)(),
+      new (Winston.transports.Console)({
+          timestamp: function () {
+          return now().toFixed(2);},
+          'colorize': true
+          
+     }),
       new (Winston.transports.File)({ 
           filename: './autonomous.log',
-          options:{flags: 'w'} // Overwrite logfile. Remove if you want to append 
+          options:{flags: 'w'}, // Overwrite logfile. Remove if you want to append 
+          timestamp: function () {
+          return now();},
      })
     ]
   });
+
 
 var i = 0; 
 var current_waypoint;
@@ -60,12 +70,14 @@ autonomous_control.on('get_waypoint',function(){
     current_waypoint = wayPoints[i];
     i++;
     if(i < wayPoints.length){
-        winston.log('info', 'Got new waypoint: ' + JSON.stringify(current_waypoint));
         target_waypoint = wayPoints[i];
+        winston.info( 'Current Location: ' + JSON.stringify(current_waypoint));
+        winston.info( 'Target Location: ' + JSON.stringify(target_waypoint));
         turn_toward_target();
     }
     else{
         console.log("Arrived at endpoint!");
+        var end = now();
     }
     
 });
@@ -84,16 +96,16 @@ var turn_toward_target = function(){
 
         target_heading = geolib.getBearing(current_waypoint,target_waypoint);
         heading_delta = current_heading - target_heading;
-        //winston.log('info', 'Target heading: ' + target_heading);
+        //winston.log( 'Target heading: ' + target_heading);
         // If we are within 1 degree of the desired heading stop, else turn
         if(Math.abs(heading_delta) <= 1){
             //rover.stop();
             clearInterval(turn_timer);
-            winston.log('info', 'On target: ' + current_heading);
+            winston.info('Reached desired heading: ' + current_heading);
             autonomous_control.emit('on_target',target_waypoint);
         }
         else{
-            winston.log('info', 'Turning..current heading: ' + current_heading + ' degrees');
+            winston.info('Turning..current heading: ' + current_heading + ' degrees');
             
             // We have to loop the degrees around manually for testing 
              if(current_heading < 0){
@@ -143,20 +155,19 @@ var drive_toward_target = function(){
         if(distance_to_target < STOP_DISTANCE){
             //rover.stop();
             clearInterval(drive_timer);
-            winston.log('info', 'Arrived...within ' + distance_to_target + ' meters');
+            winston.info( 'Arrived...within ' + distance_to_target + ' meters');
             autonomous_control.emit('get_waypoint');
         } else if(rover_overshot){
                 //rover.stop();
                 clearInterval(drive_timer);
-                winston.log('info', '**** Overshot: ' + distance_to_target);
+                winston.info( '**** Overshot: ' + distance_to_target);
                 turn_toward_target(current_heading,target_waypoint);
         } else{
             //rover.forward(); 
             //distance_to_target = geolib.getDistance(current_waypoint,target);
             previous_distance = distance_to_target;
             distance_to_target--;
-            winston.log('info', 'driving...distance to target: ' + distance_to_target + ' meters');
-            winston.log('info', 'previous: ' + previous_distance + ' meters');
+            winston.info( 'driving...distance to target: ' + distance_to_target + ' meters');
         }
 
     },1);
@@ -164,6 +175,7 @@ var drive_toward_target = function(){
 };
 
 
+var start = now();
 
 // Start the autonomous sequence.
 autonomous_control.emit('get_waypoint');
