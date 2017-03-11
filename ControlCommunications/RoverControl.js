@@ -49,6 +49,14 @@ var config = {
     TEST_CONNECTION: 2000
 };
 
+var x_Axis_arr = new Uint16Array(2);
+x_Axis_arr[0] = 0x0008;
+var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
+
+var y_Axis_arr = new Uint16Array(2);
+y_Axis_arr[0] = 0x0009;
+var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
+
 var time = new Date();
 
 // If debug is true will send this info back to homebase control.
@@ -152,8 +160,12 @@ function receiveMobility(joystickData) {
 // Send 0 to both the x and y axis to stop the rover from running
 // Will only be invoked if we lose signal
 function stopRover() {
-    receiveMobility(zeroMessage[0]);
-    receiveMobility(zeroMessage[1]);
+    //receiveMobility(zeroMessage[0]);
+    //receiveMobility(zeroMessage[1]);
+    x_Axis_arr[1] = 1500;
+    y_Axis_arr[1] = 1500;
+    port.write(x_Axis_buff);
+    port.write(y_Axis_buff);
     // Stopping all joints
     for (i = 1; i <= 7; i++) {
         port.write(arm.stopJoint(i));
@@ -246,7 +258,7 @@ function armControl(message) {
                 if (thumbPressed) {
                     port.write(arm.joint6_360Unlimited(message));
                 } else {
-                    port.write(arm.joint3_linear2(message));
+                    port.write(arm.joint3_linear2(message, getPwmValue(message.value)));
                 }
                 break;
             case 1:
@@ -254,7 +266,7 @@ function armControl(message) {
                 if (thumbPressed) {
                     port.write(arm.joint4_rotateWrist(message));
                 } else {
-                    port.write(arm.joint2_linear1(message));
+                    port.write(arm.joint2_linear1(message, getPwmValue(message.value)));
                 }
                 break;
             case 2:
@@ -270,7 +282,7 @@ function armControl(message) {
                 port.write(arm.joint7_gripper(message));
                 break;
             default:
-            throw new RangeError('invalid armcontrol axis');
+                throw new RangeError('invalid armcontrol axis');
 
         }
     } else if (message.type == 'button') {
@@ -339,6 +351,7 @@ server.bind(PORT);
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     stopRover();
+    port.close();
     process.exit();
 });
 
@@ -347,6 +360,7 @@ process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     stopRover();
+    port.close();
     // some other closing procedures go here
     process.exit();
 });

@@ -6,23 +6,16 @@
  * in case of stepper motor byte 2 will be direction. Byte 3 will be on or off.  Byte 4 is still
  * up for grabs but will probably be steps
  */
-var x_Axis_arr = new Uint16Array(2);
-x_Axis_arr[0] = 0x0800;
-var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
-
-var y_Axis_arr = new Uint16Array(2);
-y_Axis_arr[0] = 0x0900;
-var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var joint1_arr = new Uint16Array(2);
 var joint1_buff = Buffer.from(joint1_arr.buffer);
 
 var joint2_arr = new Uint16Array(2);
-joint2_arr[0] = 0x0200;
+joint2_arr[0] = 0x0002;
 var joint2_buff = Buffer.from(joint2_arr.buffer);
 
 var joint3_arr = new Uint16Array(2);
-joint3_arr[0] = 0x0300;
+joint3_arr[0] = 0x0003;
 var joint3_buff = Buffer.from(joint3_arr.buffer);
 
 var joint4_arr = new Uint16Array(2);
@@ -36,20 +29,6 @@ var joint6_buff = Buffer.from(joint6_arr.buffer);
 
 var joint7_arr = new Uint16Array(2);
 var joint7_buff = Buffer.from(joint7_arr.buffer);
-
-Number.prototype.map = function(in_min, in_max, out_min, out_max) {
-    return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-};
-
-function getPwmValue(value) {
-    if (value <= 0) {
-        value = value.map(config.Joystick_MIN, 0, 1000, 1500);
-    } else {
-        value = value.map(0, config.Joystick_MAX, 1500, 2000);
-    }
-
-    return value;
-}
 
 module.exports = {
 
@@ -66,45 +45,45 @@ module.exports = {
 
         switch (jointNum) {
             case 1:
-                joint1_arr[0] = 0x0100;
+                joint1_arr[0] = 0x0001;
                 if (direction) {
-                    joint1_arr[0] += 1; // Should be 0x0101
+                    joint1_arr[0] = 0x0101; // Should be 0x0101
                 }
                 // Place the steps in 4 byte of 4 byte command
                 // joint_arr[1] should be between 0x0001 and 0x00c8
                 joint1_arr[1] = steps;
                 break;
             case 4:
-                joint4_arr[0] = 0x0400;
+                joint4_arr[0] = 0x0004;
                 if (direction) {
-                    joint4_arr[0] += 1; // Should be 0x0401
+                    joint4_arr[0] = 0x0104; // Should be 0x0401
                 }
                 // Place the steps in 4 byte of 4 byte command
                 // joint_arr[1] should be between 0x0001 and 0x00c8
                 joint4_arr[1] = steps;
                 break;
             case 5:
-                joint5_arr[0] = 0x0500;
+                joint5_arr[0] = 0x0005;
                 if (direction) {
-                    joint5_arr[0] += 1; // Should be 0x0501
+                    joint5_arr[0] = 0x0105; // Should be 0x0501
                 }
                 // Place the steps in 4 byte of 4 byte command
                 // joint_arr[1] should be between 0x0001 and 0x00c8
                 joint5_arr[1] = steps;
                 break;
             case 6:
-                joint6_arr[0] = 0x0600;
+                joint6_arr[0] = 0x0006;
                 if (direction) {
-                    joint6_arr[0] += 1; // Should be 0x0601
+                    joint6_arr[0] = 0x0106; // Should be 0x0601
                 }
                 // Place the steps in 4 byte of 4 byte command
                 // joint_arr[1] should be between 0x0001 and 0x00c8
                 joint6_arr[1] = steps;
                 break;
             case 7:
-                joint7_arr[0] = 0x0700;
+                joint7_arr[0] = 0x0007;
                 if (direction) {
-                    joint7_arr[0] += 1; // Should be 0x0701
+                    joint7_arr[0] = 0x0107; // Should be 0x0701
                 }
                 // Place the steps in 4 byte of 4 byte command
                 // joint_arr[1] should be between 0x0001 and 0x00c8
@@ -127,7 +106,7 @@ module.exports = {
         if (direction) {
             joint1_arr[0] = 0x0101;
         } else {
-            joint1_arr[0] = 0x0100;
+            joint1_arr[0] = 0x0001;
         }
 
         //Stop else move a certain amount of steps
@@ -146,11 +125,7 @@ module.exports = {
      * Will be the longer first linear Actuator
      * Driver: Actobotics Dual Motor Controller
      */
-    joint2_linear1: function(message) {
-        let value = parseInt(message.value);
-
-        value = getPwmValue(value);
-
+    joint2_linear1: function(message, value) {
         joint2_arr[1] = value;
 
         return (joint2_buff);
@@ -162,11 +137,7 @@ module.exports = {
      * Will be the smaller second linear Actuator
      * Driver: Actobotics Dual Motor Controller
      */
-    joint3_linear2: function(message) {
-        let value = parseInt(message.value);
-
-        value = getPwmValue(value);
-
+    joint3_linear2: function(message, value) {
         joint2_arr[1] = value;
 
         return (joint2_buff);
@@ -182,9 +153,9 @@ module.exports = {
         let direction = value < 0;
 
         if (direction) {
-            joint4_arr[0] = 0x0401;
+            joint4_arr[0] = 0x0104;
         } else {
-            joint4_arr[0] = 0x0400;
+            joint4_arr[0] = 0x0004;
         }
 
         if (value === 0) {
@@ -206,9 +177,9 @@ module.exports = {
         let direction = value < 0;
 
         if (direction) {
-            joint5_arr[0] = 0x0501;
+            joint5_arr[0] = 0x0105;
         } else {
-            joint5_arr[0] = 0x0500;
+            joint5_arr[0] = 0x0005;
         }
 
         if (value === 0) {
@@ -230,9 +201,9 @@ module.exports = {
         let direction = value < 0;
 
         if (direction) {
-            joint6_arr[0] = 0x0601;
+            joint6_arr[0] = 0x0106;
         } else {
-            joint6_arr[0] = 0x0600;
+            joint6_arr[0] = 0x0006;
         }
 
         if (value === 0) {
@@ -254,9 +225,9 @@ module.exports = {
         let direction = value < 0;
 
         if (direction) {
-            joint7_arr[0] = 0x0701;
+            joint7_arr[0] = 0x0107;
         } else {
-            joint7_arr[0] = 0x0700;
+            joint7_arr[0] = 0x0007;
         }
 
         if (value === 0) {
