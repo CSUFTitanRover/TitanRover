@@ -34,9 +34,9 @@ var turn_toward_target = setInterval(function(current_heading, target){
             // This can probably be simplified. Refactor later
              if(delta_is_positive){
                 if(Math.abs(heading_delta) > 180){
-                    rover.turn_left();
-                }else{
                     rover.turn_right();
+                }else{
+                    rover.turn_left();
                     }
             }else{
                 if(Math.abs(heading_delta) > 180){
