@@ -1,3 +1,9 @@
+/*
+  Titan Rover - Autonomous 
+  Description:
+		Globals: current_location and target_location
+*/
+
 var geolib = require('geolib');
 //var rover = require('runt');
 const EventEmitter = require('events');
@@ -63,7 +69,7 @@ autonomous_control.on('on_target',function(target_waypoint){
      winston.info('Reached desired heading: ' + current_heading + ' degrees');
      winston.info('Initiating drive toward ' +JSON.stringify(target_waypoint));
      sleep.sleep(3);
-     process.stdout.write('\033c');
+     process.stdout.write('\x1B[2J\x1B[0f');
      drive_toward_target();
     
 });
@@ -80,15 +86,18 @@ autonomous_control.on('get_waypoint',function(){
         winston.info( 'Current Location: ' + JSON.stringify(current_waypoint));
         winston.info( 'Target Location: ' + JSON.stringify(target_waypoint));
         sleep.sleep(3);
-        process.stdout.write('\033c');
+        process.stdout.write('\x1B[2J\x1B[0f');
+        
         if(distance_to_target < STOP_DISTANCE){
             winston.info( 'Already near waypoint. Skipping.');
             autonomous_control.emit('get_waypoint');
         }
         else{
             winston.info( 'Initiating turn');
+            target_heading = geolib.getBearing(current_waypoint,target_waypoint);
+            winston.info( 'Target heading: ' + target_heading.toFixed(2) + ' Current heading: ' + current_heading);
             sleep.sleep(3);
-            process.stdout.write('\033c');;
+            process.stdout.write('\x1B[2J\x1B[0f');
             turn_toward_target();
         }
         
@@ -112,19 +121,18 @@ var turn_toward_target = function(){
     
     var turn_timer = setInterval(function(){
 
-        target_heading = geolib.getBearing(current_waypoint,target_waypoint);
+       
         heading_delta = current_heading - target_heading;
-        //winston.log( 'Target heading: ' + target_heading);
+        
         // If we are within 1 degree of the desired heading stop, else turn
         if(Math.abs(heading_delta) <= 1){
             //rover.stop();
             clearInterval(turn_timer);
-           
             autonomous_control.emit('on_target',target_waypoint);
         }
         else{
             
-            process.stdout.write('\033c');
+            process.stdout.write('\x1B[2J\x1B[0f');
             winston.info('Turning..current heading: ' + current_heading + ' degrees');
             // We have to loop the degrees around manually for testing 
              if(current_heading < 0){
@@ -135,7 +143,7 @@ var turn_toward_target = function(){
                  current_heading = 0;
              }
 
-             // If we have turn more than halfway, its quicker to turn the other direction.
+            // If we have turn more than halfway, its quicker to turn the other direction.
             // This can probably be simplified. Refactor later
              if(current_heading > target_heading){
                 if(Math.abs(heading_delta) > 180){
@@ -168,37 +176,31 @@ var drive_toward_target = function(){
     var drive_timer = setInterval(function(){
         rover_overshot = false;
         if(previous_distance !== null){
-            
             rover_overshot = distance_to_target > previous_distance;
         }
-        if(distance_to_target < STOP_DISTANCE){
+
+        if(rover_overshot){
+            //rover.stop();
+            clearInterval(drive_timer);
+            winston.warn( 'Overshot: ' + distance_to_target);
+            turn_toward_target(current_heading,target_waypoint);
+        }else if(distance_to_target < STOP_DISTANCE){
             //rover.stop();
             clearInterval(drive_timer);
             winston.info( 'Arrived...within ' + distance_to_target + ' meters');
             sleep.sleep(2);
-            process.stdout.write('\033c');
+            process.stdout.write('\x1B[2J\x1B[0f');
             autonomous_control.emit('get_waypoint');
-        } else if(rover_overshot){
-                
-                //rover.stop();
-                clearInterval(drive_timer);
-                winston.info( '**** Overshot: ' + distance_to_target);
-                turn_toward_target(current_heading,target_waypoint);
-                
-        } else{
+        }else {
             //rover.forward(); 
             //distance_to_target = geolib.getDistance(current_waypoint,target);
             
             previous_distance = distance_to_target;
             distance_to_target--;
-            process.stdout.write('\033c');
+            process.stdout.write('\x1B[2J\x1B[0f');
             winston.info( 'driving...distance to target: ' + distance_to_target + ' meters');
-            
-            
         }
-
     },30);
-
 };
 
 
