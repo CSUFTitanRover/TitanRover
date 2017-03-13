@@ -34,7 +34,7 @@ var current_waypoint;
 var current_heading = 45;
 var target_waypoint; // The next waypoint to travel to
 var distance_to_target;
-const STOP_DISTANCE = 50; // Stop within 50m (change to cm during integration) of target 
+const STOP_DISTANCE = 2; // Stop within 50m (change to cm during integration) of target 
 
 /* 
 You can plot these points here. Just copy paste. 
@@ -69,7 +69,7 @@ autonomous_control.on('on_target',function(target_waypoint){
      winston.info('Reached desired heading: ' + current_heading + ' degrees');
      winston.info('Initiating drive toward ' +JSON.stringify(target_waypoint));
      sleep.sleep(3);
-     process.stdout.write('\x1B[2J\x1B[0f');
+     process.stdout.write('\033c');
      drive_toward_target();
     
 });
@@ -86,7 +86,7 @@ autonomous_control.on('get_waypoint',function(){
         winston.info( 'Current Location: ' + JSON.stringify(current_waypoint));
         winston.info( 'Target Location: ' + JSON.stringify(target_waypoint));
         sleep.sleep(3);
-        process.stdout.write('\x1B[2J\x1B[0f');
+        process.stdout.write('\033c');
         
         if(distance_to_target < STOP_DISTANCE){
             winston.info( 'Already near waypoint. Skipping.');
@@ -97,14 +97,15 @@ autonomous_control.on('get_waypoint',function(){
             target_heading = geolib.getBearing(current_waypoint,target_waypoint);
             winston.info( 'Target heading: ' + target_heading.toFixed(2) + ' Current heading: ' + current_heading);
             sleep.sleep(3);
-            process.stdout.write('\x1B[2J\x1B[0f');
+            process.stdout.write('\033c');
             turn_toward_target();
         }
         
     }
     else{
-        console.log("Arrived at endpoint!");
-        var end = now();
+
+        winston.info("Arrived at endpoint! Total travel time: " + ((now()-start)/1000).toFixed(2) + " seconds");
+        
     }
     
 });
@@ -132,7 +133,7 @@ var turn_toward_target = function(){
         }
         else{
             
-            process.stdout.write('\x1B[2J\x1B[0f');
+            process.stdout.write('\033c');
             winston.info('Turning..current heading: ' + current_heading + ' degrees');
             // We have to loop the degrees around manually for testing 
              if(current_heading < 0){
@@ -189,7 +190,7 @@ var drive_toward_target = function(){
             clearInterval(drive_timer);
             winston.info( 'Arrived...within ' + distance_to_target + ' meters');
             sleep.sleep(2);
-            process.stdout.write('\x1B[2J\x1B[0f');
+            process.stdout.write('\033c');
             autonomous_control.emit('get_waypoint');
         }else {
             //rover.forward(); 
@@ -197,7 +198,7 @@ var drive_toward_target = function(){
             
             previous_distance = distance_to_target;
             distance_to_target--;
-            process.stdout.write('\x1B[2J\x1B[0f');
+            process.stdout.write('\033c');
             winston.info( 'driving...distance to target: ' + distance_to_target + ' meters');
         }
     },30);
@@ -206,5 +207,8 @@ var drive_toward_target = function(){
 
 var start = now();
 
+
 // Start the autonomous sequence.
+process.stdout.write('\033c');
+winston.info('Starting autonomous navigation ');
 autonomous_control.emit('get_waypoint');
