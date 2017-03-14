@@ -2,18 +2,35 @@
   Titan Rover - Autonomous 
   Description:
 		Globals: current_location and target_location
+  
+MAGNETIC DECLINATION 
+    Mars Desert Research Station UT 
+    Latitude: 38° 24' 44.3" N
+    Longitude: 110° 48' 20.5" W
+    Magnetic declination: +10° 44' 
+    Declination is POSITIVE (EAST)
+    Inclination: 64° 10' 
+    Magnetic field strength: 50629.5 nT
+    
+    Fullerton
+    Latitude: 33° 52' 54.5" N
+    Longitude: 117° 52' 57.4" W
+    Magnetic declination: +11° 57' 
+    Declination is POSITIVE (EAST)
+    Inclination: 58° 47' 
+    Magnetic field strength: 46862.8 nT
 */
 
-var geolib = require('geolib');
-//var rover = require('runt');
+const geolib = require('geolib');
+//const rover = require('runt');
 const EventEmitter = require('events');
 class MyEmitter extends EventEmitter {}
 const autonomous_control = new MyEmitter();
-var sleep = require('sleep');
-var now = require("performance-now");
+const sleep = require('sleep');
+const now = require("performance-now");
 
 const Winston = require('winston');
- var winston = new (Winston.Logger)({
+const winston = new (Winston.Logger)({
     transports: [
       new (Winston.transports.Console)({
           'colorize': true
@@ -34,11 +51,14 @@ var current_waypoint;
 var current_heading = 45;
 var target_waypoint; // The next waypoint to travel to
 var distance_to_target;
-const STOP_DISTANCE = 2; // Stop within 50m (change to cm during integration) of target 
+const STOP_DISTANCE = 2; // Stop within 2m of target (change to cm during integration)
+const UNITS = ' meter(s)';
 
 /* 
-You can plot these points here. Just copy paste. 
+You can plot these points on a map here. 
 https://www.darrinward.com/lat-long/?id=2727099
+
+Just copy paste. 
 
 33.64995,-117.612345
 33.650316,-117.612109
@@ -67,62 +87,50 @@ var wayPoints = [
 autonomous_control.on('on_target',function(target_waypoint){ 
     //console.log("distance: " + distance_to_target);
      winston.info('Reached desired heading: ' + current_heading + ' degrees');
-     winston.info('Initiating drive toward ' +JSON.stringify(target_waypoint));
+     winston.info('Initiating drive toward waypoint ' + (i-1) + ", " +JSON.stringify(target_waypoint));
      sleep.sleep(3);
      process.stdout.write('\033c');
      drive_toward_target();
-    
 });
 
 autonomous_control.on('get_waypoint',function(){
-    // Assuming the first point is the current waypoint. This wont be true for the runt. 
+    // Assuming the first point is the current waypoint. This wont be true during testings.
     current_waypoint = wayPoints[i];
     i++;
    
     if(i < wayPoints.length){
         target_waypoint = wayPoints[i];
         distance_to_target = geolib.getDistance(current_waypoint,target_waypoint);  
-        winston.info( 'Getting next waypoint!');
+        winston.info( 'Getting target location');
         winston.info( 'Current Location: ' + JSON.stringify(current_waypoint));
         winston.info( 'Target Location: ' + JSON.stringify(target_waypoint));
         sleep.sleep(3);
         process.stdout.write('\033c');
         
         if(distance_to_target < STOP_DISTANCE){
-            winston.info( 'Already near waypoint. Skipping.');
+            winston.info( 'Already at waypoint. Skipping.');
             autonomous_control.emit('get_waypoint');
         }
         else{
-            winston.info( 'Initiating turn');
-            target_heading = geolib.getBearing(current_waypoint,target_waypoint);
-            winston.info( 'Target heading: ' + target_heading.toFixed(2) + ' Current heading: ' + current_heading);
-            sleep.sleep(3);
-            process.stdout.write('\033c');
             turn_toward_target();
         }
-        
     }
     else{
-
         winston.info("Arrived at endpoint! Total travel time: " + ((now()-start)/1000).toFixed(2) + " seconds");
-        
     }
     
 });
 
-
 /**
- * 
- * Uses the current heading and target to calculate which direction to turn.
- * If we are within 1 degree of the desired heading. stop.  
- * If not, take the shortest turn to get the desired heading. 
+ * Constantly checks and turns until pointing toward target. 
  */   
 
 var turn_toward_target = function(){
-    
+    winston.info( 'Initiating turn');
+    target_heading = geolib.getBearing(current_waypoint,target_waypoint);
     var turn_timer = setInterval(function(){
-
-       
+        process.stdout.write('\033c');
+        winston.info( 'Turning ... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
         heading_delta = current_heading - target_heading;
         
         // If we are within 1 degree of the desired heading stop, else turn
@@ -131,19 +139,14 @@ var turn_toward_target = function(){
             clearInterval(turn_timer);
             autonomous_control.emit('on_target',target_waypoint);
         }
-        else{
-            
-            process.stdout.write('\033c');
-            winston.info('Turning..current heading: ' + current_heading + ' degrees');
+        else{           
             // We have to loop the degrees around manually for testing 
              if(current_heading < 0){
                  current_heading = 359;
              }
-
-             if(current_heading > 360){
+             else if(current_heading > 360){
                  current_heading = 0;
              }
-
             // If we have turn more than halfway, its quicker to turn the other direction.
             // This can probably be simplified. Refactor later
              if(current_heading > target_heading){
@@ -163,52 +166,46 @@ var turn_toward_target = function(){
                     current_heading = current_heading + 1;
                     }
             }
-           
         }
-    },40);
+    },15);
 };
 
 /**
- * Updates current_distance while driving toward target
+ * The rover will drive towards target until it reaches the target or moves further away from the target
  */ 
-var drive_toward_target = function(){
-    
+var drive_toward_target = function(){  
     previous_distance = null;
     var drive_timer = setInterval(function(){
-        rover_overshot = false;
+        off_target = false;
         if(previous_distance !== null){
-            rover_overshot = distance_to_target > previous_distance;
+            off_target = distance_to_target > previous_distance;
         }
 
-        if(rover_overshot){
+        if(off_target){
             //rover.stop();
             clearInterval(drive_timer);
-            winston.warn( 'Overshot: ' + distance_to_target);
+            winston.warn( 'Overshot target by ' + distance_to_target + UNITS);
             turn_toward_target(current_heading,target_waypoint);
         }else if(distance_to_target < STOP_DISTANCE){
             //rover.stop();
             clearInterval(drive_timer);
-            winston.info( 'Arrived...within ' + distance_to_target + ' meters');
+            winston.info( 'Arrived...within ' + distance_to_target + UNITS);
             sleep.sleep(2);
             process.stdout.write('\033c');
             autonomous_control.emit('get_waypoint');
         }else {
             //rover.forward(); 
             //distance_to_target = geolib.getDistance(current_waypoint,target);
-            
             previous_distance = distance_to_target;
             distance_to_target--;
             process.stdout.write('\033c');
-            winston.info( 'driving...distance to target: ' + distance_to_target + ' meters');
+            winston.info( 'driving...distance to target: ' + distance_to_target + UNITS);
         }
-    },30);
+    },15);
 };
 
-
 var start = now();
-
-
 // Start the autonomous sequence.
 process.stdout.write('\033c');
-winston.info('Starting autonomous navigation ');
+winston.info('Starting autonomous navigation');
 autonomous_control.emit('get_waypoint');
