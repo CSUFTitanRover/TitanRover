@@ -54,6 +54,8 @@ var distance_to_target;
 const STOP_DISTANCE = 2; // Stop within 2m of target (change to cm during integration)
 const UNITS = ' meter(s)';
 
+var turn_timer;
+var drive_timer;
 /* 
 You can plot these points on a map here. 
 https://www.darrinward.com/lat-long/?id=2727099
@@ -83,6 +85,11 @@ var wayPoints = [
     {latitude: 33.649968,longitude: -117.612367}
     ];
 
+autonomous_control.on('stop',function(){ 
+    clearInterval(turn_timer);
+    clearInterval(drive_timer);
+    winston.info( 'Stop command received');
+});
 
 autonomous_control.on('on_target',function(target_waypoint){ 
     //console.log("distance: " + distance_to_target);
@@ -128,7 +135,7 @@ autonomous_control.on('get_waypoint',function(){
 var turn_toward_target = function(){
     winston.info( 'Initiating turn');
     target_heading = geolib.getBearing(current_waypoint,target_waypoint);
-    var turn_timer = setInterval(function(){
+    turn_timer = setInterval(function(){
         process.stdout.write('\033c');
         winston.info( 'Turning ... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
         heading_delta = current_heading - target_heading;
@@ -175,7 +182,7 @@ var turn_toward_target = function(){
  */ 
 var drive_toward_target = function(){  
     previous_distance = null;
-    var drive_timer = setInterval(function(){
+    drive_timer = setInterval(function(){
         off_target = false;
         if(previous_distance !== null){
             off_target = distance_to_target > previous_distance;
@@ -204,8 +211,7 @@ var drive_toward_target = function(){
     },15);
 };
 
-var start = now();
-// Start the autonomous sequence.
 process.stdout.write('\033c');
 winston.info('Starting autonomous navigation');
+var start = now();
 autonomous_control.emit('get_waypoint');
