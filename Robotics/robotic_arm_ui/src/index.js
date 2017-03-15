@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RoboticArmUI from './RoboticArmUI';
+import App from './App';
 import './index.css';
 
 ReactDOM.render(
-  <RoboticArmUI />,
+  <App />,
   document.getElementById('root')
 );

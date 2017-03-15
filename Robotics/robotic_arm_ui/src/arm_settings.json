@@ -1,9 +1,17 @@
 {
+    "base": {
+      "width": 150,
+      "height": 30
+    },
     "boneOne": {
         "width": 287.5,
         "height": 35
     },
     "boneTwo": {
+      "width": 143.7,
+      "height": 35
+    },
+    "boneThree": {
       "width": 143.7,
       "height": 35
     }
