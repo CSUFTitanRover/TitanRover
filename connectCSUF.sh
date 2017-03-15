@@ -9,8 +9,8 @@ network={
 	pairwise=CCMP TKIP
 	group=CCMP TKIP
 	eap=PEAP
-	identity="scubastew@csu.fullerton.edu"
-	password="Brock!2016"
+	identity=""
+	password=""
 	phase1="peapver=0"
 	phase2="auth=MSCHAPV2"
 }
