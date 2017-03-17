@@ -6,19 +6,20 @@
 
 import arm_settings from './arm_settings.json';
 
-const boneOne = {
-    length: arm_settings.boneOne.width,
-    angle: 0,
+const d1 = arm_settings.d1, d2 = arm_settings.d2;
+const p1 = {
     x: 0,
     y: 0
 };
-const boneTwo = {
-    length: arm_settings.boneTwo.width,
-    angle: 0,
-    x: arm_settings.boneOne.width,
+const p2 = {
+    x: d1.length,
     y: 0
 };
 
+const p3 = {
+    x: d1.length + d2.length,
+    y: 0
+};
 
 function forwardReaching() {
     return "Forward Reaching";
@@ -38,60 +39,62 @@ function backwardReaching() {
  * @param {Object} target - {x: Number, y: Number, length: Number}.
  */
 function solveIK(target) {
-    let totalArmLength = boneOne.length + boneTwo.length;
-    console.info('boneOne.x: ' + boneOne.x);
-    console.info('boneTwo.x: ' + boneTwo.x);
+    let totalArmLength = d1.length + d2.length;
     console.info('totalArmLength: ' + totalArmLength);
 
     // we have a list of pre-checks to run through
     // First, check if the target is out of reach
     /// if YES, then point all bones in a straight line to the target
 
-    let delta, gamma, inverseGamma, xdelta, ydelta;
-    if (Math.abs(target.x) > totalArmLength || Math.abs(target.y) > totalArmLength) {
+    let delta, lambda, lambdaStar, xdelta, ydelta;
+    xdelta = (target.x - p1.x);
+    ydelta = (target.y - p1.y);
+    let targetDistance = Math.sqrt( (xdelta * xdelta) + (ydelta * ydelta) );
+
+    if (Math.abs( targetDistance ) > totalArmLength) {
         // target is out of reach
 
         // delta = _target.subtract(bone.globalPosition).length;
 
         // FIRST BONE CALCS
-        xdelta = (target.x - boneOne.x);
-        ydelta = (target.y - boneOne.y);
+        xdelta = (target.x - p1.x);
+        ydelta = (target.y - p1.y);
         delta = Math.sqrt( (xdelta * xdelta) + (ydelta * ydelta) );
-        gamma = boneOne.length/delta;
-        inverseGamma = 1.0 - gamma;
+        lambda = d1.length/delta;
+        lambdaStar = 1.0 - lambda;
 
-        boneOne.x = (inverseGamma * boneOne.x) + (gamma * target.x);
-        boneOne.y = (inverseGamma * boneOne.y) + (gamma * target.y);
+        p2.x = (lambdaStar * p1.x) + (lambda * target.x);
+        p2.y = (lambdaStar * p1.y) + (lambda * target.y);
 
         console.info(
             'Bone One Calcs:\n' +
             'delta: ' + delta + '\n' +
-            'gamma: ' + gamma + '\n' +
-            'inverseGamma: ' + inverseGamma + '\n' +
-            'boneOne.x: ' + boneOne.x + '\n' +
-            'boneOne.y: ' + boneOne.y
+            'lambda: ' + lambda + '\n' +
+            'lambdaStar: ' + lambdaStar + '\n' +
+            'p2.x: ' + p2.x + '\n' +
+            'p2.y: ' + p2.y
         );
 
         // SECOND BONE CALCS
-        xdelta = (target.x - boneTwo.x);
-        ydelta = (target.y - boneTwo.y);
+        xdelta = (target.x - p2.x);
+        ydelta = (target.y - p2.y);
         delta = Math.sqrt(xdelta * xdelta + ydelta * ydelta);
-        gamma = boneTwo.length/delta;
-        inverseGamma = 1.0 - gamma;
+        lambda = d2.length/delta;
+        lambdaStar = 1.0 - lambda;
 
-        boneTwo.x = (inverseGamma * boneTwo.x) + (gamma * target.x);
-        boneTwo.y = (inverseGamma * boneTwo.y) + (gamma * target.y);
+        p3.x = (lambdaStar * p2.x) + (lambda * target.x);
+        p3.y = (lambdaStar * p2.y) + (lambda * target.y);
 
         console.info(
             'Bone Two Calcs:\n' +
             'delta: ' + delta + '\n' +
-            'gamma: ' + gamma + '\n' +
-            'inverseGamma: ' + inverseGamma + '\n' +
-            'boneTwo.x: ' + boneTwo.x + '\n' +
-            'boneTwo.y: ' + boneTwo.y
+            'lambda: ' + lambda + '\n' +
+            'lambdaStar: ' + lambdaStar + '\n' +
+            'p3.x: ' + p3.x + '\n' +
+            'p3.y: ' + p3.y
         );
 
-        return {boneOne, boneTwo};
+        return {p2, p3};
     }
     else {
         // target is in reach

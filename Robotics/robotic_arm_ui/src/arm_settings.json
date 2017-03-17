@@ -11,8 +11,13 @@
       "width": 143,
       "height": 35
     },
-    "boneThree": {
-      "width": 143,
-      "height": 35
+
+    "d1": {
+      "length": 287
+    },
+    "d2": {
+      "length": 143
     }
+
+
 }
