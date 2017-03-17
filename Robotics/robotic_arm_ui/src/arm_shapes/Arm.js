@@ -7,7 +7,7 @@ import BoneOne from './BoneOne'
 class Arm extends Component {
     render() {
         return (
-            <BoneOne armState={this.props.armState}/>
+            <BoneOne armState={this.props.armState} setArmState={this.props.setArmState}/>
         );
     }
 }

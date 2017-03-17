@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import './RoboticArm.css';
+import './App.css';
 import Base from './arm_shapes/Base';
 import arm_settings from './arm_settings.json';
 import '../node_modules/antd/dist/antd.min.css';
-import { Slider, InputNumber, Button } from 'antd';
+import { Slider, InputNumber } from 'antd';
 import { Stage, Layer, Group, Rect, Circle, Text } from 'react-konva';
 import Arm from './arm_shapes/Arm';
+import { solveIK } from './InverseKinematics';
+
 
 class App extends Component {
     constructor(props) {
@@ -15,22 +17,18 @@ class App extends Component {
         this.state = {
             boneOne: {
                 angle: 0,
-                group: {
-                    x: 0,
-                    y: 0
-                }
+                x: 0,
+                y: 0
             },
             boneTwo: {
                 angle: 0,
-                group: {
-                    x: arm_settings.boneOne.width,
-                    y: 0
-                }
+                x: arm_settings.boneOne.width,
+                y: 0
             }
         };
 
         this.stage = {
-            width: 950,
+            width: 1200,
             height: 600,
         };
 
@@ -116,7 +114,6 @@ class App extends Component {
         THETA2D = -1 * (THETA2D) * (180 / Math.PI);
 
         if (THETA1D && THETA2D) {
-            // hard coding in constraints
             return {boneOneAngle: THETA1D, boneTwoAngle: THETA2D};
         }
         return null;
@@ -133,7 +130,43 @@ class App extends Component {
         this.refs.target.x(390);
     }
 
+    handleDragEnd = (event) => {
+        let target = {x: event.target.attrs.x, y: event.target.attrs.y};
+
+        // flipping mouse.y coordinates to "cartesian"
+        target.y *= -1;
+
+        console.info('target.x: ' + target.x, 'target.y: '+ target.y);
+        let result = solveIK(target);
+        const { boneOne, boneTwo } = result;
+
+        // const newState = this.state;
+        // newState.boneOne.x = boneOne.x;
+        // newState.boneOne.y = boneOne.y * -1;
+        // newState.boneTwo.x = boneTwo.x;
+        // newState.boneTwo.y = boneTwo.y * -1;
+        // this.setState(newState);
+
+        let boneOneAngle = Math.atan2(boneOne.y, boneTwo.x) * (180/Math.PI);
+        let boneTwoAngle = Math.atan2(boneTwo.y, boneTwo.x) * (180/Math.PI);
+
+        const newState = this.state;
+        newState.boneOne.angle = boneTwoAngle * -1;
+        newState.boneTwo.angle = boneOneAngle * -1;
+
+        this.setState(newState);
+    };
+
+    setArmState = (newState) => {
+        this.setState(newState);
+    };
+
     render() {
+        // let circlePoints = [
+        //     <Circle x={this.state.boneOne.x} y={this.state.boneOne.y} width={5} height={5} fill="blue"/>,
+        //     <Circle x={this.state.boneTwo.x} y={this.state.boneTwo.y} width={5} height={5} fill="green"/>
+        // ];
+
         return (
             <div>
 
@@ -150,11 +183,13 @@ class App extends Component {
 
                         <Base width={arm_settings.base.width} height={arm_settings.base.height}/>
 
-                        <Arm armState={this.state} />
+                        <Arm armState={this.state} setArmState={this.setArmState} />
 
+                        {/*{circlePoints}*/}
 
                         {/*Our End Target*/}
-                        <Group onDragMove={this.handleDragMoveTarget} ref="target" draggable={true} offsetX={-arm_settings.base.width / 2}>
+                        {/*onDragMove={this.handleDragMoveTarget}*/}
+                        <Group onDragEnd={this.handleDragEnd} ref="target" draggable={true} offsetX={-arm_settings.base.width / 2}>
                             <Circle width={20} height={20} fill="red" />
                             <Text
                                 x={15} y={-20}

@@ -21,6 +21,12 @@ class BoneOne extends Component {
             });
 
             this.setState({angle: nextProps.armState.boneOne.angle});
+
+            // let rect = this.refs.boneOne;
+            // console.info(rect);
+            // let x = this.refs.boneOne.x();
+            // let y = this.refs.boneOne.y();
+            // console.info('boneOne.x: ' + x, 'boneOne.y: '+ y);
         }
     }
 
@@ -35,6 +41,7 @@ class BoneOne extends Component {
                     offsetX={0} offsetY={0}
                     width={arm_settings.boneOne.width} height={arm_settings.boneOne.height}
                     fill="rgba(0, 255, 4, 0.5)"
+                    ref="bone1"
                 />
                 <Text
                     x={arm_settings.boneOne.width / 2 - 35} y={8}
@@ -48,7 +55,7 @@ class BoneOne extends Component {
                         x={arm_settings.boneOne.width / 2} y={arm_settings.boneOne.height / 2}
                 />
 
-                <BoneTwo armState={this.props.armState}/>
+                <BoneTwo armState={this.props.armState} setArmState={this.props.setArmState}/>
             </Group>
         );
     }
