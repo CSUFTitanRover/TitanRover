@@ -3,37 +3,46 @@ import './App.css';
 import Base from './arm_shapes/Base';
 import arm_settings from './arm_settings.json';
 import '../node_modules/antd/dist/antd.min.css';
-import { Slider, InputNumber } from 'antd';
+// import { Slider, InputNumber } from 'antd';
 import { Stage, Layer, Group, Rect, Circle, Text, Line } from 'react-konva';
-import Arm from './arm_shapes/Arm';
-import { solveIK } from './InverseKinematics';
+import { Fabrik } from './Fabrik';
 
 class App extends Component {
     constructor(props) {
         super(props);
 
+        this.fabrik = new Fabrik();
+        const fabrik = this.fabrik;
+        fabrik.addBone(arm_settings.d0.length);
+        fabrik.addBone(arm_settings.d1.length);
+        fabrik.addBone(arm_settings.d2.length);
+
         // init default values
         this.state = {
-            p1: {
+            p0: {
                 x: 0,
                 y: 0
             },
+            p1: {
+                x: fabrik.points[1].x,
+                y: fabrik.points[1].y
+            },
             p2: {
-                x: arm_settings.d1.length,
-                y: 0
+                x: fabrik.points[2].x,
+                y: fabrik.points[2].y
             },
             p3: {
-                x: arm_settings.d1.length + arm_settings.d2.length,
-                y: 0,
+                x: fabrik.points[3].x,
+                y: fabrik.points[3].y
             },
             target: {
-                x: arm_settings.d1.length + arm_settings.d2.length + 25,
-                y: 0,
+                x: fabrik.points[3].x,
+                y: fabrik.points[3].y * -1,
             }
         };
 
         this.stage = {
-            width: 1000,
+            width: 1200,
             height: 600,
         };
 
@@ -56,71 +65,6 @@ class App extends Component {
         boneTwo.angle = value;
         this.setState({boneTwo});
     };
-
-    // handleDragMoveTarget = (event) => {
-    //     let mouse = {x: event.target.attrs.x, y: event.target.attrs.y};
-    //
-    //     // flipping mouse.y coordinates to "cartesian"
-    //     mouse.y *= -1;
-    //
-    //     console.info(mouse.x, mouse.y);
-    //     //
-    //     // if (mouse.x > arm_settings.boneOne.height &&
-    //     //     (mouse.y < arm_settings.boneOne.width &&
-    //     //         mouse.y > -1 * (arm_settings.boneOne.width + arm_settings.boneTwo.width)
-    //     //     )) {
-    //     //
-    //     // }
-    //
-    //     let result = this.inverse_kinematics(mouse.x, mouse.y);
-    //     // console.info(result);
-    //
-    //     if (result) {
-    //
-    //         // constraints ?!
-    //         if (result.boneOneAngle < -90)
-    //             result.boneOneAngle = -90;
-    //         if (result.boneOneAngle > 0)
-    //             result.boneOneAngle = 0;
-    //         if (result.boneTwoAngle > 90)
-    //             result.boneTwoAngle = 90;
-    //         if (result.boneTwoAngle < 0)
-    //             result.boneTwoAngle = 0;
-    //
-    //         // stupid hack here for centering bone two
-    //         result.boneTwoAngle -= 4;
-    //
-    //         const boneOne = this.state.boneOne, boneTwo = this.state.boneTwo;
-    //         boneOne.angle = result.boneOneAngle;
-    //         boneTwo.angle = result.boneTwoAngle;
-    //         this.setState({boneOne, boneTwo});
-    //     }
-    //
-    // };
-    //
-
-    // Given the XY, output the Thetas
-    // inverse_kinematics = (X,Y) => {
-    //     // compensate for group offset of bones
-    //     let l1 = arm_settings.boneOne.width - 15, l2 = arm_settings.boneTwo.width - 15;
-    //
-    //     let c2 = (Math.pow(X,2) + Math.pow(Y,2) - Math.pow(l1,2) - Math.pow(l2,2))/(2*l1*l2);
-    //     let s2 =  Math.sqrt(1 - Math.pow(c2,2));
-    //     let THETA2D = -Math.atan2(s2, c2); // theta2 is deduced
-    //
-    //     let k1 = l1 + l2*Math.cos(THETA2D);
-    //     let k2 = l2*(Math.sin(THETA2D));
-    //     let gamma = Math.atan2(k2, k1);
-    //     let THETA1D =  Math.atan2(Y, X) - gamma; // Theta 1 deduced
-    //
-    //     THETA1D = -1 * (THETA1D) * (180 / Math.PI);
-    //     THETA2D = -1 * (THETA2D) * (180 / Math.PI);
-    //
-    //     if (THETA1D && THETA2D) {
-    //         return {boneOneAngle: THETA1D, boneTwoAngle: THETA2D};
-    //     }
-    //     return null;
-    // };
 
     getRandomIntInclusive(min, max) {
         min = Math.ceil(min);
@@ -147,17 +91,17 @@ class App extends Component {
         // flipping mouse.y coordinates to "cartesian"
         target.y *= -1;
 
-        console.info('target.x: ' + target.x, 'target.y: '+ target.y);
-        let result = solveIK(target);
-        const { p2, p3 } = result;
+        // solvedPoints will be an array of type Victor Objects
+        let solvedPoints = this.fabrik.solveIK(target.x, target.y);
 
         const newState = this.state;
-        newState.p2.x = p2.x;
-        newState.p2.y = p2.y * -1;
-        newState.p3.x = p3.x;
-        newState.p3.y = p3.y * -1;
+        for(let i = 1, length = solvedPoints.length; i < length; i++) {
+            // dynamically updating all the States' points with the New Points
+            newState["p" + i].x = solvedPoints[i].x;
+            newState["p" + i].y = solvedPoints[i].y * -1; // this is to convert from cartesianal to gui coordiantes
+        }
 
-        // just to update the targets new (x, y). Don't worry about this
+        // just to update the circle targets new (x, y). Don't worry about this.
         newState.target.x = target.x;
         newState.target.y = target.y * -1;
 
@@ -167,10 +111,11 @@ class App extends Component {
     setArmState = (newState) => {
         this.setState(newState);
     };
+
     render() {
         return (
             <div>
-                <h1>Inverse Kinematics - 2 DOF</h1>
+                <h1>Inverse Kinematics - Unconstrained 3 DOF</h1>
                 <Stage width={this.stage.width} height={this.stage.height}>
                     {/* This is just to draw a border around our drawing canvas Stage */}
                     <Layer>
@@ -186,18 +131,29 @@ class App extends Component {
                         <Group offsetX={-arm_settings.base.width / 2}>
 
                             {/*Point 1*/}
-                            <Circle x={this.state.p1.x} y={this.state.p1.y} width={10} fill="rgba(0,255,0,0.7)"/>
+                            <Circle x={this.state.p0.x} y={this.state.p0.y} width={10} fill="rgba(0,255,0,0.7)"/>
+
+                            {/*Line between Point 0 and Point 1*/}
+                            <Line stroke="black" strokeWidth={3}
+                                  points={[
+                                      this.state.p0.x, this.state.p0.y,
+                                      this.state.p1.x, this.state.p1.y
+                                  ]}
+                            />
+
+                            {/*Point 2*/}
+                            <Circle x={this.state.p1.x} y={this.state.p1.y} width={10} fill="rgba(0,0,255,0.7)"/>
 
                             {/*Line between Point 1 and Point 2*/}
                             <Line stroke="black" strokeWidth={3}
                                   points={[
                                       this.state.p1.x, this.state.p1.y,
-                                      this.state.p2.x, this.state.p2.y
+                                      this.state.p2.x, this.state.p2.y,
                                   ]}
                             />
 
-                            {/*Point 2*/}
-                            <Circle x={this.state.p2.x} y={this.state.p2.y} width={10} fill="rgba(0,0,255,0.7)"/>
+                            {/*Point 3*/}
+                            <Circle x={this.state.p2.x} y={this.state.p2.y} width={10} fill="rgba(255,255,0,0.7)"/>
 
                             {/*Line between Point 2 and Point 3*/}
                             <Line stroke="black" strokeWidth={3}
@@ -208,7 +164,7 @@ class App extends Component {
                             />
 
                             {/*Point 3*/}
-                            <Circle x={this.state.p3.x} y={this.state.p3.y} width={10} fill="rgba(255,255,0,0.7)"/>
+                            <Circle x={this.state.p3.x} y={this.state.p3.y} width={10} fill="rgba(90,90,90,0.7)"/>
 
                             {/*Our End Target*/}
                             <Circle width={20} height={20} fill="rgba(255,0,0,0.7)"

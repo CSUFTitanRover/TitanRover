@@ -9,14 +9,16 @@ const Victor = require('victor');
 class Fabrik {
 
     /**
-     * Constructor takes in an errorTolerance that defaults to 0.01
-     * @param errorTolerance {Number} - Defines the allowed error when solving. Defualts to 0.01 if no value is supplied
+     * Constructor takes in an optional errorTolerance and optional maxAttemptsToSolve.
+     * @param errorTolerance {Number} - Defines the allowed error when solving. Defaults to 0.01 if no value is supplied
+     * @param maxAttemptsToSolve {Number} - Defines the max number of attempts to solve for. Defaults to 15 if no value is supplied.
      */
-    constructor(errorTolerance=0.01) {
+    constructor(errorTolerance = 0.001, maxAttemptsToSolve = 15) {
         this.points = [];
         this.lengths = [];
         this.totalArmLength = 0;
         this.errorTolerance = errorTolerance;
+        this.maxAttemptsToSolve = maxAttemptsToSolve;
     };
 
     /**
@@ -26,7 +28,7 @@ class Fabrik {
      */
     addBone(length, startingAngle = 0) {
         if(this.points.length === 0) {
-            let p0 = Victor(0, 0);
+            let p0 = Victor(0, 0); // setting a default point at (0,0)
             let p1X = length * Math.cos(startingAngle),
                 p1Y = length * Math.sin(startingAngle);
             let p1 = Victor(p1X, p1Y);
@@ -97,6 +99,7 @@ class Fabrik {
      *
      * @param targetX {Number} - X coordinate of target
      * @param targetY {Number} - Y coordinate of target
+     * @return {Array} - returns an array of Victor Objects
      */
     solveIK(targetX, targetY) {
         let target = Victor(targetX, targetY);
@@ -126,9 +129,6 @@ class Fabrik {
                 newX = (lambdaStar * this.points[i].x) + (lambda * target.x);
                 newY = (lambdaStar * this.points[i].y) + (lambda * target.y);
 
-                console.log(newX);
-                console.log(newY);
-
                 this.points[i+1].x = newX;
                 this.points[i+1].y = newY;
             }
@@ -137,6 +137,9 @@ class Fabrik {
             // The Target is IN Reach.
             // First perform a sweep from the base point (p0) to the last point (pN)
             console.log("Within Reach");
+
+            // initialize attemptsCounter for tracking if the solving takes too long
+            let attemptsCounter = 1;
 
             // save the basePoint
             let initialPoint = this.points[0].clone();
@@ -154,25 +157,22 @@ class Fabrik {
                 this.points[0].copy(initialPoint);
                 this.backwardReaching();
 
-                // finally recalculate the deltaDifference
+                // recalculate the deltaDifference
                 deltaDifference = endPoint.distance(target);
+
+                // finally check if we are past our maxAttempts
+                if (attemptsCounter > this.maxAttemptsToSolve) {
+                    break;
+                }
+                attemptsCounter += 1;
             }
 
+            console.log("Iterations taken: " + attemptsCounter);
         }
+
+        // finally return the solved Points
+        return this.points;
     }
 }
 
-let fabrik = new Fabrik(0.001);
-
-fabrik.addBone(50, Math.PI / 4);
-fabrik.addBone(50, 0);
-console.log(fabrik);
-
-
-let target = {x: 80, y: 0};
-fabrik.solveIK(target.x, target.y);
-
-console.log("\n");
-console.log(fabrik);
-console.log(target);
-
+module.exports.Fabrik = Fabrik;
