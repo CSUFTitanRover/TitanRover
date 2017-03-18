@@ -3,13 +3,25 @@
       "width": 150,
       "height": 30
     },
-    "d0": {
-      "length": 287
+    "bone1": {
+      "length": 287,
+      "constraint": {
+        "start": 0,
+        "end": 90
+      }
     },
-    "d1": {
-      "length": 143
+    "bone2": {
+      "length": 143,
+      "constraint": {
+        "start": 0,
+        "end": 90
+      }
     },
-    "d2": {
-      "length": 80
+    "bone3": {
+      "length": 80,
+      "constraint": {
+        "start": 0,
+        "end": 90
+      }
     }
 }

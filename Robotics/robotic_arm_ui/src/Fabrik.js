@@ -4,13 +4,13 @@
  Date: 03/2017
  */
 
-const Victor = require('victor');
+const THREE = require('three');
 
 class Fabrik {
 
     /**
      * Constructor takes in an optional errorTolerance and optional maxAttemptsToSolve.
-     * @param errorTolerance {Number} - Defines the allowed error when solving. Defaults to 0.01 if no value is supplied
+     * @param errorTolerance {Number} - Defines the allowed error when solving. Defaults to 0.001 if no value is supplied.
      * @param maxAttemptsToSolve {Number} - Defines the max number of attempts to solve for. Defaults to 15 if no value is supplied.
      */
     constructor(errorTolerance = 0.001, maxAttemptsToSolve = 15) {
@@ -25,13 +25,14 @@ class Fabrik {
      * Appends a bone to the chain.
      * @param length {Number} - length of the bone
      * @param startingAngle {Number} - Defaults to 0 degrees if no value is passed.
+     * @param boneConstraints {Object} - Defines the rotational constrants of the Bone. Defaults to null if no value is passed.
      */
-    addBone(length, startingAngle = 0) {
+    addBone(length, startingAngle = 0, boneConstraints = null) {
         if(this.points.length === 0) {
-            let p0 = Victor(0, 0); // setting a default point at (0,0)
+            let p0 = new THREE.Vector3(0, 0, 0);
             let p1X = length * Math.cos(startingAngle),
                 p1Y = length * Math.sin(startingAngle);
-            let p1 = Victor(p1X, p1Y);
+            let p1 = new THREE.Vector3(p1X, p1Y, 0); // start every vector's z value as 0
 
             // append our points
             this.points.push(p0);
@@ -42,9 +43,9 @@ class Fabrik {
         }
         else {
             let endPoint = this.points[this.points.length-1];
-            let newX = length * Math.cos(startingAngle) + endPoint.x,
-                newY = length * Math.sin(startingAngle) + endPoint.y;
-            let newPoint = Victor(newX, newY);
+            let newX = length * Math.cos(startingAngle) + endPoint.getComponent(0),
+                newY = length * Math.sin(startingAngle) + endPoint.getComponent(1);
+            let newPoint = new THREE.Vector3(newX, newY, 0); // start every vector's z value as 0
 
             this.points.push(newPoint); // append our point
             this.lengths.push(length); // append our length
@@ -59,16 +60,16 @@ class Fabrik {
         let delta, lambda, lambdaStar, newX, newY;
         for(let i = this.points.length-2; i > 0; i--) {
             // find calculations
-            delta = this.points[i+1].distance(this.points[i]);
+            delta = this.points[i+1].distanceTo(this.points[i]);
             lambda = this.lengths[i] / delta;
             lambdaStar = 1.0 - lambda;
 
             // update the points[i] position
-            newX = (lambdaStar * this.points[i+1].x) + (lambda * this.points[i].x);
-            newY = (lambdaStar * this.points[i+1].y) + (lambda * this.points[i].y);
+            newX = (lambdaStar * this.points[i+1].getComponent(0)) + (lambda * this.points[i].getComponent(0));
+            newY = (lambdaStar * this.points[i+1].getComponent(1)) + (lambda * this.points[i].getComponent(1));
 
-            this.points[i].x = newX;
-            this.points[i].y = newY;
+            this.points[i].setComponent(0, newX);
+            this.points[i].setComponent(1, newY);
         }
     }
 
@@ -82,16 +83,16 @@ class Fabrik {
         for(let i=0, length = this.points.length; i < length - 1; i++) {
 
             // find calculations
-            delta = this.points[i+1].distance(this.points[i]);
+            delta = this.points[i+1].distanceTo(this.points[i]);
             lambda = this.lengths[i] / delta;
             lambdaStar = 1.0 - lambda;
 
             // update the points[i+1] position
-            newX = (lambdaStar * this.points[i].x) + (lambda * this.points[i+1].x);
-            newY = (lambdaStar * this.points[i].y) + (lambda * this.points[i+1].y);
+            newX = (lambdaStar * this.points[i].getComponent(0)) + (lambda * this.points[i+1].getComponent(0));
+            newY = (lambdaStar * this.points[i].getComponent(1)) + (lambda * this.points[i+1].getComponent(1));
 
-            this.points[i+1].x = newX;
-            this.points[i+1].y = newY;
+            this.points[i+1].setComponent(0, newX);
+            this.points[i+1].setComponent(1, newY);
         }
     }
 
@@ -102,40 +103,38 @@ class Fabrik {
      * @return {Array} - returns an array of Victor Objects
      */
     solveIK(targetX, targetY) {
-        let target = Victor(targetX, targetY);
-
+        // let target = Victor(targetX, targetY);
+        let target = new THREE.Vector3(targetX, targetY, 0);
         let totalArmLengthSq = this.totalArmLength * this.totalArmLength;
 
         // First check if the target is out of reach
         // this means that the distance from the target to point Zero is greater
         // then the sum of all the lengths (which is the Max Reach)
-        if ( this.points[0].distanceSq(target) > totalArmLengthSq) {
-            // The Target is unreachable so let's stretch all of the bones in a single line pointing towards the target.
 
-            console.log("Out of Reach");
+        // if ( this.points[0].distanceSq(target) > totalArmLengthSq) {
+        if (this.points[0].distanceToSquared(target) > totalArmLengthSq) {
+            // The Target is unreachable so let's stretch all of the bones in a single line pointing towards the target.
 
             // save the length value so it doesn't have to recalculate it on every iteration
             // since the array is expanded or shrinked in any way
             let delta, lambda, lambdaStar, newX, newY;
             for(let i=0, length = this.points.length; i < length - 1; i++) {
-
                 // find calculations
-                delta = target.distance(this.points[i]);
+                delta = target.distanceTo(this.points[i]);
                 lambda = this.lengths[i] / delta;
                 lambdaStar = 1.0 - lambda;
 
                 // update the points[i+1] position
-                newX = (lambdaStar * this.points[i].x) + (lambda * target.x);
-                newY = (lambdaStar * this.points[i].y) + (lambda * target.y);
+                newX = (lambdaStar * this.points[i].getComponent(0)) + (lambda * target.getComponent(0));
+                newY = (lambdaStar * this.points[i].getComponent(1)) + (lambda * target.getComponent(1));
 
-                this.points[i+1].x = newX;
-                this.points[i+1].y = newY;
+                this.points[i+1].setComponent(0, newX);
+                this.points[i+1].setComponent(1, newY);
             }
         }
         else {
             // The Target is IN Reach.
             // First perform a sweep from the base point (p0) to the last point (pN)
-            console.log("Within Reach");
 
             // initialize attemptsCounter for tracking if the solving takes too long
             let attemptsCounter = 0;
@@ -145,7 +144,8 @@ class Fabrik {
 
             // Check whether the distance between the end effector pN and the target is greater than the errorTolerance
             let endPoint = this.points[this.points.length-1];
-            let deltaDifference = endPoint.distance(target);
+            // let deltaDifference = endPoint.distance(target);
+            let deltaDifference = endPoint.distanceTo(target);
 
             while(deltaDifference > this.errorTolerance) {
                 // Set the end point as the target
@@ -157,7 +157,7 @@ class Fabrik {
                 this.backwardReaching();
 
                 // recalculate the deltaDifference
-                deltaDifference = endPoint.distance(target);
+                deltaDifference = endPoint.distanceTo(target);
 
                 // incrementing our number of attempts so far
                 attemptsCounter += 1;
@@ -167,8 +167,6 @@ class Fabrik {
                     break;
                 }
             }
-
-            console.log("Iterations taken: " + attemptsCounter);
         }
 
         // finally return the solved Points
