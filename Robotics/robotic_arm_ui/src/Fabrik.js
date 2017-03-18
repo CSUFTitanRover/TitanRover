@@ -63,7 +63,7 @@ class Fabrik {
             lambda = this.lengths[i] / delta;
             lambdaStar = 1.0 - lambda;
 
-            // update the points[i+1] position
+            // update the points[i] position
             newX = (lambdaStar * this.points[i+1].x) + (lambda * this.points[i].x);
             newY = (lambdaStar * this.points[i+1].y) + (lambda * this.points[i].y);
 
@@ -96,7 +96,7 @@ class Fabrik {
     }
 
     /**
-     *
+     * Solves IK via FABRIK Algorithm
      * @param targetX {Number} - X coordinate of target
      * @param targetY {Number} - Y coordinate of target
      * @return {Array} - returns an array of Victor Objects
@@ -111,7 +111,6 @@ class Fabrik {
         // then the sum of all the lengths (which is the Max Reach)
         if ( this.points[0].distanceSq(target) > totalArmLengthSq) {
             // The Target is unreachable so let's stretch all of the bones in a single line pointing towards the target.
-            // Loop through every point
 
             console.log("Out of Reach");
 
@@ -139,7 +138,7 @@ class Fabrik {
             console.log("Within Reach");
 
             // initialize attemptsCounter for tracking if the solving takes too long
-            let attemptsCounter = 1;
+            let attemptsCounter = 0;
 
             // save the basePoint
             let initialPoint = this.points[0].clone();
@@ -160,11 +159,13 @@ class Fabrik {
                 // recalculate the deltaDifference
                 deltaDifference = endPoint.distance(target);
 
+                // incrementing our number of attempts so far
+                attemptsCounter += 1;
+
                 // finally check if we are past our maxAttempts
                 if (attemptsCounter > this.maxAttemptsToSolve) {
                     break;
                 }
-                attemptsCounter += 1;
             }
 
             console.log("Iterations taken: " + attemptsCounter);
