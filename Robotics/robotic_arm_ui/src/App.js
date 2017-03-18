@@ -5,6 +5,7 @@ import arm_settings from './arm_settings.json';
 import '../node_modules/antd/dist/antd.min.css';
 // import { Slider, InputNumber } from 'antd';
 import { Stage, Layer, Group, Rect, Circle, Text, Line } from 'react-konva';
+import Konva from 'konva';
 import { Fabrik } from './Fabrik';
 
 class App extends Component {
@@ -13,33 +14,34 @@ class App extends Component {
 
         this.fabrik = new Fabrik();
         const fabrik = this.fabrik;
-        fabrik.addBone(arm_settings.d0.length);
-        fabrik.addBone(arm_settings.d1.length);
-        fabrik.addBone(arm_settings.d2.length);
+        // fabrik.addBone(arm_settings.d0.length);
+        // fabrik.addBone(arm_settings.d1.length);
+        // fabrik.addBone(arm_settings.d2.length);
+
+        let numberOfBones = 10;
+        for(let i = 0; i < numberOfBones; i++) {
+            fabrik.addBone(100);
+        }
+
+        let initialState = {};
+        for(let i = 0, length = fabrik.points.length; i < length; i++) {
+            // dynamically set all the States' points with the New Points
+            initialState["p" + i] = {
+                x: fabrik.points[i].x,
+                y: fabrik.points[i].y * -1 // this is to convert from cartesianal to gui coordiantes
+            };
+        }
 
         // init default values
-        this.state = {
-            p0: {
-                x: 0,
-                y: 0
-            },
-            p1: {
-                x: fabrik.points[1].x,
-                y: fabrik.points[1].y
-            },
-            p2: {
-                x: fabrik.points[2].x,
-                y: fabrik.points[2].y
-            },
-            p3: {
-                x: fabrik.points[3].x,
-                y: fabrik.points[3].y
-            },
-            target: {
-                x: fabrik.points[3].x,
-                y: fabrik.points[3].y * -1,
+        this.state = Object.assign({},
+            initialState,
+            {
+                target: {
+                    x: fabrik.points[fabrik.points.length - 1].x,
+                    y:fabrik.points[fabrik.points.length - 1].y * -1
+                }
             }
-        };
+        );
 
         this.stage = {
             width: 1200,
@@ -72,17 +74,34 @@ class App extends Component {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    // initially set the target's x position to the tip of the arm
     componentDidMount() {
-        // let i = 0;
-        // setInterval( () => {
-        //     const p2 = {
-        //         x: Math.cos(i) * 180/Math.PI,
-        //         y: Math.sin(i) * 180/Math.PI
-        //     };
-        //     i += 1;
-        //     this.setState({p2})
-        // }, 200);
+
+        console.info("Hello?");
+        this.points = [];
+        for(let i=0, length=this.fabrik.points.length; i < length; i++) {
+            let randomColor = Konva.Util.getRandomColor();
+            console.info("WORLD?");
+            let currentPoint = this.state["p" + i];
+            let x = currentPoint.x;
+            let y = currentPoint.y;
+            this.points.push(
+                <Circle x={x} y={y} width={10} fill="black" key={i}/>
+            );
+        }
+        console.info(this.points);
+
+        // this.lines = [];
+        // for(let i=0, length=this.fabrik.points; i < length; i++) {
+        //
+        //     lines.push(
+        //         <Line stroke="black" strokeWidth={3}
+        //               points={[
+        //                   this.state.p0.x, this.state.p0.y,
+        //                   this.state.p1.x, this.state.p1.y
+        //               ]}
+        //         />
+        //     );
+        // }
     }
 
     handleDragMove = (event) => {
@@ -130,41 +149,10 @@ class App extends Component {
 
                         <Group offsetX={-arm_settings.base.width / 2}>
 
-                            {/*Point 1*/}
-                            <Circle x={this.state.p0.x} y={this.state.p0.y} width={10} fill="rgba(0,255,0,0.7)"/>
 
-                            {/*Line between Point 0 and Point 1*/}
-                            <Line stroke="black" strokeWidth={3}
-                                  points={[
-                                      this.state.p0.x, this.state.p0.y,
-                                      this.state.p1.x, this.state.p1.y
-                                  ]}
-                            />
 
-                            {/*Point 2*/}
-                            <Circle x={this.state.p1.x} y={this.state.p1.y} width={10} fill="rgba(0,0,255,0.7)"/>
+                            {this.points}
 
-                            {/*Line between Point 1 and Point 2*/}
-                            <Line stroke="black" strokeWidth={3}
-                                  points={[
-                                      this.state.p1.x, this.state.p1.y,
-                                      this.state.p2.x, this.state.p2.y,
-                                  ]}
-                            />
-
-                            {/*Point 3*/}
-                            <Circle x={this.state.p2.x} y={this.state.p2.y} width={10} fill="rgba(255,255,0,0.7)"/>
-
-                            {/*Line between Point 2 and Point 3*/}
-                            <Line stroke="black" strokeWidth={3}
-                                  points={[
-                                      this.state.p2.x, this.state.p2.y,
-                                      this.state.p3.x, this.state.p3.y,
-                                  ]}
-                            />
-
-                            {/*Point 3*/}
-                            <Circle x={this.state.p3.x} y={this.state.p3.y} width={10} fill="rgba(90,90,90,0.7)"/>
 
                             {/*Our End Target*/}
                             <Circle width={20} height={20} fill="rgba(255,0,0,0.7)"
@@ -185,6 +173,44 @@ class App extends Component {
 }
 
 export default App;
+
+
+// {/*Point 1*/}
+// <Circle x={this.state.p0.x} y={this.state.p0.y} width={10} fill="rgba(0,255,0,0.7)"/>
+//
+// {/*Line between Point 0 and Point 1*/}
+// <Line stroke="black" strokeWidth={3}
+//       points={[
+//           this.state.p0.x, this.state.p0.y,
+//           this.state.p1.x, this.state.p1.y
+//       ]}
+// />
+//
+// {/*Point 2*/}
+// <Circle x={this.state.p1.x} y={this.state.p1.y} width={10} fill="rgba(0,0,255,0.7)"/>
+//
+// {/*Line between Point 1 and Point 2*/}
+// <Line stroke="black" strokeWidth={3}
+//       points={[
+//           this.state.p1.x, this.state.p1.y,
+//           this.state.p2.x, this.state.p2.y,
+//       ]}
+// />
+//
+// {/*Point 3*/}
+// <Circle x={this.state.p2.x} y={this.state.p2.y} width={10} fill="rgba(255,255,0,0.7)"/>
+//
+// {/*Line between Point 2 and Point 3*/}
+// <Line stroke="black" strokeWidth={3}
+//       points={[
+//           this.state.p2.x, this.state.p2.y,
+//           this.state.p3.x, this.state.p3.y,
+//       ]}
+// />
+//
+// {/*Point 3*/}
+// <Circle x={this.state.p3.x} y={this.state.p3.y} width={10} fill="rgba(90,90,90,0.7)"/>
+
 
 /*
 <div id="controls">
