@@ -8,23 +8,12 @@ import { Stage, Layer, Group, Rect, Circle, Text, Line } from 'react-konva';
 import Arm from './arm_shapes/Arm';
 import { solveIK } from './InverseKinematics';
 
-
 class App extends Component {
     constructor(props) {
         super(props);
 
         // init default values
         this.state = {
-            boneOne: {
-                angle: 0,
-                x: 0,
-                y: 0
-            },
-            boneTwo: {
-                angle: 0,
-                x: arm_settings.boneOne.width,
-                y: 0
-            },
             p1: {
                 x: 0,
                 y: 0
