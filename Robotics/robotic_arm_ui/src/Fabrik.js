@@ -1,3 +1,9 @@
+/*
+ IK Solver using FABRIK algorithm from: https://www.academia.edu/9165835/FABRIK_A_fast_iterative_solver_for_the_Inverse_Kinematics_problem
+ Author: Michael Negrete
+ Date: 03/2017
+ */
+
 const Victor = require('victor');
 
 class Fabrik {
@@ -49,7 +55,7 @@ class Fabrik {
      */
     forwardReaching() {
         let delta, lambda, lambdaStar, newX, newY;
-        for(let i = this.points.length; i > 0; i--) {
+        for(let i = this.points.length-2; i > 0; i--) {
             // find calculations
             delta = this.points[i+1].distance(this.points[i]);
             lambda = this.lengths[i] / delta;
@@ -68,8 +74,10 @@ class Fabrik {
      * Loop from the base point to the end point
      */
     backwardReaching() {
+        // save the length value so it doesn't have to recalculate it on every iteration
+        // since the array is expanded or shrinked in any way
         let delta, lambda, lambdaStar, newX, newY;
-        for(let i=0; i < this.points.length - 1; i++) {
+        for(let i=0, length = this.points.length; i < length - 1; i++) {
 
             // find calculations
             delta = this.points[i+1].distance(this.points[i]);
@@ -104,8 +112,10 @@ class Fabrik {
 
             console.log("Out of Reach");
 
+            // save the length value so it doesn't have to recalculate it on every iteration
+            // since the array is expanded or shrinked in any way
             let delta, lambda, lambdaStar, newX, newY;
-            for(let i=0; i < this.points.length - 1; i++) {
+            for(let i=0, length = this.points.length; i < length - 1; i++) {
 
                 // find calculations
                 delta = target.distance(this.points[i]);
@@ -162,6 +172,7 @@ console.log(fabrik);
 let target = {x: 80, y: 0};
 fabrik.solveIK(target.x, target.y);
 
+console.log("\n");
 console.log(fabrik);
 console.log(target);
 
