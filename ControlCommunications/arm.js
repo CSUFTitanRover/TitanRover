@@ -138,9 +138,9 @@ module.exports = {
      * Driver: Actobotics Dual Motor Controller
      */
     joint3_linear2: function(message, value) {
-        joint2_arr[1] = value;
+        joint3_arr[1] = value;
 
-        return (joint2_buff);
+        return (joint3_buff);
     },
 
     /**
