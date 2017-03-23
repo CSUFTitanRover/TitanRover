@@ -36,11 +36,11 @@ module.exports = {
      * Move a joint a certain number of steps
      * @param {Number} jointNum values 1 - 7
      * @param {bool} direction true for clockwise false for counter clockwise
-     * @param {Number} steps # of steps to move that joint between 1 - 200 since stepper motors have 200 steps to go 360degrees
+     * @param {Number} steps # of steps to move that joint Can't be 0
      */
     stepJoint: function(jointNum, direction, steps) {
-        if (steps > 200 || steps <= 0) {
-            throw new RangeError('Steps must be between ' + 1 + ' and ' + 200);
+        if (steps > 255 || steps <= 0) {
+            throw new RangeError('Steps must be between ' + 1 + ' and ' + 255);
         }
 
         switch (jointNum) {

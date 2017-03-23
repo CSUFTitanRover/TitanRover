@@ -2,6 +2,8 @@
 #include <AMIS30543.h>
 #include <Servo.h>
 #include <Stepper.h>
+#include <SoftwareSerial.h>
+#include <Sabertooth.h>
 
 const int stepsPerRevolution = 200;
 // X Axis Mobility
@@ -58,10 +60,17 @@ int i;
 int delayVal = 1;
 uint16_t pwmVal;
 
+SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
+Sabertooth Back(128, SWSerial);
+Sabertooth Front(129, SWSerial);
+
 void setup()
 {
   SPI.begin();
   Serial.begin(9600);
+  SWSerial.begin(9600);
+  Back.autobaud();
+  Front.autobaud();
   delay(1);
 
   // Start the mobility on zero
@@ -175,13 +184,12 @@ void loop()
       if (val[2] != 0x00)
         stepJoint(joint7_pulse_pin, val[3]);
     }
-    else if (val[0] == 0x08) // X Axis mobility
+    else if (val[0] == 0x08) // Mobility
     {
-      x_mobility.writeMicroseconds(pwmVal);
-    }
-    else if (val[0] == 0x09) // Y Axis mobility
-    {
-      y_mobility.writeMicroseconds(pwmVal);
+      Back.motor(1, val[2]);
+      Back.motor(2, val[3]);
+      Front.motor(1, val[2]);
+      Front.motor(2, val[3]);
     }
 
   }
