@@ -14,30 +14,29 @@ class App extends Component {
 
         this.fabrik = new Fabrik();
         const fabrik = this.fabrik;
-        this.pi = Math.PI; // cache for use later on
-        fabrik.addBone(arm_settings.bone1.length);
-        fabrik.addBone(arm_settings.bone2.length);
-        fabrik.addBone(arm_settings.bone3.length);
+        // fabrik.addBone(arm_settings.bone1);
+        // fabrik.addBone(arm_settings.bone2);
+        // fabrik.addBone(arm_settings.bone3);
 
         // For Demo purposes
-        // let numberOfBones = 20;
-        // for(let i = 0; i < numberOfBones; i++) {
-        //     fabrik.addBone(20);
-        // }
+        let numberOfBones = 10;
+        for(let i = 0; i < numberOfBones; i++) {
+            fabrik.addBone( {
+                    "length": 50
+            });
+        }
 
-        let initialPoints = {}, initialBones = {}, angle;
-        for(let i = 0, length = fabrik.points.length; i < length; i++) {
+        let initialPoints = {}, initialBones = {};
+        for(let i = 0, length = fabrik.state.points.length; i < length; i++) {
             // dynamically set all the States' points with the New Points
-            angle =  Math.atan2(fabrik.points[i].y, fabrik.points[i].x);
-            angle = angle * (180 / this.pi);
-
             initialPoints["p" + i] = {
-                x: fabrik.points[i].getComponent(0),
-                y: fabrik.points[i].getComponent(1) * -1, // this is to convert from cartesianal to gui coordiantes
+                x: fabrik.state.points[i].getComponent(0),
+                y: fabrik.state.points[i].getComponent(1) * -1, // this is to convert from cartesianal to gui coordiantes
             };
 
-            initialBones["bone" + i] = {
-                angle: angle
+            // make sure we don't go out of bounds for the bones & accidentally create a new bone(N+1) object
+            if (i < length - 1) {
+                initialBones["bone" + (i + 1)] = fabrik.state.bones[i];
             }
         }
 
@@ -47,8 +46,8 @@ class App extends Component {
             initialBones,
             {
                 target: {
-                    x: fabrik.points[fabrik.points.length - 1].x,
-                    y:fabrik.points[fabrik.points.length - 1].y * -1
+                    x: fabrik.state.points[fabrik.state.points.length - 1].x,
+                    y:fabrik.state.points[fabrik.state.points.length - 1].y * -1
                 }
             }
         );
@@ -72,25 +71,22 @@ class App extends Component {
         // flipping mouse.y coordinates to "cartesian"
         target.y *= -1;
 
-        // solvedPoints will be an array of type Victor Objects
-        let solvedPoints = this.fabrik.solveIK(target.x, target.y);
+        // result will be an Object of "points" {Array of Vector3} & "bones" {Array of Objects}
+        let result = this.fabrik.solveIK(target.x, target.y);
 
         const newState = this.state;
-        let angle, dx, dy;
-        for(let i = 1, length = solvedPoints.length; i < length; i++) {
+        for(let i = 1, length = result.points.length; i < length; i++) {
             // updating the respective bone's angle
-            // dx = solvedPoints[i].getComponent(0) - newState["p" + i].x;
-            // dy = solvedPoints[i].getComponent(1) - newState["p" + i].y;
-            angle =  Math.atan2(solvedPoints[i].getComponent(1), solvedPoints[i].getComponent(0));
-            angle = angle * (180 / this.pi);
-            newState["bone" + i].angle = angle;
+            // we subtract i-1 because the bones [] starts at 0
+            newState["bone" + i].angle = result.bones[(i - 1)].angle;
 
+            // we use just i because we don't care about the first point which is (0,0,0)
             // dynamically updating all the States' points with the New Points
-            newState["p" + i].x = solvedPoints[i].getComponent(0);
-            newState["p" + i].y = solvedPoints[i].getComponent(1) * -1; // this is to convert from cartesianal to gui coordiantes
+            newState["p" + i].x = result.points[i].getComponent(0);
+            newState["p" + i].y = result.points[i].getComponent(1) * -1; // this is to convert from cartesianal to gui coordiantes
         }
 
-        // just to update the circle targets new (x, y). Don't worry about this.
+        // just to update the circle target's new (x, y). Don't worry about this.
         newState.target.x = target.x;
         newState.target.y = target.y * -1;
 
@@ -101,43 +97,15 @@ class App extends Component {
         // Save randomly generated colors for the renderPoints
         this.randomColors = [];
 
-        for(let i=0, length=this.fabrik.points.length; i < length; i++) {
+        for(let i=0, length=this.fabrik.state.points.length; i < length; i++) {
             this.randomColors.push(Konva.Util.getRandomColor());
         }
     }
 
-    /**
-     * @param angle {Number} - Angle to use
-     * @param vector3 {Vector3} - Vector of the point to modify
-     */
-    updateBonePosition = (angle, vector3) => {
-        return;
-    };
-
-    handleBone2AngleChange = (angleValue) => {
-
-        let newPosition = {x: null, y: null};
-        const prevPoint = this.fabrik.points[1];
-        const fabrikP2 = this.fabrik.points[2];
-        const state = this.state;
-        newPosition.x = (arm_settings.bone2.length) * Math.cos(angleValue * (this.pi/180)) + prevPoint.getComponent(0);
-        newPosition.y = (arm_settings.bone2.length) * Math.sin(angleValue * (this.pi/180)) + prevPoint.getComponent(1);
-        newPosition.y *= -1; // converting back to cartesianal plane
-
-        // update the position & angle for React's state
-        state.p2.x = newPosition.x;
-        state.p2.y = newPosition.y;
-        state.bone2.angle = angleValue;
-        this.setState(state);
-
-        // update the position & angle in Fabrik
-        fabrikP2.setComponent(0, newPosition.x);
-        fabrikP2.setComponent(1, newPosition.y);
-    };
-
     render() {
-        let renderPoints = [], renderLines = [], controls = [], renderGrids = [];
-        for(let i=0, length=this.fabrik.points.length; i < length; i++) {
+        let renderPoints = [], renderBones = [], renderGrids = [];
+        // let demoControls = []; // for demo purposes
+        for(let i=0, length=this.fabrik.state.points.length; i < length; i++) {
             renderPoints.push(
                 <Circle x={this.state["p" + i].x} y={this.state["p" + i].y}
                         width={15} fill={this.randomColors[i]} key={i}
@@ -145,8 +113,8 @@ class App extends Component {
             );
 
             // make sure we don't go out of bounds
-            if (i <= length - 2) {
-                renderLines.push(
+            if (i < length - 1) {
+                renderBones.push(
                     <Line stroke="rgb(170,170,170)" strokeWidth={5} key={i}
                           points={[
                               this.state["p" + i].x, this.state["p" + i].y,
@@ -156,26 +124,26 @@ class App extends Component {
                 );
             }
 
-            // y-grids
-            renderGrids.push(
-              <Rect x={this.state["p" + i].x} y={-this.stage.height + arm_settings.base.height}
-                    width={2} height={this.stage.height}
-                    fill={this.randomColors[i]}
-              />
-            );
-
-            //x-grids
-            renderGrids.push(
-                <Rect x={-this.stage.width/2} y={this.state["p" + i].y}
-                      width={this.stage.width} height={2}
-                      fill={this.randomColors[i]}
-                />
-            );
+            // // y-grids
+            // renderGrids.push(
+            //   <Rect x={this.state["p" + i].x} y={-this.stage.height + arm_settings.base.height}
+            //         width={2} height={this.stage.height}
+            //         fill={this.randomColors[i]}
+            //   />
+            // );
+            //
+            // //x-grids
+            // renderGrids.push(
+            //     <Rect x={-this.stage.width/2} y={this.state["p" + i].y}
+            //           width={this.stage.width} height={2}
+            //           fill={this.randomColors[i]}
+            //     />
+            // );
 
             // For demo purposes
             // ignore the first point (base point) since its just (0,0)
             // if (i !== 0) {
-            //     controls.push(
+            //     demoControls.push(
             //         <div key={i}>
             //             <h3>Bone {i-1} Degree Values</h3>
             //             <Slider min={-360} max={360} step={0.01} value={this.state["p" + i].angle} />
@@ -187,7 +155,7 @@ class App extends Component {
 
         return (
             <div>
-                <h1>FABRIK Algorithm - Unconstrained {this.fabrik.lengths.length} Bones</h1>
+                <h1>FABRIK Algorithm - Unconstrained {this.fabrik.state.bones.length} Bones</h1>
                 <Stage width={this.stage.width} height={this.stage.height}>
                     {/* This is just to draw a border around our drawing canvas Stage */}
                     <Layer>
@@ -203,7 +171,7 @@ class App extends Component {
                         <Group offsetX={-arm_settings.base.width / 2}>
                             {renderGrids}
 
-                            {renderLines}
+                            {renderBones}
 
                             {renderPoints}
 
@@ -212,7 +180,7 @@ class App extends Component {
                             <Circle width={30} fill="rgba(255,0,0,0.5)"
                                     ref="target" draggable={true}
                                     x={this.state.target.x} y={this.state.target.y}
-                                    onDragMove={this.handleDragMove}
+                                    onDragEnd={this.handleDragMove}
                                     onMouseOver={() => {document.body.style.cursor = "move"}}
                                     onMouseOut={() => {document.body.style.cursor = "default"}}
                             />
@@ -230,8 +198,8 @@ class App extends Component {
                     </div>
                     <div>
                         <h3>Bone 2 Degree Values</h3>
-                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone2.angle} onChange={this.handleBone2AngleChange}/>
-                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone2.angle} onChange={this.handleBone2AngleChange}/>
+                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone2.angle} />
+                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone2.angle} />
                     </div>
                     <div>
                         <h3>Bone 3 Degree Values</h3>
