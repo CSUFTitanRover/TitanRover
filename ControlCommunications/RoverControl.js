@@ -47,25 +47,26 @@ var config = {
     debug: false,
     TIME_TO_STOP: 1000,
     TEST_CONNECTION: 2000,
-    saber_min: -127,
-    saber_max: 127
+    saber_min: 0,
+    saber_max: 254
 };
 
 var Mobility_arr = new Uint16Array(2);
 Mobility_arr[0] = 0x0008;
+var Mobility_buff = Buffer.from(Mobility_arr.buffer);
+
 
 var lastx = 0;
 var lasty = 0;
 
-/*var x_Axis_arr = new Uint16Array(2);
-x_Axis_arr[0] = 0x0008;
-var x_Axis_buff = Buffer.fromfunction getMobilityValue(value) {
 
-}(x_Axis_arr.buffer);
+var x_Axis_arr = new Uint16Array(2);
+x_Axis_arr[0] = 0x0008;
+var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
 
 var y_Axis_arr = new Uint16Array(2);
 y_Axis_arr[0] = 0x0009;
-var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);*/
+var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
 
@@ -136,45 +137,17 @@ function getPwmValue(value) {
         value = value.map(0, config.Joystick_MAX, 1500, 2000);
     }
 
-    return value;
+    return parseInt(value);
 }
 
-function calculateDiff(yAxis, xAxis) {
-    //xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
-    //yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
-
-    //xAxis = xAxis * -1;
-    yAxis = yAxis * -1;
-
-    var V = (Number(config.Joystick_MAX) - Math.abs(xAxis)) * (yAxis / Number(config.Joystick_MAX)) + yAxis;
-    var W = (Number(config.Joystick_MAX) - Math.abs(yAxis)) * (xAxis / Number(config.Joystick_MAX)) + xAxis;
-    var right = (V + W) / 2.0;
-    var left = (V - W) / 2.0;
-
-    if (right <= 0) {
-        right = right.map(config.Joystick_MIN, 0, config.saber_min, 0);
+function getMobilitySpeed(value) {
+    if (value <= 0) {
+        value = value.map(config.Joystick_MIN, 0, 0, 127);
     } else {
-        right = right.map(0, config.Joystick_MAX, 0, config.saber_max);
+        value = value.map(0, config.Joystick_MAX, 127, 254);
     }
 
-    if (left <= 0) {
-        left = left.map(config.Joystick_MIN, 0, config.saber_min, 0);
-    } else {
-        left = left.map(0, config.Joystick_MAX, 0, config.saber_max);
-    }
-
-    return {
-        "leftSpeed": left,
-        "rightSpeed": right
-    };
-}
-
-function mobilityWriteSpeed(diffSteer) {
-    temp = diff.left;
-    temp = temp << 8;
-    temp |= diff.right;
-    Mobility_arr[1] = temp;
-    port.write(Mobility_arr);
+    return parseInt(value);
 }
 
 // Function that handles all mobility from the joystick
@@ -182,33 +155,8 @@ function receiveMobility(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
-    var diff;
-    var temp;
 
-    debug.Num_Mobility_Commands += 1;
-
-    if (axis === 0) {
-        diff = calculateDiff(value, lasty);
-        mobilityWriteSpeed(diff);
-    } else if (axis === 1) {
-        diff = calculateDiff(lastx, value);
-        mobilityWriteSpeed(diff);
-    } else if (axis === null) //If sent from Gamepad
-    {
-        diff = calculateDiff(joystickData.x, joystickData.y);
-        mobilityWriteSpeed(diff);
-    }
-
-}
-
-/*
-// Function that handles all mobility from the joystick
-function receiveMobility(joystickData) {
-    // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
-    let axis = parseInt(joystickData.number);
-    var value = parseInt(joystickData.value);
-
-    value = getPwmValue(value);
+    value = getMobilitySpeed(value);
 
     debug.Num_Mobility_Commands += 1;
 
@@ -216,18 +164,19 @@ function receiveMobility(joystickData) {
         x_Axis_arr[1] = value;
         port.write(x_Axis_buff);
     } else if (axis === 1) {
+        value *= -1;
         y_Axis_arr[1] = value;
         port.write(y_Axis_buff);
     } else if (axis === null) //If sent from Gamepad
     {
-        x_Axis_arr[1] = getPwmValue(joystickData.x);
-        y_Axis_arr[1] = getPwmValue(joystickData.y);
+        x_Axis_arr[1] = getMobilitySpeed(joystickData.x);
+        y_Axis_arr[1] = getMobilitySpeed(joystickData.y);
 
         port.write(x_Axis_buff);
         port.write(y_Axis_buff);
     }
 
-}*/
+}
 
 // Send 0 to both the x and y axis to stop the rover from running
 // Will only be invoked if we lose signal

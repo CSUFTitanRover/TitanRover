@@ -7,12 +7,12 @@
 
 const int stepsPerRevolution = 200;
 // X Axis Mobility
-Servo x_mobility;
-const uint8_t x_pwm_pin = 6;
+/*Servo x_mobility;
+  const uint8_t x_pwm_pin = 6;
 
-// Y Axis Mobility
-Servo y_mobility;
-const uint8_t y_pwm_pin = 7;
+  // Y Axis Mobility
+  Servo y_mobility;
+  const uint8_t y_pwm_pin = 7;*/
 
 // Joint #1
 const uint8_t joint1_dir_pin = 30;
@@ -61,8 +61,8 @@ int delayVal = 1;
 uint16_t pwmVal;
 
 SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
-Sabertooth Back(128, SWSerial);
-Sabertooth Front(129, SWSerial);
+Sabertooth Back(129, SWSerial);
+Sabertooth Front(128, SWSerial);
 
 void setup()
 {
@@ -73,12 +73,16 @@ void setup()
   Front.autobaud();
   delay(1);
 
+  Back.drive(0);
+  Front.drive(0);
+  Back.turn(0);
+  Front.turn(0);
   // Start the mobility on zero
-  x_mobility.attach(x_pwm_pin);
-  x_mobility.writeMicroseconds(1500);
+  /*x_mobility.attach(x_pwm_pin);
+    x_mobility.writeMicroseconds(1500);
 
-  y_mobility.attach(y_pwm_pin);
-  y_mobility.writeMicroseconds(1500);
+    y_mobility.attach(y_pwm_pin);
+    y_mobility.writeMicroseconds(1500);*/
 
   // Setup the linear actuators
   joint2.attach(joint2_pwm_pin);
@@ -184,12 +188,15 @@ void loop()
       if (val[2] != 0x00)
         stepJoint(joint7_pulse_pin, val[3]);
     }
-    else if (val[0] == 0x08) // Mobility
+    else if (val[0] == 0x08) // x-Mobility
     {
-      Back.motor(1, val[2]);
-      Back.motor(2, val[3]);
-      Front.motor(1, val[2]);
-      Front.motor(2, val[3]);
+      Back.turn(val[2] - 127);
+      Front.turn(val[2] - 127);
+    }
+    else if (val[0] == 0x09) // y-Mobility
+    {
+      Back.drive((val[2] - 127) * -1);
+      Front.drive(val[2] - 127);
     }
 
   }
