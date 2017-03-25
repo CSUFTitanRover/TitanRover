@@ -8,7 +8,7 @@ class Fabrik {
      * @param {Number} [maxAttemptsToSolve = 15] - Defines the max number of attempts to solve for. Defaults to 15 if no value is supplied.
      */
     constructor(errorTolerance = 0.001, maxAttemptsToSolve = 15) {
-        // this.basePoint = new THREE.Vector3(0, 0, 0); // different then baseBone; this is just the point of origin (0,0,0)
+        this.rootPoint = new THREE.Vector3(0, 0, 0); // different then baseBone; this is just the point of origin (0,0,0)
         this.baseBone = null; // pointer baseBone
         this.endBone = null; // pointer endBone
 
@@ -29,7 +29,9 @@ class Fabrik {
     addBone(bone, startingLocalAngle=0) {
         if (this.baseBone === null) {
             // this is going to be the first bone in the chain
-            let positionVector = new THREE.Vector3(0, 0, 0);
+            let x = bone.length * Math.cos(startingLocalAngle * this.DEG2RAD);
+            let y = bone.length * Math.sin(startingLocalAngle * this.DEG2RAD);
+            let positionVector = new THREE.Vector3(x, y, 0);
             let parent = null;
             let child = null;
             let globalAngle = startingLocalAngle, localAngle = startingLocalAngle;
@@ -41,9 +43,9 @@ class Fabrik {
         else {
             // this is not the first bone in the chain
             let globalAngle = startingLocalAngle + this.endBone.globalAngle;
-            const endBonePoints = this.endBone.getEndPoint(globalAngle);
-            let x = bone.length * Math.cos(globalAngle * this.DEG2RAD) + endBonePoints.x;
-            let y = bone.length * Math.sin(globalAngle * this.DEG2RAD) + endBonePoints.y;
+            // const endBonePoints = this.endBone.getEndPoint(globalAngle);
+            let x = bone.length * Math.cos(globalAngle * this.DEG2RAD) + this.endBone.x;
+            let y = bone.length * Math.sin(globalAngle * this.DEG2RAD) + this.endBone.y;
             let positionVector = new THREE.Vector3(x, y, 0);
 
             let parent = this.endBone;
@@ -53,6 +55,7 @@ class Fabrik {
 
             this.endBone.child = newBone; // update the current endBone's child
             this.endBone = newBone; // update the endBone pointer itself
+            this.totalArmLength += bone.length;
         }
     }
 
@@ -65,21 +68,37 @@ class Fabrik {
     solveIK(targetX, targetY) {
 
         let target = new THREE.Vector3(targetX, targetY, 0);
+        console.log(target);
         let totalArmLengthSq = this.totalArmLength * this.totalArmLength;
 
         // First check if the target is out of reach
         // this means that the distance from the target to pointZero is greater
         // then the sum of all the bone lengths (which is the Max Reach)
 
-        if (this.baseBone.position.distanceToSquared(target) > totalArmLengthSq) {
+        if (this.rootPoint.distanceToSquared(target) > totalArmLengthSq) {
             // The Target is unreachable so let's stretch all of the bones in a single line pointing towards the target.
 
             // we iterate from the baseBone to the endbone
             let delta, lambda, lambdaStar, newX, newY;
             let currentBone = this.baseBone;
-            let childBone; // just used for calculations
-            while(currentBone.hasChild()) {
 
+            delta = target.distanceTo(currentBone.position);
+            lambda = currentBone.boneLength / delta;
+            lambdaStar = 1.0 - lambda;
+
+            // update the child's position vector
+            newX = (lambdaStar * this.rootPoint.x) + (lambda * target.x);
+            newY = (lambdaStar * this.rootPoint.y) + (lambda * target.y);
+            currentBone.x = newX;
+            currentBone.y = newY;
+
+            let newAngle = Math.atan2(newY, newX);
+            newAngle = newAngle * this.RAD2DEG;
+            currentBone.globalAngle -= newAngle;
+            currentBone.localAngle -= newAngle;
+
+
+            while(currentBone.hasChild()) {
                 delta = target.distanceTo(currentBone.position);
                 lambda = currentBone.boneLength / delta;
                 lambdaStar = 1.0 - lambda;
@@ -87,6 +106,17 @@ class Fabrik {
                 // update the child's position vector
                 newX = (lambdaStar * currentBone.x) + (lambda * target.x);
                 newY = (lambdaStar * currentBone.y) + (lambda * target.y);
+
+                // here we need to check for angle constraints
+                // ...
+
+                // update the global & local angle of the bone
+                let newAngle = Math.atan2(newY, newX);
+                newAngle = newAngle * this.RAD2DEG;
+                currentBone.globalAngle -= newAngle;
+                currentBone.localAngle -= newAngle;
+                // console.log(newAngle);
+
                 currentBone.child.x = newX;
                 currentBone.child.y = newY;
 
@@ -95,7 +125,7 @@ class Fabrik {
             }
         }
         else {
-
+            console.log("In Reach");
         }
     }
 
@@ -106,26 +136,26 @@ module.exports.Fabrik = Fabrik;
 
 let fabrik = new Fabrik();
 fabrik.addBone({length: 10}, 45);
-fabrik.addBone({length: 10}, 0);
+fabrik.addBone({length: 10}, -10);
 fabrik.addBone({length: 10}, 90);
 
 let currentBone = fabrik.baseBone;
 while(currentBone) {
     console.log(currentBone.position);
-    console.log(currentBone.localAngle);
-    console.log(currentBone.globalAngle);
+    console.log('localAngle: ' + currentBone.localAngle);
+    console.log('globalAngle: ' + currentBone.globalAngle);
     console.log();
     currentBone = currentBone.child;
 }
 
 console.log('Solving Ik...\n');
-fabrik.solveIK(31, 0);
+fabrik.solveIK(40, 0);
 
 currentBone = fabrik.baseBone;
 while(currentBone) {
     console.log(currentBone.position);
-    console.log(currentBone.localAngle);
-    console.log(currentBone.globalAngle);
+    console.log('localAngle: ' + currentBone.localAngle);
+    console.log('globalAngle: ' + currentBone.globalAngle);
     console.log();
     currentBone = currentBone.child;
 }

@@ -3,7 +3,7 @@ import './App.css';
 import Base from './arm_shapes/Base';
 import arm_settings from './arm_settings.json';
 import '../node_modules/antd/dist/antd.min.css';
-import { Slider, InputNumber } from 'antd';
+import { Slider, InputNumber, Switch } from 'antd';
 import { Stage, Layer, Group, Rect, Circle, Text, Line } from 'react-konva';
 import Konva from 'konva';
 import { Fabrik } from './Fabrik';
@@ -14,17 +14,20 @@ class App extends Component {
 
         this.fabrik = new Fabrik();
         const fabrik = this.fabrik;
-        // fabrik.addBone(arm_settings.bone1);
-        // fabrik.addBone(arm_settings.bone2);
-        // fabrik.addBone(arm_settings.bone3);
+        fabrik.addBone(arm_settings.bone1);
+        fabrik.addBone(arm_settings.bone2);
+        fabrik.addBone(arm_settings.bone3);
+
+        // fabrik.addBone({length: 100}, 45);
+        // fabrik.addBone({length: 100}, -10);
+        // fabrik.addBone({length: 100}, 90);
 
         // For Demo purposes
-        let numberOfBones = 10;
-        for(let i = 0; i < numberOfBones; i++) {
-            fabrik.addBone( {
-                    "length": 50
-            });
-        }
+        // let numberOfBones = 2;
+        // for(let i = 0; i < numberOfBones; i++) {
+        //     fabrik.addBone( {length: 50}, 45);
+        // }
+
 
         let initialPoints = {}, initialBones = {};
         for(let i = 0, length = fabrik.state.points.length; i < length; i++) {
@@ -47,7 +50,7 @@ class App extends Component {
             {
                 target: {
                     x: fabrik.state.points[fabrik.state.points.length - 1].x,
-                    y:fabrik.state.points[fabrik.state.points.length - 1].y * -1
+                    y: fabrik.state.points[fabrik.state.points.length - 1].y * -1
                 }
             }
         );
@@ -65,7 +68,7 @@ class App extends Component {
         };
     }
 
-    handleDragMove = (event) => {
+    handleTargetDrag = (event) => {
         let target = {x: event.target.attrs.x, y: event.target.attrs.y};
 
         // flipping mouse.y coordinates to "cartesian"
@@ -124,21 +127,23 @@ class App extends Component {
                 );
             }
 
-            // // y-grids
-            // renderGrids.push(
-            //   <Rect x={this.state["p" + i].x} y={-this.stage.height + arm_settings.base.height}
-            //         width={2} height={this.stage.height}
-            //         fill={this.randomColors[i]}
-            //   />
-            // );
-            //
-            // //x-grids
-            // renderGrids.push(
-            //     <Rect x={-this.stage.width/2} y={this.state["p" + i].y}
-            //           width={this.stage.width} height={2}
-            //           fill={this.randomColors[i]}
-            //     />
-            // );
+            // y-grids
+            renderGrids.push(
+              <Rect x={this.state["p" + i].x} y={-this.stage.height + arm_settings.base.height}
+                    width={2} height={this.stage.height}
+                    fill={this.randomColors[i]}
+                    visible={this.state.grids}
+              />
+            );
+
+            //x-grids
+            renderGrids.push(
+                <Rect x={-this.stage.width/2} y={this.state["p" + i].y}
+                      width={this.stage.width} height={2}
+                      fill={this.randomColors[i]}
+                      visible={this.state.grids}
+                />
+            );
 
             // For demo purposes
             // ignore the first point (base point) since its just (0,0)
@@ -180,7 +185,8 @@ class App extends Component {
                             <Circle width={30} fill="rgba(255,0,0,0.5)"
                                     ref="target" draggable={true}
                                     x={this.state.target.x} y={this.state.target.y}
-                                    onDragEnd={this.handleDragMove}
+                                    onDragMove={this.handleTargetDrag}
+                                    onDragEnd={this.handleTargetDrag}
                                     onMouseOver={() => {document.body.style.cursor = "move"}}
                                     onMouseOut={() => {document.body.style.cursor = "default"}}
                             />
@@ -191,20 +197,38 @@ class App extends Component {
                 </Stage>
 
                 <div id="controls">
+                    <Switch checkedChildren="Grids On" unCheckedChildren="Grids Off" defaultChecked={true}
+                            onChange={(switchValue) => {this.setState({grids: switchValue})}}/>
+
                     <div>
-                        <h3>Bone 1 Degree Values</h3>
-                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone1.angle} />
-                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone1.angle} />
+                        <h3>Bone 1 Global Angle (Degree Values)</h3>
+                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone1.globalAngle} />
+                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone1.globalAngle} />
                     </div>
                     <div>
-                        <h3>Bone 2 Degree Values</h3>
-                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone2.angle} />
-                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone2.angle} />
+                        <h3>Bone 1 Local Angle (Degree Values)</h3>
+                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone1.localAngle} />
+                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone1.localAngle} />
                     </div>
                     <div>
-                        <h3>Bone 3 Degree Values</h3>
-                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone3.angle} />
-                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone3.angle}/>
+                        <h3>Bone 2 Global Angle (Degree Values)</h3>
+                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone2.globalAngle} />
+                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone2.globalAngle} />
+                    </div>
+                    <div>
+                        <h3>Bone 2 Local Angle (Degree Values)</h3>
+                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone2.localAngle} />
+                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone2.localAngle} />
+                    </div>
+                    <div>
+                        <h3>Bone 3 Global Angle (Degree Values)</h3>
+                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone3.globalAngle} />
+                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone3.globalAngle}/>
+                    </div>
+                    <div>
+                        <h3>Bone 3 Local Angle (Degree Values)</h3>
+                        <Slider min={-360} max={360} step={0.00001} value={this.state.bone3.localAngle} />
+                        <InputNumber min={-360} max={360} step={0.00001} value={this.state.bone3.localAngle}/>
                     </div>
                 </div>
             </div>

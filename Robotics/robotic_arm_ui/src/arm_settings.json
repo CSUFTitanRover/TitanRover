@@ -5,21 +5,21 @@
     },
     "bone1": {
       "length": 287,
-      "constraint": {
+      "constraints": {
         "min": 0,
         "max": 90
       }
     },
     "bone2": {
       "length": 143,
-      "constraint": {
+      "constraints": {
         "min": -90,
         "max": 0
       }
     },
     "bone3": {
       "length": 80,
-      "constraint": {
+      "constraints": {
         "min": -90,
         "max": 0
       }

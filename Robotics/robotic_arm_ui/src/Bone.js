@@ -9,8 +9,8 @@ class Bone {
      * @param {Bone} [parent=null] - Parent bone
      * @param {Bone} [child=null] - Child bone
      * @param {Number} [boneLength=null] - length of bone
-     * @param {Number}localAngle - Expeceted in Degrees. The bone's global angle with respect to its parent angle
-     * @param {Number}localAngle - Expeceted in Degrees. The bone's local angle.
+     * @param {Number} globalAngle - Expeceted in Degrees. The bone's global angle with respect to its parent angle
+     * @param {Number} localAngle - Expeceted in Degrees. The bone's local angle.
      */
     constructor(positionVector, parent=null, child=null, boneLength=null, globalAngle=0, localAngle=0) {
         this.position = positionVector;
