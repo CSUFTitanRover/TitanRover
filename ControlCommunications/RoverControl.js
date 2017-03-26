@@ -44,21 +44,11 @@ var config = {
     Joystick_MAX: 32767,
     arm_on: true,
     mobility_on: true,
-    debug: false,
     TIME_TO_STOP: 1000,
     TEST_CONNECTION: 2000,
     saber_min: 0,
     saber_max: 254
 };
-
-var Mobility_arr = new Uint16Array(2);
-Mobility_arr[0] = 0x0008;
-var Mobility_buff = Buffer.from(Mobility_arr.buffer);
-
-
-var lastx = 0;
-var lasty = 0;
-
 
 var x_Axis_arr = new Uint16Array(2);
 x_Axis_arr[0] = 0x0008;
@@ -81,6 +71,7 @@ var debug = {
     Lost_Connection_Num: 0,
     Start_Time: time.toString(),
     Curr_Time: time.toString(),
+    LastTime_ConnectionLost: time.toString()
 };
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
@@ -183,8 +174,8 @@ function receiveMobility(joystickData) {
 function stopRover() {
     //receiveMobility(zeroMessage[0]);
     //receiveMobility(zeroMessage[1]);
-    x_Axis_arr[1] = 1500;
-    y_Axis_arr[1] = 1500;
+    x_Axis_arr[1] = 127;
+    y_Axis_arr[1] = 127;
     port.write(x_Axis_buff);
     port.write(y_Axis_buff);
     // Stopping all joints
@@ -211,16 +202,13 @@ function sendHome(msg) {
 setInterval(function() {
     sendHome(CONTROL_MESSAGE_ROVER);
     debug.Tested_Connection_Num += 1;
-    time = new Date();
-    debug.Curr_Time = time.toString();
-    if (config.debug) {
-        sendHome(debug);
-    }
     gotAckRover = false;
     setTimeout(function() {
         if (gotAckRover === false) {
             console.log("Stopping Rover: ROVER lost connection to HOME")
             debug.Lost_Connection_Num += 1;
+            time = new Date();
+            debug.LastTime_ConnectionLost = time.toString();
             stopRover();
         }
     }, config.TIME_TO_STOP);
@@ -253,12 +241,15 @@ function handleControl(message) {
         gotAck = true;
         gotAckRover = true;
     } else if (message.type == "config") {
-        config.debug = message.debug;
         config.arm_on = message.arm_on;
         config.mobility_on = message.mobility_on;
         config.Joystick_MAX = message.Joystick_MAX;
         config.Joystick_MIN = message.Joystick_MIN;
         console.log(config);
+    } else if (message.type == "debug") {
+        time = new Date();
+        debug.Curr_Time = time.toString();
+        sendHome(debug);
     }
 }
 

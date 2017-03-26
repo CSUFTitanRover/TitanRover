@@ -44,9 +44,13 @@ const CHANGE_CONFIG = {
     Joystick_MAX: 127.50,
     Joystick_MIN: -127.50,
     arm_on: true,
-    mobility_on: true,
-    debug: false
-}
+    mobility_on: true
+};
+
+const GET_DEBUG_STATS = {
+    commandType: "control",
+    type: "debug"
+};
 
 const CONTROL_MESSAGE_ACK = {
     commandType: "control",
