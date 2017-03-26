@@ -35,8 +35,8 @@ class Fabrik {
     addBone(bone, startingLocalAngle = 0) {
         if(this.state.points.length === 0) {
             let p0 = new THREE.Vector3(0, 0, 0); // init the first point at (0,0,0)
-            let p1X = bone.length * Math.cos(startingLocalAngle * this.DEG2RAD),
-                p1Y = bone.length * Math.sin(startingLocalAngle * this.DEG2RAD);
+            let p1X = bone.boneLength * Math.cos(startingLocalAngle * this.DEG2RAD),
+                p1Y = bone.boneLength * Math.sin(startingLocalAngle * this.DEG2RAD);
             let p1 = new THREE.Vector3(p1X, p1Y, 0); // start every vector's z value as 0
 
             // append our points
@@ -45,22 +45,65 @@ class Fabrik {
 
             let boneAngleInfo = {globalAngle: startingLocalAngle, localAngle: startingLocalAngle};
             this.state.bones.push(Object.assign({}, bone, boneAngleInfo)); // append our new bone object w/ angle
-            this.totalArmLength += bone.length; // add to our total arm length
+            this.totalArmLength += bone.boneLength; // add to our total arm length
         }
         else {
             let endPoint = this.state.points[this.state.points.length-1];
             let endBone = this.state.bones[this.state.bones.length-1];
             let globalAngle = endBone.globalAngle + startingLocalAngle;
-            let newX = bone.length * Math.cos(globalAngle * this.DEG2RAD) + endPoint.getComponent(0),
-                newY = bone.length * Math.sin(globalAngle * this.DEG2RAD) + endPoint.getComponent(1);
+            let newX = bone.boneLength * Math.cos(globalAngle * this.DEG2RAD) + endPoint.getComponent(0),
+                newY = bone.boneLength * Math.sin(globalAngle * this.DEG2RAD) + endPoint.getComponent(1);
             let newPoint = new THREE.Vector3(newX, newY, 0); // start every vector's z value as 0
 
             let boneAngleInfo = {globalAngle: globalAngle, localAngle: startingLocalAngle};
             this.state.points.push(newPoint); // append our point
             this.state.bones.push(Object.assign({}, bone, boneAngleInfo)); // append our new bone object w/ angle
-            this.totalArmLength += bone.length; // add to our total arm length
+            this.totalArmLength += bone.boneLength; // add to our total arm length
         }
     };
+
+    /**
+     * Clamps the value passed between the range of min to max
+     * @example Fabrik.clamp(-5, 0, 10) // outputs 0
+     * @param {Number} value
+     * @param {Number} min
+     * @param {Number} max
+     * @return {Number}
+     */
+    clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+    }
+
+    /**
+     * Calculates & returns a new object of the new global & local angle of the current bone
+     * @param {Vector3} newPosition - the new position of the current point
+     * @param {Vector3} currentPoint - the current point without being updated to the new Position
+     * @param {Vector3} prevPoint
+     * @param {Object} currentBone - current bone without its updated angles
+     * @param {Object} prevBone
+     * @return {Object} - with properties "globalAngle" & "localAngle"
+     */
+    calculateNewAngles(newPosition, currentPoint, prevPoint, currentBone, prevBone) {
+        let result = Object.assign({}, currentBone); // clone the currentBone's properties
+
+        // now we can calculate the angles
+        let v = newPosition;
+        let u = currentPoint;
+        let v_u = v.sub(u);
+
+        let globalAngle = Math.atan2(v_u.getComponent(1), v_u.getComponent(0));
+        globalAngle = globalAngle * this.RAD2DEG; // convert from radians to degrees
+
+        let localAngle = globalAngle - prevBone.globalAngle;
+
+        // result.globalAngle = globalAngle;
+        // result.localAngle = localAngle;
+
+        currentBone.globalAngle = globalAngle;
+        currentBone.localAngle = localAngle;
+        // return result;
+    }
+
 
     checkAngleConstraints(currentIndex, newX, newY) {
         const points = this.state.points;
@@ -122,6 +165,31 @@ class Fabrik {
     }
 
     /**
+     * We assume that this bone has constraints
+     * Directly modifies/clamps the point if the bone has constraints
+     */
+    clampPosition(newX, newY, bone, prevGlobalAngle=0, prevPoint=null) {
+        // before we calculate any angles we need to honor bone constraints if there is any
+        let minX, minY, maxX, maxY;
+        let globalMinAngle = bone.constraints.min + prevGlobalAngle;
+        let globalMaxAngle = bone.constraints.max + prevGlobalAngle;
+        let prevX = (prevPoint) ? prevPoint.getComponent(0) : 0; // default to 0 if no prevPoint is passed
+        let prevY = (prevPoint) ? prevPoint.getComponent(1) : 0; // default to 0 if no prevPoint is passed
+
+        minX = bone.boneLength * Math.cos(globalMaxAngle * this.DEG2RAD) + prevX;
+        minY = bone.boneLength * Math.sin(globalMinAngle * this.DEG2RAD) + prevY;
+
+        maxX = bone.boneLength * Math.cos(globalMinAngle * this.DEG2RAD) + prevX;
+        maxY = bone.boneLength * Math.sin(globalMaxAngle * this.DEG2RAD) + prevY;
+
+        // finally clamping
+        let clampedX = this.clamp(newX, minX, maxX);
+        let clampedY = this.clamp(newY, minY, maxY);
+
+        return {x: clampedX, y: clampedY};
+    }
+
+    /**
      * Loop from the end point to the base point
      */
     forwardReaching() {
@@ -131,18 +199,34 @@ class Fabrik {
         for(let i = points.length-2; i > 0; i--) {
             // find calculations
             delta = points[i+1].distanceTo(points[i]);
-            lambda = bones[i].length / delta;
+            lambda = bones[i].boneLength / delta;
             lambdaStar = 1.0 - lambda;
 
             // update the points[i] position
             newX = (lambdaStar * points[i+1].getComponent(0)) + (lambda * points[i].getComponent(0));
             newY = (lambdaStar * points[i+1].getComponent(1)) + (lambda * points[i].getComponent(1));
 
-            // finding the global & local angles
-            // this.checkAngleConstraints(i, newX, newY);
+            //constraining the first bone
+            if (i === 0 && bones[i].hasOwnProperty("constraints")) {
+                let clampedPoint;
+                console.log(newX, newY);
+                if (i === 0) {
+                    // we don't need to pass in the global Angle and point0 since its just 0 for all of them
+                    clampedPoint = this.clampPosition(newX, newY, bones[i]);
 
-            points[i].setComponent(0, newX);
-            points[i].setComponent(1, newY);
+                    // else {
+                    //     clampedPoint = this.clampPosition(newX, newY, bones[i], bones[i-1].globalAngle, points[i-1]);
+                    // }
+
+                    console.log(clampedPoint);
+                    points[i].setComponent(0, clampedPoint.x);
+                    points[i].setComponent(1, clampedPoint.y);
+                }
+            }
+            else {
+                points[i].setComponent(0, newX);
+                points[i].setComponent(1, newY);
+            }
         }
     }
 
@@ -155,24 +239,46 @@ class Fabrik {
         const points = this.state.points;
         const bones = this.state.bones;
         let delta, lambda, lambdaStar, newX, newY;
-        for(let i=0, length = points.length; i < length - 1; i++) {
+        for(let i = 0, length = points.length; i < length - 1; i++) {
 
             // find calculations
-            delta = points[i+1].distanceTo(points[i]);
-            lambda = bones[i].length / delta;
+            delta = points[i + 1].distanceTo(points[i]);
+            lambda = bones[i].boneLength / delta;
             lambdaStar = 1.0 - lambda;
 
             // update the points[i+1] position
-            newX = (lambdaStar * points[i].getComponent(0)) + (lambda * points[i+1].getComponent(0));
-            newY = (lambdaStar * points[i].getComponent(1)) + (lambda * points[i+1].getComponent(1));
+            newX = (lambdaStar * points[i].getComponent(0)) + (lambda * points[i + 1].getComponent(0));
+            newY = (lambdaStar * points[i].getComponent(1)) + (lambda * points[i + 1].getComponent(1));
 
-            // finding the global & local angles
-            // if (i >= 1) {
-            this.checkAngleConstraints(i, newX, newY);
+            // I need to update the bone's global & local angle regardless if this point is out of range or not
+            // If it is out of range then we can fix that if we have to constrain the new position
+            // ...
+            // if (i === 0) {
+            //
             // }
 
-            points[i+1].setComponent(0, newX);
-            points[i+1].setComponent(1, newY);
+
+            //constraining the first bone
+            if (i === 0 && bones[i].hasOwnProperty("constraints")) {
+                let clampedPoint;
+                console.log(newX, newY);
+                if (i === 0) {
+                    // we don't need to pass in the global Angle and point0 since its just 0 for all of them
+                    clampedPoint = this.clampPosition(newX, newY, bones[i]);
+
+                // else {
+                //     clampedPoint = this.clampPosition(newX, newY, bones[i], bones[i-1].globalAngle, points[i-1]);
+                // }
+
+                    console.log(clampedPoint);
+                    points[i + 1].setComponent(0, clampedPoint.x);
+                    points[i + 1].setComponent(1, clampedPoint.y);
+                }
+            }
+            else {
+                points[i + 1].setComponent(0, newX);
+                points[i + 1].setComponent(1, newY);
+            }
         }
     }
 
@@ -203,15 +309,33 @@ class Fabrik {
             for(let i=0, length = points.length; i < length - 1; i++) {
                 // find calculations
                 delta = target.distanceTo(points[i]);
-                lambda = bones[i].length / delta;
+                lambda = bones[i].boneLength / delta;
                 lambdaStar = 1.0 - lambda;
 
                 // update the points[i+1] position
                 newX = (lambdaStar * points[i].getComponent(0)) + (lambda * target.getComponent(0));
                 newY = (lambdaStar * points[i].getComponent(1)) + (lambda * target.getComponent(1));
 
-                points[i+1].setComponent(0, newX);
-                points[i+1].setComponent(1, newY);
+                //constraining the first bone
+                if (bones[i].hasOwnProperty("constraints")) {
+                    let clampedPoint;
+                    console.log(newX, newY);
+                    if (i === 0) {
+                        // we don't need to pass in the global Angle and point0 since its just 0 for all of them
+                        clampedPoint = this.clampPosition(newX, newY, bones[i]);
+                    }
+                    else {
+                        clampedPoint = this.clampPosition(newX, newY, bones[i], bones[i-1].globalAngle, points[i-1]);
+                    }
+
+                    console.log(clampedPoint);
+                    points[i + 1].setComponent(0, clampedPoint.x);
+                    points[i + 1].setComponent(1, clampedPoint.y);
+                }
+                else {
+                    points[i + 1].setComponent(0, newX);
+                    points[i + 1].setComponent(1, newY);
+                }
             }
         }
         else {
@@ -257,3 +381,18 @@ class Fabrik {
 }
 
 module.exports.Fabrik = Fabrik;
+
+/**
+ * For some reason the points when at max constraint will dip below it's max x or y. This causes the drawn line between
+ * 2 points representing a bone to decrease in width. But regardless the angle of the bone will still be the same.
+ * Either super close to maxAngle or minAngle. I'm talking decimal e^-14.
+ * So what needs to happen is instead of drawing out the points and lines like im doing now. I should draw out rectangle
+ * boxes with a defined height & width. This way the height/width never changes. Since in the end all I'm worried about
+ * is the angle of what bone needs to rotate to then I don't have to worry about "acurracy" if the x,y decreases below
+ * defined max constraints. Again in the end the angle will stay the same for up to 14 decimal places. Which is pretty
+ * damn negligent for our system. At least I hope so...
+ *
+ * for example
+ * atan2(286.1090133608492, 1.757368156776452e-14) = 89.999999999999996480719804972291 degrees
+ * atan2(274.3865618635226, 1.757368156776452e-14) = 89.999999999999996330367720994381 degrees
+ */

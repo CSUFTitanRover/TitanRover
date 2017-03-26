@@ -4,21 +4,21 @@
       "height": 30
     },
     "bone1": {
-      "length": 287,
+      "boneLength": 287,
       "constraints": {
         "min": 0,
         "max": 90
       }
     },
     "bone2": {
-      "length": 143,
+      "boneLength": 143,
       "constraints": {
         "min": -90,
         "max": 0
       }
     },
     "bone3": {
-      "length": 80,
+      "boneLength": 80,
       "constraints": {
         "min": -90,
         "max": 0

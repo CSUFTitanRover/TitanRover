@@ -81,7 +81,7 @@ class App extends Component {
         for(let i = 1, length = result.points.length; i < length; i++) {
             // updating the respective bone's angle
             // we subtract i-1 because the bones [] starts at 0
-            newState["bone" + i].angle = result.bones[(i - 1)].angle;
+            newState["bone" + i] = result.bones[(i - 1)];
 
             // we use just i because we don't care about the first point which is (0,0,0)
             // dynamically updating all the States' points with the New Points
