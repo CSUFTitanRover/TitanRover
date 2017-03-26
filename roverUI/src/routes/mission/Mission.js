@@ -5,9 +5,7 @@ import SonicRangeFinder from './modules/SonicRangeFinder';
 import ArmControl from './modules/ArmControl';
 import LiveFeeds from './modules/livefeeds/LiveFeeds';
 import ArmCamera from './modules/livefeeds/ArmCamera';
-import MastCamera from './modules/livefeeds/MastCamera';
-import LeftCamera from './modules/livefeeds/LeftCamera';
-import RightCamera from './modules/livefeeds/RightCamera';
+import FrontCamera from './modules/livefeeds/FrontCamera';
 import Surround from './modules/livefeeds/Surround';
 
 class Overview extends Component {
@@ -32,8 +30,6 @@ export default {
     ArmControl,
     LiveFeeds,
     ArmCamera,
-    MastCamera,
-    LeftCamera,
-    RightCamera,
+    FrontCamera,
     Surround
 };

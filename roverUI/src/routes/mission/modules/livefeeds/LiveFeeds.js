@@ -16,26 +16,14 @@ class LiveFeeds extends Component {
                     </Button>
 
                     <Button type="primary">
-                        <Link activeClassName="active" to="/leftcamera">
-                            Left Camera
-                        </Link>
-                    </Button>
-
-                    <Button type="primary">
-                        <Link activeClassName="active" to="/rightcamera">
-                            Right Camera
-                        </Link>
-                    </Button>
-
-                    <Button type="primary">
                         <Link activeClassName="active" to="/armcamera">
                             Arm Camera
                         </Link>
                     </Button>
 
                     <Button type="primary">
-                        <Link activeClassName="active" to="/mastcamera">
-                            Mast Camera
+                        <Link activeClassName="active" to="/frontcamera">
+                            Front Camera
                         </Link>
                     </Button>
                 </ButtonGroup>

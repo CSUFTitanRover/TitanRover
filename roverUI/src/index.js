@@ -15,9 +15,7 @@ let routes = (
             <Route path="arm-control" component={Modules.Mission.ArmControl} />
             <Route path="livefeeds" component={Modules.Mission.LiveFeeds}>
                 <Route path="/armcamera" component={Modules.Mission.ArmCamera} />
-                <Route path="/mastcamera" component={Modules.Mission.MastCamera} />
-                <Route path="/leftcamera" component={Modules.Mission.LeftCamera} />
-                <Route path="/rightcamera" component={Modules.Mission.RightCamera} />
+                <Route path="/frontcamera" component={Modules.Mission.FrontCamera} />
                 <Route path="/surround" component={Modules.Mission.Surround} />
             </Route>
 
