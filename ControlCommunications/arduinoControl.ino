@@ -1,141 +1,262 @@
 #include <SPI.h>
 #include <AMIS30543.h>
+#include <Servo.h>
+#include <Stepper.h>
+#include <SoftwareSerial.h>
+#include <Sabertooth.h>
 
-const uint8_t joint1_out = 8;
-const char joint1_on = '1';
-const char joint1_off = '2';
-bool joint1_isOn = false;
+const int stepsPerRevolution = 200;
+// X Axis Mobility
+/*Servo x_mobility;
+  const uint8_t x_pwm_pin = 6;
 
-const uint8_t joint4_out = 9;
-const char joint4_on = '3';
-const char joint4_off = '4';
-bool joint4_isOn = false;
+  // Y Axis Mobility
+  Servo y_mobility;
+  const uint8_t y_pwm_pin = 7;*/
 
-const uint8_t joint5_out = 10;
-const char joint5_on = '5';
-const char joint5_off = '6';
-bool joint5_isOn = false;
+// Joint #1
+const uint8_t joint1_dir_pin = 30;
+const uint8_t joint1_enab_pin = 31;
+const uint8_t joint1_pulse_pin = 32;
+bool joint1_on = false;
 
-const uint8_t joint6_out = 7;
-const uint8_t joint6_ss = 3;
-const char joint6_on = '7';
-const char joint6_off = '8';
-bool joint6_isOn = false;
+// Joint #2
+Servo joint2;
+const uint8_t joint2_pwm_pin = 4;
 
-const uint8_t joint7_out = 6;
-const uint8_t joint7_ss = 4;
-const char joint7_on = '9';
-const char joint7_off = '0';
-bool joint7_isOn = false;
+// Joint #3
+Servo joint3;
+const uint8_t joint3_pwm_pin = 5;
 
+// Joint #4
+const uint8_t joint4_dir_pin = 34;
+const uint8_t joint4_enab_pin = 35;
+const uint8_t joint4_pulse_pin = 36;
+bool joint4_on = false;
+
+// Joint #5
+const uint8_t joint5_dir_pin = 38;
+const uint8_t joint5_enab_pin = 39;
+const uint8_t joint5_pulse_pin = 40;
+bool joint5_on = false;
+
+// Joint #6
 AMIS30543 joint6_stepper;
+const uint8_t joint6_ss = 44;
+const uint8_t joint6_dir_pin = 42;
+const uint8_t joint6_pulse_pin = 43;
+bool joint6_on = false;
+
+// Joint #7
 AMIS30543 joint7_stepper;
+const uint8_t joint7_ss = 48;
+const uint8_t joint7_dir_pin = 46;
+const uint8_t joint7_pulse_pin = 47;
+bool joint7_on = false;
+
+// Will hold the bytes from the pi
+uint8_t val[4];
+int i;
+int delayVal = 1;
+uint16_t pwmVal;
+
+SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
+Sabertooth Back(129, SWSerial);
+Sabertooth Front(128, SWSerial);
 
 void setup()
 {
   SPI.begin();
-  // put your setup code here, to run once:
-  pinMode(joint1_out, OUTPUT);
-  pinMode(joint4_out, OUTPUT);
-  pinMode(joint5_out, OUTPUT);
-  pinMode(joint6_out, OUTPUT);
-  digitalWrite(joint6_out, LOW);
-  pinMode(joint6_ss, OUTPUT);
   Serial.begin(9600);
+  SWSerial.begin(9600);
+  Back.autobaud();
+  Front.autobaud();
   delay(1);
 
+  Back.drive(0);
+  Front.drive(0);
+  Back.turn(0);
+  Front.turn(0);
+  // Start the mobility on zero
+  /*x_mobility.attach(x_pwm_pin);
+    x_mobility.writeMicroseconds(1500);
+
+    y_mobility.attach(y_pwm_pin);
+    y_mobility.writeMicroseconds(1500);*/
+
+  // Setup the linear actuators
+  joint2.attach(joint2_pwm_pin);
+  joint2.writeMicroseconds(1500);
+
+  joint3.attach(joint3_pwm_pin);
+  joint3.writeMicroseconds(1500);
+
+  // Set up Joint1
+  pinMode(joint1_dir_pin, OUTPUT);
+  pinMode(joint1_enab_pin, OUTPUT);
+  pinMode(joint1_pulse_pin, OUTPUT);
+  digitalWrite(joint1_enab_pin, LOW);
+
+  // Set up Joint4
+  pinMode(joint4_dir_pin, OUTPUT);
+  pinMode(joint4_enab_pin, OUTPUT);
+  pinMode(joint4_pulse_pin, OUTPUT);
+  digitalWrite(joint4_enab_pin, LOW);
+
+  // Set up Joint5
+  pinMode(joint5_dir_pin, OUTPUT);
+  pinMode(joint5_enab_pin, OUTPUT);
+  pinMode(joint5_pulse_pin, OUTPUT);
+  digitalWrite(joint5_enab_pin, LOW);
+
+  // Set up the Polulu Stepper motors
   joint6_stepper.init(joint6_ss);
-
   joint6_stepper.resetSettings();
-
   joint6_stepper.setCurrentMilliamps(670);
-
-  joint6_stepper.setStepMode(200);
-
+  joint6_stepper.setStepMode(stepsPerRevolution);
   joint6_stepper.enableDriver();
+
+  // Deselect the slave select pin for joint6 to allow joint7 to communicate
+  digitalWrite(joint6_ss, HIGH);
+
+  joint7_stepper.init(joint7_ss);
+  joint7_stepper.resetSettings();
+  joint7_stepper.setCurrentMilliamps(670);
+  joint7_stepper.setStepMode(stepsPerRevolution);
+  joint7_stepper.enableDriver();
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop()
+{
 
-  if(Serial.available() > 0)
+  // Check if pi has sent command data to Arduino
+  if (Serial.available() >= 4)
   {
-    // Find the joint we should turn on or off
-    char num = Serial.read();
 
-    // Either turn the stepper motors on or off
-    if(num == joint1_on)
+    // Grap the 4 bytes from the raspberry pi
+    i = 0;
+    while (i < 4)
     {
-      joint1_isOn = true;
+      val[i++] = Serial.read();
     }
-    else if(num == joint4_on)
+
+    // Convert the last two bytes into a 16 bit number to represent 1500 - 2000
+    pwmVal = 0x0000;
+    pwmVal = (uint16_t)val[2];
+    pwmVal = pwmVal | ((uint16_t)val[3] << 8);
+
+    if (val[0] == 0x01) // Joint1
     {
-      joint4_isOn = true;
+      setDirection(joint1_dir_pin, val[1]);
+      joint1_on = val[3];
+      if (val[2] != 0x00)
+        stepJoint(joint1_pulse_pin, val[3]);
     }
-    else if(num == joint5_on)
+    else if (val[0] == 0x02) // Joint2
     {
-      joint5_isOn = true;
+      joint2.writeMicroseconds(pwmVal);
     }
-    else if(num == joint6_on)
+    else if (val[0] == 0x03) // Joint3
     {
-      joint6_isOn = true;
+      joint3.writeMicroseconds(pwmVal);
     }
-    else if(num == joint7_on)
+    else if (val[0] == 0x04) // Joint4
     {
-      joint7_isOn = true;
+      setDirection(joint4_dir_pin, val[1]);
+      joint4_on = val[3];
+      if (val[2] != 0x00)
+        stepJoint(joint4_pulse_pin, val[3]);
     }
-    else if(num == joint1_off)
+    else if (val[0] == 0x05) // Joint5
     {
-      joint1_isOn = false;
+      setDirection(joint5_dir_pin, val[1]);
+      joint5_on = val[3];
+      if (val[2] != 0x00)
+        stepJoint(joint5_pulse_pin, val[3]);
     }
-    else if(num == joint4_off)
+    else if (val[0] == 0x06) // Joint6
     {
-      joint4_isOn = false;
+      setDirection(joint6_dir_pin, val[1]);
+      joint6_on = val[3];
+      if (val[2] != 0x00)
+        stepJoint(joint6_pulse_pin, val[3]);
     }
-    else if(num == joint5_off)
+    else if (val[0] == 0x07) // Joint7
     {
-      joint5_isOn = false;
+      setDirection(joint7_dir_pin, val[1]);
+      joint7_on = val[3];
+      if (val[2] != 0x00)
+        stepJoint(joint7_pulse_pin, val[3]);
     }
-    else if(num == joint6_off)
+    else if (val[0] == 0x08) // x-Mobility
     {
-      joint6_isOn = false;
+      Back.turn(val[2] - 127);
+      Front.turn(val[2] - 127);
     }
-    else if(num == joint7_off)
+    else if (val[0] == 0x09) // y-Mobility
     {
-      joint7_isOn = true;
+      Back.drive((val[2] - 127) * -1);
+      Front.drive(val[2] - 127);
     }
+
   }
 
-  if(joint1_isOn)
+
+  // Drive the stepper motors if they are activated
+  if (joint1_on)
   {
-    digitalWrite(joint1_out, HIGH);
-    digitalWrite(joint1_out, LOW);
+    digitalWrite(joint1_pulse_pin, HIGH);
+    digitalWrite(joint1_pulse_pin, LOW);
   }
 
-  if(joint4_isOn)
+  if (joint4_on)
   {
-    digitalWrite(joint4_out, HIGH);
-    digitalWrite(joint4_out, LOW);
+    digitalWrite(joint4_pulse_pin, HIGH);
+    digitalWrite(joint4_pulse_pin, LOW);
   }
 
-  if(joint5_isOn)
+  if (joint5_on)
   {
-    digitalWrite(joint5_out, HIGH);
-    digitalWrite(joint5_out, LOW);
+    digitalWrite(joint5_pulse_pin, HIGH);
+    digitalWrite(joint5_pulse_pin, LOW);
   }
 
-  if(joint6_isOn)
+  if (joint6_on)
   {
-    digitalWrite(joint6_out, HIGH);
-    digitalWrite(joint6_out, LOW);
+    digitalWrite(joint6_pulse_pin, HIGH);
+    digitalWrite(joint6_pulse_pin, LOW);
   }
 
-  if(joint7_isOn)
+  if (joint7_on)
   {
-    digitalWrite(joint7_out, HIGH);
-    digitalWrite(joint7_out, LOW);
+    digitalWrite(joint7_pulse_pin, HIGH);
+    digitalWrite(joint7_pulse_pin, LOW);
   }
 
-  delay(1);
+  delay(delayVal);
 
+}
+
+// Will step the joint between 1 and 200 steps
+void stepJoint(uint8_t pinValue, uint8_t steps)
+{
+  for (int i = 0; i < steps; ++i)
+  {
+    digitalWrite(pinValue, HIGH);
+    digitalWrite(pinValue, LOW);
+    delay(delayVal);
+  }
+}
+
+// Will switch the pin based on what byte is sent from the pi
+void setDirection(uint8_t pinValue, uint8_t val)
+{
+  if (val == 0x00)
+  {
+    digitalWrite(pinValue, LOW);
+  }
+  else if (val == 0x01)
+  {
+    digitalWrite(pinValue, HIGH);
+  }
 }
