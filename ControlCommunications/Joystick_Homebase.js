@@ -56,7 +56,7 @@ if (!mode || mode == 'both') {
     joystick_0.on('axis', handleJoystick_0);
 } else if (mode == 'arm') {
     console.log('### Using only Arm ###\n');
-    joystick_1 = new(require('joystick'))(1, 3500, 500);
+    joystick_1 = new(require('joystick'))(0, 3500, 500);
     joystick_1.on('button', handleJoystick_1);
     joystick_1.on('axis', handleJoystick_1);
 } else if (mode != 'none') {
@@ -191,11 +191,3 @@ function handleJoystick_1(event) {
         }
     }
 }
-
-// On SIGINT shutdown
-process.on('SIGINT', function() {
-    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
-    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    // some other closing procedures go here
-    process.exit();
-});
