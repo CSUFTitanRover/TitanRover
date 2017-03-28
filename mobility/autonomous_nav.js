@@ -28,6 +28,10 @@ class MyEmitter extends EventEmitter {}
 const autonomous_control = new MyEmitter();
 const sleep = require('sleep');
 const now = require("performance-now");
+var sys = require('util');
+var spawn = require("child_process").spawn;
+var process = spawn('python',["IMU_Acc_Mag_Gyro.py"]);
+
 
 const Winston = require('winston');
 const winston = new (Winston.Logger)({
@@ -44,6 +48,7 @@ const winston = new (Winston.Logger)({
      })
     ]
   });
+
 
 
 var i = 0; 
@@ -74,6 +79,37 @@ To get your own test points you can use
 http://www.findlatitudeandlongitude.com/click-lat-lng-list/
 
 */
+
+var net = require('net');
+var HOST = '192.168.43.207';
+var PORT = 9005;
+
+
+var client = new net.Socket();
+
+client.connect(PORT, HOST, function () {
+    console.log('Connected to Server');
+});
+
+client.on('data', function (data) {
+    var arr = data.toString().split(" ");
+    current_waypoint = {latitude: Number(arr[4]), longitude: Number(arr[5])};
+    //Uncommit next line for error checking output of Rover:Reach server
+    //console.log('Waypoint Latitude: ' + bufPoint.lat + ' and Longitude: ' + bufPoint.lon);
+});
+
+client.on('close', function() {
+    client.end();
+});
+
+// Getting Heading
+process.stdout.on('data', function (data){
+	current_heading = data.toString.split(",");
+	console.log(current_heading);
+    console.log('inside');
+	////////////////////////////////////////////////////////////
+});
+
 
 var wayPoints = [
     {latitude: 33.64995,   longitude: -117.612345},
@@ -211,7 +247,11 @@ var drive_toward_target = function(){
     },15);
 };
 
+setInterval(function(){
+    console.log(current_waypoint);
+},1000);
+
 process.stdout.write('\033c');
-winston.info('Starting autonomous navigation');
+//winston.info('Starting autonomous navigation');
 var start = now();
-autonomous_control.emit('get_waypoint');
+//autonomous_control.emit('get_waypoint');
