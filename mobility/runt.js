@@ -29,10 +29,10 @@ module.exports = {
 
 
     forward: function(throttle){
-        GPIO.write(MOTOR1A, GPIO.HIGH);
-        GPIO.write(MOTOR1B, GPIO.LOW);
-        GPIO.write(MOTOR2A, GPIO.HIGH);
-        GPIO.write(MOTOR2B, GPIO.LOW);
+        GPIO.write(MOTOR1A, true);
+        GPIO.write(MOTOR1B, false);
+        GPIO.write(MOTOR2A, true);
+        GPIO.write(MOTOR2B, false);
         pwm.setPWM(0, 0, parseInt(throttle));
         pwm.setPWM(1, 0, parseInt(throttle));
     },
@@ -41,18 +41,18 @@ module.exports = {
         pwm.setPWM(1, 0, 0);
     },
     turn_right: function(throttle){
-        GPIO.write(MOTOR1A, GPIO.LOW);
-        GPIO.write(MOTOR1B, GPIO.HIGH);
-        GPIO.write(MOTOR2A, GPIO.HIGH);
-        GPIO.write(MOTOR2B, GPIO.LOW);
+        GPIO.write(MOTOR1A, false);
+        GPIO.write(MOTOR1B, true);
+        GPIO.write(MOTOR2A, true);
+        GPIO.write(MOTOR2B, false);
         pwm.setPWM(0, 0, parseInt(throttle));
         pwm.setPWM(1, 0, parseInt(throttle));
     },
     turn_left: function(throttle){
-        GPIO.write(MOTOR1A, GPIO.HIGH);
-        GPIO.write(MOTOR1B, GPIO.LOW);
-        GPIO.write(MOTOR2A, GPIO.LOW);
-        GPIO.write(MOTOR2B, GPIO.HIGH);
+        GPIO.write(MOTOR1A, true);
+        GPIO.write(MOTOR1B, false);
+        GPIO.write(MOTOR2A, false);
+        GPIO.write(MOTOR2B, true);
         pwm.setPWM(0, 0, parseInt(throttle));
         pwm.setPWM(1, 0, parseInt(throttle));
     },
