@@ -433,5 +433,5 @@ while True:                    #Continous run Disabled to allow Node.js control
         #Output to stdout if running stand alone or passed to node.js control program through flush call
         #print("%d,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.8f,%5.2f,%5.2f,%5.2f" % (n, AccXangle, AccYangle, gyroXangle,gyroYangle,gyroZangle,CFangleX,CFangleY, heading, tiltCompensatedHeading, kalmanX,kalmanY))
         print("%5.8f" % (heading))
-        #sys.stdout.flush()
+        sys.stdout.flush()
 

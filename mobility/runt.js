@@ -1,5 +1,5 @@
 const makePwmDriver = require('adafruit-i2c-pwm-driver');
-const gpio = require('rpi-gpio');
+const GPIO = require('rpi-gpio');
 
 // MOTOR Initialization
 const MOTOR1A = 36;
@@ -9,10 +9,10 @@ const MOTOR2B = 13;
 
 const motor_minPWM = 1100; // Stop speed
 const motor_maxPWM = 4095; // Full throttle
-gpio.setup(MOTOR1A, gpio.DIR_OUT);
-gpio.setup(MOTOR1B, gpio.DIR_OUT);
-gpio.setup(MOTOR2A, gpio.DIR_OUT);
-gpio.setup(MOTOR2B, gpio.DIR_OUT);
+GPIO.setup(MOTOR1A, GPIO.DIR_OUT);
+GPIO.setup(MOTOR1B, GPIO.DIR_OUT);
+GPIO.setup(MOTOR2A, GPIO.DIR_OUT);
+GPIO.setup(MOTOR2B, GPIO.DIR_OUT);
 
 // PWM Config for Pi Hat:
 const pwm = makePwmDriver({
@@ -26,6 +26,8 @@ const pwm = makePwmDriver({
         pwm.setPWM(1, 0, parseInt(speed)); - RIGHT MOTOR 
  */
 module.exports = {
+
+
     forward: function(throttle){
         GPIO.write(MOTOR1A, GPIO.HIGH);
         GPIO.write(MOTOR1B, GPIO.LOW);
@@ -57,7 +59,7 @@ module.exports = {
     cleanup: function(){
         pwm.setPWM(0, 0, 0);
         pwm.setPWM(1, 0, 0);
-        gpio.destroy(function() {
+        GPIO.destroy(function() {
             console.log('All pins unexported');
         });
     }

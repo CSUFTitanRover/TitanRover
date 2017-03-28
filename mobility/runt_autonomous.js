@@ -22,7 +22,7 @@ MAGNETIC DECLINATION
 */
 
 const geolib = require('geolib');
-const rover = require('runt');
+const rover = require('./runt.js');
 const EventEmitter = require('events');
 class MyEmitter extends EventEmitter {}
 const autonomous_control = new MyEmitter();
@@ -241,7 +241,6 @@ var drive_toward_target = function(){
             rover.forward(); 
             distance_to_target = geolib.getDistance(current_waypoint,target);
             previous_distance = distance_to_target;
-            distance_to_target--;
             process.stdout.write('\033c');
             winston.info( 'driving...distance to target: ' + distance_to_target + UNITS);
         }
