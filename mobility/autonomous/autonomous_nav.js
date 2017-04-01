@@ -104,10 +104,8 @@ client.on('close', function() {
 
 // Getting Heading
 process.stdout.on('data', function (data){
-	console.log(data);
 	current_heading = data.toString();
-	console.log(current_heading);
-   	console.log('inside');
+	console.log('current heading: ' + current_heading);
 	////////////////////////////////////////////////////////////
 });
 

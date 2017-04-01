@@ -30,7 +30,7 @@ const now = require("performance-now");
 var sys = require('util');
 var spawn = require("child_process").spawn;
 var process = spawn('python',["IMU_Acc_Mag_Gyro.py"]);
-var rover = require('./python_control.js');
+var rover = require('./runt_pyControl.js');
 
 
 
@@ -105,11 +105,8 @@ client.on('close', function() {
 
 // Getting Heading
 process.stdout.on('data', function (data){
-	console.log(data);
 	current_heading = data.toString();
-	console.log(current_heading);
-   	console.log('inside');
-	////////////////////////////////////////////////////////////
+	console.log('Current heading: ' + current_heading);
 });
 
 
@@ -185,30 +182,19 @@ var turn_toward_target = function(){
             autonomous_control.emit('on_target',target_waypoint);
         }
         else{           
-            // We have to loop the degrees around manually for testing 
-             if(current_heading < 0){
-                 current_heading = 359;
-             }
-             else if(current_heading > 360){
-                 current_heading = 0;
-             }
             // If we have turn more than halfway, its quicker to turn the other direction.
             // This can probably be simplified. Refactor later
              if(current_heading > target_heading){
                 if(Math.abs(heading_delta) > 180){
                     rover.turn_right();
-                    current_heading = current_heading + 1;
                 }else{
                     rover.turn_left();
-                    current_heading = current_heading - 1;
                     }
             }else{
                 if(Math.abs(heading_delta) > 180){
                     rover.turn_left();
-                    current_heading = current_heading - 1;
                 }else{
                     rover.turn_right();
-                    current_heading = current_heading + 1;
                     }
             }
         }
@@ -239,7 +225,7 @@ var drive_toward_target = function(){
             process.stdout.write('\033c');
             autonomous_control.emit('get_waypoint');
         }else {
-            rover.forward(); 
+            rover.drive_forward(); 
             distance_to_target = geolib.getDistance(current_waypoint,target);
             previous_distance = distance_to_target;
             process.stdout.write('\033c');
