@@ -9,7 +9,6 @@ max_throttle = 4095
 
 signal.signal(signal.SIGINT, dc.sigint_handler)
 move_direction = sys.argv[1]
-print "Enter command left(l), right(r), forwards(f), backwards(b), stop(s)"
 
 if move_direction == 'f':
     dc.forwards(max_throttle)

@@ -22,7 +22,6 @@ MAGNETIC DECLINATION
 */
 
 const geolib = require('geolib');
-const rover = require('./runt.js');
 const EventEmitter = require('events');
 class MyEmitter extends EventEmitter {}
 const autonomous_control = new MyEmitter();
@@ -31,6 +30,8 @@ const now = require("performance-now");
 var sys = require('util');
 var spawn = require("child_process").spawn;
 var process = spawn('python',["IMU_Acc_Mag_Gyro.py"]);
+var rover = require('./python_control.js');
+
 
 
 const Winston = require('winston');

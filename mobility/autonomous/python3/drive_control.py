@@ -71,8 +71,7 @@ def left(x):
     GPIO.output(MOTOR2A, GPIO.LOW)
     GPIO.output(MOTOR2B, GPIO.HIGH)
     pwm.setPWM(0, 0, x)
-    pwm.setPWM(1, 0, x)               # Set frequency to 60 H
-
+    pwm.setPWM(1, 0, x)              
 def stop():
     print "stopping"
     pwm.setPWM(0, 0, 0)
