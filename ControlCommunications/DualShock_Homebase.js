@@ -28,7 +28,7 @@ const HOMEBASE_PORT = 5000;
 
 // Port that the rover is hosting the udp server
 const PORT = 3000;
-const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
+var HOST = 'tr3.local'; // Needs to be the IP address of the rover
 
 var controller = dualShock({
     config: "dualShock3",
@@ -37,6 +37,14 @@ var controller = dualShock({
     //smooths the output from the analog sticks (moving averages) defaults to false
     analogStickSmoothing: false
 });
+
+var mode = process.argv[2];
+var LOCAL = false;
+
+if (mode == 'local') {
+    HOST = 'localhost';
+    LOCAL = true;
+}
 
 const CHANGE_CONFIG = {
     commandType: "control",
@@ -66,7 +74,6 @@ var arm_mode = false;
 // Socket event handlers
 socket.on('listening', function() {
     console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
-    send_to_rover(CHANGE_CONFIG);
 });
 
 // When we recieve a packet from the rover it is acking a control packet
@@ -90,7 +97,7 @@ socket.bind(HOMEBASE_PORT);
 */
 function send_to_rover(message) {
     message = new Buffer(JSON.stringify(message));
-    socket.send(message, 0, message.length, PORT, "192.168.1.125", function(err) {
+    socket.send(message, 0, message.length, PORT, HOST, function(err) {
         if (err) {
             console.log("Problem with sending data!!!");
         } else {

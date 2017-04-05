@@ -105,7 +105,6 @@ var arm_joint = false;
 // Socket event handlers
 socket.on('listening', function() {
     console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
-    send_to_rover(CHANGE_CONFIG);
 });
 
 // When we recieve a packet from the rover it is acking a control packet

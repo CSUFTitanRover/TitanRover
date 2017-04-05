@@ -131,11 +131,11 @@ function getPwmValue(value) {
     return parseInt(value);
 }
 
-function getMobilitySpeed(value) {
+function getMobilitySpeed(value, joystick_Max, joystick_Min) {
     if (value <= 0) {
-        value = value.map(config.Joystick_MIN, 0, 0, 127);
+        value = value.map(Joystick_Min, 0, 0, 127);
     } else {
-        value = value.map(0, config.Joystick_MAX, 127, 254);
+        value = value.map(0, Joystick_Max, 127, 254);
     }
 
     return parseInt(value);
@@ -147,7 +147,7 @@ function receiveMobility(joystickData) {
     let axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
 
-    value = getMobilitySpeed(value);
+    value = getMobilitySpeed(value, 32767, -32767);
 
     debug.Num_Mobility_Commands += 1;
 
@@ -160,8 +160,8 @@ function receiveMobility(joystickData) {
         port.write(y_Axis_buff);
     } else if (axis === null) //If sent from Gamepad
     {
-        x_Axis_arr[1] = getMobilitySpeed(joystickData.x);
-        y_Axis_arr[1] = getMobilitySpeed(joystickData.y);
+        x_Axis_arr[1] = getMobilitySpeed(joystickData.x, 127.5, -127.5);
+        y_Axis_arr[1] = getMobilitySpeed(joystickData.y, 127.5, -127.5);
 
         port.write(x_Axis_buff);
         port.write(y_Axis_buff);
@@ -334,6 +334,7 @@ server.on('message', function(message, remote) {
 
     var msg = JSON.parse(message);
     //console.log(msg.commandType);
+    //console.log(msg);
 
     debug.Number_Commands += 1;
 
