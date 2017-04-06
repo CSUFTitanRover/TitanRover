@@ -133,9 +133,9 @@ function getPwmValue(value) {
 
 function getMobilitySpeed(value, joystick_Max, joystick_Min) {
     if (value <= 0) {
-        value = value.map(Joystick_Min, 0, 0, 127);
+        value = value.map(joystick_Min, 0, 0, 127);
     } else {
-        value = value.map(0, Joystick_Max, 127, 254);
+        value = value.map(0, joystick_Max, 127, 254);
     }
 
     return parseInt(value);
@@ -158,7 +158,7 @@ function receiveMobility(joystickData) {
         value *= -1;
         y_Axis_arr[1] = value;
         port.write(y_Axis_buff);
-    } else if (axis === null) //If sent from Gamepad
+    } else if (axis === 2) //If sent from Gamepad
     {
         x_Axis_arr[1] = getMobilitySpeed(joystickData.x, 127.5, -127.5);
         y_Axis_arr[1] = getMobilitySpeed(joystickData.y, 127.5, -127.5);

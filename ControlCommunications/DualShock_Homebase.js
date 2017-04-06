@@ -110,7 +110,7 @@ function send_to_rover(message) {
 // Shifting joystick values from 0-255 to -127.5 to 127.5
 controller.on('left:move', function(data) {
     event = {
-        number: null,
+        number: 2,
         x: data.x - 127.5,
         y: data.y - 127.5,
         commandType: "mobility"

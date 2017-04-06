@@ -1,0 +1,15 @@
+[Unit]
+Description=dualShock Control
+
+[Service]
+ExecStart=/usr/local/bin/node /home/pi/TitanRover/ControlCommunications/DualShock_Homebase.js local
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=RoverControl
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target
