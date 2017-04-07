@@ -38,14 +38,6 @@ var controller = dualShock({
     analogStickSmoothing: false
 });
 
-var mode = process.argv[2];
-var LOCAL = false;
-
-if (mode == 'local') {
-    HOST = 'localhost';
-    LOCAL = true;
-}
-
 const CHANGE_CONFIG = {
     commandType: "control",
     type: "config",
