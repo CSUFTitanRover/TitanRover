@@ -11,12 +11,11 @@ signal.signal(signal.SIGINT, dc.sigint_handler)
 move_direction = sys.argv[1]
 
 
-
-
 if move_direction == 'f':
     dc.forwards(max_throttle)       
 
 elif move_direction == 'l':
+    print 'dc left'
     dc.left()
 
 elif move_direction == 'r':
@@ -26,9 +25,7 @@ elif move_direction == 'b':
     dc.backwards()
 
 elif move_direction == 'x':
-    print('sys ' + sys.argv[2])
-    throttle = float(sys.argv[2])
-    dc.set_speed(throttle)
+    dc.set_speed(int(float(sys.argv[2])))
 
 elif move_direction == 's':
     dc.stop()

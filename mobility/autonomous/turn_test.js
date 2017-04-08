@@ -11,7 +11,7 @@ process.stdout.on('data', function (data){
 	current_heading = parseFloat(data);
 	//console.log('Current heading: ' + data.toString());
 });
-
+var turn_once = false;
 
 var turn_toward_target = function(){
     console.log('Initiating turn');
@@ -23,6 +23,7 @@ var turn_toward_target = function(){
     if(current_heading > target_heading){
         if(Math.abs(heading_delta) > 180){
             console.log('turning right');
+       
             rover.turn_right();
             heading_delta = 360 - current_heading + target_heading;
         }else{
@@ -43,7 +44,7 @@ var turn_toward_target = function(){
         }
     }
 
-    turn_timer = setInterval(function(){
+    var turn_timer = setInterval(function(){
         console.log( 'Turning ... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
         var heading_delta = current_heading - target_heading; 
         if(current_heading > target_heading){
@@ -60,23 +61,36 @@ var turn_toward_target = function(){
             }
         }
         // If we are within x degrees of the desired heading stop, else check if we overshot
-        console.log('Delta test: ' + heading_delta);
+        //console.log('Delta test: ' + heading_delta);
+        console.log(previous_heading_delta + ' ' + (heading_delta + 4));
         if(Math.abs(heading_delta) <= 10){
             rover.stop();
             clearInterval(turn_timer);
             //console.log('on_target: + current heading');
             setTimeout(function(){console.log(current_heading)},1000);
         }
-        else if(previous_heading_delta !== null && previous_heading_delta < heading_delta){
+        
+        else if(previous_heading_delta !== null && previous_heading_delta  < heading_delta + 4){
+            console.log('overshot');
             clearInterval(turn_timer);
             turn_toward_target();
         }
         previous_heading_delta = heading_delta; 
-        scale_error_factor = 2995 * (Math.abs(heading_delta)/180) + pwm_min;
-        console.log(scale_error_factor);
-        rover.set_speed(scale_error_factor);
-    
-    },15);
+        proportional_error = 2995 * (Math.abs(heading_delta)/180) + pwm_min;
+        /*
+        setInterval(function(){
+            rover.set_speed(proportional_error);
+        },1000);
+        */
+        var highEnd=(proportional_error*.10)+proportional_error;
+        var lowEnd=proportional_error-(proportional_error*.10);
+        console.log(highEnd);
+        console.log(lowEnd);
+        if (highEnd > proportional_error && lowEnd < proportional_error){
+            rover.set_speed(proportional_error);
+        }
+ 
+   },15);
 };
 
 turn_toward_target();

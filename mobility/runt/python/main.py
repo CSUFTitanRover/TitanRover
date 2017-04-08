@@ -13,16 +13,16 @@ print "Enter command left(l), right(r), forwards(f), backwards(b), stop(s)"
 while True:        
     move_direction = raw_input("Enter command: ")
     if move_direction == 'f':
-        dc.forwards(max_throttle)
+        dc.forwards(max_throttle/3)
 
     elif move_direction == 'l':
-        dc.left(max_throttle)
+        dc.left(max_throttle/3)
 
     elif move_direction == 'r':
-        dc.right(max_throttle)
+        dc.right(max_throttle/3)
 
     elif move_direction == 'b':
-        dc.backwards(max_throttle)
+        dc.backwards(max_throttle/3)
     
     elif move_direction == 's':
         dc.stop()

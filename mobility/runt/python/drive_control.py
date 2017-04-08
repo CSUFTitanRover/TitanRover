@@ -4,9 +4,9 @@ import sys
 
 '''
 Runt Rover v.01
-	Motor 1 - right side of the rover
-	Moter 2 - left side of rover
-
+	channel 1 - right side of the rover
+	channel 0 - left side of rover
+    pwm 0
 	The script will run both pairs of motors for 2 seconds and stop.
 
 '''

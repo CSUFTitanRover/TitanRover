@@ -35,14 +35,13 @@ GPIO.setup(MOTOR2B, GPIO.OUT)
 
 
     
-def forwards(left_speed,right_speed):
+def forwards():
     
     GPIO.output(MOTOR1A, GPIO.HIGH)
     GPIO.output(MOTOR1B, GPIO.LOW)
     GPIO.output(MOTOR2A, GPIO.HIGH)
     GPIO.output(MOTOR2B, GPIO.LOW)
-    pwm.setPWM(0, 0, 4000-4000*left_speed)
-    pwm.setPWM(1, 0, 4000*right_speed)
+    
     
 
 def backwards(x):
@@ -81,7 +80,7 @@ def stop():
     pwm.setPWM(1, 0, 0)
 
 def set_speed(throttle):
-    print throttle
+    print 'setting set_speed'      
     pwm.setPWM(0, 0, throttle)
     pwm.setPWM(1, 0, throttle)
 

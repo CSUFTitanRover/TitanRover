@@ -8,9 +8,9 @@ var options = {
     };
 
 module.exports = {
-    drive_forward: function(throttle){
+    drive_forward: function(){
         options.args[0] = 'f';
-        options.args[1] = throttle;
+    
         PythonShell.run('pyShell_handler.py', options, function (err, results) {
             if (err) throw err;
             // results is an array consisting of messages collected during execution
@@ -26,7 +26,7 @@ module.exports = {
         }); 
     },
     turn_left: function(){
-        options.args[0] = 'r';
+        options.args[0] = 'l';
         PythonShell.run('pyShell_handler.py', options, function (err, results) {
             if (err) throw err;
             // results is an array consisting of messages collected during execution
@@ -34,7 +34,7 @@ module.exports = {
         });
     },
     turn_right: function(){
-        options.args[0] = 'l';
+        options.args[0] = 'r';
         PythonShell.run('pyShell_handler.py', options, function (err, results) {
                 if (err) throw err;
                 // results is an array consisting of messages collected during execution
@@ -45,7 +45,7 @@ module.exports = {
         
         options.args[0] = 'x';
         options.args[1] = throttle;
-        console.log('set speed ' + options.args);
+        console.log('set speed ' + options.args[1]);   
         PythonShell.run('pyShell_handler.py', options, function (err, results) {
                 if (err) throw err;
                 // results is an array consisting of messages collected during execution
