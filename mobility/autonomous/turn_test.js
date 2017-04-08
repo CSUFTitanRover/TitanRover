@@ -18,22 +18,27 @@ var turn_toward_target = function(){
     var previous_heading_delta = null; 
     var  target_heading = 65;
 	var heading_delta = current_heading - target_heading;
-    var scale_error_factor;
+    var proportional_error;
+    
     if(current_heading > target_heading){
         if(Math.abs(heading_delta) > 180){
             rover.turn_right();
 			console.log('turning right');
+            heading_delta = 360 - current_heading + target_heading;
         }else{
             rover.turn_left();
 			console.log('turning left');
+            heading_delta = current_heading - target_heading;
             }
     }else{
         if(Math.abs(heading_delta) > 180){
             rover.turn_left();
+            heading_delta = 360 - target_heading + current_heading;
 			console.log('turning left');
         }else{
             rover.turn_right();
 			console.log('turning right');
+            heading_delta = target_heading - current_heading;
         }
     }
     turn_timer = setInterval(function(){
@@ -52,6 +57,9 @@ var turn_toward_target = function(){
             turn_toward_target();
         }
         previous_heading_delta = heading_delta; 
+        if(heading_delta > 180){
+            heading_delta = heading_delta / 2 ;
+        }
         scale_error_factor = 2995 * (Math.abs(heading_delta)/180) + pwm_min;
         console.log(scale_error_factor);
         //rover.set_speed(scale_error_factor);
