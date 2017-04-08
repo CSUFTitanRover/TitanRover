@@ -22,31 +22,46 @@ var turn_toward_target = function(){
     
     if(current_heading > target_heading){
         if(Math.abs(heading_delta) > 180){
+            console.log('turning right');
             rover.turn_right();
-			console.log('turning right');
             heading_delta = 360 - current_heading + target_heading;
         }else{
+            console.log('turning left');
             rover.turn_left();
-			console.log('turning left');
             heading_delta = current_heading - target_heading;
             }
     }else{
         if(Math.abs(heading_delta) > 180){
+            console.log('turning left');
             rover.turn_left();
             heading_delta = 360 - target_heading + current_heading;
-			console.log('turning left');
+			
         }else{
+            console.log('turning right');
             rover.turn_right();
-			console.log('turning right');
             heading_delta = target_heading - current_heading;
         }
     }
+
     turn_timer = setInterval(function(){
         console.log( 'Turning ... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
         var heading_delta = current_heading - target_heading; 
-  
+        if(current_heading > target_heading){
+            if(Math.abs(heading_delta) > 180){
+                heading_delta = 360 - current_heading + target_heading;
+            }else{
+                heading_delta = current_heading - target_heading;
+                }
+        }else{
+            if(Math.abs(heading_delta) > 180){ 
+                heading_delta = 360 - target_heading + current_heading;
+            }else{
+                heading_delta = target_heading - current_heading;
+            }
+        }
         // If we are within x degrees of the desired heading stop, else check if we overshot
-        if(Math.abs(heading_delta) <= 5){
+        console.log('Delta test: ' + heading_delta);
+        if(Math.abs(heading_delta) <= 10){
             rover.stop();
             clearInterval(turn_timer);
             //console.log('on_target: + current heading');
@@ -57,12 +72,9 @@ var turn_toward_target = function(){
             turn_toward_target();
         }
         previous_heading_delta = heading_delta; 
-        if(heading_delta > 180){
-            heading_delta = heading_delta / 2 ;
-        }
         scale_error_factor = 2995 * (Math.abs(heading_delta)/180) + pwm_min;
         console.log(scale_error_factor);
-        //rover.set_speed(scale_error_factor);
+        rover.set_speed(scale_error_factor);
     
     },15);
 };

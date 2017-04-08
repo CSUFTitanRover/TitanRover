@@ -230,9 +230,9 @@ var drive_toward_target = function(){
         }
         else if(bad_heading){
             if(current_heading > target_heading){
-                let scaled_error_correction = heading_delta/180; 
+                let scaled_error_correction = 4000 * heading_delta/180; 
                 if(Math.abs(heading_delta) > 180){
-                    rover.slight_right(scaled_error_correction);
+                    rover.slight_forward(scaled_error_correction);
                 }else{
                     rover.slight_left(scaled_error_correction);
                 }

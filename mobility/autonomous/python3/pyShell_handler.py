@@ -9,20 +9,26 @@ max_throttle = 4095
 
 signal.signal(signal.SIGINT, dc.sigint_handler)
 move_direction = sys.argv[1]
-throttle =  sys.argv[2]
-print throttle
+
+
+
 
 if move_direction == 'f':
-    dc.forwards(max_throttle)
+    dc.forwards(max_throttle)       
 
 elif move_direction == 'l':
-    dc.left(max_throttle)
+    dc.left()
 
 elif move_direction == 'r':
-    dc.right(max_throttle)
+    dc.right()
 
 elif move_direction == 'b':
-    dc.backwards(max_throttle)
-    
+    dc.backwards()
+
+elif move_direction == 'x':
+    print('sys ' + sys.argv[2])
+    throttle = float(sys.argv[2])
+    dc.set_speed(throttle)
+
 elif move_direction == 's':
     dc.stop()

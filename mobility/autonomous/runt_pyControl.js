@@ -25,18 +25,16 @@ module.exports = {
             console.log('results: %j', results);
         }); 
     },
-    turn_left: function(throttle){
+    turn_left: function(){
         options.args[0] = 'r';
-        options.args[1] = throttle;
         PythonShell.run('pyShell_handler.py', options, function (err, results) {
             if (err) throw err;
             // results is an array consisting of messages collected during execution
             console.log('results: %j', results);
         });
     },
-    turn_right: function(throttle){
+    turn_right: function(){
         options.args[0] = 'l';
-        options.args[1] = throttle;
         PythonShell.run('pyShell_handler.py', options, function (err, results) {
                 if (err) throw err;
                 // results is an array consisting of messages collected during execution
@@ -44,8 +42,10 @@ module.exports = {
         });
     },
     set_speed: function(throttle){
+        
         options.args[0] = 'x';
         options.args[1] = throttle;
+        console.log('set speed ' + options.args);
         PythonShell.run('pyShell_handler.py', options, function (err, results) {
                 if (err) throw err;
                 // results is an array consisting of messages collected during execution
