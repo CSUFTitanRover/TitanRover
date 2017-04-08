@@ -29,7 +29,7 @@ const sleep = require('sleep');
 const now = require("performance-now");
 var sys = require('util');
 var spawn = require("child_process").spawn;
-var process = spawn('python',["IMU_Acc_Mag_Gyro.py"]);
+var process = spawn('python',["./python3/IMU_Acc_Mag_Gyro.py"]);
 var rover = require('./runt_pyControl.js');
 
 
@@ -106,7 +106,7 @@ client.on('close', function() {
 // Getting Heading
 process.stdout.on('data', function (data){
 	current_heading = data.toString();
-	console.log('Current heading: ' + current_heading);
+	//console.log('Current heading: ' + current_heading);
 });
 
 
@@ -238,4 +238,7 @@ var drive_toward_target = function(){
 process.stdout.write('\033c');
 winston.info('Starting autonomous navigation');
 var start = now();
-autonomous_control.emit('get_waypoint');
+//autonomous_control.emit('get_waypoint');
+
+
+
