@@ -6,6 +6,7 @@ var rover = require('./runt_pyControl.js');
 var pwm_min = 1100; // Calculated to be 1000 us
 var pwm_max = 4095; // Calculated to be 2000 us
 var current_heading;
+var proportional_error;
 // Getting Heading
 process.stdout.on('data', function (data){
 	current_heading = parseFloat(data);
@@ -18,7 +19,7 @@ var turn_toward_target = function(){
     var previous_heading_delta = null; 
     var  target_heading = 65;
 	var heading_delta = current_heading - target_heading;
-    var proportional_error;
+    
     
     if(current_heading > target_heading){
         if(Math.abs(heading_delta) > 180){
@@ -66,32 +67,32 @@ var turn_toward_target = function(){
         if(Math.abs(heading_delta) <= 10){
             rover.stop();
             clearInterval(turn_timer);
-            //console.log('on_target: + current heading');
-            setTimeout(function(){console.log(current_heading)},1000);
+            clearInterval(speed_timer);
+            setTimeout(function(){console.log('on_target:' + current_heading);},1000);
         }
         
-        else if(previous_heading_delta !== null && previous_heading_delta  < heading_delta + 4){
+        else if(previous_heading_delta !== null && previous_heading_delta + 15  < heading_delta ){
             console.log('overshot');
             clearInterval(turn_timer);
             turn_toward_target();
         }
         previous_heading_delta = heading_delta; 
         proportional_error = 2995 * (Math.abs(heading_delta)/180) + pwm_min;
-        /*
-        setInterval(function(){
-            rover.set_speed(proportional_error);
-        },1000);
-        */
-        var highEnd=(proportional_error*.10)+proportional_error;
-        var lowEnd=proportional_error-(proportional_error*.10);
-        console.log(highEnd);
-        console.log(lowEnd);
-        if (highEnd > proportional_error && lowEnd < proportional_error){
-            rover.set_speed(proportional_error);
-        }
+        
+        
+        
+
+       
  
    },15);
 };
+
+var speed_timer = setInterval(function(){
+            var inc = 1;
+            proportional_error = proportional_error / inc;
+            console.log('average:' + proportional_error);
+            rover.set_speed(proportional_error);
+        },900);
 
 turn_toward_target();
 
