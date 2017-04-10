@@ -8,7 +8,7 @@ var pwm_min = 2000; // Calculated to be 1000 us
 var pwm_max = 4095; // Calculated to be 2000 us
 var current_heading;
 var proportional_error = 1500;
-var DELTA_THRESHOLD = 1;
+var DELTA_THRESHOLD = 5;
 
 
 const Winston = require('winston');
@@ -33,12 +33,28 @@ process.stdout.on('data', function (data){
 	//winston.info('Current heading: ' + data.toString());
 });
 
+process.stdin.on('SIGINT',function(){
+    clearInterval(turn_timer);
+    turn_toward_target();
+    rover.stop();
+});
 
 var turn_toward_target = function(){
     winston.info('Initiating turn');
     var previous_heading_delta = null; 
     var  target_heading = 65;
 	var heading_delta = current_heading - target_heading;
+
+
+    var speed_timer = setInterval(function(){
+            //var inc = 1;
+            //proportional_error = proportional_error / inc;
+            winston.info('throttle:' + proportional_error);
+            if(proportional_error != null){
+                rover.set_speed(proportional_error);
+            }
+            
+        },250);
 
     winston.info('current heading before turn: ' + current_heading);
     if(current_heading > target_heading){
@@ -66,9 +82,9 @@ var turn_toward_target = function(){
             heading_delta = target_heading - current_heading;
         }
     }
-  
+    
     var turn_timer = setInterval(function(){
-        winston.info( 'Turning... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
+        console.log( 'Turning... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
         var heading_delta = current_heading - target_heading; 
         if(current_heading > target_heading){
             if(Math.abs(heading_delta) > 180){
@@ -91,21 +107,25 @@ var turn_toward_target = function(){
             clearInterval(turn_timer);
             clearInterval(speed_timer);
             rover.stop();
+            winston.info('stopped heading: ' + current_heading);
+            
+            // Wait 1 second to do a final check if we are really within the threshold
             setTimeout(function(){
-                winston.info('Final Heading:' + current_heading);
+               
                 if(Math.abs(current_heading-target_heading) > DELTA_THRESHOLD)
                 {
                     turn_toward_target();
-                    speed_timer();
                 }
-            },1000);
-            winston.info('stopped heading: ' + current_heading);
-           
+                else{
+                     winston.info('Final Heading:' + current_heading);
+                }
+            },1000);    
         }
         
         else if(previous_heading_delta !== null && previous_heading_delta + 15  < heading_delta ){
             winston.info('overshot');
             clearInterval(turn_timer);
+            clearInterval(speed_timer);
             turn_toward_target();
         }
         previous_heading_delta = heading_delta; 
@@ -114,21 +134,13 @@ var turn_toward_target = function(){
    },15);
 }
 
-var speed_timer = setInterval(function(){
-            var inc = 1;
-            proportional_error = proportional_error / inc;
-            winston.info('throttle:' + proportional_error);
-            if(proportional_error != null){
-                rover.set_speed(proportional_error);
-            }
-            
-        },250);
 
 
 var main = setInterval(function(){
     if(current_heading != null){
         clearInterval(main);
-        turn_toward_target();
+        
+        setTimeout(function(){turn_toward_target();},1000);
     }
     
 },500);
