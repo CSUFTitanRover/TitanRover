@@ -78,6 +78,7 @@ def stop():
     print "stopping"
     pwm.setPWM(0, 0, 0)
     pwm.setPWM(1, 0, 0)
+    GPIO.cleanup()
 
 def set_speed(throttle):
     print 'setting set_speed'      
@@ -85,6 +86,13 @@ def set_speed(throttle):
     pwm.setPWM(1, 0, throttle)
 
 def sigint_handler(signum, frame):
+    print "Exiting with cleanup"
+    pwm.setPWM(0, 0, 0)
+    pwm.setPWM(1, 0, 0)
+    GPIO.cleanup()
+    sys.exit(0)
+
+def shutdown(signum, frame):
     print "Exiting with cleanup"
     pwm.setPWM(0, 0, 0)
     pwm.setPWM(1, 0, 0)
