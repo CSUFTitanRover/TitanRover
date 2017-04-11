@@ -4,12 +4,16 @@ var spawn = require("child_process").spawn;
 var process = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
 var rover = require('./runt_pyControl.js');
 const NOW = require("performance-now");
-var pwm_min = 2000;                 // Calculated to be 1000 us
+var pwm_min = 1800;                 // Calculated to be 1000 us
 var pwm_max = 4095;                 // Calculated to be 2000 us
+var  target_heading = 65;
 var current_heading = null;
+var previous_heading_delta = null;
 var heading_delta = null;                 // Global that is updated when data is received from magnetometer
+var turning_right = null;
+var turning_left = null;
 var proportional_throttle = 1500;   // Throttle in proportion to error
-const DELTA_THRESHOLD = 5;            // Acceptable heading error
+const DELTA_THRESHOLD = 1;            // Acceptable heading error
 
 
 const Winston = require('winston');
@@ -31,62 +35,63 @@ const winston = new (Winston.Logger)({
 // Getting Heading
 process.stdout.on('data', function (data){
     current_heading = parseFloat(data);
+    calc_heading_delta();
 	//winston.info('Current heading: ' + data.toString());
 });
 
 // Cleanup procedures 
 process.stdin.on('SIGINT',function(){
     clearInterval(turn_timer);
+    clearInterval(speed_timer);
     turn_toward_target();
     rover.stop();
 });
 
 // Main Function
 var turn_toward_target = function(){
-    winston.info('Initiating turn');
-    var previous_heading_delta = null; 
-    var  target_heading = 65;
+    winston.info('Initiating turn');    
 	calc_heading_delta();
 
     // Constantly adjusting throttle
     var speed_timer = setInterval(function(){
             winston.info('throttle:' + proportional_throttle);
+            proportional_throttle = (pwm_max-pwm_min) * (Math.abs(heading_delta)/180) + pwm_min;
             if(proportional_throttle !== null){
                 rover.set_speed(proportional_throttle);
             } 
-    },250);
+    },300);
 
     // Calculates shortest turn 
     winston.info('current heading before turn: ' + current_heading);
     if(current_heading > target_heading){
         winston.info('heading delta: '+ Math.abs(heading_delta));
-        if(Math.abs(heading_delta) > 180){
+        if(Math.abs(heading_delta) > 180 && (turning_left || turning_right === null)){
             winston.info('turning right:'+ current_heading);
-            rover.turn_right();
-            heading_delta = 360 - current_heading + target_heading;
+            turning_right = true;
+            rover.turn_right(); 
         }else{
             winston.info('turning left'+ current_heading);
+            turning_left = true;
             rover.turn_left();
-            heading_delta = current_heading - target_heading;
         }
     }else{
         winston.info('heading delta: '+ Math.abs(heading_delta));
-        if(Math.abs(heading_delta) > 180){
+        if(Math.abs(heading_delta) > 180 && (turning_right || turning_left === null)){
             winston.info('turning left'+ current_heading);
-            rover.turn_left();
-            heading_delta = 360 - target_heading + current_heading;
+            turning_left = true;
+            rover.turn_left();    
         }	
         else{
             winston.info('turning right'+ current_heading);
+            turning_right = true;
             rover.turn_right();
-            heading_delta = target_heading - current_heading;
         }
     }
     
     // Constantly calculates error and checks if within threshold
     var turn_timer = setInterval(function(){
         console.log( 'Turning... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
-        calc_heading_delta();
+        //calc_heading_delta();
         // If we are within x degrees of the desired heading stop, else check if we overshot
         //winston.info('Delta test: ' + heading_delta);
         //winston.info((previous_heading_delta + 15) + ' ' + (heading_delta));
@@ -105,21 +110,22 @@ var turn_toward_target = function(){
                 else{
                      winston.info('Final Heading:' + current_heading);
                 }
-            },1000);    
+            },200);    
         }   
-        else if(previous_heading_delta !== null && previous_heading_delta + 15  < heading_delta ){
-            winston.info('overshot');
+        else if(previous_heading_delta !== null && (Math.abs(previous_heading_delta) + 20 < Math.abs(heading_delta)) ){
+            winston.info('delta is increasing, prev:  ' +previous_heading_delta + 'current d : ' + heading_delta );
             clearInterval(turn_timer);
             clearInterval(speed_timer);
             turn_toward_target();
         }
         previous_heading_delta = heading_delta; 
-        proportional_throttle = (pwm_max-pwm_min) * (Math.abs(heading_delta)/180) + pwm_min;
+        
    },15);
 };
 
 function calc_heading_delta(){
     // Calculating error (heading_delta)
+    heading_delta = current_heading - target_heading;
     if(current_heading > target_heading){
         if(Math.abs(heading_delta) > 180){
             heading_delta = 360 - current_heading + target_heading;
@@ -138,8 +144,8 @@ function calc_heading_delta(){
 var main = setInterval(function(){
     if(current_heading != null){
         clearInterval(main);
-        
-        setTimeout(function(){turn_toward_target();},1000);
+        turn_toward_target()
+        //setTimeout(function(){;},1000);
     }
     
 },500);
