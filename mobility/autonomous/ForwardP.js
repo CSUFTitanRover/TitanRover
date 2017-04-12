@@ -5,14 +5,17 @@ var executeTime = 5;
 var throttlePercentageChange;
 var throttleMultiplier;
 
-/*COMMENT THIS OUT IF YOU WISH TO TEST WITH THE RUNT ROVER*/
+var target_heading = 65;
+var previous_heading_delta;
+
+/*COMMENT THIS OUT IF YOU WISH TO TEST WITH THE RUNT ROVER
 var inital_current_heading=15;
 var inital_target_heading=20;
 var target_heading;
 var current_heading;
+*/
 
-
-/*COMMENT THIS OUT IF YOU WISH TO TEST WITHOUT THE RUNT ROVER
+///*COMMENT THIS OUT IF YOU WISH TO TEST WITHOUT THE RUNT ROVER
 var spawn = require("child_process").spawn;
 var process = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
 var rover = require('./runt_pyControl.js');
@@ -24,7 +27,7 @@ process.stdout.on('data', function (data){
 	current_heading = parseFloat(data);
 	//console.log('Current heading: ' + data.toString());
 });
-*/
+//*/
 
 var forwardPMovement = function() {
     console.log("Calculating Current Deviation")
@@ -33,9 +36,8 @@ var forwardPMovement = function() {
     rover.drive_forward();
 
     //Begin checking for any errors during our traversal and adjusting that over time. 
-    var target_heading;
     turn_timer = setInterval(function(){
-        console.log( 'Turning ... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
+        //console.log( 'Turning ... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
         var heading_delta = current_heading - target_heading; 
             if(current_heading > target_heading){
                 if(Math.abs(heading_delta) > 180){
@@ -88,9 +90,19 @@ var forwardPMovement = function() {
             forwardPMovement();
         }
         previous_heading_delta = heading_delta;
-        scale_error_factor = 2995 * throttleMultiplier + pwm_min;
-        console.log(scale_error_factor);
-        rover.set_speed(scale_error_factor);
-    },15);
-        
+        left_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
+        right_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
+        console.log(left_scale_error_factor);
+        console.log(left_scale_error_factor);
+        rover.set_speed(left_scale_error_factor, right_scale_error_factor);
+    },15);    
 };
+
+var main = setInterval(function(){
+    if(current_heading != null){
+        clearInterval(main);
+        forwardPMovement();
+        //setTimeout(function(){;},1000);
+    }
+    
+},500);
