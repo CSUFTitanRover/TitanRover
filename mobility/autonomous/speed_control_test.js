@@ -11,9 +11,9 @@ desired_speed = 4000;
 
 var speed_timer = setInterval(function(){
     delta_speed = Math.abs(throttle - desired_speed)
-    var increment = delta_speed / turn_within_seconds
+    var increment = 200;
     throttle = throttle + increment;
-    rover.set_speed(throttle);
+    rover.set_speed(throttle,throttle);
     
     if(throttle >= desired_speed){
         setTimeout(function(){
@@ -22,7 +22,7 @@ var speed_timer = setInterval(function(){
         },1)
        
     }
-},1000)
+},400)
    
 
 
