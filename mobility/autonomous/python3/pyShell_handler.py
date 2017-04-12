@@ -12,7 +12,7 @@ move_direction = sys.argv[1]
 
 
 if move_direction == 'f':
-    dc.forwards(max_throttle)       
+    dc.forwards()       
 
 elif move_direction == 'l':
     
