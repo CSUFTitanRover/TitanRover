@@ -47,13 +47,19 @@ var forwardPMovement = function() {
                     console.log("Heading Delta: " + heading_delta)
                     console.log('slowing turning right');
                     throttlePercentageChange = heading_delta/180
+                    calcThrottleMultiplier();
+                    right_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
+                    left_scale_error_factor = pwm_max;
                 }else{
                     heading_delta = current_heading - target_heading;
                     console.log("Current Heading: " + current_heading);
                     console.log("Target Heading: " + target_heading);
                     console.log("Heading Delta: " + heading_delta)
                     console.log('slow turning left');
-                    throttlePercentageChange = heading_delta/180
+                    throttlePercentageChange = heading_delta/180;
+                    calcThrottleMultiplier();
+                    left_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
+                    right_scale_error_factor = pwm_max;
                     }
             }else{
                 if(Math.abs(heading_delta) > 180){
@@ -63,6 +69,10 @@ var forwardPMovement = function() {
                     console.log("Heading Delta: " + heading_delta)
                     console.log('slowly turning left');
                     throttlePercentageChange = heading_delta/180
+                    calcThrottleMultiplier();
+                    left_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
+                    right_scale_error_factor = pwm_max;
+
                 }else{
                     heading_delta = target_heading - current_heading;
                     console.log("Current Heading: " + current_heading);
@@ -70,12 +80,11 @@ var forwardPMovement = function() {
                     console.log("Heading Delta: " + heading_delta)
                     console.log('slowly turning right');
                     throttlePercentageChange = heading_delta/180
+                    calcThrottleMultiplier();
+                    right_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
+                    left_scale_error_factor = pwm_max;
                 }
             }
-        //calculate necesary throttle change
-        console.log("Throttle Percentage Change: " + throttlePercentageChange);
-        throttleMultiplier = 1-throttlePercentageChange;
-        console.log(throttleMultiplier);
 
         // If we are within x degrees of the desired heading stop, else check if we overshot
         console.log('Delta test: ' + heading_delta);
@@ -90,13 +99,17 @@ var forwardPMovement = function() {
             forwardPMovement();
         }
         previous_heading_delta = heading_delta;
-        left_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
-        right_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
         console.log(left_scale_error_factor);
-        console.log(left_scale_error_factor);
+        console.log(right_scale_error_factor);
         rover.set_speed(left_scale_error_factor, right_scale_error_factor);
     },15);    
 };
+
+var calcThrottleMultiplier = function() {
+    console.log("Throttle Percentage Change: " + throttlePercentageChange);
+    throttleMultiplier = 1-throttlePercentageChange;
+    console.log(throttleMultiplier);
+}
 
 var main = setInterval(function(){
     if(current_heading != null){
