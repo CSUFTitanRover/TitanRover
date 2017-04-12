@@ -49,7 +49,7 @@ var forwardPMovement = function() {
                     throttlePercentageChange = heading_delta/180
                     calcThrottleMultiplier();
                     right_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
-                    left_scale_error_factor = pwm_max;
+                    //left_scale_error_factor = pwm_max;
                 }else{
                     heading_delta = current_heading - target_heading;
                     console.log("Current Heading: " + current_heading);
@@ -59,7 +59,7 @@ var forwardPMovement = function() {
                     throttlePercentageChange = heading_delta/180;
                     calcThrottleMultiplier();
                     left_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
-                    right_scale_error_factor = pwm_max;
+                    //right_scale_error_factor = pwm_max;
                     }
             }else{
                 if(Math.abs(heading_delta) > 180){
@@ -71,7 +71,7 @@ var forwardPMovement = function() {
                     throttlePercentageChange = heading_delta/180
                     calcThrottleMultiplier();
                     left_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
-                    right_scale_error_factor = pwm_max;
+                    //right_scale_error_factor = pwm_max;
 
                 }else{
                     heading_delta = target_heading - current_heading;
@@ -82,7 +82,7 @@ var forwardPMovement = function() {
                     throttlePercentageChange = heading_delta/180
                     calcThrottleMultiplier();
                     right_scale_error_factor = 2995 * throttleMultiplier + pwm_min;
-                    left_scale_error_factor = pwm_max;
+                    //left_scale_error_factor = pwm_max;
                 }
             }
 
