@@ -51,53 +51,42 @@ var turn_toward_target = function(){
     winston.info('Initiating turn');    
     // Constantly adjusting throttle
     var speed_timer = setInterval(function(){
+
             winston.info('throttle:' + proportional_throttle);
             proportional_throttle = (pwm_max-pwm_min) * (Math.abs(heading_delta)/180) + pwm_min;
             if(proportional_throttle !== null){
-                rover.set_speed(proportional_throttle);
+                rover.set_speed(proportional_throttle,proportional_throttle);
             } 
     },250);
-    
-    // Calculates shortest turn 
-    // winston.info('current heading before turn: ' + current_heading);
-    // if(current_heading > target_heading){
-    //     winston.info('heading delta: '+ Math.abs(heading_delta));
-    //     if(Math.abs(heading_delta) > 180 ){
-    //         if(turning_left || turning_right === null){
-    //             winston.info('turning right: '+ current_heading);
-    //             turning_right = true;
-    //             turning_left = false;
-    //             rover.turn_right(); 
-    //         }
-    //     }else{
-    //         if(turning_right || turning_left === null){
-    //             winston.info('turning left: '+ current_heading);
-    //             turning_left = true;
-    //             turning_right = false;
-    //             rover.turn_left();
-    //         }
-    //     }
-    // }else{
-    //     winston.info('heading delta: '+ Math.abs(heading_delta));
-    //     if(Math.abs(heading_delta) > 180){
-    //         if(turning_right || turning_left === null){
-    //             winston.info('turning left: '+ current_heading);
-    //             turning_left = true;
-    //             turning_right = false;
-    //             rover.turn_left();  
-    //         }
-             
-    //     }	
-    //     else{
-    //        if(turning_left || turning_right === null){
-    //             winston.info('turning right: '+ current_heading);
-    //             turning_right = true;
-    //             turning_left = false;
-    //             rover.turn_right();
-    //        }
-    //     }
-    // }
-    
+
+
+    winston.info('current heading before turn: ' + current_heading);
+    if(current_heading > target_heading){
+        winston.info('heading delta: '+ Math.abs(heading_delta));
+        if(Math.abs(heading_delta) > 180){
+            winston.info('turning right:'+ current_heading);
+       
+            rover.turn_right();
+            heading_delta = 360 - current_heading + target_heading;
+        }else{
+            winston.info('turning left'+ current_heading);
+            rover.turn_left();
+            heading_delta = current_heading - target_heading;
+            }
+    }else{
+        winston.info('heading delta: '+ Math.abs(heading_delta));
+        if(Math.abs(heading_delta) > 180){
+            winston.info('turning left'+ current_heading);
+            rover.turn_left();
+            heading_delta = 360 - target_heading + current_heading;
+        }	
+        else{
+            winston.info('turning right'+ current_heading);
+            rover.turn_right();
+            heading_delta = target_heading - current_heading;
+        }
+    }
+
     // Constantly calculates error and checks if within threshold
     var turn_timer = setInterval(function(){
         console.log( 'Turning... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
