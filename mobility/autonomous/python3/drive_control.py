@@ -79,10 +79,10 @@ def stop():
     pwm.setPWM(0, 0, 0)
     pwm.setPWM(1, 0, 0)
 
-def set_speed(throttle):
+def set_speed(right_speed,left_speed):
     print 'setting set_speed'      
-    pwm.setPWM(0, 0, throttle)
-    pwm.setPWM(1, 0, throttle)
+    pwm.setPWM(0, 0, right_speed)
+    pwm.setPWM(1, 0, left_speed)
 
 def sigint_handler(signum, frame):
     print "Exiting with cleanup"

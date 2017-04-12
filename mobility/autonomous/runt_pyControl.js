@@ -41,11 +41,11 @@ module.exports = {
                 console.log('results: %j', results);
         });
     },
-    set_speed: function(left_speed, right_speed){
+    set_speed: function(right_speed, left_speed){
         
         options.args[0] = 'x';
-        options.args[1] = left_speed;
-        options.args[2] = right_speed;
+        options.args[1] = right_speed;
+        options.args[2] = left_speed;
         console.log('left speed: ' + options.args[1] +' right speed: ' + options.args[2]);   
         PythonShell.run('pyShell_handler.py', options, function (err, results) {
                 if (err) throw err;

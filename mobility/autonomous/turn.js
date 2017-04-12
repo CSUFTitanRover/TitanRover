@@ -51,7 +51,7 @@ var turn_toward_target = function(){
             //proportional_error = proportional_error / inc;
             winston.info('throttle:' + proportional_error);
             if(proportional_error != null){
-                rover.set_speed(proportional_error);
+                rover.set_speed(proportional_error, proportional_error); //rover.set_speed(right,left)
             }
             
         },250);
