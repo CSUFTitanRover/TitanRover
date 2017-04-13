@@ -40,9 +40,7 @@ python_proc.stdout.on('data', function (data){
 });
 
 // Cleanup procedures 
-process.on('SIGINT',function(){;
-    clearInterval(stop_turn_timer);
-    clearInterval(speed_timer);
+process.on('SIGINT',function(){
     rover.stop();
     winston.info('shutting rover down.')
     process.exit();
@@ -97,10 +95,13 @@ var turn_toward_target = function(){
 };
 
 function calc_heading_delta(){
-    // Calculating error (heading_delta)
+    
     temp_delta = current_heading - target_heading;
+
+// Is turning left or right the shorter turn?
     if(current_heading > target_heading){
         if(Math.abs(temp_delta) > 180){
+            // If we were turning left previously or have never turned right before
             if(turning_left || turning_right === null){
                 winston.info('turning right: '+ current_heading);
                 turning_right = true;
@@ -109,6 +110,7 @@ function calc_heading_delta(){
             }
             heading_delta = 360 - current_heading + target_heading;
         }else{
+              // If we were turning right previously or have never turned left before
              if(turning_right || turning_left === null){
                 winston.info('turning left: '+ current_heading);
                 turning_left = true;
