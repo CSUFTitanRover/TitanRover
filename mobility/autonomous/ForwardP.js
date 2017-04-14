@@ -186,11 +186,10 @@ function calc_heading_delta(){
     } 
 }
 
-var main = setInterval(function(){
+var main = function() {
     if(current_heading != null){
         clearInterval(main);
         forwardPMovement();
         //setTimeout(function(){;},1000);
     }
-    
-},500);
+};
