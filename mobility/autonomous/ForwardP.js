@@ -27,6 +27,7 @@ var currentRightThrottle;
 var previousRightThrottle;
 var previousLeftThrottle;
 var current_heading;
+var heading_delta;
 
 var driveCounter;
 
@@ -66,7 +67,15 @@ var forwardPMovement = function() {
     winston.info('----ForwardPmovement----')
     rover.drive_forward();
     drive_timer = setInterval(function() {
-        var heading_delta = current_heading - target_heading; 
+        temp_heading_delta = current_heading - target_heading;
+        if (current_heading > target_heading) {
+            if(Math.abs(temp_heading_delta > 180)) {
+                winston.info('Right Hand Heading');
+                heading_delta = 360 - current_heading + target_heading;
+            }
+        }else{
+            heading_delta = 360 - current_heading + target_heading;
+        }
         winston.info("Current Heading: " + current_heading);
         winston.info("Target Heading: " + target_heading);
         winston.info("Heading Delta: " + heading_delta)
