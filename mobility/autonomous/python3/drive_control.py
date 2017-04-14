@@ -37,19 +37,20 @@ GPIO.setup(MOTOR2B, GPIO.OUT)
     
 def forwards():
     
-    GPIO.output(MOTOR1A, GPIO.HIGH)
-    GPIO.output(MOTOR1B, GPIO.LOW)
-    GPIO.output(MOTOR2A, GPIO.HIGH)
-    GPIO.output(MOTOR2B, GPIO.LOW)
+    GPIO.output(MOTOR1A, GPIO.LOW)
+    GPIO.output(MOTOR1B, GPIO.HIGH)
+    GPIO.output(MOTOR2A, GPIO.LOW)
+    GPIO.output(MOTOR2B, GPIO.HIGH)
     
     
 
 def backwards(x):
     
-    GPIO.output(MOTOR1A, GPIO.LOW)
-    GPIO.output(MOTOR1B, GPIO.HIGH)
-    GPIO.output(MOTOR2A, GPIO.LOW)
-    GPIO.output(MOTOR2B, GPIO.HIGH)
+    GPIO.output(MOTOR1A, GPIO.HIGH)
+    GPIO.output(MOTOR1B, GPIO.LOW)
+    GPIO.output(MOTOR2A, GPIO.HIGH)
+    GPIO.output(MOTOR2B, GPIO.LOW)
+
     pwm.setPWM(0, 0, x)
     pwm.setPWM(1, 0, x)
 
