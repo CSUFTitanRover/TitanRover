@@ -80,9 +80,9 @@ var forwardPMovement = function() {
         console.log("Turning left?:" + turning_left);
         console.log("Turning right?:" + turning_right);
         if (Math.abs(heading_delta) <= acceptable_Degree_Error) {
-            rover.set_speed(drive_constant, drive_constant);
+            currentLeftThrottle = drive_constant;
+            currentRightThrottle = drive_constant;
             console.log('Moving forward at drive constant');
-            driveCounter++;
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
             throttlePercentageChange = heading_delta/180
