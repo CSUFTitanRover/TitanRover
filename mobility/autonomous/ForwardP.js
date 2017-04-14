@@ -30,8 +30,8 @@ var previousLeftThrottle;
 var current_heading;
 var heading_delta;
 
-var turning_left;
-var turning_right;
+var turning_left = null;
+var turning_right = null;
 
 var driveCounter;
 
@@ -86,7 +86,10 @@ var forwardPMovement = function() {
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
             throttlePercentageChange = heading_delta/180
-            calcThrottleMultiplier();
+            var upperThrottleModifier = throttlePercentageChange + 1;
+            var lowerThrottleModifier = 1 - throttleMultiplier;
+            console.log('UpperThrottleModifier:' + upperThrottleModifier);
+            console.log('LowerThrottleMultiplier: ' + lowerThrottleModifier);
             if(turning_right){
                     console.log('Slowing turning right');
                     currentLeftThrottle = drive_constant + (drive_constant * throttleMultiplier);
@@ -144,9 +147,9 @@ var forwardPMovement = function() {
 
 //grabbed shan's calc_heading_delta() that we worked on together for the turning/heading logic
 function calc_heading_delta(){
-    
+    console.log('Calculating Heading Delta & Direction');
     temp_delta = current_heading - target_heading;
-
+    console.log('temp_delta: ' + temp_delta);
 // Is turning left or right the shorter turn?
     if(current_heading > target_heading){
         if(Math.abs(temp_delta) > 180){
@@ -182,13 +185,7 @@ function calc_heading_delta(){
             }
             heading_delta = target_heading - current_heading;
         }
-    }
-}; 
-
-var calcThrottleMultiplier = function() {
-    console.log("Throttle Percentage Change: " + throttlePercentageChange);
-    throttleMultiplier = 1-throttlePercentageChange;
-    console.log(throttleMultiplier);
+    } 
 }
 
 var main = setInterval(function(){
