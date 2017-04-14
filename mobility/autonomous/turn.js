@@ -4,7 +4,7 @@ var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
 var rover = require('./runt_pyControl.js');
 const NOW = require("performance-now");
-var pwm_min = 2000;                 // Calculated to be 1000 us
+var pwm_min = 1500;                 // Calculated to be 1000 us
 var pwm_max = 4095;                 // Calculated to be 2000 us
 var  target_heading = 65;
 var current_heading = null;
@@ -13,8 +13,7 @@ var heading_delta = null;                 // Global that is updated when data is
 var turning_right = null;
 var turning_left = null;
 var proportional_throttle = 1500;   // Throttle in proportion to error
-const DELTA_THRESHOLD = 1;            // Acceptable heading error
-
+const DELTA_THRESHOLD = 5;            // Acceptable heading err
 
 const Winston = require('winston');
 const winston = new (Winston.Logger)({
@@ -32,10 +31,10 @@ const winston = new (Winston.Logger)({
     ]
   });
 
-// Getting Heading
+// Get heading,calculate heading and turn immediately.
 python_proc.stdout.on('data', function (data){
     current_heading = parseFloat(data);
-	//winston.info('Current heading: ' + data.toString());
+	winston.info('Current heading: ' + data.toString());
     calc_heading_delta();
 });
 
@@ -56,7 +55,7 @@ var turn_toward_target = function(){
             if(proportional_throttle !== null){
                 rover.set_speed(proportional_throttle,proportional_throttle);
             } 
-    },200);
+    },20);
 
 
     // Constantly calculates error and checks if within threshold
@@ -73,18 +72,18 @@ var turn_toward_target = function(){
             
             // Wait 1 second to do a final check if we are really within the threshold
             setTimeout(function(){
-                if(Math.abs(current_heading-target_heading) > DELTA_THRESHOLD)
-                {
-                    turn_toward_target();
-                }
-                else{
+                if(Math.abs(current_heading-target_heading) <= DELTA_THRESHOLD){
                      python_proc.kill();
                      clearInterval(stop_turn_timer);
                      clearInterval(speed_timer);
                      rover.stop();
                      winston.info('Final Heading:' + current_heading);
                 }
-            },200);    
+                else{
+                    turn_toward_target();
+                }
+                
+            },1000);    
         }   
         else if(previous_heading_delta !== null && (Math.abs(previous_heading_delta) + 2 < Math.abs(heading_delta)) ){
             winston.info('delta is increasing, prev:  ' +previous_heading_delta + 'current d : ' + heading_delta );
