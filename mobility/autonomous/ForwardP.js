@@ -140,7 +140,7 @@ var forwardPMovement = function() {
         } else {
             console.log('Thottle Adjusted');
         }
-    },200);
+    },50);
 };
 
 //grabbed shan's calc_heading_delta() that we worked on together for the turning/heading logic
@@ -186,10 +186,11 @@ function calc_heading_delta(){
     } 
 }
 
-var main = function() {
+var main = setInterval(function(){
     if(current_heading != null){
         clearInterval(main);
         forwardPMovement();
         //setTimeout(function(){;},1000);
     }
-};
+    
+},500);
