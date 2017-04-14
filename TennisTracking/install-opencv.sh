@@ -3,53 +3,82 @@
 
 sudo apt-get -y update
 sudo apt-get -y upgrade
-sudo apt-get -y dist-upgrade
-sudo apt-get -y autoremove
-
 
 # INSTALL THE DEPENDENCIES
 
 # Build tools:
-sudo apt-get install -y build-essential cmake
+sudo apt-get install -y build-essential cmake pkg-config
 
-# GUI (if you want to use GTK instead of Qt, replace 'qt5-default' with 'libgtkglext1-dev' and remove '-DWITH_QT=ON' option in CMake):
-sudo apt-get install -y qt5-default libvtk6-dev
+# Image I/O packages:
+sudo apt-get install -y libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
 
-# Media I/O:
-sudo apt-get install -y zlib1g-dev libjpeg-dev libwebp-dev libpng-dev libtiff5-dev libjasper-dev libopenexr-dev libgdal-dev
+# Video I/O packages:
+sudo apt-get install -y libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+sudo apt-get install -y libxvidcore-dev libx264-dev
 
-# Video I/O:
-sudo apt-get install -y libdc1394-22-dev libavcodec-dev libavformat-dev libswscale-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev yasm libopencore-amrnb-dev libopencore-amrwb-dev libv4l-dev libxine2-dev
+# GUI
+sudo apt-get install -y libgtk2.0-dev
 
-# Parallelism and linear algebra libraries:
-sudo apt-get install -y libtbb-dev libeigen3-dev
+# Optimization libraries:
+sudo apt-get install -y libatlas-base-dev gfortran
 
-# Python:
-sudo apt-get install -y python-dev python-tk python-numpy python3-dev python3-tk python3-numpy
+# Python 2.7 and 3.0 header files:
+sudo apt-get install -y python2.7-dev python3-dev
 
-# Java:
-sudo apt-get install -y ant default-jdk
+# INSTALL OPENCV
 
-# Documentation:
-sudo apt-get install -y doxygen
+# Download OpenCV 3.1.0:
+cd ~
+wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.1.0.zip
+unzip opencv.zip
 
+# Download opencv_contrib repository:
+wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.1.0.zip
+unzip opencv_contrib.zip
 
-# INSTALL THE LIBRARY (YOU CAN CHANGE '3.1.0' FOR THE LAST STABLE VERSION)
+# Download and Install Python package manager:
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python get-pip.py
 
-sudo apt-get install -y unzip wget
-wget https://github.com/Itseez/opencv/archive/3.1.0.zip
-unzip 3.1.0.zip
-rm 3.1.0.zip
-mv opencv-3.1.0 OpenCV
-cd OpenCV
+# Install virtualenv and virtualenvwrapper
+sudo pip install virtualenv virtualenvwrapper
+sudo rm -rf ~/.cache/pip
+
+# update ~/.profile
+export WORKON_HOME=$HOME/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh
+echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.profile
+echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.profile
+echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.profile
+source ~/.profile
+mkvirtualenv cv -p python3
+
+# Install Numpy and imutils:
+sudo pip install imutils
+sudo pip install numpy
+
+# Setup build using CMake:
+cd ~/opencv-3.1.0/
 mkdir build
 cd build
-cmake -DWITH_QT=ON -DWITH_OPENGL=ON -DFORCE_VTK=ON -DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=ON -DBUILD_EXAMPLES=ON ..
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.1.0/modules \
+    -D BUILD_EXAMPLES=ON ..
+
+# Compile OpenCV:
 make -j4
+
+# Install OpenCV 3
 sudo make install
 sudo ldconfig
 
+cd /usr/local/lib/python3.4/site-packages/
+sudo mv cv2.cpython-34m.so cv2.so
+cd ~/.virtualenvs/cv/lib/python3.4/site-packages/
+ln -s /usr/local/lib/python3.4/site-packages/cv2.so cv2.so
 
-# EXECUTE SOME OPENCV EXAMPLES AND COMPILE A DEMONSTRATION
-
-# To complete this step, please visit 'http://milq.github.io/install-opencv-ubuntu-debian'.
+# Cleanup
+rm -rf opencv-3.1.0 opencv_contrib-3.1.0
+rm opencv_contrib.zip opencv.zip get-pip.py
