@@ -3,7 +3,7 @@ var sys = require('util');
 var finishedTraversal = false;
 var executeTime = 5;
 var throttlePercentageChange;
-var throttleMultiplier;
+var throttlePercentageChange;
 
 var target_heading = 65;
 var previous_heading_delta;
@@ -22,7 +22,7 @@ var rover = require('./runt_pyControl.js');
 var pwm_min = 1100; // Calculated to be 1000 us
 var pwm_max = 4095; // Calculated to be 2000 us
 var drive_constant = 2600;
-var acceptable_Degree_Error = 1;
+var acceptable_Degree_Error = 2;
 var currentLeftThrottle;
 var currentRightThrottle;
 var previousRightThrottle;
@@ -86,18 +86,16 @@ var forwardPMovement = function() {
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
             throttlePercentageChange = heading_delta/180
-            var upperThrottleModifier = throttlePercentageChange + 1;
-            var lowerThrottleModifier = 1 - throttleMultiplier;
-            console.log('UpperThrottleModifier:' + upperThrottleModifier);
-            console.log('LowerThrottleMultiplier: ' + lowerThrottleModifier);
+            console.log('turning_left: ' + turning_left);
+            console.log('turning_right:' + turning_right);
             if(turning_right){
                     console.log('Slowing turning right');
-                    currentLeftThrottle = drive_constant + (drive_constant * throttleMultiplier);
-                    currentRightThrottle = drive_constant - (drive_constant * throttleMultiplier);
+                    currentLeftThrottle = drive_constant + (drive_constant * throttlePercentageChange);
+                    currentRightThrottle = drive_constant - (drive_constant * throttlePercentageChange);
             }else if(turning_left){
                     console.log('Slowing turning left');
-                    currentLeftThrottle = drive_constant - (drive_constant * throttleMultiplier);
-                    currentRightThrottle = drive_constant + (drive_constant * throttleMultiplier);
+                    currentLeftThrottle = drive_constant - (drive_constant * throttlePercentageChange);
+                    currentRightThrottle = drive_constant + (drive_constant * throttlePercentageChange);
             } else {
                 console.log('ERROR - Cannot slowly turn left or right');
             }
