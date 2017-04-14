@@ -36,6 +36,7 @@ var turning_right;
 var driveCounter;
 
 //Adding winston logger into script for file generation support, implemented by Shan
+/*
 const Winston = require('winston');
 const winston = new (Winston.Logger)({
     transports: [
@@ -51,48 +52,49 @@ const winston = new (Winston.Logger)({
      })
     ]
   });
+*/
 
 // Getting Heading, implemented by Shan
 process.stdout.on('data', function (data){
 	current_heading = parseFloat(data);
-	//winston.info('Current heading: ' + data.toString());
+	//console.log('Current heading: ' + data.toString());
 });
 //*/
 
 // Cleanup procedures, implemented by Shan
 process.on('SIGINT',function(){;
     rover.stop();
-    winston.info('shutting rover down.')
+    console.log('shutting rover down.')
     process.exit();
 });
 
 //Drives the rover forward and making any adjustments along the way.
 var forwardPMovement = function() {
-    winston.info('----ForwardPmovement----')
+    console.log('----ForwardPmovement----')
     rover.drive_forward();
     drive_timer = setInterval(function() {
         calc_heading_delta();
-        winston.info("Current Heading: " + current_heading);
-        winston.info("Target Heading: " + target_heading);
-        winston.info("Heading Delta: " + heading_delta)
+        console.log("Current Heading: " + current_heading);
+        console.log("Target Heading: " + target_heading);
+        console.log("Heading Delta: " + heading_delta)
         if (Math.abs(heading_delta) <= acceptable_Degree_Error) {
             rover.set_speed(drive_constant, drive_constant);
-            winston.info('Moving forward at drive constant');
+            console.log('Moving forward at drive constant');
             driveCounter++;
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
             throttlePercentageChange = heading_delta/180
             calcThrottleMultiplier();
             if(turning_right && !turning_left){
-                    winston.info('Slowing turning right');
+                    console.log('Slowing turning right');
                     currentLeftThrottle = drive_constant + (drive_constant * throttleMultiplier);
                     currentRightThrottle = drive_constant - (drive_constant * throttleMultiplier);
             }else if(turning_left && !turning_right){
-                    winston.info('Slowing turning left');
+                    console.log('Slowing turning left');
                     currentLeftThrottle = drive_constant - (drive_constant * throttleMultiplier);
                     currentRightThrottle = drive_constant + (drive_constant * throttleMultiplier);
             } else {
-                winston.info('ERROR - Cannot slowly turn left or right');
+                console.log('ERROR - Cannot slowly turn left or right');
             }
         }
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
@@ -104,14 +106,14 @@ var forwardPMovement = function() {
             previousRightThrottle = currentRightThrottle;
         } else {
             //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
-            winston.info('Throttle Value outside of PWM range');
+            console.log('Throttle Value outside of PWM range');
             //checks the leftThrottle values to make sure they're within mechanical constraints
             if (currentLeftThrottle > pwm_max){
                 currentLeftThrottle = pwm_max;
             } else if (currentLeftThrottle < pwm_min) {
                 currentLeftThrottle = pwm_min;
             } else {
-                winston.info('ERROR - leftThrottle values undefined');
+                console.log('ERROR - leftThrottle values undefined');
                 rover.stop();
                 clearInterval(drive_timer);
             }
@@ -122,7 +124,7 @@ var forwardPMovement = function() {
             } else if (currentRightThrottle < pwm_min) {
                 currentRightThrottle = pwm_min;
             } else {
-                winston.info('ERROR - rightThrottle values undefined');
+                console.log('ERROR - rightThrottle values undefined');
                 rover.stop();
                 clearInterval(drive_timer);
             }
@@ -131,9 +133,9 @@ var forwardPMovement = function() {
         if (driveCounter > 20) {
             clearInterval(drive_timer);
             rover.stop();
-            winston.info('On Heading...Stopping...');
+            console.log('On Heading...Stopping...');
         } else {
-            winston.info('Thottle Adjusted');
+            console.log('Thottle Adjusted');
         }
     });
 };
@@ -148,7 +150,7 @@ function calc_heading_delta(){
         if(Math.abs(temp_delta) > 180){
             // If we were turning left previously or have never turned right before
             if(turning_left || turning_right === null){
-                winston.info('turning right: '+ current_heading);
+                console.log('turning right: '+ current_heading);
                 turning_right = true;
                 turning_left = false;
             }
@@ -156,7 +158,7 @@ function calc_heading_delta(){
         }else{
               // If we were turning right previously or have never turned left before
              if(turning_right || turning_left === null){
-                winston.info('turning left: '+ current_heading);
+                console.log('turning left: '+ current_heading);
                 turning_left = true;
                 turning_right = false;
             }
@@ -165,14 +167,14 @@ function calc_heading_delta(){
     }else{
         if(Math.abs(temp_delta) > 180){ 
              if(turning_right || turning_left === null){
-                winston.info('turning left: '+ current_heading);
+                console.log('turning left: '+ current_heading);
                 turning_left = true;
                 turning_right = false;
             }
             heading_delta = 360 - target_heading + current_heading;
         }else{
             if(turning_left || turning_right === null){
-                winston.info('turning right: '+ current_heading);
+                console.log('turning right: '+ current_heading);
                 turning_right = true;
                 turning_left = false;
             }
@@ -182,9 +184,9 @@ function calc_heading_delta(){
 }; 
 
 var calcThrottleMultiplier = function() {
-    winston.info("Throttle Percentage Change: " + throttlePercentageChange);
+    console.log("Throttle Percentage Change: " + throttlePercentageChange);
     throttleMultiplier = 1-throttlePercentageChange;
-    winston.info(throttleMultiplier);
+    console.log(throttleMultiplier);
 }
 
 var main = setInterval(function(){
