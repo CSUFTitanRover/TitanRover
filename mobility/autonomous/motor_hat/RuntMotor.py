@@ -47,12 +47,12 @@ else:
 ####### runt motors run!#########
    #####Right Side######
 
-    front_right.setSpeed(abs(argv[1]));
-    back_right.setSpeed(abs(argv[1]));
+    front_right.setSpeed(abs(sys.argv[1]));
+    back_right.setSpeed(abs(sys.argv[1]));
 
    #####Left Side######
-    front_left.setSpeed(abs(argv[2]));
-    back_left.setSpeed(abs(argv[2]));
+    front_left.setSpeed(abs(sys.argv[2]));
+    back_left.setSpeed(abs(sys.argv[2]));
 
     #Text output for testing code
     #print('right side power ' + sys.argv[1] + ' left side power ' + sys.argv[2])
