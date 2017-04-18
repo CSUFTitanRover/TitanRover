@@ -4,7 +4,6 @@ from time import sleep
 import signal
 import sys 
 
-signal.signal(signal.SIGINT, dc.sigint_handler)
 move_direction = sys.argv[1]
 
 if move_direction == 'f':
