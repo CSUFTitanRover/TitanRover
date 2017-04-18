@@ -2,7 +2,7 @@ var sys = require('util');
 var spawn = require("child_process").spawn;
 
 //call child_process and pass values
-var process = spawn('python', ["RuntMotor.py", rightMotors, leftMotors]);
+var process = spawn('python', ["RuntMotor.py", 100, 100]);
 
 //Remain code for Testing Code with text outputs
 //var end = new Date() - start;

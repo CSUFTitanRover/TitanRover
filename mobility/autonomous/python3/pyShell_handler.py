@@ -6,7 +6,6 @@ import sys
 
 move_direction = sys.argv[1]
 
-print(sys.argv[1]);
 
 if move_direction == 'f':
     dc.forwards()  
