@@ -96,6 +96,11 @@ const GET_DEBUG_STATS = {
     type: "debug"
 };
 
+const RESET_ROVER = {
+    commandType: "arm",
+    number: 1
+};
+
 const SEND_CONTROL_AFTER = 20;
 var packet_count = 0;
 
@@ -190,3 +195,12 @@ function handleJoystick_1(event) {
         }
     }
 }
+
+// On SIGINT shutdown the server
+process.on('SIGINT', function() {
+    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
+    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    send_to_rover(RESET_ROVER);
+    // some other closing procedures go here
+    process.exit();
+});

@@ -29,7 +29,8 @@ var arm = require('./arm');
 var serialPort = require('serialport');
 
 var port = new serialPort('/dev/ttyACM0', {
-    baudRate: 9600
+    baudRate: 9600,
+    parser: serialPort.parsers.readline('\n')
 });
 
 var PORT = 3000;
@@ -316,10 +317,27 @@ function armControl(message) {
                     port.write(arm.stopJoint(6));
                 }
                 break;
+            case 6:
+                port.write(arm.calibrate());
+                break;
+            case 7:
+                port.write(arm.getJointInfo());
+                break;
             default:
         }
     }
 }
+
+port.on('data', function(data) {
+    var jsonBuilder = {};
+    var splitted = data.split(':');
+    jsonBuilder.joint4Steps = Number(splitted[0]);
+    jsonBuilder.joint5Steps = Number(splitted[1]);
+    jsonBuilder.type = 'debug';
+
+    sendHome(jsonBuilder);
+
+});
 
 
 server.on('listening', function() {

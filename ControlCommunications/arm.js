@@ -30,68 +30,48 @@ var joint6_buff = Buffer.from(joint6_arr.buffer);
 var joint7_arr = new Uint16Array(2);
 var joint7_buff = Buffer.from(joint7_arr.buffer);
 
+var armControl = new Uint16Array(2);
+var armControl_buff = Buffer.from(armControl);
+
 module.exports = {
 
     /**
      * Move a joint a certain number of steps
      * @param {Number} jointNum values 1 - 7
-     * @param {bool} direction true for clockwise false for counter clockwise
      * @param {Number} steps # of steps to move that joint Can't be 0
+     * @return {Buffer} armControl_buff Needs to be written to a port
      */
-    stepJoint: function(jointNum, direction, steps) {
-        if (steps > 255 || steps <= 0) {
-            throw new RangeError('Steps must be between ' + 1 + ' and ' + 255);
+    stepJoint: function(jointNum, steps) {
+        if (steps == 0) {
+            throw new RangeError('Steps can not be zero');
         }
 
         switch (jointNum) {
             case 1:
-                joint1_arr[0] = 0x0001;
-                if (direction) {
-                    joint1_arr[0] = 0x0101; // Should be 0x0101
-                }
-                // Place the steps in 4 byte of 4 byte command
-                // joint_arr[1] should be between 0x0001 and 0x00c8
-                joint1_arr[1] = steps;
+                armControl[0] = 0x010a;
+                armControl[1] = steps;
                 break;
             case 4:
-                joint4_arr[0] = 0x0004;
-                if (direction) {
-                    joint4_arr[0] = 0x0104; // Should be 0x0401
-                }
-                // Place the steps in 4 byte of 4 byte command
-                // joint_arr[1] should be between 0x0001 and 0x00c8
-                joint4_arr[1] = steps;
+                armControl[0] = 0x040a;
+                armControl[1] = steps;
                 break;
             case 5:
-                joint5_arr[0] = 0x0005;
-                if (direction) {
-                    joint5_arr[0] = 0x0105; // Should be 0x0501
-                }
-                // Place the steps in 4 byte of 4 byte command
-                // joint_arr[1] should be between 0x0001 and 0x00c8
-                joint5_arr[1] = steps;
+                armControl[0] = 0x050a;
+                armControl[1] = steps;
                 break;
             case 6:
-                joint6_arr[0] = 0x0006;
-                if (direction) {
-                    joint6_arr[0] = 0x0106; // Should be 0x0601
-                }
-                // Place the steps in 4 byte of 4 byte command
-                // joint_arr[1] should be between 0x0001 and 0x00c8
-                joint6_arr[1] = steps;
+                armControl[0] = 0x060a;
+                armControl[1] = steps;
                 break;
             case 7:
-                joint7_arr[0] = 0x0007;
-                if (direction) {
-                    joint7_arr[0] = 0x0107; // Should be 0x0701
-                }
-                // Place the steps in 4 byte of 4 byte command
-                // joint_arr[1] should be between 0x0001 and 0x00c8
-                joint7_arr[1] = steps;
+                armControl[0] = 0x070a;
+                armControl[1] = steps;
                 break;
             default:
                 throw new RangeError('Dumbass Joint must either 1, 4, 5, 6, 7');
         }
+
+        return armControl_buff;
     },
     /**
      * Joint1: Phantom Menace
@@ -279,5 +259,15 @@ module.exports = {
         }
 
         return send_buff;
+    },
+
+    calibrate: function() {
+        armcontrol[0] = 0x01ff;
+        return armControl_buff;
+    },
+
+    getJointInfo: function() {
+        armcontrol[0] = 0x02ff;
+        return armControl_buff;
     }
 };

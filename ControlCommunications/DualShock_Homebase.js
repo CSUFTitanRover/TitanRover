@@ -107,6 +107,7 @@ controller.on('left:move', function(data) {
         y: data.y - 127.5,
         commandType: "mobility"
     };
+    event.y *= -1; //Axis needs to be flipped
     send_to_rover(event);
 });
 
