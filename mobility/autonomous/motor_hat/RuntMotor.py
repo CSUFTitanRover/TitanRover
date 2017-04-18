@@ -9,7 +9,7 @@
 
 from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
 
-import time,sys
+import time,sys,math
 import atexit
 
 # create a default object, no changes to I2C address or frequency
@@ -28,18 +28,31 @@ def turnOffMotors():
     mh.getMotor(3).run(Adafruit_MotorHAT.RELEASE)
     mh.getMotor(4).run(Adafruit_MotorHAT.RELEASE)
 
+front_right.run(Adafruit_MotorHAT.FORWARD)
+back_right.run(Adafruit_MotorHAT.FORWARD)
+front_left.run(Adafruit_MotorHAT.FORWARD)
+back_left.run(Adafruit_MotorHAT.FORWARD) 
+
+if sys.srgv[1] < 0:
+    front_right.run(Adafruit_MotorHAT.BACKWARD)
+    back_right.run(Adafruit_MotorHAT.BACKWARD)
+
+if sys.argv[2] < 0:
+    front_left.run(Adafruit_MotorHAT.BACKWARD)
+    back_left.run(Adafruit_MotorHAT.BACKWARD)    
+    
 if sys.argv[1] == 0 and sys.argv[2] == 0:
     atexit.register(turnOffMotors)
 else:
 ####### runt motors run!#########
    #####Right Side######
 
-    front_right.setSpeed(argv[1]);
-    back_right.setSpeed(argv[1]);
+    front_right.setSpeed(math.abs(argv[1]));
+    back_right.setSpeed(math.abs(argv[1]));
 
    #####Left Side######
-    front_left.setSpeed(argv[2]);
-    back_left.setSpeed(argv[2]);
+    front_left.setSpeed(math.abs(argv[2]));
+    back_left.setSpeed(math.abs(argv[2]));
 
     #Text output for testing code
     #print('right side power ' + sys.argv[1] + ' left side power ' + sys.argv[2])
