@@ -21,9 +21,9 @@ greenUpper = (64, 255, 255)
 pts = deque(maxlen=args["buffer"])
 
 # if a video path was not supplied, grab the reference
-# to the webcam
+# to the IP camera stream.
 if not args.get("video", False):
-	camera = cv2.VideoCapture(0)
+	camera = cv2.VideoCapture('http://itwebcammh.fullerton.edu/axis-cgi/mjpg/video.cgi?resolution=640x480&dummy=1492128437652')
 
 # otherwise, grab a reference to the video file
 else:
@@ -80,7 +80,7 @@ while True:
 	pts.appendleft(center)
 
 	# loop over the set of tracked points
-	for i in xrange(1, len(pts)):
+	for i in range(1, len(pts)):
 		# if either of the tracked points are None, ignore
 		# them
 		if pts[i - 1] is None or pts[i] is None:
