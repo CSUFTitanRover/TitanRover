@@ -132,7 +132,7 @@ var forwardPMovement = function() {
                 clearInterval(drive_timer);
             }
         }
-        rover.set_speed(currentLeftThrottle, currentRightThrottle);
+        rover.set_speed(int(currentLeftThrottle), int(currentRightThrottle));
         if (driveCounter > 20) {
             clearInterval(drive_timer);
             rover.stop();
