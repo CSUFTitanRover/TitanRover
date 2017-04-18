@@ -1,114 +1,62 @@
-from Adafruit_PWM_Servo_Driver import PWM
-import RPi.GPIO as GPIO
-import sys
+#!/usr/bin/python
 
-'''
-Runt Rover v.01
-	channel 1 - right side of the rover
-	channel 0 - left side of rover
-    pwm 0
-	The script will run both pairs of motors for 2 seconds and stop.
+# 1 - top right. 2- bottom right. 3- top left, 4- bottom -left 
+from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
 
-'''
-# Initialise the PWM device using the default address
-pwm = PWM(0x40)
-pwm.setPWMFreq(50) 
+import time
+import atexit
 
+# create a default object, no changes to I2C address or frequency
+mh = Adafruit_MotorHAT(addr=0x60)
 
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
+# recommended for auto-disabling motors on shutdown!
+def turnOffMotors():
+    mh.getMotor(1).run(Adafruit_MotorHAT.RELEASE)
+    mh.getMotor(2).run(Adafruit_MotorHAT.RELEASE)
+    mh.getMotor(3).run(Adafruit_MotorHAT.RELEASE)
+    mh.getMotor(4).run(Adafruit_MotorHAT.RELEASE)
 
-# Right side of rover
-MOTOR1A = 36
-MOTOR1B = 38
+atexit.register(turnOffMotors)
 
-# Left side of rover 
-MOTOR2A = 12
-MOTOR2B = 13
-
-GPIO.setup(MOTOR1A, GPIO.OUT)
-GPIO.setup(MOTOR1B, GPIO.OUT)
-
-GPIO.setup(MOTOR2A, GPIO.OUT)
-GPIO.setup(MOTOR2B, GPIO.OUT)
+front_right = mh.getMotor(1)
+back_right = mh.getMotor(2)
+front_left = mh.getMotor(3)
+back_left = mh.getMotor(4)
 
 
-def forwards(x):
-    print "moving forwards"
-    GPIO.output(MOTOR1A, GPIO.HIGH)
-    GPIO.output(MOTOR1B, GPIO.LOW)
-    GPIO.output(MOTOR2A, GPIO.HIGH)
-    GPIO.output(MOTOR2B, GPIO.LOW)
-    pwm.setPWM(0, 0, x)
-    pwm.setPWM(1, 0, x)
+def forwards():
+    front_left.run(Adafruit_MotorHAT.FORWARD)
+    back_left.run(Adafruit_MotorHAT.FORWARD)
+    front_right.run(Adafruit_MotorHAT.FORWARD)
+    back_right.run(Adafruit_MotorHAT.FORWARD)
+    
+def backwards():
+    front_left.run(Adafruit_MotorHAT.BACKWARD)
+    back_left.run(Adafruit_MotorHAT.BACKWARD)
+    front_right.run(Adafruit_MotorHAT.BACKWARD)
+    back_right.run(Adafruit_MotorHAT.BACKWARD)
+    
+def left():
+    front_left.run(Adafruit_MotorHAT.BACKWARD)
+    back_left.run(Adafruit_MotorHAT.BACKWARD)
+    front_right.run(Adafruit_MotorHAT.FORWARD)
+    back_right.run(Adafruit_MotorHAT.FORWARD)
 
-def backwards(x):
-    print "moving backwards"
-    GPIO.output(MOTOR1A, GPIO.LOW)
-    GPIO.output(MOTOR1B, GPIO.HIGH)
-    GPIO.output(MOTOR2A, GPIO.LOW)
-    GPIO.output(MOTOR2B, GPIO.HIGH)
-    pwm.setPWM(0, 0, x)
-    pwm.setPWM(1, 0, x)
-
-'''Right and left functions will probably need separate
-    pwm values'''
-
-def right(x):
-    print "moving right"
-    GPIO.output(MOTOR1A, GPIO.LOW)
-    GPIO.output(MOTOR1B, GPIO.HIGH)
-    GPIO.output(MOTOR2A, GPIO.HIGH)
-    GPIO.output(MOTOR2B, GPIO.LOW)
-    pwm.setPWM(0, 0, x)
-    pwm.setPWM(1, 0, x)
-
-def left(x):
-    print "moving left"
-    GPIO.output(MOTOR1A, GPIO.HIGH)
-    GPIO.output(MOTOR1B, GPIO.LOW)
-    GPIO.output(MOTOR2A, GPIO.LOW)
-    GPIO.output(MOTOR2B, GPIO.HIGH)
-    pwm.setPWM(0, 0, x)
-    pwm.setPWM(1, 0, x)               # Set frequency to 60 H
+def right():
+    front_left.run(Adafruit_MotorHAT.FORWARD)
+    back_left.run(Adafruit_MotorHAT.FORWARD)
+    front_right.run(Adafruit_MotorHAT.BACKWARD)
+    back_right.run(Adafruit_MotorHAT.BACKWARD)
 
 def stop():
-    print "stopping"
-    pwm.setPWM(0, 0, 0)
-    pwm.setPWM(1, 0, 0)
+    mh.getMotor(1).run(Adafruit_MotorHAT.RELEASE)
+    mh.getMotor(2).run(Adafruit_MotorHAT.RELEASE)
+    mh.getMotor(3).run(Adafruit_MotorHAT.RELEASE)
+    mh.getMotor(4).run(Adafruit_MotorHAT.RELEASE)
+
+def set_speed(right_speed, left_speed):
+    front_left.setSpeed(left_speed)
+    back_left.setSpeed(left_speed)
+    front_right.setSpeed(right_speed)
+    back_right.setSpeed(right_speed)
     
-def sigint_handler(signum, frame):
-    print "Exiting with cleanup"
-    pwm.setPWM(0, 0, 0)
-    pwm.setPWM(1, 0, 0)
-    GPIO.cleanup()
-    sys.exit(0)
-
-def set_left_motors(speed):
-    if speed < 0:
-        GPIO.output(MOTOR1A, GPIO.LOW)
-        GPIO.output(MOTOR1B, GPIO.HIGH)
-        GPIO.output(MOTOR2A, GPIO.LOW)
-        GPIO.output(MOTOR2B, GPIO.HIGH)
-    else:
-        GPIO.output(MOTOR1A, GPIO.HIGH)
-        GPIO.output(MOTOR1B, GPIO.LOW)
-        GPIO.output(MOTOR2A, GPIO.HIGH)
-        GPIO.output(MOTOR2B, GPIO.LOW)
-        # Not sure if this is left!!
-        pwm.setPWM(0, 0, speed)
-
-def set_right_motors(speed):
-    if speed < 0:
-        GPIO.output(MOTOR1A, GPIO.LOW)
-        GPIO.output(MOTOR1B, GPIO.HIGH)
-        GPIO.output(MOTOR2A, GPIO.LOW)
-        GPIO.output(MOTOR2B, GPIO.HIGH)
-    else:
-        GPIO.output(MOTOR1A, GPIO.HIGH)
-        GPIO.output(MOTOR1B, GPIO.LOW)
-        GPIO.output(MOTOR2A, GPIO.HIGH)
-        GPIO.output(MOTOR2B, GPIO.LOW)
-        # Not sure if this is left!!
-        pwm.setPWM(1, 0, speed)
-

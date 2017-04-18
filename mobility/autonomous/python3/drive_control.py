@@ -49,10 +49,6 @@ def right():
     back_right.run(Adafruit_MotorHAT.BACKWARD)
 
 def stop():
-    front_right.setSpeed(0)
-    front_left.setSpeed(0)
-    back_right.setSpeed(0)
-    back_left.setSpeed(0)
     mh.getMotor(1).run(Adafruit_MotorHAT.RELEASE)
     mh.getMotor(2).run(Adafruit_MotorHAT.RELEASE)
     mh.getMotor(3).run(Adafruit_MotorHAT.RELEASE)
