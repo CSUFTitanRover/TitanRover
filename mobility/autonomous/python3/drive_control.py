@@ -23,12 +23,18 @@ back_right = mh.getMotor(2)
 front_left = mh.getMotor(3)
 back_left = mh.getMotor(4)
 
+#priming the motor forward to test
+front_right.run(Adafruit_MotorHAT.FORWARD)
+back_right.run(Adafruit_MotorHAT.FORWARD)
+front_left.run(Adafruit_MotorHAT.FORWARD)
+back_left.run(Adafruit_MotorHAT.FORWARD) 
 
 def forwards():
     front_left.run(Adafruit_MotorHAT.FORWARD)
     back_left.run(Adafruit_MotorHAT.FORWARD)
     front_right.run(Adafruit_MotorHAT.FORWARD)
     back_right.run(Adafruit_MotorHAT.FORWARD)
+    set_speed(100, 100) #added to see if directly setting the speed after is an issue
     
 def backwards():
     front_left.run(Adafruit_MotorHAT.BACKWARD)
