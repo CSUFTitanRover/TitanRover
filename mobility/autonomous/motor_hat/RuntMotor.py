@@ -33,7 +33,7 @@ back_right.run(Adafruit_MotorHAT.FORWARD)
 front_left.run(Adafruit_MotorHAT.FORWARD)
 back_left.run(Adafruit_MotorHAT.FORWARD) 
 
-if sys.srgv[1] < 0:
+if sys.argv[1] < 0:
     front_right.run(Adafruit_MotorHAT.BACKWARD)
     back_right.run(Adafruit_MotorHAT.BACKWARD)
 
