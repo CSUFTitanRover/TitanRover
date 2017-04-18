@@ -16,12 +16,9 @@ var drive_forward = function(){
             console.log('results: %j', results);
         });
     };
-    
+
 var main = setInterval(function(){
-    if(current_heading != null){
-        clearInterval(main);
-        drive_forward();
-        //setTimeout(function(){;},1000);
-    }
-    
+    clearInterval(main);
+    drive_forward();
+        //setTimeout(function(){;},1000); 
 },500);
