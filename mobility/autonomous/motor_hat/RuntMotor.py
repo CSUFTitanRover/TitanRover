@@ -15,6 +15,11 @@ import atexit
 # create a default object, no changes to I2C address or frequency
 mh = Adafruit_MotorHAT(addr=0x60)
 
+front_right = mh.getMotor(1)
+back_right = mh.getMotor(2)
+front_left = mh.getMotor(3) 
+back_left = mh.getMotor(4)
+
 # recommended for auto-disabling motors on shutdown!
 def turnOffMotors():
     #print('Motors stopped')
@@ -29,12 +34,12 @@ else:
 ####### runt motors run!#########
    #####Right Side######
 
-    mh.getMotor(1).setSpeed(argv[1]);
-    mh.getMotor(2).setSpeed(argv[1]);
+    front_right.setSpeed(argv[1]);
+    back_right.setSpeed(argv[1]);
 
    #####Left Side######
-    mh.getMotor(3).setSpeed(argv[2]);
-    mh.getMotor(4).setSpeed(argv[2]);
+    front_left.setSpeed(argv[2]);
+    back_left.setSpeed(argv[2]);
 
     #Text output for testing code
     #print('right side power ' + sys.argv[1] + ' left side power ' + sys.argv[2])
