@@ -104,7 +104,7 @@ var forwardPMovement = function() {
         //less than motorHat_min and motorHat_max. Then sets the rover speed to the calculated value
 
         if (currentLeftThrottle < motorHat_max && currentLeftThrottle > motorHat_min &&  currentRightThrottle < motorHat_max && currentRightThrottle > motorHat_min){
-            rover.set_speed(currentLeftThrottle, currentRightThrottle);
+            rover.set_speed(Math.trunc(currentLeftThrottle), Math.trunc(currentRightThrottle);
             previousLeftThrottle = currentLeftThrottle;
             previousRightThrottle = currentRightThrottle;
         } else {
