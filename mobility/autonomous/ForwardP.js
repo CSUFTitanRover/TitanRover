@@ -19,9 +19,9 @@ var current_heading;
 var spawn = require("child_process").spawn;
 var process = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
 var rover = require('./runt_pyControl.js');
-var pwm_min = 1100; // Calculated to be 1000 us
-var pwm_max = 4095; // Calculated to be 2000 us
-var drive_constant = 2600;
+var motorHat_min = 0; // Calculated to be 1000 us
+var motorHat_max = 255; // Calculated to be 2000 us
+var drive_constant = 127;
 var acceptable_Degree_Error = 2;
 var currentLeftThrottle;
 var currentRightThrottle;
@@ -101,9 +101,9 @@ var forwardPMovement = function() {
             }
         }
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
-        //less than pwm_min and pwm_max. Then sets the rover speed to the calculated value
+        //less than motorHat_min and motorHat_max. Then sets the rover speed to the calculated value
 
-        if (currentLeftThrottle < pwm_max && currentLeftThrottle > pwm_min &&  currentRightThrottle < pwm_max && currentRightThrottle > pwm_min){
+        if (currentLeftThrottle < motorHat_max && currentLeftThrottle > motorHat_min &&  currentRightThrottle < motorHat_max && currentRightThrottle > motorHat_min){
             rover.set_speed(currentLeftThrottle, currentRightThrottle);
             previousLeftThrottle = currentLeftThrottle;
             previousRightThrottle = currentRightThrottle;
@@ -111,10 +111,10 @@ var forwardPMovement = function() {
             //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
             console.log('Throttle Value outside of PWM range');
             //checks the leftThrottle values to make sure they're within mechanical constraints
-            if (currentLeftThrottle > pwm_max){
-                currentLeftThrottle = pwm_max;
-            } else if (currentLeftThrottle < pwm_min) {
-                currentLeftThrottle = pwm_min;
+            if (currentLeftThrottle > motorHat_max){
+                currentLeftThrottle = motorHat_max;
+            } else if (currentLeftThrottle < motorHat_min) {
+                currentLeftThrottle = motorHat_min;
             } else {
                 console.log('ERROR - leftThrottle values undefined');
                 rover.stop();
@@ -122,10 +122,10 @@ var forwardPMovement = function() {
             }
 
             //checks the rightThrottle values to make sure they're within mechanical constraints
-            if (currentRightThrottle > pwm_max) {
-                currentRightThrottle = pwm_max;
-            } else if (currentRightThrottle < pwm_min) {
-                currentRightThrottle = pwm_min;
+            if (currentRightThrottle > motorHat_max) {
+                currentRightThrottle = motorHat_max;
+            } else if (currentRightThrottle < motorHat_min) {
+                currentRightThrottle = motorHat_min;
             } else {
                 console.log('ERROR - rightThrottle values undefined');
                 rover.stop();
