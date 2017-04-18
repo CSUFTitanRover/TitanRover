@@ -33,13 +33,13 @@ back_right.run(Adafruit_MotorHAT.FORWARD)
 front_left.run(Adafruit_MotorHAT.FORWARD)
 back_left.run(Adafruit_MotorHAT.FORWARD) 
 
-if sys.argv[1] < 0:
-    front_right.run(Adafruit_MotorHAT.BACKWARD)
-    back_right.run(Adafruit_MotorHAT.BACKWARD)
+#if sys.argv[1] < 0:
+#    front_right.run(Adafruit_MotorHAT.BACKWARD)
+#    back_right.run(Adafruit_MotorHAT.BACKWARD)
 
-if sys.argv[2] < 0:
-    front_left.run(Adafruit_MotorHAT.BACKWARD)
-    back_left.run(Adafruit_MotorHAT.BACKWARD)    
+#if sys.argv[2] < 0:
+#    front_left.run(Adafruit_MotorHAT.BACKWARD)
+#    back_left.run(Adafruit_MotorHAT.BACKWARD)    
     
 if sys.argv[1] == 0 and sys.argv[2] == 0:
     atexit.register(turnOffMotors)
