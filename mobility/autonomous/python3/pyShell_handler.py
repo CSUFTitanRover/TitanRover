@@ -20,7 +20,7 @@ elif move_direction == 'b':
     dc.backwards()
 
 elif move_direction == 'x':
-    dc.set_speed(int(float(sys.argv[2])),int(float(sys.argv[3])))
+    dc.set_speed(int(sys.argv[2]),int(sys.argv[3]))
 
 elif move_direction == 's':
     dc.stop()
