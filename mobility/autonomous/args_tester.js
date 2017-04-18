@@ -16,5 +16,12 @@ var drive_forward = function(){
             console.log('results: %j', results);
         });
     };
-
-drive_forward();
+    
+var main = setInterval(function(){
+    if(current_heading != null){
+        clearInterval(main);
+        drive_forward();
+        //setTimeout(function(){;},1000);
+    }
+    
+},500);
