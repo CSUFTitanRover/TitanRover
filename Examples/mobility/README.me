@@ -1,0 +1,3 @@
+https://www.npmjs.com/package/i2c
+
+If you need to calculate pulse-width in microseconds, you can do that by first figuring out how long each cycle is. That would be 1/freq where freq is the PWM frequency you set above. For 1000 Hz, that would be 1 millisecond. Then divide by 4096 to get the time per tick, eg 1 millisecond / 4096 = ~0.25 microseconds. If you want a pulse that is 10 microseconds long, divide the time by time-per-tick (10us / 0.25 us = 40) then turn on at tick 0 and turn off at tick 40.
