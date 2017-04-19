@@ -142,6 +142,26 @@ function getMobilitySpeed(value, joystick_Max, joystick_Min) {
     return parseInt(value);
 }
 
+function setYAxis(speed) {
+    if (speed < -127 || speed > 127) {
+        throw new RangeError('speed must be between -127 and 127');
+    }
+
+    // Since we are using unsigened ints for serial make it between 0 and 254
+    y_Axis_arr[1] = speed + 127;
+    port.write(y_Axis_buff);
+}
+
+function setXAxis(speed) {
+    if (speed < -127 || speed > 127) {
+        throw new RangeError('speed must be between -127 and 127');
+    }
+
+    // Since we are using unsigned ints for serial make it between 0 and 254
+    x_Axis_arr[1] = speed + 127;
+    port.write(x_Axis_buff);
+}
+
 // Function that handles all mobility from the joystick
 function receiveMobility(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
