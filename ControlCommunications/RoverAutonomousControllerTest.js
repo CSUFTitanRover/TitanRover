@@ -4,8 +4,10 @@ var bodyParser = require('body-parser');
 var serialPort = require('serialport');
 
 var port = new serialPort('/dev/ttyACM0', {
-    baudRate: 9600
+    baudRate: 9600,
+    parser: serialPort.parsers.readline('\n')
 });
+
 
 var x_Axis_arr = new Uint16Array(2);
 x_Axis_arr[0] = 0x0008;
@@ -21,7 +23,7 @@ function setYAxis(speed) {
     if (speed < -127 || speed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
-
+    console.log('Y: ' + speed );
     // Since we are using unsigened ints for serial make it between 0 and 254
     y_Axis_arr[1] = speed + 127;
     port.write(y_Axis_buff);
@@ -31,7 +33,7 @@ function setXAxis(speed) {
     if (speed < -127 || speed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
-
+    console.log('x: ' + speed);
     // Since we are using unsigned ints for serial make it between 0 and 254
     x_Axis_arr[1] = speed + 127;
     port.write(x_Axis_buff);
@@ -45,23 +47,20 @@ function stopRover() {
     port.write(x_Axis_buff);
     port.write(y_Axis_buff);
     // Stopping all joints
-    for (i = 1; i <= 7; i++) {
-        port.write(arm.stopJoint(i));
-    }
 }
 
+var i = -127;
 var main = setInterval(function(){
-    if(current_heading != null){
-        //clearInterval(main);
-        for (var i = 0; i < 255; i++) {
-           setYAxis(i);
-           setXAxis(i);
-        }
+    if (i < 128) {
+    setYAxis(i);
+    setXAxis(i);
+    } else {
         stopRover();
-        //setTimeout(function(){;},1000);
+        clearInterval(main);
     }
-    
-},500);
+        //setTimeout(function(){;},1000);
+    i++;
+},50);
 
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
