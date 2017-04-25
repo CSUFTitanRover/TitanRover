@@ -379,6 +379,7 @@ port.on('data', function(data) {
     console.log('ArduinoMessage: ' + data);
     var jsonBuilder = {};
     jsonBuilder.ArduinoMessage = data;
+    jsonBuilder.type = 'debug';
 
     sendHome(jsonBuilder);
 
