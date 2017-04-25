@@ -47,7 +47,7 @@ const uint8_t joint4_interrupt_pin = 2;
 volatile int joint4_TotalSteps = 0;
 uint8_t joint4_bit;
 uint8_t joint4_port;
-const int joint4_StepsLimit = 5000;
+const int joint4_StepsLimit = 750;
 bool passedLimit = false;
 
 // Joint #5
@@ -88,7 +88,6 @@ const int LimitDistance_Steps = 50;
 
 SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
 Sabertooth Back(129, SWSerial);
-Sabertooth Front(128, SWSerial);
 
 void setup()
 {
@@ -96,14 +95,11 @@ void setup()
   Serial.begin(9600);
   SWSerial.begin(9600);
   Back.autobaud();
-  Front.autobaud();
 
   delay(1);
 
   Back.drive(0);
-  Front.drive(0);
   Back.turn(0);
-  Front.turn(0);
   // Start the mobility on zero
   /*x_mobility.attach(x_pwm_pin);
     x_mobility.writeMicroseconds(1500);
@@ -229,13 +225,11 @@ void loop()
     else if (val[0] == 0x08) // x-Mobility
     {
       Back.turn(val[2] - 127);
-      Front.turn(val[2] - 127);
       //x_mobility.writeMicroseconds(pwnval);
     }
     else if (val[0] == 0x09) // y-Mobility
     {
       Back.drive((val[2] - 127) * -1);
-      Front.drive(val[2] - 127);
       //y_mobility.writeMicroseconds(pwnval);
     }
     else if (val[0] == 0x0A)  // Step a joint

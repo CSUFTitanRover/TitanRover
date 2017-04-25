@@ -30,7 +30,7 @@ var serialPort = require('serialport');
 
 var port = new serialPort('/dev/ttyACM0', {
     baudRate: 9600,
-    parser: serialPort.parsers.readline('\n')
+    parser: serialPort.parsers.readline('\r\n')
 });
 
 var PORT = 3000;
