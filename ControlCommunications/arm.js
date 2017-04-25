@@ -31,7 +31,9 @@ var joint7_arr = new Uint16Array(2);
 var joint7_buff = Buffer.from(joint7_arr.buffer);
 
 var armControl = new Uint16Array(2);
-var armControl_buff = Buffer.from(armControl);
+armControl[0] = 0x00ff;
+armControl[1] = 0x0000;
+var armControl_buff = Buffer.from(armControl.buffer);
 
 module.exports = {
 
@@ -262,12 +264,12 @@ module.exports = {
     },
 
     calibrate: function() {
-        armcontrol[0] = 0x01ff;
-        return armControl_buff;
+        armControl[0] = 0x01ff;
+        return (armControl_buff);
     },
 
     getJointInfo: function() {
-        armcontrol[0] = 0x02ff;
-        return armControl_buff;
+        armControl[0] = 0x02ff;
+        return (armControl_buff);
     }
 };

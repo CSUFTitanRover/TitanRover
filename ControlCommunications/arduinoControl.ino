@@ -42,10 +42,13 @@ const uint8_t joint4_enab_pin = 35;
 const uint8_t joint4_pulse_pin = 36;
 volatile bool joint4_on = false;
 volatile bool joint4_interrupted = false;
+volatile bool joint4_needsStepOff = false;
 const uint8_t joint4_interrupt_pin = 2;
-static int joint4_TotalSteps = 0;
+volatile int joint4_TotalSteps = 0;
 uint8_t joint4_bit;
 uint8_t joint4_port;
+const int joint4_StepsLimit = 5000;
+bool passedLimit = false;
 
 // Joint #5
 const uint8_t joint5_dir_pin = 38;
@@ -53,8 +56,9 @@ const uint8_t joint5_enab_pin = 39;
 const uint8_t joint5_pulse_pin = 40;
 volatile bool joint5_on = false;
 volatile bool joint5_interrupted = false;
+volatile bool joint5_needsStepOff = false;
 const uint8_t joint5_interrupt_pin = 3;
-static int joint5_TotalSteps = 0;
+volatile int joint5_TotalSteps = 0;
 uint8_t joint5_bit;
 uint8_t joint5_port;
 
@@ -75,12 +79,12 @@ volatile bool joint7_on = false;
 // Additional Global variables needed
 uint8_t val[4];
 int i;
-int delayVal = 1;
+int delayVal = 2;
 uint16_t pwmVal;
 const uint8_t interruptDelay = 250;
 static unsigned long joint4_last_interrupt_time = 0;
 static unsigned long joint5_last_interrupt_time = 0;
-const int LimitDistance_Steps = 100;
+const int LimitDistance_Steps = 50;
 
 SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
 Sabertooth Back(129, SWSerial);
@@ -93,6 +97,7 @@ void setup()
   SWSerial.begin(9600);
   Back.autobaud();
   Front.autobaud();
+
   delay(1);
 
   Back.drive(0);
@@ -158,11 +163,12 @@ void setup()
 
 void loop()
 {
+  // Will step of the limit switch if it has been triggered
+  checkNeedToStepOffSwitch();
 
   // Check if pi has sent command data to Arduino
   if (Serial.available() >= 4)
   {
-
     // Grap the 4 bytes from the raspberry pi
     i = 0;
     while (i < 4)
@@ -224,11 +230,13 @@ void loop()
     {
       Back.turn(val[2] - 127);
       Front.turn(val[2] - 127);
+      //x_mobility.writeMicroseconds(pwnval);
     }
     else if (val[0] == 0x09) // y-Mobility
     {
       Back.drive((val[2] - 127) * -1);
       Front.drive(val[2] - 127);
+      //y_mobility.writeMicroseconds(pwnval);
     }
     else if (val[0] == 0x0A)  // Step a joint
     {
@@ -239,11 +247,15 @@ void loop()
     {
       if (val[1] == 0x01) // Calibrate the arm
       {
-        calibrateArm();
+        //calibrateArm();
       }
       else if (val[1] == 0x02)  // Send back step information
       {
         sendInfo();
+      }
+      else if (val[1] == 0x03)  // Update the speed of stepper motors
+      {
+        delayVal = val[3];
       }
     }
 
@@ -259,36 +271,61 @@ void loop()
 
   if (joint4_on && joint4_interrupted == false)
   {
+    /*uint8_t bit = digitalPinToBitMask(joint4_dir_pin);
+      uint8_t port = digitalPinToPort(joint4_dir_pin);
+
+      // Get the direction that the stepper was moving
+      uint8_t state = (*portOutputRegister(port) & bit) ? HIGH : LOW;*/
     // Get the direction that the stepper was moving
     uint8_t state = (*portOutputRegister(joint4_port) & joint4_bit) ? HIGH : LOW;
 
     // Update the step count
     if (state)
     {
-      joint4_TotalSteps -= 1;
+      joint4_TotalSteps--;
+      if (joint4_TotalSteps < joint4_StepsLimit)
+      {
+        passedLimit = false;
+      }
     }
     else
     {
-      joint4_TotalSteps += 1;
+      if (joint4_TotalSteps < joint4_StepsLimit)
+      {
+        joint4_TotalSteps++;
+        passedLimit = false;
+      }
+      else
+      {
+        passedLimit = true;
+      }
     }
 
-    digitalWrite(joint4_pulse_pin, HIGH);
-    digitalWrite(joint4_pulse_pin, LOW);
+    if (!passedLimit)
+    {
+      digitalWrite(joint4_pulse_pin, HIGH);
+      digitalWrite(joint4_pulse_pin, LOW);
+    }
   }
 
   if (joint5_on && joint5_interrupted == false)
   {
+    /*uint8_t bit = digitalPinToBitMask(joint5_dir_pin);
+      uint8_t port = digitalPinToPort(joint5_dir_pin);
+
+      // Get the direction that the stepper was moving
+      uint8_t state = (*portOutputRegister(port) & bit) ? HIGH : LOW;*/
     // Get the direction that the stepper was moving
     uint8_t state = (*portOutputRegister(joint5_port) & joint5_bit) ? HIGH : LOW;
 
     // Update the step count
     if (state)
     {
-      joint5_TotalSteps -= 1;
+      joint5_TotalSteps--;
     }
     else
     {
-      joint5_TotalSteps += 1;
+      joint5_TotalSteps++;
     }
 
     digitalWrite(joint5_pulse_pin, HIGH);
@@ -311,7 +348,7 @@ void loop()
 
 }
 
-void stepJointHandler(uint8_t joint, uint16_t steps)
+void stepJointHandler(uint8_t joint, int16_t steps)
 {
   uint8_t dir = 0x01;
   if (steps < 0)
@@ -395,6 +432,15 @@ void calibrateArm()
   joint4_TotalSteps = 0;
 
   // Run joint5 calibration
+  digitalWrite(joint5_dir_pin, HIGH);
+  while (!joint5_interrupted)
+  {
+    digitalWrite(joint5_pulse_pin, HIGH);
+    digitalWrite(joint5_pulse_pin, LOW);
+    delay(delayVal);
+  }
+
+  joint5_TotalSteps = 0;
 
 }
 
@@ -405,7 +451,7 @@ void sendInfo()
 {
   Serial.print(joint4_TotalSteps);
   Serial.print(":");
-  Serial.print(joint5_TotalSteps);
+  Serial.println(joint5_TotalSteps);
 }
 
 /*
@@ -417,9 +463,16 @@ void stopJoint4()
   unsigned long joint4_interrupt_time = millis();
   if (joint4_interrupt_time - joint4_last_interrupt_time > interruptDelay)
   {
+    // Get the direction that the stepper was moving
+    uint8_t state = (*portOutputRegister(joint4_port) & joint4_bit) ? HIGH : LOW;
+
     // Limit switch has been activated
-    joint4_interrupted = true;
-    StepOffLimitSwitch(joint4_dir_pin, joint4_pulse_pin);
+    if (state)
+    {
+      joint4_interrupted = true;
+      joint4_on = false;
+      joint4_needsStepOff = true;
+    }
   }
   joint4_last_interrupt_time = joint4_interrupt_time;
 }
@@ -435,7 +488,8 @@ void stopJoint5()
   {
     // Limit switch has been activated
     joint5_interrupted = true;
-    StepOffLimitSwitch(joint5_dir_pin, joint5_pulse_pin);
+    joint5_on = false;
+    joint5_needsStepOff = true;
   }
   joint5_last_interrupt_time = joint5_interrupt_time;
 }
@@ -466,4 +520,19 @@ void setPortandBit()
   joint4_port = digitalPinToPort(joint4_dir_pin);
   joint5_bit = digitalPinToBitMask(joint5_dir_pin);
   joint5_port = digitalPinToPort(joint5_dir_pin);
+}
+
+void checkNeedToStepOffSwitch()
+{
+  if (joint4_needsStepOff)
+  {
+    StepOffLimitSwitch(joint4_dir_pin, joint4_pulse_pin);
+    joint4_needsStepOff = false;
+  }
+
+  if (joint5_needsStepOff)
+  {
+    StepOffLimitSwitch(joint5_dir_pin, joint5_pulse_pin);
+    joint5_needsStepOff = false;
+  }
 }

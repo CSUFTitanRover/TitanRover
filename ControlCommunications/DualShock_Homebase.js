@@ -100,17 +100,26 @@ function send_to_rover(message) {
 }
 
 // Shifting joystick values from 0-255 to -127.5 to 127.5
+// Set to 25% speed since this joystick is only used to move rover from one place to another
 controller.on('left:move', function(data) {
     event = {
         number: 2,
-        x: data.x - 127.5,
-        y: data.y - 127.5,
+        x: (data.x - 127.5) * 0.25,
+        y: ((data.y - 127.5) * 0.25) * -1,
         commandType: "mobility"
     };
-    event.y *= -1; //Axis needs to be flipped
+
+    // Fix the zeroing point issue
+    if (event.y < 1.5 && event.y > -1.5) {
+        event.y = 0;
+    }
+
+    if (event.x < 1.5 && event.x > -1.5) {
+        event.x = 0;
+    }
     send_to_rover(event);
 });
-
+/*
 //l2 should map to thumbPressed
 controller.on('l2:press', function(data) {
     event = {
@@ -174,4 +183,4 @@ controller.on('circle:release', function(data) {
         commandType: "arm"
     };
     send_to_rover(event);
-});
+});*/
