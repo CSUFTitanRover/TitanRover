@@ -19,7 +19,7 @@ var speed_timer = setInterval(function(){
         setTimeout(function(){
             clearInterval(speed_timer);
             rover.stop();
-        },1)
+        },1);
        
     }
 },400)

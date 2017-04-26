@@ -2,6 +2,7 @@ import socket
 import sys
 import os
 import json 
+import drive_control as dc
 server_address = './mysock' #its a stanky sock
 
 # Make sure the socket does not already exist
@@ -38,9 +39,12 @@ while True:
                 print 'left throttle: "%s", right throttle: "%s"' % \
                     (JSON['left_throttle'], JSON['right_throttle'])
                 print >> sys.stderr, 'sending data back to the client'
+                dc.forwards()
+                dc.set_speed(JSON['left_throttle'], JSON['right_throttle'])
                 connection.sendall(data)
             else:
                 print >> sys.stderr, 'no more data from', client_address
+                dc.turnOffMotors()
                 break
     finally:
         # Clean up the connection
