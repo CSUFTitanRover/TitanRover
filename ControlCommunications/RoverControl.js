@@ -51,12 +51,14 @@ var config = {
     saber_max: 254
 };
 
-var x_Axis_arr = new Uint16Array(2);
+var x_Axis_arr = new Uint16Array(3);
 x_Axis_arr[0] = 0x0008;
+x_Axis_arr[2] = 0xbbaa;
 var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
 
-var y_Axis_arr = new Uint16Array(2);
+var y_Axis_arr = new Uint16Array(3);
 y_Axis_arr[0] = 0x0009;
+y_Axis_arr[2] = 0xbbaa;
 var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
@@ -139,6 +141,14 @@ function getMobilitySpeed(value, joystick_Max, joystick_Min) {
         value = value.map(0, joystick_Max, 127, 254);
     }
 
+    if (value > 254) {
+        value = 254;
+    }
+
+    if (value < 0) {
+        value = 0;
+    }
+
     return parseInt(value);
 }
 
@@ -202,7 +212,6 @@ function receiveMobility(joystickData) {
         x_Axis_arr[1] = value;
         port.write(x_Axis_buff);
     } else if (axis === 1) {
-        value *= -1;
         y_Axis_arr[1] = value;
         port.write(y_Axis_buff);
     } else if (axis === 2) //If sent from Gamepad

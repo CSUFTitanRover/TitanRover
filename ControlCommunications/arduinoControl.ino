@@ -47,7 +47,7 @@ const uint8_t joint4_interrupt_pin = 2;
 volatile int joint4_TotalSteps = 0;
 uint8_t joint4_bit;
 uint8_t joint4_port;
-const int joint4_StepsLimit = 750;
+const int joint4_StepsLimit = 740;
 bool passedLimit = false;
 
 // Joint #5
@@ -77,14 +77,14 @@ const uint8_t joint7_pulse_pin = 47;
 volatile bool joint7_on = false;
 
 // Additional Global variables needed
-uint8_t val[4];
+uint8_t val[6];
 int i;
 int delayVal = 2;
 uint16_t pwmVal;
 const uint8_t interruptDelay = 250;
 static unsigned long joint4_last_interrupt_time = 0;
 static unsigned long joint5_last_interrupt_time = 0;
-const int LimitDistance_Steps = 50;
+const int LimitDistance_Steps = 15;
 
 SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
 Sabertooth Back(129, SWSerial);
@@ -163,13 +163,20 @@ void loop()
   checkNeedToStepOffSwitch();
 
   // Check if pi has sent command data to Arduino
-  if (Serial.available() >= 4)
+  if (Serial.available() >= 6)
   {
     // Grap the 4 bytes from the raspberry pi
     i = 0;
-    while (i < 4)
+    while (i < 6)
     {
       val[i++] = Serial.read();
+    }
+
+    // If Safety checks don't pass reset buffer and stop rover
+    if (val[4] != 0xaa && val[5] != 0xbb)
+    {
+      val[0] = 0;
+      clearSerialBuffer();
     }
 
     // Convert the last two bytes into a 16 bit number
@@ -229,7 +236,7 @@ void loop()
     }
     else if (val[0] == 0x09) // y-Mobility
     {
-      Back.drive((val[2] - 127) * -1);
+      Back.drive((val[2] - 127));
       //y_mobility.writeMicroseconds(pwnval);
     }
     else if (val[0] == 0x0A)  // Step a joint
@@ -466,6 +473,7 @@ void stopJoint4()
       joint4_interrupted = true;
       joint4_on = false;
       joint4_needsStepOff = true;
+      joint4_TotalSteps = 0;
     }
   }
   joint4_last_interrupt_time = joint4_interrupt_time;
@@ -484,6 +492,7 @@ void stopJoint5()
     joint5_interrupted = true;
     joint5_on = false;
     joint5_needsStepOff = true;
+    joint5_TotalSteps = 0;
   }
   joint5_last_interrupt_time = joint5_interrupt_time;
 }
@@ -495,6 +504,7 @@ void stopJoint5()
 */
 void StepOffLimitSwitch(const uint8_t dirPin, const uint8_t pulsePin)
 {
+  Serial.println("Stepping");
   uint8_t bit = digitalPinToBitMask(dirPin);
   uint8_t port = digitalPinToPort(dirPin);
 
@@ -528,5 +538,26 @@ void checkNeedToStepOffSwitch()
   {
     StepOffLimitSwitch(joint5_dir_pin, joint5_pulse_pin);
     joint5_needsStepOff = false;
+  }
+}
+
+// Serial buffer can obly have 64 bytes clear them out
+void clearSerialBuffer()
+{
+  Back.drive(0);
+  Back.turn(0);
+
+  char crap;
+  uint8_t i = 0;
+  Serial.println("Bytes Switched Clearing Buffer");
+  while (Serial.available() > 0)
+  {
+    if (i > 64)
+    {
+      break;
+    }
+
+    crap = Serial.read();
+    i++;
   }
 }

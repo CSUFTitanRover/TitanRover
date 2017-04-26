@@ -148,7 +148,8 @@ function send_to_rover(message) {
 function handleJoystick_0(event) {
 
     if (event.type == "axis") {
-        if (event.number == 0 || event.number == 1 || event.number == 3) {
+        if (event.number == 0 || event.number == 1) {
+            event.value *= 0.5;
             event.commandType = "mobility";
             send_to_rover(event);
         }
