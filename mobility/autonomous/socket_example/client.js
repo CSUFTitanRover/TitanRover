@@ -20,12 +20,17 @@ var timer = setInterval(function(){
         clearInterval(timer);
     }
     else{
-        message = new Buffer(JSON.stringify(command)+'\n');
+        message = new Buffer(JSON.stringify(command));
         client.write(message);
     }
 },10);
 
-// When we get a data packet from the python proc
+/* 
+    This is just to show that bi-directional comm is possible. 
+    We would only need to send back error message from the python process 
+    during implentation. s
+ */
+
 client.on('data', function(data,err) { 
     if(err){
         console.log("Error!: " + JSON.stringify(err));
