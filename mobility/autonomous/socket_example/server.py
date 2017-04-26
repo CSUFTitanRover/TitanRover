@@ -30,7 +30,7 @@ while True:
 
         # Receive the data in small chunks and retransmit it
         while True:
-            data = connection.recv(60)
+            data = connection.recv(65)
             #debug
             #print sys.stderr, 'received "%s"' % data      
             if data:
@@ -39,12 +39,13 @@ while True:
                 print 'left throttle: "%s", right throttle: "%s"' % \
                     (JSON['left_throttle'], JSON['right_throttle'])
                 print >> sys.stderr, 'sending data back to the client'
+                
                 dc.forwards()
                 dc.set_speed(JSON['left_throttle'], JSON['right_throttle'])
                 connection.sendall(data)
             else:
                 print >> sys.stderr, 'no more data from', client_address
-                dc.turnOffMotors()
+                #dc.turnOffMotors()
                 break
     finally:
         # Clean up the connection

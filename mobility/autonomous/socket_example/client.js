@@ -10,20 +10,12 @@ command = {
 
 client.connect('./mysock', function() {
     console.log('Connected to mysocks server');
+
+    message = new Buffer(JSON.stringify(command));
+    client.write(message);
+    
 });
 
-var timer = setInterval(function(){
-    command.left_throttle++;
-    command.right_throttle++; 
-    if(command.left_throttle > 254){
-        client.end();
-        clearInterval(timer);
-    }
-    else{
-        message = new Buffer(JSON.stringify(command));
-        client.write(message);
-    }
-},10);
 
 /* 
     This is just to show that bi-directional comm is possible. 
@@ -31,11 +23,21 @@ var timer = setInterval(function(){
     during implentation. s
  */
 
+
 client.on('data', function(data,err) { 
     if(err){
         console.log("Error!: " + JSON.stringify(err));
     }
     console.log('Received data: ' + data);
+    command.left_throttle++;
+    command.right_throttle++; 
+    if(command.left_throttle > 254){
+        client.end();
+    }
+    else{
+        message = new Buffer(JSON.stringify(command));
+        client.write(message);
+    }
 });
 
 client.on('close', function() {
