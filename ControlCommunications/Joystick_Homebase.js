@@ -37,8 +37,33 @@ number = 5: Y top of joystick value is either -32767 up or 32767 down
 
 // Make sure the joystick is plugged into the computer
 
-var joystick_0 = new(require('joystick'))(0, 3500, 500);
-var joystick_1 = new(require('joystick'))(1, 3500, 500);
+var mode = process.argv[2];
+var joystick_0;
+var joystick_1;
+
+if (!mode || mode == 'both') {
+    console.log('### Using both Mobility and Arm ###\n');
+    joystick_0 = new(require('joystick'))(0, 3500, 500);
+    joystick_1 = new(require('joystick'))(1, 3500, 500);
+    joystick_0.on('button', handleJoystick_0);
+    joystick_0.on('axis', handleJoystick_0);
+    joystick_1.on('button', handleJoystick_1);
+    joystick_1.on('axis', handleJoystick_1);
+} else if (mode == 'mobility') {
+    console.log('### Using only Mobility ###\n');
+    joystick_0 = new(require('joystick'))(0, 3500, 500);
+    joystick_0.on('button', handleJoystick_0);
+    joystick_0.on('axis', handleJoystick_0);
+} else if (mode == 'arm') {
+    console.log('### Using only Arm ###\n');
+    joystick_1 = new(require('joystick'))(0, 3500, 500);
+    joystick_1.on('button', handleJoystick_1);
+    joystick_1.on('axis', handleJoystick_1);
+} else if (mode != 'none') {
+    throw new Error('Dont understand this argument ' + mode);
+}
+
+
 var request = require('request');
 
 var dgram = require('dgram');
@@ -50,7 +75,7 @@ const HOMEBASE_PORT = 5000;
 
 // Port that the rover is hosting the udp server
 const PORT = 3000;
-const HOST = '192.168.1.117'; // Needs to be the IP address of the rover
+const HOST = 'localhost'; // Needs to be the IP address of the rover
 
 const CONTROL_MESSAGE_ACK = {
     commandType: "control",
@@ -60,12 +85,21 @@ const CONTROL_MESSAGE_ACK = {
 const CHANGE_CONFIG = {
     commandType: "control",
     type: "config",
-    Joystick_MAX: 32767,
-    Joystick_MIN: -32767,
     arm_on: true,
-    mobility_on: true,
-    debug: false
-}
+    Joystick_MIN: -32767,
+    Joystick_MAX: 32767,
+    mobility_on: true
+};
+
+const GET_DEBUG_STATS = {
+    commandType: "control",
+    type: "debug"
+};
+
+const RESET_ROVER = {
+    commandType: "arm",
+    number: 1
+};
 
 const SEND_CONTROL_AFTER = 20;
 var packet_count = 0;
@@ -73,16 +107,9 @@ var packet_count = 0;
 // Arm Variables
 var arm_joint = false;
 
-// Joystick event handlers
-joystick_0.on('button', handleJoystick_0);
-joystick_0.on('axis', handleJoystick_0);
-joystick_1.on('button', handleJoystick_1);
-joystick_1.on('axis', handleJoystick_1);
-
 // Socket event handlers
 socket.on('listening', function() {
     console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
-    send_to_rover(CHANGE_CONFIG);
 });
 
 // When we recieve a packet from the rover it is acking a control packet
@@ -93,6 +120,8 @@ socket.on('message', function(message, remote) {
         //console.log("Rover sent an ack");
         packet_count = 0;
         send_to_rover(CONTROL_MESSAGE_ACK);
+    } else if (msg.type == "debug") {
+        console.log(msg);
     }
 });
 
@@ -123,6 +152,8 @@ function handleJoystick_0(event) {
             event.commandType = "mobility";
             send_to_rover(event);
         }
+    } else if (event.number == 9 && event.value == 1) {
+        send_to_rover(GET_DEBUG_STATS);
     } else if (event.type == 'button') {
         if (event.number == 10 && event.value == 1) {
             console.log("Mobility Joystick!!");
@@ -157,8 +188,19 @@ function handleJoystick_1(event) {
                 console.log("Joint 2 and 3 ## ONLINE ##\nJoint 4 and 6 ## OFFLINE ##");
             }
             send_to_rover(event);
+        } else if (event.number == 9 && event.value == 1) {
+            send_to_rover(GET_DEBUG_STATS);
         } else if (event.number == 10 && event.value == 1) { // Button 11: Determine which joystick is what
             console.log("Arm Joystick!!");
         }
     }
 }
+
+// On SIGINT shutdown the server
+process.on('SIGINT', function() {
+    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
+    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    send_to_rover(RESET_ROVER);
+    // some other closing procedures go here
+    process.exit();
+});
