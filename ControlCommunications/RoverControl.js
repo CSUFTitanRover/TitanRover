@@ -30,7 +30,7 @@ var serialPort = require('serialport');
 
 var port = new serialPort('/dev/ttyACM0', {
     baudRate: 9600,
-    parser: serialPort.parsers.readline('\n')
+    parser: serialPort.parsers.readline('\r\n')
 });
 
 var PORT = 3000;
@@ -51,12 +51,14 @@ var config = {
     saber_max: 254
 };
 
-var x_Axis_arr = new Uint16Array(2);
+var x_Axis_arr = new Uint16Array(3);
 x_Axis_arr[0] = 0x0008;
+x_Axis_arr[2] = 0xbbaa;
 var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
 
-var y_Axis_arr = new Uint16Array(2);
+var y_Axis_arr = new Uint16Array(3);
 y_Axis_arr[0] = 0x0009;
+y_Axis_arr[2] = 0xbbaa;
 var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
@@ -122,11 +124,11 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
     return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
 
-function getPwmValue(value) {
+function getPwmValue(value, Joystick_MAX, Joystick_MIN) {
     if (value <= 0) {
-        value = value.map(config.Joystick_MIN, 0, 1000, 1500);
+        value = value.map(Joystick_MIN, 0, 1000, 1500);
     } else {
-        value = value.map(0, config.Joystick_MAX, 1500, 2000);
+        value = value.map(0, Joystick_MAX, 1500, 2000);
     }
 
     return parseInt(value);
@@ -137,6 +139,14 @@ function getMobilitySpeed(value, joystick_Max, joystick_Min) {
         value = value.map(joystick_Min, 0, 0, 127);
     } else {
         value = value.map(0, joystick_Max, 127, 254);
+    }
+
+    if (value > 254) {
+        value = 254;
+    }
+
+    if (value < 0) {
+        value = 0;
     }
 
     return parseInt(value);
@@ -163,6 +173,32 @@ function setXAxis(speed) {
 }
 
 // Function that handles all mobility from the joystick
+/*function receiveMobility(joystickData) {
+    // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
+    let axis = parseInt(joystickData.number);
+    var value = parseInt(joystickData.value);
+
+    value = getPwmValue(value, 32767, -32767);
+
+    debug.Num_Mobility_Commands += 1;
+
+    if (axis === 0) {
+        x_Axis_arr[1] = value;
+        port.write(x_Axis_buff);
+    } else if (axis === 1) {
+        value *= -1;
+        y_Axis_arr[1] = value;
+        port.write(y_Axis_buff);
+    } else if (axis === 2) //If sent from Gamepad
+    {
+        x_Axis_arr[1] = getPwmValue(joystickData.x, 127.5, -127.5);
+        y_Axis_arr[1] = getPwmValue(joystickData.y, 127.5, -127.5);
+
+        port.write(x_Axis_buff);
+        port.write(y_Axis_buff);
+    }
+}*/
+
 function receiveMobility(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
@@ -176,7 +212,6 @@ function receiveMobility(joystickData) {
         x_Axis_arr[1] = value;
         port.write(x_Axis_buff);
     } else if (axis === 1) {
-        value *= -1;
         y_Axis_arr[1] = value;
         port.write(y_Axis_buff);
     } else if (axis === 2) //If sent from Gamepad
@@ -187,7 +222,6 @@ function receiveMobility(joystickData) {
         port.write(x_Axis_buff);
         port.write(y_Axis_buff);
     }
-
 }
 
 // Send 0 to both the x and y axis to stop the rover from running
@@ -291,7 +325,7 @@ function armControl(message) {
                 if (thumbPressed) {
                     port.write(arm.joint6_360Unlimited(message));
                 } else {
-                    port.write(arm.joint3_linear2(message, getPwmValue(message.value)));
+                    port.write(arm.joint3_linear2(message, getPwmValue(message.value, 32767, -32767)));
                 }
                 break;
             case 1:
@@ -299,7 +333,7 @@ function armControl(message) {
                 if (thumbPressed) {
                     port.write(arm.joint4_rotateWrist(message));
                 } else {
-                    port.write(arm.joint2_linear1(message, getPwmValue(message.value)));
+                    port.write(arm.joint2_linear1(message, getPwmValue(message.value, 32767, -32767)));
                 }
                 break;
             case 2:
@@ -348,11 +382,12 @@ function armControl(message) {
     }
 }
 
+// Any serial data from the arduino will be sent back home
+// and printed to the console
 port.on('data', function(data) {
+    console.log('ArduinoMessage: ' + data);
     var jsonBuilder = {};
-    var splitted = data.split(':');
-    jsonBuilder.joint4Steps = Number(splitted[0]);
-    jsonBuilder.joint5Steps = Number(splitted[1]);
+    jsonBuilder.ArduinoMessage = data;
     jsonBuilder.type = 'debug';
 
     sendHome(jsonBuilder);
@@ -393,6 +428,7 @@ server.on('message', function(message, remote) {
             break;
         default:
             debug.Num_Unknown_Commands += 1;
+            console.log(msg);
             throw new RangeError('commandType invalid');
     }
 });

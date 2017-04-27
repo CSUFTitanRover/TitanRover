@@ -148,7 +148,8 @@ function send_to_rover(message) {
 function handleJoystick_0(event) {
 
     if (event.type == "axis") {
-        if (event.number == 0 || event.number == 1 || event.number == 3) {
+        if (event.number == 0 || event.number == 1) {
+            event.value *= 0.5;
             event.commandType = "mobility";
             send_to_rover(event);
         }
@@ -188,19 +189,16 @@ function handleJoystick_1(event) {
                 console.log("Joint 2 and 3 ## ONLINE ##\nJoint 4 and 6 ## OFFLINE ##");
             }
             send_to_rover(event);
-        } else if (event.number == 9 && event.value == 1) {
+        } else if (event.number == 6 && event.value == 1) { // Button 7: Start the calibration sequence
+            event.commandType = 'arm'
+            //send_to_rover(event);
+        } else if (event.number == 7 && event.value == 1) { // Button 8: Get back joint positions
+            event.commandType = 'arm';
+            send_to_rover(event)
+        } else if (event.number == 9 && event.value == 1) { // Button 10: Get back debug statistics
             send_to_rover(GET_DEBUG_STATS);
         } else if (event.number == 10 && event.value == 1) { // Button 11: Determine which joystick is what
             console.log("Arm Joystick!!");
         }
     }
 }
-
-// On SIGINT shutdown the server
-process.on('SIGINT', function() {
-    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
-    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    send_to_rover(RESET_ROVER);
-    // some other closing procedures go here
-    process.exit();
-});
