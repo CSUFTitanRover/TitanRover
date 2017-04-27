@@ -43,7 +43,7 @@ var previous_heading_delta;
 
 //FOR OFF ROVER TESTING:
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
-var current_heading = 75;
+var current_heading = 360;
 var target_heading = 65;
 //THEN COMMENT THIS OUT
 /*
@@ -93,8 +93,10 @@ var forwardPMovement = function() {
     console.log('----ForwardPmovement----')
     //rover.drive_forward();
     drive_timer = setInterval(function() {
+        //FOR TESTING OFF ROVER
         driveCounter++;
         current_heading--;
+        //---------------------
         calc_heading_delta();
         console.log("Current Heading: " + current_heading);
         console.log("Target Heading: " + target_heading);
@@ -150,7 +152,7 @@ var forwardPMovement = function() {
             }
         }
         //rover.set_speed(Math.trunc(x_axis_throttle), Math.trunc(x_axis_throttle));
-        if (driveCounter > 20) {
+        if (driveCounter > 361) {
             clearInterval(drive_timer);
             //rover.stop();
             console.log('On Heading...Stopping...');
@@ -210,4 +212,4 @@ var main = setInterval(function(){
         //setTimeout(function(){;},1000);
     }
     
-},500);
+},50);
