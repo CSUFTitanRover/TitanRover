@@ -5,16 +5,16 @@ var serialPort = require('serialport');
 
 var port = new serialPort('/dev/ttyACM0', {
     baudRate: 9600,
-    parser: serialPort.parsers.readline('\r\n')
+    parser: serialPort.parsers.raw
 });
 
 
-var x_Axis_arr = new Uint16Array(2);
+var x_Axis_arr = new Uint16Array(3);
 x_Axis_arr[0] = 0x0008;
 x_Axis_arr[2] = 0xbbaa;
 var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
 
-var y_Axis_arr = new Uint16Array(2);
+var y_Axis_arr = new Uint16Array(3);
 y_Axis_arr[0] = 0x0009;
 y_Axis_arr[2] = 0xbbaa;
 var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
@@ -22,7 +22,7 @@ var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 var time = new Date();
 
 function setYAxis(y_speed) {
-    if (speed < -127 || y_speed > 127) {
+    if (y_speed < -127 || y_speed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
     console.log('Y: ' + y_speed );
@@ -33,12 +33,14 @@ function setYAxis(y_speed) {
     //x_Axis_arr[1] = parseInt(speed + 127);
 
     //console.log(y_Axis_buff);
+    console.log(y_Axis_arr);
+    console.log(y_Axis_buff);
     port.write(y_Axis_buff);
     //port.write(x_Axis_buff)
 }
 
 function setXAxis(x_speed) {
-    if (speed < -127 || speed > 127) {
+    if (x_speed < -127 || x_speed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
     console.log('x: ' + x_speed);
@@ -46,6 +48,8 @@ function setXAxis(x_speed) {
     x_speed = x_speed + 127;
     parseInt(x_speed);
     x_Axis_arr[1] = x_speed;
+    console.log(x_Axis_arr);
+    console.log(x_Axis_buff);
     port.write(x_Axis_buff);
 }
 
@@ -71,18 +75,20 @@ port.on('data', function(data) {
 
 });
 
-var i = -127;
+
+var i = 0;
 var main = setInterval(function(){
     if (i < 128) {
-    setYAxis(i);
-    //setXAxis(i);
+    
+    setXAxis(i);
     } else {
         stopRover();
         clearInterval(main);
     }
         //setTimeout(function(){;},1000);
     i++;
-},50);
+},850);
+
 
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
