@@ -409,10 +409,6 @@ port.on('data', function(data) {
 
 });
 
-/*port.on('open', function() {
-    port.write(0x000000000000);
-});*/
-
 port.on('error', function(err) {
     console.log('ArduinoError: ' + err);
     var jsonBuilder = {};
