@@ -5,16 +5,18 @@ var serialPort = require('serialport');
 
 var port = new serialPort('/dev/ttyACM0', {
     baudRate: 9600,
-    parser: serialPort.parsers.readline('\n')
+    parser: serialPort.parsers.readline('\r\n')
 });
 
 
-var x_Axis_arr = new Uint16Array(2);
+var x_Axis_arr = new Uint16Array(3);
 x_Axis_arr[0] = 0x0008;
+x_Axis_arr[2] = 0xbbaa;
 var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
 
-var y_Axis_arr = new Uint16Array(2);
+var y_Axis_arr = new Uint16Array(3);
 y_Axis_arr[0] = 0x0009;
+y_Axis_arr[2] = 0xbbaa;
 var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
@@ -25,8 +27,12 @@ function setYAxis(speed) {
     }
     console.log('Y: ' + speed );
     // Since we are using unsigened ints for serial make it between 0 and 254
-    y_Axis_arr[1] = speed + 127;
+    y_Axis_arr[1] = parseInt(speed + 127);
+    //x_Axis_arr[1] = parseInt(speed + 127);
+
+    //console.log(y_Axis_buff);
     port.write(y_Axis_buff);
+    //port.write(x_Axis_buff)
 }
 
 function setXAxis(speed) {
@@ -35,7 +41,7 @@ function setXAxis(speed) {
     }
     console.log('x: ' + speed);
     // Since we are using unsigned ints for serial make it between 0 and 254
-    x_Axis_arr[1] = speed + 127;
+    x_Axis_arr[1] = parseInt(speed) + 127;
     port.write(x_Axis_buff);
 }
 
@@ -47,13 +53,25 @@ function stopRover() {
     port.write(x_Axis_buff);
     port.write(y_Axis_buff);
     // Stopping all joints
+
 }
+// Any serial data from the arduino will be sent back home
+// and printed to the console
+port.on('data', function(data) {
+    console.log('ArduinoMessage: ' + data);
+    var jsonBuilder = {};
+    jsonBuilder.ArduinoMessage = data;
+    jsonBuilder.type = 'debug';
+
+    //ssendHome(jsonBuilder);
+
+});
 
 var i = -127;
 var main = setInterval(function(){
     if (i < 128) {
     setYAxis(i);
-    setXAxis(i);
+    //setXAxis(i);
     } else {
         stopRover();
         clearInterval(main);
