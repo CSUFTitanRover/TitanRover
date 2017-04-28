@@ -103,6 +103,11 @@ const RESET_ROVER = {
     number: 1
 };
 
+const SET_ARDUINO_DEBUG = {
+    commandType: 'control',
+    type: 'arduinoDebug'
+};
+
 const SEND_CONTROL_AFTER = 20;
 var packet_count = 0;
 
@@ -112,6 +117,7 @@ var arm_joint = false;
 // Socket event handlers
 socket.on('listening', function() {
     console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
+    send_to_rover(SET_ARDUINO_DEBUG);
 });
 
 // When we recieve a packet from the rover it is acking a control packet
@@ -155,13 +161,14 @@ function handleJoystick_0(event) {
             event.commandType = "mobility";
             send_to_rover(event);
         }
-    } else if (event.number == 9 && event.value == 1) {
+    } else if (event.number == 9 && event.value == 1) { // Button 10: Get back debug statistics
         send_to_rover(GET_DEBUG_STATS);
-    } else if (event.type == 'button') {
-        if (event.number == 10 && event.value == 1) {
-            console.log("Mobility Joystick!!");
-        }
+    } else if (event.number == 10 && event.value == 1) { // Button 11: Determine which joystick is what
+        console.log("Mobility Joystick!!");
+    } else if (event.number == 11 && event.value == 1) { // Button 12: Turn on Arduino debug statements
+        send_to_rover(SET_ARDUINO_DEBUG);
     }
+}
 }
 
 
@@ -201,6 +208,8 @@ function handleJoystick_1(event) {
             send_to_rover(GET_DEBUG_STATS);
         } else if (event.number == 10 && event.value == 1) { // Button 11: Determine which joystick is what
             console.log("Arm Joystick!!");
+        } else if (event.number == 11 && event.value == 1) { // Button 12: Turn on Arduino debug statements
+            send_to_rover(SET_ARDUINO_DEBUG);
         }
     }
 }

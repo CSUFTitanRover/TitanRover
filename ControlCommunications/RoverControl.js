@@ -31,6 +31,12 @@ var serialPort = require('serialport');
 var port = new serialPort('/dev/ttyACM0', {
     baudRate: 9600,
     parser: serialPort.parsers.readline('\r\n')
+}, function(err) {
+    if (err) {
+        console.log('Error: ', err.message);
+    } else {
+        console.log('Arduino is ready!');
+    }
 });
 
 var PORT = 3000;
@@ -60,6 +66,12 @@ var y_Axis_arr = new Uint16Array(3);
 y_Axis_arr[0] = 0x0009;
 y_Axis_arr[2] = 0xbbaa;
 var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
+
+var roverControl_arr = new Uint16Array(3);
+roverControl_arr[0] = 0x00ff;
+roverControl_arr[1] = 0x0000;
+roverControl_arr[2] = 0xbbaa;
+var roverControl_buff = Buffer.from(roverControl_arr.buffer);
 
 var time = new Date();
 
@@ -158,7 +170,7 @@ function setYAxis(speed) {
     }
 
     // Since we are using unsigened ints for serial make it between 0 and 254
-    y_Axis_arr[1] = speed + 127;
+    y_Axis_arr[1] = parseInt(speed + 127);
     port.write(y_Axis_buff);
 }
 
@@ -168,7 +180,7 @@ function setXAxis(speed) {
     }
 
     // Since we are using unsigned ints for serial make it between 0 and 254
-    x_Axis_arr[1] = speed + 127;
+    x_Axis_arr[1] = parseInt(speed + 127);
     port.write(x_Axis_buff);
 }
 
@@ -305,6 +317,9 @@ function handleControl(message) {
         time = new Date();
         debug.Curr_Time = time.toString();
         sendHome(debug);
+    } else if (message.type == "arduinoDebug") {
+        roverControl_arr[0] = 0x04ff;
+        port.write(roverControl_buff);
     }
 }
 
@@ -392,6 +407,18 @@ port.on('data', function(data) {
 
     sendHome(jsonBuilder);
 
+});
+
+/*port.on('open', function() {
+    port.write(0x000000000000);
+});*/
+
+port.on('error', function(err) {
+    console.log('ArduinoError: ' + err);
+    var jsonBuilder = {};
+    jsonBuilder.ArduinoError = err;
+    jsonBuilder.type = 'debug';
+    sendHome(jsonBuilder);
 });
 
 

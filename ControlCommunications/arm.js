@@ -8,6 +8,7 @@
  */
 
 var joint1_arr = new Uint16Array(3);
+joint1_arr[0] = 0x0001;
 joint1_arr[2] = 0xbbaa;
 var joint1_buff = Buffer.from(joint1_arr.buffer);
 
@@ -22,18 +23,22 @@ joint3_arr[2] = 0xbbaa;
 var joint3_buff = Buffer.from(joint3_arr.buffer);
 
 var joint4_arr = new Uint16Array(3);
+joint4_arr[0] = 0x0004;
 joint4_arr[2] = 0xbbaa;
 var joint4_buff = Buffer.from(joint4_arr.buffer);
 
 var joint5_arr = new Uint16Array(3);
+joint5_arr[0] = 0x0005;
 joint5_arr[2] = 0xbbaa;
 var joint5_buff = Buffer.from(joint5_arr.buffer);
 
 var joint6_arr = new Uint16Array(3);
+joint6_arr[0] = 0x0006;
 joint6_arr[2] = 0xbbaa;
 var joint6_buff = Buffer.from(joint6_arr.buffer);
 
 var joint7_arr = new Uint16Array(3);
+joint7_arr[0] = 0x0007;
 joint7_arr[2] = 0xbbaa;
 var joint7_buff = Buffer.from(joint7_arr.buffer);
 
