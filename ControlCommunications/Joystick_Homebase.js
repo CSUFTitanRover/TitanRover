@@ -43,6 +43,7 @@ var joystick_1;
 
 if (!mode || mode == 'both') {
     console.log('### Using both Mobility and Arm ###\n');
+    console.log('### Remember to Calibrate Arm: Button 7');
     joystick_0 = new(require('joystick'))(0, 3500, 500);
     joystick_1 = new(require('joystick'))(1, 3500, 500);
     joystick_0.on('button', handleJoystick_0);
@@ -56,6 +57,7 @@ if (!mode || mode == 'both') {
     joystick_0.on('axis', handleJoystick_0);
 } else if (mode == 'arm') {
     console.log('### Using only Arm ###\n');
+    console.log('### Remember to Calibrate Arm: Button 7 ###');
     joystick_1 = new(require('joystick'))(0, 3500, 500);
     joystick_1.on('button', handleJoystick_1);
     joystick_1.on('axis', handleJoystick_1);
@@ -191,7 +193,7 @@ function handleJoystick_1(event) {
             send_to_rover(event);
         } else if (event.number == 6 && event.value == 1) { // Button 7: Start the calibration sequence
             event.commandType = 'arm'
-            //send_to_rover(event);
+            send_to_rover(event);
         } else if (event.number == 7 && event.value == 1) { // Button 8: Get back joint positions
             event.commandType = 'arm';
             send_to_rover(event)
