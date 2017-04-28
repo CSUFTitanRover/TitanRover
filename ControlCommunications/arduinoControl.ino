@@ -184,85 +184,76 @@ void loop()
     pwmVal = (uint16_t)val[2];
     pwmVal = pwmVal | ((uint16_t)val[3] << 8);
 
-    if (val[0] == 0x01) // Joint1
+    switch (val[0])
     {
-      setDirectionPin(joint1_dir_pin, val[1]);
-      joint1_on = val[3];
-    }
-    else if (val[0] == 0x02) // Joint2
-    {
-      joint2.writeMicroseconds(pwmVal);
-    }
-    else if (val[0] == 0x03) // Joint3
-    {
-      joint3.writeMicroseconds(pwmVal);
-    }
-    else if (val[0] == 0x04) // Joint4
-    {
-      setDirectionPin(joint4_dir_pin, val[1]);
-      joint4_on = val[3];
-
-      // Don't move joint4 if we have hit are limit switch until user returns to zero point
-      if (joint4_interrupted && val[3] == 0x00)
-      {
-        joint4_interrupted = false;
-      }
-    }
-    else if (val[0] == 0x05) // Joint5
-    {
-      setDirectionPin(joint5_dir_pin, val[1]);
-      joint5_on = val[3];
-
-      // Don't move joint5 if we have hit are limit switch until user returns to zero point
-      if (joint5_interrupted && val[3] == 0x00)
-      {
-        joint5_interrupted = false;
-      }
-    }
-    else if (val[0] == 0x06) // Joint6
-    {
-      setDirectionPin(joint6_dir_pin, val[1]);
-      joint6_on = val[3];
-    }
-    else if (val[0] == 0x07) // Joint7
-    {
-      setDirectionPin(joint7_dir_pin, val[1]);
-      joint7_on = val[3];
-    }
-    else if (val[0] == 0x08) // x-Mobility
-    {
-      Back.turn(val[2] - 127);
-      //x_mobility.writeMicroseconds(pwnval);
-    }
-    else if (val[0] == 0x09) // y-Mobility
-    {
-      Back.drive((val[2] - 127));
-      //y_mobility.writeMicroseconds(pwnval);
-    }
-    else if (val[0] == 0x0A)  // Step a joint
-    {
-      // pwmVal should contain the total steps in both bytes val[2] and val[3]
-      stepJointHandler(val[1], pwmVal);
-    }
-    else if (val[0] == 0xff) // All auxiliary functions
-    {
-      if (val[1] == 0x01) // Calibrate the arm
-      {
-        //calibrateArm();
-      }
-      else if (val[1] == 0x02)  // Send back step information
-      {
-        sendInfo();
-      }
-      else if (val[1] == 0x03)  // Update the speed of stepper motors
-      {
-        delayVal = val[3];
-      }
-    }
-
-  }
-
-
+      case 0x01:
+        setDirectionPin(joint1_dir_pin, val[1]);
+        joint1_on = val[3];
+        break;
+      case 0x02:
+        joint2.writeMicroseconds(pwmVal);
+        break;
+      case 0x03:
+        joint3.writeMicroseconds(pwmVal);
+        break;
+      case 0x04:
+        setDirectionPin(joint4_dir_pin, val[1]);
+        joint4_on = val[3];
+        // Don't move joint4 if we have hit are limit switch until user returns to zero point
+        if (joint4_interrupted && val[3] == 0x00)
+        {
+          joint4_interrupted = false;
+        }
+        break;
+      case 0x05:
+        setDirectionPin(joint5_dir_pin, val[1]);
+        joint5_on = val[3];
+        // Don't move joint5 if we have hit are limit switch until user returns to zero point
+        if (joint5_interrupted && val[3] == 0x00)
+        {
+          joint5_interrupted = false;
+        }
+        break;
+      case 0x06:
+        setDirectionPin(joint6_dir_pin, val[1]);
+        joint6_on = val[3];
+        break;
+      case 0x07:
+        setDirectionPin(joint7_dir_pin, val[1]);
+        joint7_on = val[3];
+        break;
+      case 0x08:
+        Back.turn(val[2] - 127);
+        //x_mobility.writeMicroseconds(pwnval);
+        break;
+      case 0x09:
+        Back.drive((val[2] - 127));
+        //y_mobility.writeMicroseconds(pwnval);
+        break;
+      case 0x0A:
+        // pwmVal should contain the total steps in both bytes val[2] and val[3]
+        stepJointHandler(val[1], pwmVal);
+        break;
+      case 0xff:
+        if (val[1] == 0x01) // Calibrate the arm
+        {
+          //calibrateArm();
+        }
+        else if (val[1] == 0x02)  // Send back step information
+        {
+          sendInfo();
+        }
+        else if (val[1] == 0x03)  // Update the speed of stepper motors
+        {
+          delayVal = val[3];
+        }
+        break;
+      default: 
+        Serial.println("Invalid val 0");
+        break;
+    } // end of switch
+  } // endif serial.available()
+  
   // Drive the stepper motors if they are activated
   if (joint1_on)
   {
@@ -347,7 +338,7 @@ void loop()
 
   delay(delayVal);
 
-}
+} // End of loop()
 
 void stepJointHandler(uint8_t joint, int16_t steps)
 {
@@ -547,17 +538,12 @@ void clearSerialBuffer()
   Back.drive(0);
   Back.turn(0);
 
-  char crap;
   uint8_t i = 0;
   Serial.println("Bytes Switched Clearing Buffer");
-  while (Serial.available() > 0)
+  while (Serial.available() > 0 && i < 64)
   {
-    if (i > 64)
-    {
-      break;
-    }
-
-    crap = Serial.read();
+    Serial.read();
     i++;
   }
 }
+ig
