@@ -1,6 +1,6 @@
-var express = require('express');
-var fs = require('fs');
-var bodyParser = require('body-parser');
+
+////////////////  I2C  Version   /////////////////
+// Allows us to contorl the rpio pins on the raspberry pi
 var serialPort = require('serialport');
 
 var port = new serialPort('/dev/ttyACM0', {
@@ -8,18 +8,29 @@ var port = new serialPort('/dev/ttyACM0', {
     parser: serialPort.parsers.raw
 });
 
+var sleep = require('sleep');
+var i2c = require('i2c');
 
-var x_Axis_arr = new Uint16Array(3);
-x_Axis_arr[0] = 0x0008;
-x_Axis_arr[2] = 0xbbaa;
-var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
+var device1 = new i2c(0x18, {
+	device: '/dev/i2c-1', 
+	debug: false
+});
 
-var y_Axis_arr = new Uint16Array(3);
-y_Axis_arr[0] = 0x0009;
-y_Axis_arr[2] = 0xbbaa;
-var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
+device1.setAddress(0x4);
 
-var time = new Date();
+// Motor 1 
+var left = new Uint16Array(3);
+left[0] = 0x000A;
+left[2] = 0xbbaa;
+var left = Buffer.from(left.buffer);
+
+// Motor 2 
+var right = new Uint16Array(3);
+right[0] = 0x000C;
+right[2] = 0xbbaa;
+var right = Buffer.from(right.buffer);
+
+
 
 function setYAxis(y_speed) {
     if (y_speed < -127 || y_speed > 127) {
@@ -29,14 +40,13 @@ function setYAxis(y_speed) {
     // Since we are using unsigened ints for serial make it between 0 and 254
     y_speed = y_speed + 127;
     parseInt(y_speed);
-    y_Axis_arr[1] = y_speed;
-    //x_Axis_arr[1] = parseInt(speed + 127);
+    right[1] = y_speed;
+    //left[1] = parseInt(speed + 127);
 
-    //console.log(y_Axis_buff);
-    console.log(y_Axis_arr);
-    console.log(y_Axis_buff);
-    port.write(y_Axis_buff);
-    //port.write(x_Axis_buff)
+    //console.log(right);
+    console.log(right);
+    //device1.write(right, function(){});
+    device1.write(right, function(){});
 }
 
 function setXAxis(x_speed) {
@@ -47,61 +57,63 @@ function setXAxis(x_speed) {
     // Since we are using unsigned ints for serial make it between 0 and 254
     x_speed = x_speed + 127;
     parseInt(x_speed);
-    x_Axis_arr[1] = x_speed;
-    console.log(x_Axis_arr);
-    console.log(x_Axis_buff);
-    port.write(x_Axis_buff);
+    left[1] = x_speed;
+
+    console.log(left);
+    //device1.write(left, function(){});
+    device1.write(left, function(){});
 }
+
+
+
+port.on('data', function(data) {
+    console.log('ArduinoMessage: ' + data);
+
+});
 
 function stopRover() {
     //receiveMobility(zeroMessage[0]);
     //receiveMobility(zeroMessage[1]);
-    x_Axis_arr[1] = 127;
-    y_Axis_arr[1] = 127;
-    port.write(x_Axis_buff);
-    port.write(y_Axis_buff);
+    left[1] = 127;
+    right[1] = 127;
+    //device1.write(left, function(){});
+    //device1.write(right, function(){});
+    device1.write(left, function(){});
+    device1.write(right, function(){});
     // Stopping all joints
 
 }
-// Any serial data from the arduino will be sent back home
-// and printed to the console
-port.on('data', function(data) {
-    console.log('ArduinoMessage: ' + data);
-    var jsonBuilder = {};
-    jsonBuilder.ArduinoMessage = data;
-    jsonBuilder.type = 'debug';
-
-    //ssendHome(jsonBuilder);
-
-});
 
 
-var i = 0;
+var i = 127;
+setYAxis(120);
 var main = setInterval(function(){
-    if (i < 128) {
-    
-    setXAxis(i);
-    } else {
+    if (i >= 0) {
+        
+        setXAxis(i);
+        
+    }else {
         stopRover();
         clearInterval(main);
+	    process.exit();
     }
-        //setTimeout(function(){;},1000);
-    i++;
-},850);
+    i--;
+},50);
 
 
+
+//setInterval(()=>{},1000);
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     stopRover();
-    port.close();
     process.exit();
 });
 
+// On SIGINT shutdown the server
 process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     stopRover();
-    port.close();
     // some other closing procedures go here
     process.exit();
 });

@@ -279,11 +279,15 @@ kalmanX = kalmanY = 0.0
 
 a = datetime.datetime.now()                                             #Gyro Timing Control
 
-n = 0
 
-while True:                    #Continous run Disabled to allow Node.js control
+total_heading = 0.0
+loop = 10                     #High the loops the greater the accuracy
+                                #The longer the cycle
+#n = 0
+#while n < loop: #True:                    #Continous run Disabled to allow Node.js control
+#        n = n + 1
 
-#for num in range(1,20):	        #Currently this loop runs for 20 reads providing greater accuracy
+for num in range(0,loop):	        #Currently this loop runs for 20 reads providing greater accuracy
 	
 	#Read the accelerometer,gyroscope and magnetometer values
         '''
@@ -427,11 +431,13 @@ while True:                    #Continous run Disabled to allow Node.js control
 
 	
 	#slow program down a bit, makes the output more readable
-	time.sleep(0.5)        #disable while not using loop features
+	#time.sleep(0.5)        #disable while not using loop features
         #break                  #this is disabliling the while loop for Node.js Control
-        n = n + 1
+        #n = n + 1
         #Output to stdout if running stand alone or passed to node.js control program through flush call
         #print("%d,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.8f,%5.2f,%5.2f,%5.2f" % (n, AccXangle, AccYangle, gyroXangle,gyroYangle,gyroZangle,CFangleX,CFangleY, heading, tiltCompensatedHeading, kalmanX,kalmanY))
-        print("%5.8f" % (heading))
-        #sys.stdout.flush()
+        total_heading += heading 
+
+print("%5.8f" % (total_heading/loop))
+sys.stdout.flush()
 

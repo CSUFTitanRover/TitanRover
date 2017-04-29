@@ -158,7 +158,7 @@ function setYAxis(speed) {
     }
 
     // Since we are using unsigened ints for serial make it between 0 and 254
-    y_Axis_arr[1] = speed + 127;
+    y_Axis_arr[1] = parseInt(speed + 127);
     port.write(y_Axis_buff);
 }
 
@@ -168,7 +168,8 @@ function setXAxis(speed) {
     }
 
     // Since we are using unsigned ints for serial make it between 0 and 254
-    x_Axis_arr[1] = speed + 127;
+    x_Axis_arr[1] = parseInt(speed + 127);
+	console.log(x_Axis_buff);
     port.write(x_Axis_buff);
 }
 
@@ -222,6 +223,7 @@ function receiveMobility(joystickData) {
         port.write(x_Axis_buff);
         port.write(y_Axis_buff);
     }
+setXAxis(127);
 }
 
 // Send 0 to both the x and y axis to stop the rover from running
@@ -394,10 +396,21 @@ port.on('data', function(data) {
 
 });
 
+/*var i = 0;
+setInterval(function(){
+    if (i < 128) {
+	setXAxis(i);
+    }
+    i++;
+},850);*/
+
+
+
 
 server.on('listening', function() {
     var address = server.address();
     console.log('Rover running on: ' + address.address + ':' + address.port);
+
 });
 
 // recieved a message from the homebase control to perform an action
