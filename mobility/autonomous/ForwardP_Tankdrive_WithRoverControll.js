@@ -19,17 +19,17 @@ var process = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/I
 //var rover = require('./runt_pyControl.js');
 //*/
 //port.close();
-var port = new serialPort('/dev/ttyACM0', {
-    baudRate: 9600,
-    parser: serialPort.parsers.readline('\n')
-});
 
 process.stdout.on('data', function (data){
 	current_heading = parseFloat(data);
 	//console.log('Current heading: ' + data.toString());
 });
 
-
+//-------ROVERCONTROL------
+var port = new serialPort('/dev/ttyACM0', {
+    baudRate: 9600,
+    parser: serialPort.parsers.readline('\n')
+});
 
 var x_Axis_arr = new Uint16Array(3);
 x_Axis_arr[0] = 0xB;
@@ -104,13 +104,15 @@ port.on('open',function(){
     console.log('open');
     //setTimeout(main,1000);
 });
+//----END ROVER CONTROL----
+
 
 //DRIVE-CONSTANT: 
 //40 - UNTESTED, UNSURE OF SPEED, BE AWARE WHEN TESTING
 var drive_constant = 75;
 
-var throttle_min = -127; // Calculated to be 1000 us
-var throttle_max = 127; // Calculated to be 2000 us
+var throttle_min = -126; // Calculated to be 1000 us
+var throttle_max = 126; // Calculated to be 2000 us
 
 //DEGREE OF ERROR
 //2 DEGREES - Currenly untested on Atlas, may adjust over time. 
