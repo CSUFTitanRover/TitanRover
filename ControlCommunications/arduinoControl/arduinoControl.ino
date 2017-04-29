@@ -162,17 +162,27 @@ void loop()
 {
   //Serial.println(Serial.available());  // Will step of the limit switch if it has been triggered
   checkNeedToStepOffSwitch();
-  Serial.print(Serial.peek());
   // Check if pi has sent command data to Arduino
   if (Serial.available() >= 6)
   {
-    Serial.println("Insidie");
     // Grap the 4 bytes from the raspberry pi
     i = 0;
     while (i < 6)
     {
       val[i++] = Serial.read();
     }
+
+    Serial.print(val[0]);
+    Serial.print(":");
+        Serial.print(val[1]);
+    Serial.print(":");
+        Serial.print(val[2]);
+    Serial.print(":");
+        Serial.print(val[3]);
+    Serial.print(":");
+        Serial.print(val[4]);
+    Serial.print(":");
+        Serial.println(val[5]);
 
     // If Safety checks don't pass reset buffer and stop rover
     if (val[4] != 0xaa && val[5] != 0xbb)
@@ -249,6 +259,14 @@ void loop()
     {
       // pwmVal should contain the total steps in both bytes val[2] and val[3]
       stepJointHandler(val[1], pwmVal);
+    }
+    else if (val[0] == 0x0B)
+    {
+      Back.motor(1,val[2]-127);
+    }
+    else if (val[0] == 0x0C)
+    {
+       Back.motor(2,val[2]-127);
     }
     else if (val[0] == 0xff) // All auxiliary functions
     {
