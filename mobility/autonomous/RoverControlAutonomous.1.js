@@ -22,7 +22,7 @@ var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
 var timer;
-function setLeftSide(leftSpeed) {
+function setRightSide(leftSpeed) {
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -40,7 +40,7 @@ function setLeftSide(leftSpeed) {
     //port.write(x_Axis_buff)
 }
 
-function setRightSide(rightSpeed) {
+function setLeftSide(rightSpeed) {
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -89,8 +89,8 @@ function main()
     {
         if(i < 128){   
             i++;
-            setLeftSide(i);
             setRightSide(i);
+            setLeftSide(0);
         } else {
             stopRover();
             clearInterval(timer);

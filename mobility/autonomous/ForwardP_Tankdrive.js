@@ -1,5 +1,11 @@
 var sys = require('util');
-
+var express = require('express');
+var fs = require('fs');
+var bodyParser = require('body-parser');
+var serialPort = require('serialport');
+var sleep = require('sleep');
+var spawn = require("child_process").spawn;
+//var rover = require('./runt_pyControl.js');
 /*COMMENT THIS OUT IF YOU WISH TO TEST WITH THE RUNT ROVER
 var inital_current_heading=15;
 var inital_target_heading=20;
@@ -7,16 +13,22 @@ var target_heading;
 var current_heading;
 */
 
-/*COMMENT THIS OUT IF YOU WISH TO TEST WITHOUT THE RUNT ROVER
+//COMMENT THIS OUT IF YOU WISH TO TEST WITHOUT THE RUNT ROVER
 var spawn = require("child_process").spawn;
 var process = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
-var rover = require('./runt_pyControl.js');
-*/
-
+//var rover = require('./runt_pyControl.js');
+//*/
+//port.close();
 var port = new serialPort('/dev/ttyACM0', {
     baudRate: 9600,
     parser: serialPort.parsers.readline('\n')
 });
+
+process.stdout.on('data', function (data){
+	current_heading = parseFloat(data);
+	//console.log('Current heading: ' + data.toString());
+});
+
 
 
 var x_Axis_arr = new Uint16Array(3);
@@ -31,7 +43,7 @@ var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
 var timer;
-function setLeftSide(leftSpeed) {
+function setRightSide(leftSpeed) {
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -49,7 +61,7 @@ function setLeftSide(leftSpeed) {
     //port.write(x_Axis_buff)
 }
 
-function setRightSide(rightSpeed) {
+function setLeftSide(rightSpeed) {
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -95,19 +107,19 @@ port.on('open',function(){
 
 //DRIVE-CONSTANT: 
 //40 - UNTESTED, UNSURE OF SPEED, BE AWARE WHEN TESTING
-var drive_constant = 40;
+var drive_constant = 75;
 
 var throttle_min = -127; // Calculated to be 1000 us
 var throttle_max = 127; // Calculated to be 2000 us
 
 //DEGREE OF ERROR
 //2 DEGREES - Currenly untested on Atlas, may adjust over time. 
-var acceptable_Degree_Error = 2;
+var acceptable_Degree_Error = 4;
 
 var leftThrottle;
 var rightThrottle;
-var previousRightThrottle;
-var previousLeftThrottle;
+var previousrightThrottle;
+var previousleftThrottle;
 
 var previous_heading_delta;
 var throttlePercentageChange;
@@ -122,7 +134,7 @@ var driveCounter = 0;
 
 //FOR OFF ROVER TESTING:
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
-var current_heading = 360;
+var current_heading;
 var target_heading = 65;
 //THEN COMMENT THIS OUT
 
@@ -131,9 +143,9 @@ var forwardPMovement = function() {
     console.log('----ForwardPmovement----')
 
     drive_timer = setInterval(function() {
-        0//FOR TESTING OFF ROVER
+        //FOR TESTING OFF ROVER
         driveCounter++;
-        current_heading--;
+        //current_heading--;
         //---------------------
         calc_heading_delta();
         console.log("Current Heading: " + current_heading);
@@ -169,8 +181,8 @@ var forwardPMovement = function() {
             //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
             driveForward(leftThrottle, rightThrottle);
             //PUT SET SPEED IN HERE.
-            previousLeftThrottle = leftThrottle;
-            previousRightThrottle = rightThrottle;
+            previousleftThrottle = leftThrottle;
+            previousrightThrottle = rightThrottle;
             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } else {
             //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
@@ -201,7 +213,7 @@ var forwardPMovement = function() {
             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         }
 
-        if (driveCounter > 361) {
+        if (driveCounter > 400) {
             clearInterval(drive_timer);
             stopRover();
             console.log('On Heading...Stopping...');
@@ -254,14 +266,14 @@ function calc_heading_delta(){
     } 
 }
 
-var main = setInterval(function(){
-    if(current_heading != null){
-        clearInterval(main);
-        forwardPMovement();
-        //setTimeout(function(){;},1000);
-    }
-    
-},500);
+//stopRover();
+setTimeout(main,3000);
+function main() 
+{
+    clearTimeout(main);
+    forwardPMovement();
+    stopRover();
+}
 
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
