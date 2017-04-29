@@ -1,13 +1,5 @@
 var sys = require('util');
 
-var finishedTraversal = false;
-var executeTime = 5;
-var throttlePercentageChange;
-var throttlePercentageChange;
-
-var target_heading = 65;
-var previous_heading_delta;
-
 /*COMMENT THIS OUT IF YOU WISH TO TEST WITH THE RUNT ROVER
 var inital_current_heading=15;
 var inital_target_heading=20;
@@ -37,6 +29,9 @@ var rightThrottle;
 var previousRightThrottle;
 var previousLeftThrottle;
 
+var previous_heading_delta;
+var throttlePercentageChange;
+
 var current_heading;
 var heading_delta;
 
@@ -50,6 +45,20 @@ var driveCounter = 0;
 var current_heading = 360;
 var target_heading = 65;
 //THEN COMMENT THIS OUT
+
+//SERVER INFO FOR OPEN SOCKET
+var request = require('request');
+
+var dgram = require('dgram');
+var socket = dgram.createSocket('udp4');
+
+//var URL_ROVER = 'http://localhost:3000/command';
+
+const HOMEBASE_PORT = 5000;
+
+// Port that the rover is hosting the udp server
+const PORT = 3001;
+const HOST = 'localhost'; // Needs to be the IP address of the rover
 
 //Adding winston logger into script for file generation support, implemented by Shan
 /*
