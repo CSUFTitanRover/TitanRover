@@ -3,6 +3,7 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 var serialPort = require('serialport');
 var sleep = require('sleep');
+
 var port = new serialPort('/dev/ttyACM0', {
     baudRate: 9600,
     parser: serialPort.parsers.readline('\n')

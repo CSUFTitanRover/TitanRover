@@ -46,54 +46,6 @@ var current_heading = 360;
 var target_heading = 65;
 //THEN COMMENT THIS OUT
 
-//SERVER INFO FOR OPEN SOCKET
-var request = require('request');
-
-var dgram = require('dgram');
-var socket = dgram.createSocket('udp4');
-
-//var URL_ROVER = 'http://localhost:3000/command';
-
-const HOMEBASE_PORT = 5000;
-
-// Port that the rover is hosting the udp server
-const PORT = 3001;
-const HOST = 'localhost'; // Needs to be the IP address of the rover
-
-//Adding winston logger into script for file generation support, implemented by Shan
-/*
-const Winston = require('winston');
-const winston = new (Winston.Logger)({
-    transports: [
-      new (Winston.transports.Console)({
-          'colorize': true
-          
-     }),
-      new (Winston.transports.File)({ 
-          filename: './autonomous.log',
-          options:{flags: 'w'},         // Overwrites logfile. Remove if you want to append 
-          timestamp: function () {
-          return NOW();},
-     })
-    ]
-  });
-*/
-
-/*
-// Getting Heading, implemented by Shan
-process.stdout.on('data', function (data){
-	current_heading = parseFloat(data);
-	//console.log('Current heading: ' + data.toString());
-});
-//*/
-
-// Cleanup procedures, implemented by Shan
-process.on('SIGINT',function(){;
-    //rover.stop();
-    console.log('shutting rover down.')
-    process.exit();
-});
-
 //Drives the rover forward and making any adjustments along the way.
 var forwardPMovement = function() {
     console.log('----ForwardPmovement----')
