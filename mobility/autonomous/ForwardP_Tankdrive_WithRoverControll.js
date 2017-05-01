@@ -111,8 +111,8 @@ port.on('open',function(){
 //40 - UNTESTED, UNSURE OF SPEED, BE AWARE WHEN TESTING
 var drive_constant = 75;
 
-var throttle_min = -126; // Calculated to be 1000 us
-var throttle_max = 126; // Calculated to be 2000 us
+var throttle_min = -127; // Calculated to be 1000 us
+var throttle_max = 127; // Calculated to be 2000 us
 
 //DEGREE OF ERROR
 //2 DEGREES - Currenly untested on Atlas, may adjust over time. 
@@ -179,7 +179,7 @@ var forwardPMovement = function() {
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
         //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
 
-        if (leftThrottle < throttle_max && leftThrottle > throttle_min &&  rightThrottle < throttle_max && rightThrottle > throttle_min){
+        if (leftThrottle <= throttle_max && leftThrottle >= throttle_min &&  rightThrottle <= throttle_max && rightThrottle >= throttle_min){
             //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
             driveForward(leftThrottle, rightThrottle);
             //PUT SET SPEED IN HERE.
@@ -189,15 +189,19 @@ var forwardPMovement = function() {
         } else {
             //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
             console.log('Throttle Value outside of motor range');
+            console.log("Unfixed LeftThrottle:" + leftThrottle);
+            console.log("Unfixed RightThrottle: " + rightThrottle);
             //checks the leftThrottle values to make sure they're within mechanical constraints
             if (leftThrottle > throttle_max){
                 leftThrottle = throttle_max;
             } else if (leftThrottle < throttle_min) {
                 leftThrottle = throttle_min;
+            } else if (leftThrottle <= throttle_max && leftThrottle >= throttle_min) {
+               console.log("LEFT THROTTLE OKAY"); 
             } else {
                 console.log('ERROR - leftThrottle values undefined');
                 stopRover();
-                clearInterval(drive_timer);
+                //clearInterval(drive_timer);
             }
 
             //checks the rightThrottle values to make sure they're within mechanical constraints
@@ -205,10 +209,12 @@ var forwardPMovement = function() {
                 rightThrottle = throttle_max;
             } else if (rightThrottle < throttle_min) {
                 rightThrottle = throttle_min;
+            } else if (rightThrottle <= throttle_max && rightThrottle >= throttle_min) {
+                console.log("RIGHT THROTTLE OK");
             } else {
                 console.log('ERROR - rightThrottle values undefined');
                 stopRover();
-                clearInterval(drive_timer);
+                //clearInterval(drive_timer);
             }
             //PUT SET SPEED HERE AS WELL
             driveForward(leftThrottle, rightThrottle);
@@ -218,7 +224,7 @@ var forwardPMovement = function() {
         if (driveCounter > 400) {
             clearInterval(drive_timer);
             stopRover();
-            console.log('On Heading...Stopping...');
+            console.log('----REACHED THE END OF LOOP----');
         } else {
             console.log('Thottle Adjusted');
         }
@@ -274,6 +280,7 @@ function main()
 {
     clearTimeout(main);
     forwardPMovement();
+    console.log("----BACK IN MAIN FUNCTION----")
     stopRover();
 }
 
