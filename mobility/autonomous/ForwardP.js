@@ -117,7 +117,6 @@ port.on('open',function(){
 //LOGIC TO KILL ALL PROCESS AND STOP ROVER MID SCRIPT
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
-    clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();  
     setTimeout(function(){ //required to fully stop the rover
@@ -129,7 +128,6 @@ process.on('SIGTERM', function() {
 process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();
     setTimeout(function(){ //required to fully stop the rover
@@ -139,6 +137,16 @@ process.on('SIGINT', function() {
 });
 //----END SCRIPT KILL----
 //----END ROVER CONTROL----
+
+//main function
+setTimeout(main,3000); //Necesary block for the serial port to open with the arduino
+function main() 
+{
+    clearTimeout(main);
+    forwardPMovement();
+    console.log("----BACK IN MAIN FUNCTION----")
+    stopRover();
+}
 
 //Drives the rover forward and making any adjustments along the way.
 var forwardPMovement = function() {
@@ -272,12 +280,4 @@ function calc_heading_delta(){
             heading_delta = target_heading - current_heading;
         }
     } 
-}
-setTimeout(main,3000);
-function main() 
-{
-    clearTimeout(main);
-    forwardPMovement();
-    console.log("----BACK IN MAIN FUNCTION----")
-    stopRover();
 }

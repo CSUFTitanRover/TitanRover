@@ -191,7 +191,7 @@ var rover_autonomous_pid = function() {
                     console.log("Heading Delta: " + heading_delta)
                     console.log("Turning left:" + turning_left);
                     console.log("Turning right:" + turning_right);
-                    if (Math.abs(heading_delta) <= acceptable_Degree_Error) {
+                    if (Math.abs(heading_delta) <= turning_drive_error) {
                         clearInterval(turn_timer);
                         stopRover();
                         console.log('----FOUND HEADING----');
@@ -205,12 +205,12 @@ var rover_autonomous_pid = function() {
                         console.log('turning_right:' + turning_right);
                         if(turning_right){
                                 console.log('Slowing turning right');
-                                leftThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
-                                rightThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
+                                leftThrottle = turning_drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
+                                rightThrottle = turning_drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
                         }else if(turning_left){
                                 console.log('Slowing turning left');
-                                leftThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
-                                rightThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
+                                leftThrottle = turning_drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
+                                rightThrottle = turning_drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
                         } else {
                             console.log('ERROR - Cannot slowly turn left or right');
                         }
@@ -236,7 +236,6 @@ var rover_autonomous_pid = function() {
                             } else {
                                 console.log('ERROR - leftThrottle values undefined');
                                 stopRover();
-                                isTurning = false; 
                                 clearInterval(turn_timer);
                             }
 
@@ -247,7 +246,6 @@ var rover_autonomous_pid = function() {
                                 rightThrottle = throttle_min;
                             } else {
                                 console.log('ERROR - rightThrottle values undefined');
-                                isTurning = false;
                                 stopRover();
                                 clearInterval(turn_timer);
                             }
@@ -256,20 +254,17 @@ var rover_autonomous_pid = function() {
                             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
                         }
 
-                        if (turnCounter > maxTurnCounter) {
+                        if (turnCounter > 50) {
                             clearInterval(turn_timer);
                             stopRover();
-                            isTurning = false;
                             console.log('REACHED MAX NUMBER OF CHANCES');
                         } else {
                             console.log("----EXECUTING TURN----");
                         }
                     } else if (doneTurning) {
-                        isTurning = false;
-                        clearInterval(turn_timer);
                         stopRover();
                     }
-            },50);
+                },50);
             //----DONE TURNINGP----
         } else if (Math.abs(heading_delta) <= turning_drive_error) {
                 isDriving = true; //boolean logic to make sure we don't stack timers uneccesarily
