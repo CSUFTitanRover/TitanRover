@@ -77,14 +77,14 @@ port.on('open',function(){
 });
 //----END ROVER CONTROL----
 
-var i = -127;
+var i = -40;
 
 setTimeout(main,3000);
 function main() 
 {
     clearTimeout(main);
     drive_timer = setInterval(function() {
-        if (i <= 127) {
+        if (i <= 40) {
             driveForward(i, i);
         } else {
             stopRover();

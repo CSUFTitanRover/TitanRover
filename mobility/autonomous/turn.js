@@ -1,19 +1,9 @@
-
 var sys = require('util');
+var sleep = require('sleep');
 var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
-var rover = require('./runt_pyControl.js');
+//var rover = require('./runt_pyControl.js');
 const NOW = require("performance-now");
-var pwm_min = -127;                 // Calculated to be 1000 us
-var pwm_max = 127;                 // Calculated to be 2000 us
-var  target_heading = 65;
-var current_heading = null;
-var previous_heading_delta = null;
-var heading_delta = null;                 // Global that is updated when data is received from magnetometer
-var turning_right = null;
-var turning_left = null;
-var proportional_throttle = 1500;   // Throttle in proportion to error
-const DELTA_THRESHOLD = 5;            // Acceptable heading err
 
 //-------ROVERCONTROL------
 var serialPort = require('serialport');
@@ -34,15 +24,15 @@ var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
 var timer;
-function setRightSide(leftSpeed) {
-    if (leftSpeed < -127 || leftSpeed > 127) {
+function setRightSide(rightSpeed) {
+    if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
-    console.log('Y: ' + leftSpeed );
+    console.log('Y: ' + rightSpeed );
     // Since we are using unsigened ints for serial make it between 0 and 254
-    leftSpeed = leftSpeed + 127;
-    parseInt(leftSpeed);
-    y_Axis_arr[1] = leftSpeed;
+    rightSpeed = rightSpeed + 127;
+    parseInt(rightSpeed);
+    y_Axis_arr[1] = rightSpeed;
     //x_Axis_arr[1] = parseInt(speed + 127);
 
     //console.log(y_Axis_buff);
@@ -52,15 +42,15 @@ function setRightSide(leftSpeed) {
     //port.write(x_Axis_buff)
 }
 
-function setLeftSide(rightSpeed) {
-    if (rightSpeed < -127 || rightSpeed > 127) {
+function setLeftSide(leftSpeed) {
+    if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
-    console.log('x: ' + rightSpeed);
+    console.log('x: ' + leftSpeed);
     // Since we are using unsigned ints for serial make it between 0 and 254
-    rightSpeed = rightSpeed + 127;
-    parseInt(rightSpeed);
-    x_Axis_arr[1] = rightSpeed;
+    leftSpeed = leftSpeed + 127;
+    parseInt(leftSpeed);
+    x_Axis_arr[1] = leftSpeed;
     console.log(x_Axis_arr);
     console.log(x_Axis_buff);
     port.write(x_Axis_buff);
@@ -74,12 +64,7 @@ function driveForward(leftSideThrottle, rightSideThrottle) {
 function stopRover() {
     //receiveMobility(zeroMessage[0]);
     //receiveMobility(zeroMessage[1]);
-    x_Axis_arr[1] = 127;
-    y_Axis_arr[1] = 127;
-    port.write(x_Axis_buff);
-    port.write(y_Axis_buff);
-    // Stopping all joints
-
+    driveForward(0, 0);
 }
 // Any serial data from the arduino will be sent back home
 // and printed to the console
@@ -96,141 +81,203 @@ port.on('open',function(){
     //setTimeout(main,1000);
 });
 //----END ROVER CONTROL----
+//DRIVE-CONSTANT: 
+//0 For Turning
+var drive_constant = 0;
 
-const Winston = require('winston');
-const winston = new (Winston.Logger)({
-    transports: [
-      new (Winston.transports.Console)({
-          'colorize': true
-          
-     }),
-      new (Winston.transports.File)({ 
-          filename: './autonomous.log',
-          options:{flags: 'w'},         // Overwrites logfile. Remove if you want to append 
-          timestamp: function () {
-          return NOW();},
-     })
-    ]
-  });
+var throttle_min = -127; // Calculated to be 1000 us
+var throttle_max = 127; // Calculated to be 2000 us
 
+//DEGREE OF ERROR
+//20 DEGREES - FOR RUNT - Currenly untested on Atlas, may adjust over time. 
+var acceptable_Degree_Error = 20;
+
+var leftThrottle;
+var rightThrottle;
+var previousrightThrottle;
+var previousleftThrottle;
+
+var doneTurning = false;
+
+var previous_heading_delta;
+var throttlePercentageChange;
+
+var turning_left = null;
+var turning_right = null;
+
+var turn_counter = 0;
+
+//FOR OFF ROVER TESTING:
+//Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
+var current_heading;
+var target_heading = 65;
+//THEN COMMENT THIS OUT
 // Get heading,calculate heading and turn immediately.
 python_proc.stdout.on('data', function (data){
     current_heading = parseFloat(data);
-	winston.info('Current heading: ' + data.toString());
-    calc_heading_delta();
-});
-
-// Cleanup procedures 
-process.on('SIGINT',function(){
-    stopRover();
-    winston.info('shutting rover down.')
-    process.exit();
+	//winston.info('Current heading: ' + data.toString());
+    //calc_heading_delta();
 });
 
 // Main Function
-var turn_toward_target = function(){
-    winston.info('Initiating turn');    
-    // Constantly adjusting throttle
-    var speed_timer = setInterval(function(){
-            winston.info('throttle:' + proportional_throttle);
-            proportional_throttle = (pwm_max-pwm_min) * (Math.abs(heading_delta)/180) + pwm_min;
-            if(proportional_throttle !== null){
-                rover.set_speed(proportional_throttle,proportional_throttle);
-            } 
-    },20);
-
-
-    // Constantly calculates error and checks if within threshold
-    var stop_turn_timer = setInterval(function(){
-        console.log( 'Turning... Current heading: ' + current_heading + ' Target heading: ' + target_heading.toFixed(2));
-        // If we are within x degrees of the desired heading stop, else check if we overshot
-        //winston.info('Delta test: ' + heading_delta);
-        //winston.info((previous_heading_delta + 15) + ' ' + (heading_delta));
-        if(Math.abs(heading_delta) <= DELTA_THRESHOLD){
-            clearInterval(stop_turn_timer);
-            clearInterval(speed_timer);
+var turningP = function() {
+    console.log('----turningP----')
+    turn_timer = setInterval(function() {
+        //FOR TESTING OFF ROVER
+        turn_counter++;
+        //current_heading--;
+        //---------------------
+        calc_heading_delta();
+        console.log("Current Heading: " + current_heading);
+        console.log("Target Heading: " + target_heading);
+        console.log("Heading Delta: " + heading_delta)
+        console.log("Turning left:" + turning_left);
+        console.log("Turning right:" + turning_right);
+        if (Math.abs(heading_delta) <= acceptable_Degree_Error) {
+            clearInterval(turn_timer);
             stopRover();
-            winston.info('stopped heading: ' + current_heading);
-            
-            // Wait 1 second to do a final check if we are really within the threshold
-            setTimeout(function(){
-                if(Math.abs(current_heading-target_heading) <= DELTA_THRESHOLD){
-                     python_proc.kill();
-                     clearInterval(stop_turn_timer);
-                     clearInterval(speed_timer);
-                     stopRover();
-                     winston.info('Final Heading:' + current_heading);
-                }
-                else{
-                    turn_toward_target();
-                }
-                
-            },1000);    
-        }   
-        else if(previous_heading_delta !== null && (Math.abs(previous_heading_delta) + 2 < Math.abs(heading_delta)) ){
-            winston.info('delta is increasing, prev:  ' +previous_heading_delta + 'current d : ' + heading_delta );
+            console.log('----FOUND HEADING----');
+            console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
+            doneTurning = true;
+        } else {
+            //Calculate the throttle percentage change based on what the proportion is.
+            throttlePercentageChange = heading_delta/180
+            throttlePercentageChange = heading_delta/180;
+            console.log('turning_left: ' + turning_left);
+            console.log('turning_right:' + turning_right);
+            if(turning_right){
+                    console.log('Slowing turning right');
+                    leftThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
+                    rightThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
+            }else if(turning_left){
+                    console.log('Slowing turning left');
+                    leftThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
+                    rightThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
+            } else {
+                console.log('ERROR - Cannot slowly turn left or right');
+            }
         }
-        previous_heading_delta = heading_delta; 
-        
-   },15);
+        //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
+        //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
+        if (!doneTurning) {
+            if (leftThrottle < throttle_max && leftThrottle > throttle_min &&  rightThrottle < throttle_max && rightThrottle > throttle_min){
+                //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
+                driveForward(leftThrottle, rightThrottle);
+                //PUT SET SPEED IN HERE.
+                previousleftThrottle = leftThrottle;
+                previousrightThrottle = rightThrottle;
+                console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            } else {
+                //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
+                console.log('Throttle Value outside of motor range');
+                //checks the leftThrottle values to make sure they're within mechanical constraints
+                if (leftThrottle > throttle_max){
+                    leftThrottle = throttle_max;
+                } else if (leftThrottle < throttle_min) {
+                    leftThrottle = throttle_min;
+                } else {
+                    console.log('ERROR - leftThrottle values undefined');
+                    stopRover();
+                    clearInterval(turn_timer);
+                }
+
+                //checks the rightThrottle values to make sure they're within mechanical constraints
+                if (rightThrottle > throttle_max) {
+                    rightThrottle = throttle_max;
+                } else if (rightThrottle < throttle_min) {
+                    rightThrottle = throttle_min;
+                } else {
+                    console.log('ERROR - rightThrottle values undefined');
+                    stopRover();
+                    clearInterval(turn_timer);
+                }
+                //PUT SET SPEED HERE AS WELL
+                driveForward(leftThrottle, rightThrottle);
+                console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            }
+
+            if (turn_counter > 50) {
+                clearInterval(turn_timer);
+                stopRover();
+                console.log('REACHED MAX NUMBER OF CHANCES');
+            } else {
+                console.log("----EXECUTING TURN----");
+            }
+        } else if (doneTurning) {
+            stopRover();
+        }
+    },50);
 };
 
 function calc_heading_delta(){
-    
+    console.log('Calculating Heading Delta & Direction');
     temp_delta = current_heading - target_heading;
-
+    console.log('temp_delta: ' + temp_delta);
 // Is turning left or right the shorter turn?
     if(current_heading > target_heading){
         if(Math.abs(temp_delta) > 180){
             // If we were turning left previously or have never turned right before
             if(turning_left || turning_right === null){
-                winston.info('turning right: '+ current_heading);
+                console.log('turning right: '+ current_heading);
                 turning_right = true;
                 turning_left = false;
-                //rover.turn_right();
-                driveForward((proportional_throttle), (-1*proportional_throttle)); 
             }
             heading_delta = 360 - current_heading + target_heading;
         }else{
               // If we were turning right previously or have never turned left before
              if(turning_right || turning_left === null){
-                winston.info('turning left: '+ current_heading);
+                console.log('turning left: '+ current_heading);
                 turning_left = true;
                 turning_right = false;
-                //rover.turn_left();  
-                driveForward((-1*proportional_throttle), proportional_throttle);
             }
             heading_delta = current_heading - target_heading;
             }
     }else{
         if(Math.abs(temp_delta) > 180){ 
              if(turning_right || turning_left === null){
-                winston.info('turning left: '+ current_heading);
+                console.log('turning left: '+ current_heading);
                 turning_left = true;
                 turning_right = false;
-                //rover.turn_left();
-                driveForward((-1*proportional_throttle), proportional_throttle);
             }
             heading_delta = 360 - target_heading + current_heading;
         }else{
             if(turning_left || turning_right === null){
-                winston.info('turning right: '+ current_heading);
+                console.log('turning right: '+ current_heading);
                 turning_right = true;
                 turning_left = false;
-                //rover.turn_right(); 
-                driveForward((proportional_throttle), (-1*proportional_throttle)); 
             }
             heading_delta = target_heading - current_heading;
         }
-    }
-} 
+    } 
+}
 
-var main = setInterval(function(){
-    if(current_heading != null){
-        clearInterval(main);
-        turn_toward_target()
+setTimeout(main,3000);
+function main() {
+    clearInterval(main);
+    turningP();
         //setTimeout(function(){;},1000);
-    }
+};
     
-},500);
-    
+process.on('SIGTERM', function() {
+    console.log("STOPPING ROVER");
+    clearInterval(turn_timer);
+    stopRover();  
+    setTimeout(function(){
+        port.close();
+        process.exit();
+    },1000);
+});
+
+process.on('SIGINT', function() {
+    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
+    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    clearInterval(turn_timer);
+    stopRover();
+    setTimeout(function(){
+        port.close();
+        process.exit();
+    },1000);
+
+    // some other closing procedures go here
+
+});

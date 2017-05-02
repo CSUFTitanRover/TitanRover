@@ -1,165 +1,231 @@
-
-
-
-//----FORWARDP MOVEMENT----
-/* ForwardP movement constantly adjusts the rovers controls over forward drive to readjusted for any difference in heading.
-
-MAPPIING ROVER CONTROLS:
-Atlas rover drive controls is by mapping joystick points. Using range of (-127,127)x and (-127,127)y
-    - x Corresponds to left and right control, -127 is full speed right, 127 is full speed left
-    - y Corresponds to forward and backward control, -127 is full speed backward, 127 is full speed forward */ 
-
-//----REQUIRED----
 var sys = require('util');
+var express = require('express');
+var fs = require('fs');
+var bodyParser = require('body-parser');
+var serialPort = require('serialport');
+var sleep = require('sleep');
 var spawn = require("child_process").spawn;
-var rover = require('./runt_pyControl.js');
-//----VARIABLES----
-var finishedTraversal = false;
-var executeTime = 5;
+//var rover = require('./runt_pyControl.js');
+/*COMMENT THIS OUT IF YOU WISH TO TEST WITH THE RUNT ROVER
+var inital_current_heading=15;
+var inital_target_heading=20;
+var target_heading;
+var current_heading;
+*/
+
+//COMMENT THIS OUT IF YOU WISH TO TEST WITHOUT THE RUNT ROVER
+var spawn = require("child_process").spawn;
+var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
+//var rover = require('./runt_pyControl.js');
+//*/
+//port.close();
+
+python_proc.stdout.on('data', function (data){
+    current_heading = parseFloat(data);
+	//winston.info('Current heading: ' + data.toString());
+    //calc_heading_delta();
+});
+
+//-------ROVERCONTROL------
+var port = new serialPort('/dev/ttyACM0', {
+    baudRate: 9600,
+    parser: serialPort.parsers.readline('\n')
+});
+
+var x_Axis_arr = new Uint16Array(3);
+x_Axis_arr[0] = 0xB;
+x_Axis_arr[2] = 0xbbaa;
+var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
+
+var y_Axis_arr = new Uint16Array(3);
+y_Axis_arr[0] = 0xC;
+y_Axis_arr[2] = 0xbbaa;
+var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
+
+var time = new Date();
+function setRightSide(rightSpeed) {
+    if (rightSpeed < -127 || rightSpeed > 127) {
+        throw new RangeError('speed must be between -127 and 127');
+    }
+    console.log('Y: ' + rightSpeed );
+    // Since we are using unsigened ints for serial make it between 0 and 254
+    rightSpeed = rightSpeed + 127;
+    parseInt(rightSpeed);
+    y_Axis_arr[1] = rightSpeed;
+    //x_Axis_arr[1] = parseInt(speed + 127);
+
+    //console.log(y_Axis_buff);
+    console.log(y_Axis_arr);
+    console.log(y_Axis_buff);
+    port.write(y_Axis_buff);
+    //port.write(x_Axis_buff)
+}
+
+function setLeftSide(leftSpeed) {
+    if (leftSpeed < -127 || leftSpeed > 127) {
+        throw new RangeError('speed must be between -127 and 127');
+    }
+    console.log('x: ' + leftSpeed);
+    // Since we are using unsigned ints for serial make it between 0 and 254
+    leftSpeed = leftSpeed + 127;
+    parseInt(leftSpeed);
+    x_Axis_arr[1] = leftSpeed;
+    console.log(x_Axis_arr);
+    console.log(x_Axis_buff);
+    port.write(x_Axis_buff);
+}
+
+function driveForward(leftSideThrottle, rightSideThrottle) {
+    setRightSide(rightSideThrottle);
+    setLeftSide(leftSideThrottle);
+}
+
+function stopRover() {
+    //receiveMobility(zeroMessage[0]);
+    //receiveMobility(zeroMessage[1]);
+    driveForward(0, 0);
+    // Stopping all joints
+
+}
+// Any serial data from the arduino will be sent back home
+// and printed to the console
+port.on('data', function(data) {
+    console.log('ArduinoMessage: ' + data);
+    var jsonBuilder = {};
+    jsonBuilder.ArduinoMessage = data;
+    jsonBuilder.type = 'debug';
+    //ssendHome(jsonBuilder);
+});
+
+port.on('open',function(){
+    console.log('open');
+    //setTimeout(main,1000);
+});
+//----END ROVER CONTROL----
+
 
 //DRIVE-CONSTANT: 
-//30 - UNTESTED, UNSURE OF SPEED, BE AWARE WHEN TESTING
-var drive_constant = 30;
+//40 - UNTESTED, UNSURE OF SPEED, BE AWARE WHEN TESTING
+var drive_constant = 75;
+
+var throttle_min = -127; // Calculated to be 1000 us
+var throttle_max = 127; // Calculated to be 2000 us
 
 //DEGREE OF ERROR
 //2 DEGREES - Currenly untested on Atlas, may adjust over time. 
-var acceptable_Degree_Error = 2;
+var acceptable_Degree_Error = 4;
 
+var leftThrottle;
+var rightThrottle;
+var previousrightThrottle;
+var previousleftThrottle;
+
+var previous_heading_delta;
 var throttlePercentageChange;
 
-var x_axis_throttle;
-var x_axis_throttle_previous;
-var x_axis_max = 127;
-var x_axis_min = -127;
-
+var current_heading;
+var heading_delta;
 
 var turning_left = null;
 var turning_right = null;
 
 var driveCounter = 0;
 
-var heading_delta;
-var previous_heading_delta;
-
 //FOR OFF ROVER TESTING:
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
-var current_heading = 360;
+var current_heading;
 var target_heading = 65;
 //THEN COMMENT THIS OUT
-/*
-var process = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
-process.stdout.on('data', function (data){
-	current_heading = parseFloat(data);
-	//console.log('Current heading: ' + data.toString());
-});
-
-//*/
-/*FOR MOTOR HAT THAT HAS BEEN REMOVED, SAVING INCASE WE SWAP BACK
-var x_axis_min = 0; // Calculated to be 1000 us
-var x_axis_max = 255; // Calculated to be 2000 us
-var drive_constant = 127;
-*/
-
-
-//----WINSTON LOGGER----
-//COMMENTED OUT CURRENTLY AS IT WAS NOT WORKING PROPERLY
-/*
-const Winston = require('winston');
-const winston = new (Winston.Logger)({
-    transports: [
-      new (Winston.transports.Console)({
-          'colorize': true
-          
-     }),
-      new (Winston.transports.File)({ 
-          filename: './autonomous.log',
-          options:{flags: 'w'},         // Overwrites logfile. Remove if you want to append 
-          timestamp: function () {
-          return NOW();},
-     })
-    ]
-  });
-*/
-
-// Cleanup procedures, implemented by Shan
-process.on('SIGINT',function(){;
-    //rover.stop();
-    console.log('shutting rover down.')
-    process.exit();
-});
 
 //Drives the rover forward and making any adjustments along the way.
 var forwardPMovement = function() {
     console.log('----ForwardPmovement----')
-    //rover.drive_forward();
+
     drive_timer = setInterval(function() {
         //FOR TESTING OFF ROVER
         driveCounter++;
-        current_heading--;
+        //current_heading--;
         //---------------------
         calc_heading_delta();
         console.log("Current Heading: " + current_heading);
         console.log("Target Heading: " + target_heading);
         console.log("Heading Delta: " + heading_delta)
-        console.log("Turning left: " + turning_left); //boolean value
-        console.log("Turning right: " + turning_right);//boolean value
+        console.log("Turning left:" + turning_left);
+        console.log("Turning right:" + turning_right);
         if (Math.abs(heading_delta) <= acceptable_Degree_Error) {
-            x_axis_throttle = drive_constant;
-            x_axis_throttle = drive_constant;
-            console.log('MOVING FORWARD AT DRIVE CONSTANT');
+            leftThrottle = drive_constant;
+            rightThrottle = drive_constant;
+            console.log('Moving forward at drive constant');
         } else {
-            console.log("NOT WITHIN ACCEPTABLE DEGREE OF ERROR");
             //Calculate the throttle percentage change based on what the proportion is.
-            //TROTTLE PERCENTAGE CHANGE FORMULA MAY BE ADJUSTED OVER TIME DEPENDING ON ATLAS SPEED
-            throttlePercentageChange = heading_delta/360
-            console.log('ThrottlePercentageChange: ' + throttlePercentageChange);
+            throttlePercentageChange = heading_delta/180
             console.log('turning_left: ' + turning_left);
             console.log('turning_right:' + turning_right);
             if(turning_right){
                     console.log('Slowing turning right');
-                    x_axis_throttle = (x_axis_max*throttlePercentageChange);
-                    console.log('Raw x_axis_throttle: ' + x_axis_throttle);
+                    leftThrottle = drive_constant + Math.round(drive_constant * throttlePercentageChange);
+                    rightThrottle = drive_constant - Math.round(drive_constant * throttlePercentageChange);
             }else if(turning_left){
                     console.log('Slowing turning left');
-                    x_axis_throttle = 0 - (x_axis_max*throttlePercentageChange);
-                    console.log('Raw x_axis_throttle: ' + x_axis_throttle);
+                    leftThrottle = drive_constant - Math.round(drive_constant * throttlePercentageChange);
+                    rightThrottle = drive_constant + Math.round(drive_constant * throttlePercentageChange);
             } else {
                 console.log('ERROR - Cannot slowly turn left or right');
             }
         }
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
-        //less than x_axis_min and x_axis_max. Then sets the rover speed to the calculated value
-        x_axis_throttle = Math.round(x_axis_throttle);
-        console.log('Rounded x_axis_throttle: ' + x_axis_throttle);
-        if (Math.abs(x_axis_throttle) < x_axis_max && x_axis_throttle > x_axis_min){
-            console.log('Sending x_axis_throttle: ' + x_axis_throttle);
-            //rover.set_speed(Math.trunc(currentLeftThrottle), Math.trunc(x_axis_throttle));
-            x_axis_throttle_previous = x_axis_throttle;
+        //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
+
+        if (leftThrottle <= throttle_max && leftThrottle >= throttle_min &&  rightThrottle <= throttle_max && rightThrottle >= throttle_min){
+            //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
+            driveForward(leftThrottle, rightThrottle);
+            //PUT SET SPEED IN HERE.
+            previousleftThrottle = leftThrottle;
+            previousrightThrottle = rightThrottle;
+            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } else {
             //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
-            console.log('Throttle Value outside of PWM range');
-            //checks the x_axis_throttle values to make sure they're within mechanical constraints
-            if (x_axis_throttle > x_axis_max){
-                x_axis_throttle = 0;
-                console.log("ERROR: EXTREME OUT OF BOUNDS: " + x_axis_throttle);
-            } else if (x_axis_throttle < x_axis_min) {
-                x_axis_throttle = 0;
-                console.log("ERROR: EXTREME OUT OF BOUNDS: " + x_axis_throttle);
+            console.log('Throttle Value outside of motor range');
+            console.log("Unfixed LeftThrottle:" + leftThrottle);
+            console.log("Unfixed RightThrottle: " + rightThrottle);
+            //checks the leftThrottle values to make sure they're within mechanical constraints
+            if (leftThrottle > throttle_max){
+                leftThrottle = throttle_max;
+            } else if (leftThrottle < throttle_min) {
+                leftThrottle = throttle_min;
+            } else if (leftThrottle <= throttle_max && leftThrottle >= throttle_min) {
+               console.log("LEFT THROTTLE OKAY"); 
             } else {
-                console.log('ERROR: THROTTLE VALUES UNDEFINED');
-                //rover.stop();
+                console.log('ERROR - leftThrottle values undefined');
+                stopRover();
                 clearInterval(drive_timer);
             }
+
+            //checks the rightThrottle values to make sure they're within mechanical constraints
+            if (rightThrottle > throttle_max) {
+                rightThrottle = throttle_max;
+            } else if (rightThrottle < throttle_min) {
+                rightThrottle = throttle_min;
+            } else if (rightThrottle <= throttle_max && rightThrottle >= throttle_min) {
+                console.log("RIGHT THROTTLE OK");
+            } else {
+                console.log('ERROR - rightThrottle values undefined');
+                stopRover();
+                //clearInterval(drive_timer);
+            }
+            //PUT SET SPEED HERE AS WELL
+            driveForward(leftThrottle, rightThrottle);
+            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         }
-        //rover.set_speed(Math.trunc(x_axis_throttle), Math.trunc(x_axis_throttle));
-        if (driveCounter > 361) {
+
+        if (driveCounter > 50) {
             clearInterval(drive_timer);
-            //rover.stop();
-            console.log('On Heading...Stopping...');
+            stopRover();
+            console.log('----REACHED THE END OF LOOP----');
         } else {
             console.log('Thottle Adjusted');
         }
-    },100);
+    },50);
 };
 
 //grabbed shan's calc_heading_delta() that we worked on together for the turning/heading logic
@@ -205,11 +271,34 @@ function calc_heading_delta(){
     } 
 }
 
-var main = setInterval(function(){
-    if(current_heading != null){
-        clearInterval(main);
-        forwardPMovement();
-        //setTimeout(function(){;},1000);
-    }
-    
-},50);
+//stopRover();
+setTimeout(main,3000);
+function main() 
+{
+    clearTimeout(main);
+    forwardPMovement();
+    console.log("----BACK IN MAIN FUNCTION----")
+    stopRover();
+}
+
+process.on('SIGTERM', function() {
+    console.log("STOPPING ROVER");
+    clearInterval(drive_timer);
+    stopRover();  
+    setTimeout(function(){
+        port.close();
+        process.exit();
+    },1000);
+});
+
+process.on('SIGINT', function() {
+    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
+    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    clearInterval(drive_timer);
+    stopRover();
+    setTimeout(function(){
+        port.close();
+        process.exit();
+    },1000);
+
+});
