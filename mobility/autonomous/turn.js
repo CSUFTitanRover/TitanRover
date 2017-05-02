@@ -9,7 +9,7 @@ var previous_heading_delta; //leave untouched
 
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var turning_turning_drive_constant = 0; 
+var turning_drive_constant = 0; 
 
 //DEGREES OF ERROR
 var turning_drive_error = 20;//within 20 degrees stop turn
