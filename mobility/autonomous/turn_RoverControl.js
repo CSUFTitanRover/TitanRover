@@ -122,15 +122,26 @@ python_proc.stdout.on('data', function (data){
 });
 
 // Cleanup procedures 
-process.on('SIGINT',function(){
+process.on('SIGTERM', function() {
+    console.log("STOPPING ROVER");
+    clearInterval(timer);
+    stopRover();   
+});
+
+process.on('SIGINT', function() {
+    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
+    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    clearInterval(timer);
     stopRover();
-    //winston.info('shutting rover down.')
-    process.exit();
+    //port.close();
+    process.exit(port.close());
+    // some other closing procedures go here
+
 });
 
 // Main Function
 var turningP = function() {
-    console.log('----ForwardPmovement----')
+    console.log('----turningP----')
     turn_timer = setInterval(function() {
         //FOR TESTING OFF ROVER
         turn_counter++;
@@ -203,7 +214,7 @@ var turningP = function() {
             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         }
 
-        if (turn_counter > 400) {
+        if (turn_counter > 50) {
             clearInterval(turn_timer);
             stopRover();
             console.log('REACHED MAX NUMBER OF CHANCES');
