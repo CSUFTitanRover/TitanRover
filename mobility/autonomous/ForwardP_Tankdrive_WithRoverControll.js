@@ -214,14 +214,14 @@ var forwardPMovement = function() {
             } else {
                 console.log('ERROR - rightThrottle values undefined');
                 stopRover();
-                clearInterval(drive_timer);
+                //clearInterval(drive_timer);
             }
             //PUT SET SPEED HERE AS WELL
             driveForward(leftThrottle, rightThrottle);
             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         }
 
-        if (driveCounter > 400) {
+        if (driveCounter > 50) {
             clearInterval(drive_timer);
             stopRover();
             console.log('----REACHED THE END OF LOOP----');
@@ -287,7 +287,9 @@ function main()
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     clearInterval(timer);
-    stopRover();   
+    stopRover();  
+    sleep.sleep(1); 
+    process.exit(port.close());
 });
 
 process.on('SIGINT', function() {
@@ -295,6 +297,7 @@ process.on('SIGINT', function() {
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     clearInterval(timer);
     stopRover();
+    sleep.sleep(1);
     //port.close();
     process.exit(port.close());
     // some other closing procedures go here
