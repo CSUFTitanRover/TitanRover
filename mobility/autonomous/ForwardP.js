@@ -1,32 +1,44 @@
 var sys = require('util');
-var express = require('express');
-var fs = require('fs');
-var bodyParser = require('body-parser');
-var serialPort = require('serialport');
-var sleep = require('sleep');
-var spawn = require("child_process").spawn;
-//var rover = require('./runt_pyControl.js');
-/*COMMENT THIS OUT IF YOU WISH TO TEST WITH THE RUNT ROVER
-var inital_current_heading=15;
-var inital_target_heading=20;
-var target_heading;
-var current_heading;
-*/
-
-//COMMENT THIS OUT IF YOU WISH TO TEST WITHOUT THE RUNT ROVER
 var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
-//var rover = require('./runt_pyControl.js');
-//*/
-//port.close();
 
+
+//Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
+var current_heading; //leave untouched, written from the IMU
+var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
+var previous_heading_delta; //leave untouched
+
+//THEN COMMENT THIS OUT
+//DRIVE-CONSTANTS: 
+var turning_drive_constant = 0; 
+var forward_drive_constant = 50;
+
+//DEGREES OF ERROR
+var forward_drive_error = 4; //within 4 degrees drive straight
+
+//THROTTLE LOGIC
+var throttle_min = -127; //Minimum throttle value acceptable
+var throttle_max = 127; //Maximum throttle value acceptable
+var leftThrottle;
+var rightThrottle;
+var previousrightThrottle;
+var previousleftThrottle;
+var throttlePercentageChange;
+
+//BOOLEAN LOGIC FOR FUNCTIONS
+var turning_left = null;
+var turning_right = null;
+
+var driveCounter = 0;//initialize counter for testing purposes
+var maxDriveCounter = 500; //max value the counter can achienve
+
+//----GRAB DATA FROM IMU----
 python_proc.stdout.on('data', function (data){
     current_heading = parseFloat(data);
-	//winston.info('Current heading: ' + data.toString());
-    //calc_heading_delta();
 });
 
 //-------ROVERCONTROL------
+var serialPort = require('serialport');
 var port = new serialPort('/dev/ttyACM0', {
     baudRate: 9600,
     parser: serialPort.parsers.readline('\n')
@@ -101,41 +113,32 @@ port.on('open',function(){
     console.log('open');
     //setTimeout(main,1000);
 });
+
+//LOGIC TO KILL ALL PROCESS AND STOP ROVER MID SCRIPT
+process.on('SIGTERM', function() {
+    console.log("STOPPING ROVER");
+    clearInterval(turn_timer);
+    clearInterval(drive_timer);
+    stopRover();  
+    setTimeout(function(){ //required to fully stop the rover
+        port.close();
+        process.exit();
+    },1000);
+});
+
+process.on('SIGINT', function() {
+    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
+    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    clearInterval(turn_timer);
+    clearInterval(drive_timer);
+    stopRover();
+    setTimeout(function(){ //required to fully stop the rover
+        port.close();
+        process.exit();
+    },1000);
+});
+//----END SCRIPT KILL----
 //----END ROVER CONTROL----
-
-
-//DRIVE-CONSTANT: 
-//40 - UNTESTED, UNSURE OF SPEED, BE AWARE WHEN TESTING
-var drive_constant = 75;
-
-var throttle_min = -127; // Calculated to be 1000 us
-var throttle_max = 127; // Calculated to be 2000 us
-
-//DEGREE OF ERROR
-//2 DEGREES - Currenly untested on Atlas, may adjust over time. 
-var acceptable_Degree_Error = 4;
-
-var leftThrottle;
-var rightThrottle;
-var previousrightThrottle;
-var previousleftThrottle;
-
-var previous_heading_delta;
-var throttlePercentageChange;
-
-var current_heading;
-var heading_delta;
-
-var turning_left = null;
-var turning_right = null;
-
-var driveCounter = 0;
-
-//FOR OFF ROVER TESTING:
-//Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
-var current_heading;
-var target_heading = 65;
-//THEN COMMENT THIS OUT
 
 //Drives the rover forward and making any adjustments along the way.
 var forwardPMovement = function() {
@@ -152,9 +155,9 @@ var forwardPMovement = function() {
         console.log("Heading Delta: " + heading_delta)
         console.log("Turning left:" + turning_left);
         console.log("Turning right:" + turning_right);
-        if (Math.abs(heading_delta) <= acceptable_Degree_Error) {
-            leftThrottle = drive_constant;
-            rightThrottle = drive_constant;
+        if (Math.abs(heading_delta) <= forward_drive_error) {
+            leftThrottle = forward_drive_constant;
+            rightThrottle = forward_drive_constant;
             console.log('Moving forward at drive constant');
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
@@ -163,12 +166,12 @@ var forwardPMovement = function() {
             console.log('turning_right:' + turning_right);
             if(turning_right){
                     console.log('Slowing turning right');
-                    leftThrottle = drive_constant + Math.round(drive_constant * throttlePercentageChange);
-                    rightThrottle = drive_constant - Math.round(drive_constant * throttlePercentageChange);
+                    leftThrottle = forward_drive_constant + Math.round(forward_drive_constant * throttlePercentageChange);
+                    rightThrottle = forward_drive_constant - Math.round(forward_drive_constant * throttlePercentageChange);
             }else if(turning_left){
                     console.log('Slowing turning left');
-                    leftThrottle = drive_constant - Math.round(drive_constant * throttlePercentageChange);
-                    rightThrottle = drive_constant + Math.round(drive_constant * throttlePercentageChange);
+                    leftThrottle = forward_drive_constant - Math.round(forward_drive_constant * throttlePercentageChange);
+                    rightThrottle = forward_drive_constant + Math.round(forward_drive_constant * throttlePercentageChange);
             } else {
                 console.log('ERROR - Cannot slowly turn left or right');
             }
@@ -270,8 +273,6 @@ function calc_heading_delta(){
         }
     } 
 }
-
-//stopRover();
 setTimeout(main,3000);
 function main() 
 {
@@ -280,25 +281,3 @@ function main()
     console.log("----BACK IN MAIN FUNCTION----")
     stopRover();
 }
-
-process.on('SIGTERM', function() {
-    console.log("STOPPING ROVER");
-    clearInterval(drive_timer);
-    stopRover();  
-    setTimeout(function(){
-        port.close();
-        process.exit();
-    },1000);
-});
-
-process.on('SIGINT', function() {
-    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
-    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    clearInterval(drive_timer);
-    stopRover();
-    setTimeout(function(){
-        port.close();
-        process.exit();
-    },1000);
-
-});

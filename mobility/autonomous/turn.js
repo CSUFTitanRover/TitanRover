@@ -2,8 +2,41 @@ var sys = require('util');
 var sleep = require('sleep');
 var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
-//var rover = require('./runt_pyControl.js');
-const NOW = require("performance-now");
+//Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
+var current_heading; //leave untouched, written from the IMU
+var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
+var previous_heading_delta; //leave untouched
+
+//THEN COMMENT THIS OUT
+//DRIVE-CONSTANTS: 
+var turning_drive_constant = 0; 
+
+//DEGREES OF ERROR
+var turning_drive_error = 20;//within 20 degrees stop turn
+
+//THROTTLE LOGIC
+var throttle_min = -127; //Minimum throttle value acceptable
+var throttle_max = 127; //Maximum throttle value acceptable
+var leftThrottle;
+var rightThrottle;
+var previousrightThrottle;
+var previousleftThrottle;
+var throttlePercentageChange;
+
+//BOOLEAN LOGIC FOR FUNCTIONS
+var doneTurning = false;
+var turning_left = null;
+var turning_right = null;
+
+var turn_counter = 0;//initialize counter for testing purposes
+var maxTurnCounter = 500; //max value the turn counter can achieve
+
+// Get heading,calculate heading and turn immediately.
+python_proc.stdout.on('data', function (data){
+    current_heading = parseFloat(data);
+	//winston.info('Current heading: ' + data.toString());
+    //calc_heading_delta();
+});
 
 //-------ROVERCONTROL------
 var serialPort = require('serialport');
@@ -23,7 +56,6 @@ y_Axis_arr[2] = 0xbbaa;
 var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
-var timer;
 function setRightSide(rightSpeed) {
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
@@ -65,6 +97,8 @@ function stopRover() {
     //receiveMobility(zeroMessage[0]);
     //receiveMobility(zeroMessage[1]);
     driveForward(0, 0);
+    // Stopping all joints
+
 }
 // Any serial data from the arduino will be sent back home
 // and printed to the console
@@ -80,51 +114,39 @@ port.on('open',function(){
     console.log('open');
     //setTimeout(main,1000);
 });
-//----END ROVER CONTROL----
-//DRIVE-CONSTANT: 
-//0 For Turning
-var drive_constant = 0;
 
-var throttle_min = -127; // Calculated to be 1000 us
-var throttle_max = 127; // Calculated to be 2000 us
-
-//DEGREE OF ERROR
-//20 DEGREES - FOR RUNT - Currenly untested on Atlas, may adjust over time. 
-var acceptable_Degree_Error = 20;
-
-var leftThrottle;
-var rightThrottle;
-var previousrightThrottle;
-var previousleftThrottle;
-
-var doneTurning = false;
-
-var previous_heading_delta;
-var throttlePercentageChange;
-
-var turning_left = null;
-var turning_right = null;
-
-var turn_counter = 0;
-
-//FOR OFF ROVER TESTING:
-//Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
-var current_heading;
-var target_heading = 65;
-//THEN COMMENT THIS OUT
-// Get heading,calculate heading and turn immediately.
-python_proc.stdout.on('data', function (data){
-    current_heading = parseFloat(data);
-	//winston.info('Current heading: ' + data.toString());
-    //calc_heading_delta();
+//LOGIC TO KILL ALL PROCESS AND STOP ROVER MID SCRIPT
+process.on('SIGTERM', function() {
+    console.log("STOPPING ROVER");
+    clearInterval(turn_timer);
+    clearInterval(drive_timer);
+    stopRover();  
+    setTimeout(function(){ //required to fully stop the rover
+        port.close();
+        process.exit();
+    },1000);
 });
+
+process.on('SIGINT', function() {
+    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
+    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    clearInterval(turn_timer);
+    clearInterval(drive_timer);
+    stopRover();
+    setTimeout(function(){ //required to fully stop the rover
+        port.close();
+        process.exit();
+    },1000);
+});
+//----END SCRIPT KILL----
+//----END ROVER CONTROL----
 
 // Main Function
 var turningP = function() {
     console.log('----turningP----')
     turn_timer = setInterval(function() {
         //FOR TESTING OFF ROVER
-        turn_counter++;
+        turnCounter++;
         //current_heading--;
         //---------------------
         calc_heading_delta();
@@ -196,7 +218,7 @@ var turningP = function() {
                 console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
             }
 
-            if (turn_counter > 50) {
+            if (turnCounter > 50) {
                 clearInterval(turn_timer);
                 stopRover();
                 console.log('REACHED MAX NUMBER OF CHANCES');
@@ -251,33 +273,8 @@ function calc_heading_delta(){
     } 
 }
 
-setTimeout(main,3000);
+setTimeout(main,3000);//Necesary block for the serial port to open with the arduino
 function main() {
     clearInterval(main);
     turningP();
-        //setTimeout(function(){;},1000);
-};
-    
-process.on('SIGTERM', function() {
-    console.log("STOPPING ROVER");
-    clearInterval(turn_timer);
-    stopRover();  
-    setTimeout(function(){
-        port.close();
-        process.exit();
-    },1000);
-});
-
-process.on('SIGINT', function() {
-    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
-    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    clearInterval(turn_timer);
-    stopRover();
-    setTimeout(function(){
-        port.close();
-        process.exit();
-    },1000);
-
-    // some other closing procedures go here
-
-});
+}
