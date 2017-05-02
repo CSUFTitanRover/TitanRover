@@ -36,7 +36,7 @@ var isTurning = false;
 var isDriving = false; 
 
 var turnCounter = 0;//initialize counter for testing purposes
-var maxTurnCounter = 500; //max value the turn counter can achieve
+var maxTurnCounter = 1000; //max value the turn counter can achieve
 var driveCounter = 0;//initialize counter for testing purposes
 var maxDriveCounter = 500; //max value the counter can achienve
 var pidCounter = 0;//initialize counter for testing purposes
@@ -247,7 +247,7 @@ var rover_autonomous_pid = function() {
                             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
                         }
 
-                        if (turnCounter > 50) {
+                        if (turnCounter > maxTurnCounter) {
                             clearInterval(turn_timer);
                             stopRover();
                             console.log('REACHED MAX NUMBER OF CHANCES');
