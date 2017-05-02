@@ -208,6 +208,8 @@ var turningP = function() {
             } else {
                 console.log("----EXECUTING TURN----");
             }
+        } else {
+            stopRover();
         }
     },50);
 };
@@ -251,7 +253,9 @@ function calc_heading_delta(){
             }
             heading_delta = target_heading - current_heading;
         }
-    } 
+    } else {
+
+    }
 }
 
 setTimeout(main,3000);
