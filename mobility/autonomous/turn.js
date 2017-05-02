@@ -28,7 +28,7 @@ var doneTurning = false;
 var turning_left = null;
 var turning_right = null;
 
-var turn_counter = 0;//initialize counter for testing purposes
+var turnCounter = 0;//initialize counter for testing purposes
 var maxTurnCounter = 500; //max value the turn counter can achieve
 
 // Get heading,calculate heading and turn immediately.
@@ -142,6 +142,12 @@ process.on('SIGINT', function() {
 //----END ROVER CONTROL----
 
 // Main Function
+setTimeout(main,3000);//Necesary block for the serial port to open with the arduino
+function main() {
+    clearInterval(main);
+    turningP();
+}
+
 var turningP = function() {
     console.log('----turningP----')
     turn_timer = setInterval(function() {
@@ -271,10 +277,4 @@ function calc_heading_delta(){
             heading_delta = target_heading - current_heading;
         }
     } 
-}
-
-setTimeout(main,3000);//Necesary block for the serial port to open with the arduino
-function main() {
-    clearInterval(main);
-    turningP();
 }
