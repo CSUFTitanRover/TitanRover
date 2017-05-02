@@ -166,8 +166,8 @@ var rover_autonomous_pid = function() {
     //TODO - CALCULATE DISTNACE SO SPIT US BACK A MODIFIER TO BE INCLUDED IN THROTTLE CALCULATIONS
     console.log('----rover_autonomous_pid----')
     pid_timer = setInterval(function() {
-        calc_heading_delta();
         if (!isDriving || !isTurning) {
+            calc_heading_delta();
             if (Math.abs(heading_delta) > turning_drive_error) {
                 isTurning = true;
                 console.log('----turningP----')
@@ -177,7 +177,6 @@ var rover_autonomous_pid = function() {
                     turnCounter++;
                     //current_heading--;
                     //---------------------
-                    calc_heading_delta();
                     console.log("Current Heading: " + current_heading);
                     console.log("Target Heading: " + target_heading);
                     console.log("Heading Delta: " + heading_delta)
@@ -272,7 +271,6 @@ var rover_autonomous_pid = function() {
                     driveCounter++;
                     //current_heading--;
                     //---------------------
-                    calc_heading_delta();
                     console.log("Current Heading: " + current_heading);
                     console.log("Target Heading: " + target_heading);
                     console.log("Heading Delta: " + heading_delta)
