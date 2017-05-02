@@ -89,8 +89,8 @@ port.on('open',function(){
 //0 For Turning
 var drive_constant = 0;
 
-var throttle_min = -126; // Calculated to be 1000 us
-var throttle_max = 126; // Calculated to be 2000 us
+var throttle_min = -127; // Calculated to be 1000 us
+var throttle_max = 127; // Calculated to be 2000 us
 
 //DEGREE OF ERROR
 //2 DEGREES - Currenly untested on Atlas, may adjust over time. 
@@ -147,9 +147,10 @@ var turningP = function() {
         console.log("Turning left:" + turning_left);
         console.log("Turning right:" + turning_right);
         if (Math.abs(heading_delta) <= acceptable_Degree_Error) {
-            leftThrottle = drive_constant;
-            rightThrottle = drive_constant;
-            console.log('Moving forward at drive constant');
+            clearInterval(turn_timer);
+            stopRover();
+            console.log('----FOUND HEADIN----');
+            console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
             throttlePercentageChange = heading_delta/360
@@ -161,8 +162,8 @@ var turningP = function() {
                     rightThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange);
             }else if(turning_left){
                     console.log('Slowing turning left');
-                    leftThrottle = drive_constant - Math.round(drive_constant * throttlePercentageChange);
-                    rightThrottle = drive_constant - Math.round(drive_constant * throttlePercentageChange);
+                    leftThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange);
+                    rightThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange);
             } else {
                 console.log('ERROR - Cannot slowly turn left or right');
             }
@@ -202,16 +203,16 @@ var turningP = function() {
                 clearInterval(turn_timer);
             }
             //PUT SET SPEED HERE AS WELL
-            //driveForward(leftThrottle, rightThrottle);
-            //console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            driveForward(leftThrottle, rightThrottle);
+            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         }
 
-        if (turn_counter > 10 || ) {
+        if (turn_counter > 400) {
             clearInterval(turn_timer);
             stopRover();
-            console.log('On Heading...Stopping...');
+            console.log('REACHED MAX NUMBER OF CHANCES');
         } else {
-            console.log('Thottle Adjusted');
+            console.log("----EXECUTING TURN----");
         }
     },50);
 };
