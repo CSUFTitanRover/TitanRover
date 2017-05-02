@@ -9,7 +9,7 @@ var previous_heading_delta; //leave untouched
 
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 0; 
+var turning_turning_drive_constant = 0; 
 
 //DEGREES OF ERROR
 var turning_drive_error = 20;//within 20 degrees stop turn
@@ -175,12 +175,12 @@ var turningP = function() {
             console.log('turning_right:' + turning_right);
             if(turning_right){
                     console.log('Slowing turning right');
-                    leftThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
-                    rightThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
+                    leftThrottle = turning_drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
+                    rightThrottle = turning_drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
             }else if(turning_left){
                     console.log('Slowing turning left');
-                    leftThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
-                    rightThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
+                    leftThrottle = turning_drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
+                    rightThrottle = turning_drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
             } else {
                 console.log('ERROR - Cannot slowly turn left or right');
             }
