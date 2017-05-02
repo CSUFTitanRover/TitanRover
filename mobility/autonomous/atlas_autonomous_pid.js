@@ -35,7 +35,7 @@ var turning_right = null;
 var isTurning = false;
 var isDriving = false; 
 
-var turn_counter = 0;//initialize counter for testing purposes
+var turnCounter = 0;//initialize counter for testing purposes
 var maxTurnCounter = 500; //max value the turn counter can achieve
 var driveCounter = 0;//initialize counter for testing purposes
 var maxDriveCounter = 500; //max value the counter can achienve
