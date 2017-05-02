@@ -161,7 +161,7 @@ var turningP = function() {
         console.log("Heading Delta: " + heading_delta)
         console.log("Turning left:" + turning_left);
         console.log("Turning right:" + turning_right);
-        if (Math.abs(heading_delta) <= acceptable_Degree_Error) {
+        if (Math.abs(heading_delta) <= turning_drive_error) {
             clearInterval(turn_timer);
             stopRover();
             console.log('----FOUND HEADING----');
