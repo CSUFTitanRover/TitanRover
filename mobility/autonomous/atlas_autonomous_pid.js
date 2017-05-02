@@ -156,9 +156,6 @@ function main() {
     clearInterval(main);
     rover_autonomous_pid();
     //exit 
-    clearInterval(pid_timer);
-    clearInterval(turn_timer);
-    clearInterval(drive_timer);
     stopRover();
     setTimeout(function(){ //required to fully stop the rover
         port.close();
