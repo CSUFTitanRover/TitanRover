@@ -213,10 +213,52 @@ var turningP = function() {
     },50);
 };
 
+function calc_heading_delta(){
+    console.log('Calculating Heading Delta & Direction');
+    temp_delta = current_heading - target_heading;
+    console.log('temp_delta: ' + temp_delta);
+// Is turning left or right the shorter turn?
+    if(current_heading > target_heading){
+        if(Math.abs(temp_delta) > 180){
+            // If we were turning left previously or have never turned right before
+            if(turning_left || turning_right === null){
+                console.log('turning right: '+ current_heading);
+                turning_right = true;
+                turning_left = false;
+            }
+            heading_delta = 360 - current_heading + target_heading;
+        }else{
+              // If we were turning right previously or have never turned left before
+             if(turning_right || turning_left === null){
+                console.log('turning left: '+ current_heading);
+                turning_left = true;
+                turning_right = false;
+            }
+            heading_delta = current_heading - target_heading;
+            }
+    }else{
+        if(Math.abs(temp_delta) > 180){ 
+             if(turning_right || turning_left === null){
+                console.log('turning left: '+ current_heading);
+                turning_left = true;
+                turning_right = false;
+            }
+            heading_delta = 360 - target_heading + current_heading;
+        }else{
+            if(turning_left || turning_right === null){
+                console.log('turning right: '+ current_heading);
+                turning_right = true;
+                turning_left = false;
+            }
+            heading_delta = target_heading - current_heading;
+        }
+    } 
+}
+
 setTimeout(main,3000);
-var main = setInterval(function(){
+function main() {
     clearInterval(main);
     turningP();
         //setTimeout(function(){;},1000);
-},500);
+};
     
