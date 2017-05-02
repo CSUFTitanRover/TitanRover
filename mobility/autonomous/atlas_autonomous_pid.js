@@ -76,13 +76,9 @@ function setLeftSide(leftSpeed) {
     leftSpeed = leftSpeed + 127;
     parseInt(leftSpeed);
     left_side_arr[1] = leftSpeed;
-    //right_side_arr[1] = parseInt(speed + 127);
-
+    //onsole.log(left_side_arr);
     //console.log(left_side_buff);
-    console.log(left_side_arr);
-    console.log(left_side_buff);
     port.write(left_side_buff);
-    //port.write(right_side_buff)
 }
 
 function setRightSide(rightSpeed) {
@@ -94,8 +90,8 @@ function setRightSide(rightSpeed) {
     rightSpeed = rightSpeed + 127;
     parseInt(rightSpeed);
     right_side_arr[1] = rightSpeed;
-    console.log(right_side_arr);
-    console.log(right_side_buff);
+    //console.log(right_side_arr);
+    //console.log(right_side_buff);
     port.write(right_side_buff);
 }
 
