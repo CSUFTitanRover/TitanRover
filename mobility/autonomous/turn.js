@@ -119,7 +119,6 @@ port.on('open',function(){
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     clearInterval(turn_timer);
-    clearInterval(drive_timer);
     stopRover();  
     setTimeout(function(){ //required to fully stop the rover
         port.close();
@@ -131,7 +130,6 @@ process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     clearInterval(turn_timer);
-    clearInterval(drive_timer);
     stopRover();
     setTimeout(function(){ //required to fully stop the rover
         port.close();

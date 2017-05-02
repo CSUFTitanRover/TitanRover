@@ -156,7 +156,7 @@ function main() {
     clearInterval(main);
     rover_autonomous_pid();
     //exit 
-    clear_interval(pid_timer);
+    clearInterval(pid_timer);
     clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();
