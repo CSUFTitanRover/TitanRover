@@ -43,15 +43,15 @@ var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
 var timer;
-function setRightSide(leftSpeed) {
-    if (leftSpeed < -127 || leftSpeed > 127) {
+function setRightSide(rightSpeed) {
+    if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
-    console.log('Y: ' + leftSpeed );
+    console.log('Y: ' + rightSpeed );
     // Since we are using unsigened ints for serial make it between 0 and 254
-    leftSpeed = leftSpeed + 127;
-    parseInt(leftSpeed);
-    y_Axis_arr[1] = leftSpeed;
+    rightSpeed = rightSpeed + 127;
+    parseInt(rightSpeed);
+    y_Axis_arr[1] = rightSpeed;
     //x_Axis_arr[1] = parseInt(speed + 127);
 
     //console.log(y_Axis_buff);
@@ -61,15 +61,15 @@ function setRightSide(leftSpeed) {
     //port.write(x_Axis_buff)
 }
 
-function setLeftSide(rightSpeed) {
-    if (rightSpeed < -127 || rightSpeed > 127) {
+function setLeftSide(leftSpeed) {
+    if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
-    console.log('x: ' + rightSpeed);
+    console.log('x: ' + leftSpeed);
     // Since we are using unsigned ints for serial make it between 0 and 254
-    rightSpeed = rightSpeed + 127;
-    parseInt(rightSpeed);
-    x_Axis_arr[1] = rightSpeed;
+    leftSpeed = leftSpeed + 127;
+    parseInt(leftSpeed);
+    x_Axis_arr[1] = leftSpeed;
     console.log(x_Axis_arr);
     console.log(x_Axis_buff);
     port.write(x_Axis_buff);
