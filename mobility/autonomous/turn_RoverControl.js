@@ -208,9 +208,8 @@ var turningP = function() {
             } else {
                 console.log("----EXECUTING TURN----");
             }
-        } else {
+        } else
             stopRover();
-        }
     },50);
 };
 
