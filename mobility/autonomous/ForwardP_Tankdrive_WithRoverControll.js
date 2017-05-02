@@ -201,7 +201,7 @@ var forwardPMovement = function() {
             } else {
                 console.log('ERROR - leftThrottle values undefined');
                 stopRover();
-                //clearInterval(drive_timer);
+                clearInterval(drive_timer);
             }
 
             //checks the rightThrottle values to make sure they're within mechanical constraints
@@ -214,7 +214,7 @@ var forwardPMovement = function() {
             } else {
                 console.log('ERROR - rightThrottle values undefined');
                 stopRover();
-                //clearInterval(drive_timer);
+                clearInterval(drive_timer);
             }
             //PUT SET SPEED HERE AS WELL
             driveForward(leftThrottle, rightThrottle);
