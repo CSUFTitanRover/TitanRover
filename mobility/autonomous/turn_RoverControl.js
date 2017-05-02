@@ -93,8 +93,8 @@ var throttle_min = -127; // Calculated to be 1000 us
 var throttle_max = 127; // Calculated to be 2000 us
 
 //DEGREE OF ERROR
-//2 DEGREES - Currenly untested on Atlas, may adjust over time. 
-var acceptable_Degree_Error = 4;
+//20 DEGREES - FOR RUNT - Currenly untested on Atlas, may adjust over time. 
+var acceptable_Degree_Error = 20;
 
 var leftThrottle;
 var rightThrottle;
@@ -149,17 +149,17 @@ var turningP = function() {
             console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
-            throttlePercentageChange = heading_delta/360
+            throttlePercentageChange = heading_delta/180
             console.log('turning_left: ' + turning_left);
             console.log('turning_right:' + turning_right);
             if(turning_right){
                     console.log('Slowing turning right');
-                    leftThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange);
-                    rightThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange);
+                    leftThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
+                    rightThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
             }else if(turning_left){
                     console.log('Slowing turning left');
-                    leftThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange);
-                    rightThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange);
+                    leftThrottle = drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
+                    rightThrottle = drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
             } else {
                 console.log('ERROR - Cannot slowly turn left or right');
             }
