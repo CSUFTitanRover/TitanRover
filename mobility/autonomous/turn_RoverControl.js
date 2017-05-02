@@ -1,4 +1,5 @@
 var sys = require('util');
+var sleep = require('sleep');
 var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
 //var rover = require('./runt_pyControl.js');
@@ -119,24 +120,6 @@ python_proc.stdout.on('data', function (data){
     current_heading = parseFloat(data);
 	//winston.info('Current heading: ' + data.toString());
     //calc_heading_delta();
-});
-
-// Cleanup procedures 
-process.on('SIGTERM', function() {
-    console.log("STOPPING ROVER");
-    clearInterval(timer);
-    stopRover();   
-});
-
-process.on('SIGINT', function() {
-    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
-    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    clearInterval(timer);
-    stopRover();
-    //port.close();
-    process.exit(port.close());
-    // some other closing procedures go here
-
 });
 
 // Main Function
@@ -274,3 +257,22 @@ function main() {
         //setTimeout(function(){;},1000);
 };
     
+process.on('SIGTERM', function() {
+    console.log("STOPPING ROVER");
+    clearInterval(timer);
+    stopRover();  
+    sleep.sleep(1); 
+    process.exit(port.close());
+});
+
+process.on('SIGINT', function() {
+    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
+    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    clearInterval(timer);
+    stopRover();
+    sleep.sleep(1);
+    //port.close();
+    process.exit(port.close());
+    // some other closing procedures go here
+
+});
