@@ -149,7 +149,7 @@ var turningP = function() {
             console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
-            throttlePercentageChange = heading_delta/360
+            throttlePercentageChange = heading_delta/180;
             console.log('turning_left: ' + turning_left);
             console.log('turning_right:' + turning_right);
             if(turning_right){
