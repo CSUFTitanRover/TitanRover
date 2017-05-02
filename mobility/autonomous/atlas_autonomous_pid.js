@@ -39,6 +39,8 @@ var turn_counter = 0;//initialize counter for testing purposes
 var maxTurnCounter = 500; //max value the turn counter can achieve
 var driveCounter = 0;//initialize counter for testing purposes
 var maxDriveCounter = 500; //max value the counter can achienve
+var pidCounter = 0;//initialize counter for testing purposes
+var maxPidCounter = 1000;//max value the counter can achienve
 
 //----GRAB DATA FROM IMU----
 python_proc.stdout.on('data', function (data){
@@ -124,6 +126,7 @@ port.on('open',function(){
 //LOGIC TO KILL ALL PROCESS AND STOP ROVER MID SCRIPT
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
+    clearInterval(pid_timer);
     clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();  
@@ -136,6 +139,7 @@ process.on('SIGTERM', function() {
 process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    clear_interval(pid_timer);
     clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();
@@ -152,6 +156,7 @@ function main() {
     clearInterval(main);
     rover_autonomous_pid();
     //exit 
+    clear_interval(pid_timer);
     clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();
@@ -166,6 +171,10 @@ var rover_autonomous_pid = function() {
     //TODO - CALCULATE DISTNACE SO SPIT US BACK A MODIFIER TO BE INCLUDED IN THROTTLE CALCULATIONS
     console.log('----rover_autonomous_pid----')
     pid_timer = setInterval(function() {
+        pidCounter++; 
+        if (pidCounter > maxPidCounter) {
+            clearInterval(pid_timer);
+        }
         if (!isDriving || !isTurning) {
             calc_heading_delta();
             if (Math.abs(heading_delta) > turning_drive_error) {
@@ -358,6 +367,7 @@ var rover_autonomous_pid = function() {
         } else {
             console.log("ERROR - HEADING NOT WITHIN VALID RANGE");
             console.log("Heading Delta: " + heading_delta);
+            clearInterval(pid_timer);
         }
     },50);
 }
