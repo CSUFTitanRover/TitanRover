@@ -102,6 +102,8 @@ var rightThrottle;
 var previousrightThrottle;
 var previousleftThrottle;
 
+var doneTurning = false;
+
 var previous_heading_delta;
 var throttlePercentageChange;
 
@@ -139,8 +141,9 @@ var turningP = function() {
         if (Math.abs(heading_delta) <= acceptable_Degree_Error) {
             clearInterval(turn_timer);
             stopRover();
-            console.log('----FOUND HEADIN----');
+            console.log('----FOUND HEADING----');
             console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
+            doneTurning = true;
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
             throttlePercentageChange = heading_delta/180
@@ -161,49 +164,50 @@ var turningP = function() {
         }
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
         //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
-
-        if (leftThrottle < throttle_max && leftThrottle > throttle_min &&  rightThrottle < throttle_max && rightThrottle > throttle_min){
-            //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
-            driveForward(leftThrottle, rightThrottle);
-            //PUT SET SPEED IN HERE.
-            previousleftThrottle = leftThrottle;
-            previousrightThrottle = rightThrottle;
-            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
-        } else {
-            //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
-            console.log('Throttle Value outside of motor range');
-            //checks the leftThrottle values to make sure they're within mechanical constraints
-            if (leftThrottle > throttle_max){
-                leftThrottle = throttle_max;
-            } else if (leftThrottle < throttle_min) {
-                leftThrottle = throttle_min;
+        if (!doneTurning) {
+            if (leftThrottle < throttle_max && leftThrottle > throttle_min &&  rightThrottle < throttle_max && rightThrottle > throttle_min){
+                //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
+                driveForward(leftThrottle, rightThrottle);
+                //PUT SET SPEED IN HERE.
+                previousleftThrottle = leftThrottle;
+                previousrightThrottle = rightThrottle;
+                console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
             } else {
-                console.log('ERROR - leftThrottle values undefined');
-                stopRover();
-                clearInterval(turn_timer);
+                //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
+                console.log('Throttle Value outside of motor range');
+                //checks the leftThrottle values to make sure they're within mechanical constraints
+                if (leftThrottle > throttle_max){
+                    leftThrottle = throttle_max;
+                } else if (leftThrottle < throttle_min) {
+                    leftThrottle = throttle_min;
+                } else {
+                    console.log('ERROR - leftThrottle values undefined');
+                    stopRover();
+                    clearInterval(turn_timer);
+                }
+
+                //checks the rightThrottle values to make sure they're within mechanical constraints
+                if (rightThrottle > throttle_max) {
+                    rightThrottle = throttle_max;
+                } else if (rightThrottle < throttle_min) {
+                    rightThrottle = throttle_min;
+                } else {
+                    console.log('ERROR - rightThrottle values undefined');
+                    stopRover();
+                    clearInterval(turn_timer);
+                }
+                //PUT SET SPEED HERE AS WELL
+                driveForward(leftThrottle, rightThrottle);
+                console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
             }
 
-            //checks the rightThrottle values to make sure they're within mechanical constraints
-            if (rightThrottle > throttle_max) {
-                rightThrottle = throttle_max;
-            } else if (rightThrottle < throttle_min) {
-                rightThrottle = throttle_min;
-            } else {
-                console.log('ERROR - rightThrottle values undefined');
-                stopRover();
+            if (turn_counter > 50) {
                 clearInterval(turn_timer);
+                stopRover();
+                console.log('REACHED MAX NUMBER OF CHANCES');
+            } else {
+                console.log("----EXECUTING TURN----");
             }
-            //PUT SET SPEED HERE AS WELL
-            driveForward(leftThrottle, rightThrottle);
-            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
-        }
-
-        if (turn_counter > 50) {
-            clearInterval(turn_timer);
-            stopRover();
-            console.log('REACHED MAX NUMBER OF CHANCES');
-        } else {
-            console.log("----EXECUTING TURN----");
         }
     },50);
 };
