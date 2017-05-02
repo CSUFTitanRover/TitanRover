@@ -15,14 +15,15 @@ var current_heading;
 
 //COMMENT THIS OUT IF YOU WISH TO TEST WITHOUT THE RUNT ROVER
 var spawn = require("child_process").spawn;
-var process = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
+var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
 //var rover = require('./runt_pyControl.js');
 //*/
 //port.close();
 
-process.stdout.on('data', function (data){
-	current_heading = parseFloat(data);
-	//console.log('Current heading: ' + data.toString());
+python_proc.stdout.on('data', function (data){
+    current_heading = parseFloat(data);
+	//winston.info('Current heading: ' + data.toString());
+    //calc_heading_delta();
 });
 
 //-------ROVERCONTROL------
@@ -42,7 +43,6 @@ y_Axis_arr[2] = 0xbbaa;
 var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
 
 var time = new Date();
-var timer;
 function setRightSide(rightSpeed) {
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
@@ -83,10 +83,7 @@ function driveForward(leftSideThrottle, rightSideThrottle) {
 function stopRover() {
     //receiveMobility(zeroMessage[0]);
     //receiveMobility(zeroMessage[1]);
-    x_Axis_arr[1] = 127;
-    y_Axis_arr[1] = 127;
-    port.write(x_Axis_buff);
-    port.write(y_Axis_buff);
+    driveForward(0, 0);
     // Stopping all joints
 
 }
@@ -286,20 +283,22 @@ function main()
 
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
-    clearInterval(timer);
+    clearInterval(drive_timer);
     stopRover();  
-    sleep.sleep(1); 
-    process.exit(port.close());
+    setTimeout(function(){
+        port.close();
+        process.exit();
+    },1000);
 });
 
 process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    clearInterval(timer);
+    clearInterval(drive_timer);
     stopRover();
-    sleep.sleep(1);
-    //port.close();
-    process.exit(port.close());
-    // some other closing procedures go here
+    setTimeout(function(){
+        port.close();
+        process.exit();
+    },1000);
 
 });

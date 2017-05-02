@@ -64,12 +64,7 @@ function driveForward(leftSideThrottle, rightSideThrottle) {
 function stopRover() {
     //receiveMobility(zeroMessage[0]);
     //receiveMobility(zeroMessage[1]);
-    x_Axis_arr[1] = 127;
-    y_Axis_arr[1] = 127;
-    port.write(x_Axis_buff);
-    port.write(y_Axis_buff);
-    // Stopping all joints
-
+    driveForward(0, 0);
 }
 // Any serial data from the arduino will be sent back home
 // and printed to the console
@@ -253,9 +248,7 @@ function calc_heading_delta(){
             }
             heading_delta = target_heading - current_heading;
         }
-    } else {
-
-    }
+    } 
 }
 
 setTimeout(main,3000);
@@ -267,20 +260,24 @@ function main() {
     
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
-    clearInterval(timer);
+    clearInterval(turn_timer);
     stopRover();  
-    sleep.sleep(1); 
-    process.exit(port.close());
+    setTimeout(function(){
+        port.close();
+        process.exit();
+    },1000);
 });
 
 process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    clearInterval(timer);
+    clearInterval(turn_timer);
     stopRover();
-    sleep.sleep(1);
-    //port.close();
-    process.exit(port.close());
+    setTimeout(function(){
+        port.close();
+        process.exit();
+    },1000);
+
     // some other closing procedures go here
 
 });
