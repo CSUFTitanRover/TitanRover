@@ -222,7 +222,7 @@ var turningP = function() {
                 console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
             }
 
-            if (turnCounter > 50) {
+            if (turnCounter > maxTurnCounter) {
                 clearInterval(turn_timer);
                 stopRover();
                 console.log('REACHED MAX NUMBER OF CHANCES');

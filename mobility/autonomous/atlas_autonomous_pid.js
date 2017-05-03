@@ -7,16 +7,16 @@ var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/pytho
 //FOR OFF ROVER TESTING:
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
 var current_heading; //leave untouched, written from the IMU
-var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
+var target_heading = 90; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
 
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
 var turning_drive_constant = 0; 
-var forward_drive_constant = 50;
+var forward_drive_constant = 75;
 
 //DEGREES OF ERROR
-var turning_drive_error = 20;//within 20 degrees stop turn
+var turning_drive_error = 25;//within 20 degrees stop turn
 var forward_drive_error = 4; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
@@ -135,7 +135,7 @@ process.on('SIGTERM', function() {
 process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    clear_interval(pid_timer);
+    clearInterval(pid_timer);
     clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();
@@ -151,12 +151,6 @@ setTimeout(main,3000);//Necesary block for the serial port to open with the ardu
 function main() {
     clearInterval(main);
     rover_autonomous_pid();
-    //exit 
-    stopRover();
-    setTimeout(function(){ //required to fully stop the rover
-        port.close();
-        process.exit();
-    },1000);
 }
 
 var rover_autonomous_pid = function() {
@@ -164,14 +158,18 @@ var rover_autonomous_pid = function() {
     //TODO - CALCULATE DISTNACE SO SPIT US BACK A MODIFIER TO BE INCLUDED IN THROTTLE CALCULATIONS
     console.log('----rover_autonomous_pid----')
     pid_timer = setInterval(function() {
+        console.log("----PID TIMER----")
+        console.log("Driving: " + isDriving + "Turning: " + isTurning);
         pidCounter++; 
         if (pidCounter > maxPidCounter) {
+            console.log("----REACHEAD MAXIMUM NUMBER OF CHANCES----");
             clearInterval(pid_timer);
         }
-        if (!isDriving || !isTurning) {
+        if (!isDriving && !isTurning) {
             calc_heading_delta();
             if (Math.abs(heading_delta) > turning_drive_error) {
                 isTurning = true;
+                doneTurning = false;
                 console.log('----turningP----')
                 //----TURNINGP TIMER----
                 turn_timer = setInterval(function() {
@@ -179,12 +177,14 @@ var rover_autonomous_pid = function() {
                     turnCounter++;
                     //current_heading--;
                     //---------------------
+                    calc_heading_delta();
                     console.log("Current Heading: " + current_heading);
                     console.log("Target Heading: " + target_heading);
                     console.log("Heading Delta: " + heading_delta)
                     console.log("Turning left:" + turning_left);
                     console.log("Turning right:" + turning_right);
                     if (Math.abs(heading_delta) <= turning_drive_error) {
+                        isTurning = false;
                         clearInterval(turn_timer);
                         stopRover();
                         console.log('----FOUND HEADING----');
@@ -229,6 +229,7 @@ var rover_autonomous_pid = function() {
                             } else {
                                 console.log('ERROR - leftThrottle values undefined');
                                 stopRover();
+                                isTurning = false;
                                 clearInterval(turn_timer);
                             }
 
@@ -240,6 +241,7 @@ var rover_autonomous_pid = function() {
                             } else {
                                 console.log('ERROR - rightThrottle values undefined');
                                 stopRover();
+                                isTurning = false;
                                 clearInterval(turn_timer);
                             }
                             //PUT SET SPEED HERE AS WELL
@@ -249,16 +251,19 @@ var rover_autonomous_pid = function() {
 
                         if (turnCounter > maxTurnCounter) {
                             clearInterval(turn_timer);
+                            isTurning = false;
                             stopRover();
                             console.log('REACHED MAX NUMBER OF CHANCES');
                         } else {
                             console.log("----EXECUTING TURN----");
                         }
                     } else if (doneTurning) {
+                        console.log("----DONE TURNING----")
                         stopRover();
                     }
                 },50);
             //----DONE TURNINGP----
+            console.log("Done Turning");
         } else if (Math.abs(heading_delta) <= turning_drive_error) {
                 isDriving = true; //boolean logic to make sure we don't stack timers uneccesarily
                 console.log('----ForwardPmovement----')
@@ -268,6 +273,7 @@ var rover_autonomous_pid = function() {
                     driveCounter++;
                     //current_heading--;
                     //---------------------
+                    calc_heading_delta();
                     console.log("Current Heading: " + current_heading);
                     console.log("Target Heading: " + target_heading);
                     console.log("Heading Delta: " + heading_delta)
@@ -340,7 +346,11 @@ var rover_autonomous_pid = function() {
                         driveForward(leftThrottle, rightThrottle);
                         console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
                     }
-
+                    if (Math.abs(heading_delta) >= turning_drive_error) {
+                        isDriving = false;
+                        clearInterval(drive_timer);
+                        stopRover();
+                    }
                     if (driveCounter > maxDriveCounter) {
                         clearInterval(drive_timer);
                         stopRover();
@@ -351,13 +361,11 @@ var rover_autonomous_pid = function() {
                     }
                 },50);
                 //----END FORWARDP----
-            }
-        } else {
-            console.log("ERROR - HEADING NOT WITHIN VALID RANGE");
-            console.log("Heading Delta: " + heading_delta);
-            clearInterval(pid_timer);
+                console.log("Done driving forward");
+            } 
         }
-    },50);
+        console.log("----CONTINUING----")
+    },200);
 }
 
 //Shan's Get heading calc based on logic Shan and Brandon came up with to determine which direction the rover will be turning
