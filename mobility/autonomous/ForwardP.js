@@ -174,12 +174,12 @@ var forwardPMovement = function() {
             console.log('turning_right:' + turning_right);
             if(turning_right){
                     console.log('Slowing turning right');
-                    leftThrottle = forward_drive_constant + Math.round(forward_drive_constant * throttlePercentageChange);
-                    rightThrottle = forward_drive_constant - Math.round(forward_drive_constant * throttlePercentageChange);
+                    leftThrottle = forward_drive_constant + (Math.round(forward_drive_constant * throttlePercentageChange))*Math.round(Math.log(heading_delta));
+                    rightThrottle = forward_drive_constant - (Math.round(forward_drive_constant * throttlePercentageChange))*Math.round(Math.log(heading_delta));
             }else if(turning_left){
                     console.log('Slowing turning left');
-                    leftThrottle = forward_drive_constant - Math.round(forward_drive_constant * throttlePercentageChange);
-                    rightThrottle = forward_drive_constant + Math.round(forward_drive_constant * throttlePercentageChange);
+                    leftThrottle = forward_drive_constant - (Math.round(forward_drive_constant * throttlePercentageChange))*Math.round(Math.log(heading_delta));
+                    rightThrottle = forward_drive_constant + (Math.round(forward_drive_constant * throttlePercentageChange))*Math.round(Math.log(heading_delta));
             } else {
                 console.log('ERROR - Cannot slowly turn left or right');
             }

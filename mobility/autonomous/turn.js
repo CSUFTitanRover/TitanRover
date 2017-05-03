@@ -167,18 +167,17 @@ var turningP = function() {
             doneTurning = true;
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
-            throttlePercentageChange = heading_delta/180
             throttlePercentageChange = heading_delta/180;
             console.log('turning_left: ' + turning_left);
             console.log('turning_right:' + turning_right);
             if(turning_right){
                     console.log('Slowing turning right');
-                    leftThrottle = turning_drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
-                    rightThrottle = turning_drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
+                    leftThrottle = turning_drive_constant + (30 + (Math.round(throttle_max * throttlePercentageChange * 2)));;
+                    rightThrottle = turning_drive_constant + (30 + (Math.round(throttle_min * throttlePercentageChange * 2)));;
             }else if(turning_left){
                     console.log('Slowing turning left');
-                    leftThrottle = turning_drive_constant + Math.round(throttle_min * throttlePercentageChange * 2);
-                    rightThrottle = turning_drive_constant + Math.round(throttle_max * throttlePercentageChange * 2);
+                    leftThrottle = turning_drive_constant + (30 + (Math.round(throttle_min * throttlePercentageChange * 2)));;
+                    rightThrottle = turning_drive_constant + (30 + (Math.round(throttle_max * throttlePercentageChange * 2)));;
             } else {
                 console.log('ERROR - Cannot slowly turn left or right');
             }
