@@ -7,7 +7,7 @@ var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/pytho
 //FOR OFF ROVER TESTING:
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
 var current_heading; //leave untouched, written from the IMU
-var target_heading = 90; //change to desired target heading, will be replaced post calculation of GPS data
+var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
 
 //THEN COMMENT THIS OUT
@@ -16,8 +16,8 @@ var turning_drive_constant = 0;
 var forward_drive_constant = 75;
 
 //DEGREES OF ERROR
-var turning_drive_error = 25;//within 20 degrees stop turn
-var forward_drive_error = 4; //within 4 degrees drive straight
+var turning_drive_error = 20;//within 20 degrees stop turn
+var forward_drive_error = 3; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
 var throttle_min = -127; //Minimum throttle value acceptable
@@ -68,6 +68,7 @@ var left_side_buff = Buffer.from(left_side_arr.buffer);
 var time = new Date();
 var timer;
 function setLeftSide(leftSpeed) {
+    leftSpeed = leftSpeed*-1;
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -82,6 +83,7 @@ function setLeftSide(leftSpeed) {
 }
 
 function setRightSide(rightSpeed) {
+    rightSpeed = rightSpeed*-1;
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
