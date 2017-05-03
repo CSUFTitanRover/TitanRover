@@ -117,7 +117,7 @@ var arm_joint = false;
 // Socket event handlers
 socket.on('listening', function() {
     console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
-    send_to_rover(SET_ARDUINO_DEBUG);
+    //send_to_rover(SET_ARDUINO_DEBUG);
 });
 
 // When we recieve a packet from the rover it is acking a control packet
@@ -168,7 +168,6 @@ function handleJoystick_0(event) {
     } else if (event.number == 11 && event.value == 1) { // Button 12: Turn on Arduino debug statements
         send_to_rover(SET_ARDUINO_DEBUG);
     }
-}
 }
 
 
