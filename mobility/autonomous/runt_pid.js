@@ -13,17 +13,15 @@ var previous_heading_delta; //leave untouched
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
 var turning_drive_constant = 0; 
-var forward_drive_constant = 60;
-var forward_drive_modifier = 0; //to modify when driving straight forward
+var forward_drive_constant = 75;
 
 //DEGREES OF ERROR
-var turning_drive_error = 10;//within 20 degrees stop turn
-var forward_drive_to_turn_error = 15; //logic to exit forwardP and turn. 
+var turning_drive_error = 20;//within 20 degrees stop turn
 var forward_drive_error = 3; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = -60; //Minimum throttle value acceptable
-var throttle_max = 60; //Maximum throttle value acceptable
+var throttle_min = -127; //Minimum throttle value acceptable
+var throttle_max = 127; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -36,12 +34,11 @@ var turning_left = null;
 var turning_right = null;
 var isTurning = false;
 var isDriving = false; 
-var isPID = false;
 
 var turnCounter = 0;//initialize counter for testing purposes
 var maxTurnCounter = 1000; //max value the turn counter can achieve
 var driveCounter = 0;//initialize counter for testing purposes
-var maxDriveCounter = 5000; //max value the counter can achienve
+var maxDriveCounter = 500; //max value the counter can achienve
 var pidCounter = 0;//initialize counter for testing purposes
 var maxPidCounter = 1000;//max value the counter can achienve
 
@@ -58,20 +55,19 @@ var port = new serialPort('/dev/ttyACM0', {
     parser: serialPort.parsers.readline('\n')
 });
 
-var left_side_arr = new Uint16Array(3);
-left_side_arr[0] = 0xB;
-left_side_arr[2] = 0xbbaa;
-var left_side_buff = Buffer.from(left_side_arr.buffer);
-
 var right_side_arr = new Uint16Array(3);
-right_side_arr[0] = 0xC;
+right_side_arr[0] = 0xB;
 right_side_arr[2] = 0xbbaa;
 var right_side_buff = Buffer.from(right_side_arr.buffer);
+
+var left_side_arr = new Uint16Array(3);
+left_side_arr[0] = 0xC;
+left_side_arr[2] = 0xbbaa;
+var left_side_buff = Buffer.from(left_side_arr.buffer);
 
 var time = new Date();
 var timer;
 function setLeftSide(leftSpeed) {
-    leftSpeed = leftSpeed*-1;
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -86,7 +82,6 @@ function setLeftSide(leftSpeed) {
 }
 
 function setRightSide(rightSpeed) {
-    rightSpeed = rightSpeed*-1;
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -100,13 +95,13 @@ function setRightSide(rightSpeed) {
     port.write(right_side_buff);
 }
 
-function setMotors(leftSideThrottle, rightSideThrottle) {
-    setLeftSide(leftSideThrottle); 
-    setRightSide(rightSideThrottle);
+function driveForward(leftSideThrottle, rightSideThrottle) {
+    setLeftSide(rightSideThrottle); 
+    setRightSide(leftSideThrottle);
 }
 
 function stopRover() {
-    setMotors(0, 0); //calls drive forward zeroed out
+    driveForward(0, 0); //calls drive forward zeroed out
 }
 
 // Any serial data from the arduino will be sent back home
@@ -127,15 +122,9 @@ port.on('open',function(){
 //LOGIC TO KILL ALL PROCESS AND STOP ROVER MID SCRIPT
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
-    if (isPID) {
-        clearInterval(pid_timer);
-    }
-    if (isTurning) {
-        clearInterval(turn_timer);
-    }
-    if (isDriving) {
-        clearInterval(drive_timer);
-    }
+    clearInterval(pid_timer);
+    clearInterval(turn_timer);
+    clearInterval(drive_timer);
     stopRover();  
     setTimeout(function(){ //required to fully stop the rover
         port.close();
@@ -146,15 +135,9 @@ process.on('SIGTERM', function() {
 process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
-    if (isPID) {
-        clearInterval(pid_timer);
-    }
-    if (isTurning) {
-        clearInterval(turn_timer);
-    }
-    if (isDriving) {
-        clearInterval(drive_timer);
-    }
+    clearInterval(pid_timer);
+    clearInterval(turn_timer);
+    clearInterval(drive_timer);
     stopRover();
     setTimeout(function(){ //required to fully stop the rover
         port.close();
@@ -175,7 +158,6 @@ var rover_autonomous_pid = function() {
     //TODO - CALCULATE DISTNACE SO SPIT US BACK A MODIFIER TO BE INCLUDED IN THROTTLE CALCULATIONS
     console.log('----rover_autonomous_pid----')
     pid_timer = setInterval(function() {
-        isPID = true;
         console.log("----PID TIMER----")
         console.log("Driving: " + isDriving + "Turning: " + isTurning);
         pidCounter++; 
@@ -204,23 +186,24 @@ var rover_autonomous_pid = function() {
                     if (Math.abs(heading_delta) <= turning_drive_error) {
                         isTurning = false;
                         clearInterval(turn_timer);
-                        //stopRover();
+                        stopRover();
                         console.log('----FOUND HEADING----');
                         console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
                         doneTurning = true;
                     } else {
                         //Calculate the throttle percentage change based on what the proportion is.
+                        throttlePercentageChange = heading_delta/180
                         throttlePercentageChange = heading_delta/180;
                         console.log('turning_left: ' + turning_left);
                         console.log('turning_right:' + turning_right);
                         if(turning_right){
                                 console.log('Slowing turning right');
-                                leftThrottle = turning_drive_constant + (53 + (Math.round(throttle_max * throttlePercentageChange)));
-                                rightThrottle = (leftThrottle-10)*-1;
+                                leftThrottle = turning_drive_constant + (30 + (Math.round(throttle_max * throttlePercentageChange * 2)));
+                                rightThrottle = turning_drive_constant + (30 + (Math.round(throttle_min * throttlePercentageChange * 2)));
                         }else if(turning_left){
                                 console.log('Slowing turning left');
-                                rightThrottle = turning_drive_constant + (53 + (Math.round(throttle_max * throttlePercentageChange)));
-                                leftThrottle = (rightThrottle-10)*-1;
+                                leftThrottle = turning_drive_constant + (30 + (Math.round(throttle_min * throttlePercentageChange * 2)));
+                                rightThrottle = turning_drive_constant + (30 + (Math.round(throttle_max * throttlePercentageChange * 2)));
                         } else {
                             console.log('ERROR - Cannot slowly turn left or right');
                         }
@@ -230,7 +213,7 @@ var rover_autonomous_pid = function() {
                     if (!doneTurning) {
                         if (leftThrottle < throttle_max && leftThrottle > throttle_min &&  rightThrottle < throttle_max && rightThrottle > throttle_min){
                             //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
-                            setMotors(leftThrottle, rightThrottle);
+                            driveForward(leftThrottle, rightThrottle);
                             //PUT SET SPEED IN HERE.
                             previousleftThrottle = leftThrottle;
                             previousrightThrottle = rightThrottle;
@@ -262,7 +245,7 @@ var rover_autonomous_pid = function() {
                                 clearInterval(turn_timer);
                             }
                             //PUT SET SPEED HERE AS WELL
-                            setMotors(leftThrottle, rightThrottle);
+                            driveForward(leftThrottle, rightThrottle);
                             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
                         }
 
@@ -276,9 +259,7 @@ var rover_autonomous_pid = function() {
                         }
                     } else if (doneTurning) {
                         console.log("----DONE TURNING----")
-                        //clearInterval(turn_timer);
-                        //isTurning = false;          
-                        //stopRover();
+                        stopRover();
                     }
                 },50);
             //----DONE TURNINGP----
@@ -299,8 +280,8 @@ var rover_autonomous_pid = function() {
                     console.log("Turning left:" + turning_left);
                     console.log("Turning right:" + turning_right);
                     if (Math.abs(heading_delta) <= forward_drive_error) {
-                        leftThrottle = forward_drive_constant + forward_drive_modifier;
-                        rightThrottle = forward_drive_constant + forward_drive_modifier;
+                        leftThrottle = forward_drive_constant;
+                        rightThrottle = forward_drive_constant;
                         console.log('Moving forward at drive constant');
                     } else {
                         //Calculate the throttle percentage change based on what the proportion is.
@@ -324,7 +305,7 @@ var rover_autonomous_pid = function() {
 
                     if (leftThrottle <= throttle_max && leftThrottle >= throttle_min &&  rightThrottle <= throttle_max && rightThrottle >= throttle_min){
                         //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
-                        setMotors(leftThrottle, rightThrottle);
+                        driveForward(leftThrottle, rightThrottle);
                         //PUT SET SPEED IN HERE.
                         previousleftThrottle = leftThrottle;
                         previousrightThrottle = rightThrottle;
@@ -362,13 +343,13 @@ var rover_autonomous_pid = function() {
                             clearInterval(drive_timer);
                         }
                         //PUT SET SPEED HERE AS WELL
-                        setMotors(leftThrottle, rightThrottle);
+                        driveForward(leftThrottle, rightThrottle);
                         console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
                     }
-                    if (Math.abs(heading_delta) >= forward_drive_to_turn_error) { //if i'm past my max for forward P, clear interval and call turn.js
+                    if (Math.abs(heading_delta) >= turning_drive_error) {
                         isDriving = false;
                         clearInterval(drive_timer);
-                        //stopRover();
+                        stopRover();
                     }
                     if (driveCounter > maxDriveCounter) {
                         clearInterval(drive_timer);
