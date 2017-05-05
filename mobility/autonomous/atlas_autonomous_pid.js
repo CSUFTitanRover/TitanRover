@@ -1,7 +1,13 @@
 var sys = require('util');
+var geolib = require('geolib');
 var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
 
+/*----TODO----
+-Implement a check to see whether or not we need to grab data from the IMU at that moment, don't want to overwrite geolibs more acurate calculation
+-Test distanceModifier to make sure we don't stop halfway to onTargetRange
+-Add reach current GPS location and a way to implement waypoints.
+*/
 //----VARIABLES----
 
 //FOR OFF ROVER TESTING:
@@ -10,6 +16,9 @@ var current_heading; //leave untouched, written from the IMU
 var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
 
+var distance; // distance to next waypoint
+var onTargetRange = 5; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
+onTargetRange = geolib.convertUnit('cm',onTargetRange); // immediately convert from meters to cm for comparisons.
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
 var turning_drive_constant = 0; 
@@ -28,7 +37,8 @@ var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
 var previousleftThrottle;
-var throttlePercentageChange;
+var headingModifier; //heading ratio, used as modifer for throttle
+var distanceModifier; //distance ratio, used as modifer for throttle
 
 //BOOLEAN LOGIC FOR FUNCTIONS
 var doneTurning = false;
@@ -184,6 +194,7 @@ var rover_autonomous_pid = function() {
             clearInterval(pid_timer);
         }
         if (!isDriving && !isTurning) {
+            pathfinder(); //gets distance and target heading
             calc_heading_delta();
             if (Math.abs(heading_delta) > turning_drive_error) {
                 isTurning = true;
@@ -210,16 +221,16 @@ var rover_autonomous_pid = function() {
                         doneTurning = true;
                     } else {
                         //Calculate the throttle percentage change based on what the proportion is.
-                        throttlePercentageChange = heading_delta/180;
+                        headingModifier = heading_delta/180;
                         console.log('turning_left: ' + turning_left);
                         console.log('turning_right:' + turning_right);
                         if(turning_right){
                                 console.log('Slowing turning right');
-                                leftThrottle = turning_drive_constant + (53 + (Math.round(throttle_max * throttlePercentageChange)));
+                                leftThrottle = turning_drive_constant + (53 + (Math.round(throttle_max * headingModifier)));
                                 rightThrottle = (leftThrottle-10)*-1;
                         }else if(turning_left){
                                 console.log('Slowing turning left');
-                                rightThrottle = turning_drive_constant + (53 + (Math.round(throttle_max * throttlePercentageChange)));
+                                rightThrottle = turning_drive_constant + (53 + (Math.round(throttle_max * headingModifier)));
                                 leftThrottle = (rightThrottle-10)*-1;
                         } else {
                             console.log('ERROR - Cannot slowly turn left or right');
@@ -288,33 +299,31 @@ var rover_autonomous_pid = function() {
                 console.log('----ForwardPmovement----')
                 //----FORWARDP TIMER----
                 drive_timer = setInterval(function() {
-                    //FOR TESTING OFF ROVER
-                    driveCounter++;
-                    //current_heading--;
-                    //---------------------
-                    calc_heading_delta();
+                    driveCounter++;//for testing purposes only.
+                    pathfinder(); //gets distance, distanceModifier modifier and target heading
+                    calc_heading_delta(); //calculates best turn towards target heading
                     console.log("Current Heading: " + current_heading);
                     console.log("Target Heading: " + target_heading);
                     console.log("Heading Delta: " + heading_delta)
                     console.log("Turning left:" + turning_left);
                     console.log("Turning right:" + turning_right);
                     if (Math.abs(heading_delta) <= forward_drive_error) {
-                        leftThrottle = forward_drive_constant + forward_drive_modifier;
-                        rightThrottle = forward_drive_constant + forward_drive_modifier;
+                        leftThrottle = (forward_drive_constant + forward_drive_modifier) * distanceModifier;
+                        rightThrottle = (forward_drive_constant + forward_drive_modifier) * distanceModifier;
                         console.log('Moving forward at drive constant');
                     } else {
                         //Calculate the throttle percentage change based on what the proportion is.
-                        throttlePercentageChange = heading_delta/180
+                        headingModifier = heading_delta/180
                         console.log('turning_left: ' + turning_left);
                         console.log('turning_right:' + turning_right);
                         if(turning_right){
                                 console.log('Slowing turning right');
-                                leftThrottle = forward_drive_constant + (Math.round(forward_drive_constant * throttlePercentageChange))*Math.round(Math.log(heading_delta));;
-                                rightThrottle = forward_drive_constant - (Math.round(forward_drive_constant * throttlePercentageChange))*Math.round(Math.log(heading_delta));;
+                                leftThrottle = (forward_drive_constant + (Math.round(forward_drive_constant * headingModifier))*Math.round(Math.log(heading_delta))*distanceModifier);
+                                rightThrottle = (forward_drive_constant - (Math.round(forward_drive_constant * headingModifier))*Math.round(Math.log(heading_delta))*distanceModifier);
                         }else if(turning_left){
                                 console.log('Slowing turning left');
-                                leftThrottle = forward_drive_constant - (Math.round(forward_drive_constant * throttlePercentageChange))*Math.round(Math.log(heading_delta));;
-                                rightThrottle = forward_drive_constant + (Math.round(forward_drive_constant * throttlePercentageChange))*Math.round(Math.log(heading_delta));;
+                                leftThrottle = (forward_drive_constant - (Math.round(forward_drive_constant * headingModifier))*Math.round(Math.log(heading_delta))*distanceModifier);
+                                rightThrottle = (forward_drive_constant + (Math.round(forward_drive_constant * headingModifier))*Math.round(Math.log(heading_delta))*distanceModifier);
                         } else {
                             console.log('ERROR - Cannot slowly turn left or right');
                         }
@@ -428,4 +437,22 @@ function calc_heading_delta(){
             heading_delta = target_heading - current_heading;
         }
     } 
+}
+
+//uses geolib to get distance and targetHeading. 
+function pathfinder() {
+    //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
+    distance = geolib.getDistance(wayPoints[current_wayPoint],wayPoints[current_wayPoint+1],1,5);
+    distance = geolib.convertUnit('cm',distance);
+    //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
+    target_heading = geolib.getBearing(wayPoints[current_wayPoint],wayPoints[current_wayPoint+1]);
+    console.log("Current Distance: " + distance);
+    console.log("Target Heading:" + target_heading);
+
+    if (distance <= onTargetRange) {
+        distanceModifier = distance/onTargetRange;
+        console.log("distanceModifier Modifier: " + distanceModifier);
+    } else {
+        distanceModifier = 1;
+    }
 }

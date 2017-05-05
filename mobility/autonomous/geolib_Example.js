@@ -4,7 +4,7 @@ This example serves to show how the geolib library will be used with waypoints
 */
 
 'use strict';
-var geolib = require('./geolib/geolib');
+var geolib = require('geolib');
 var wayPoints = [
     //These waypoints, distance calculations and degree headings are verfied with online source
     {lat: 34.052222,   lon: -118.243611},//Los Angeles, CA (34.052222, -118.243611) start position
