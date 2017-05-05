@@ -13,7 +13,7 @@ var previous_heading_delta; //leave untouched
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
 var turning_drive_constant = 0; 
-var forward_drive_constant = 60;
+var forward_drive_constant = 45;
 var forward_drive_modifier = 0; //to modify when driving straight forward
 
 //DEGREES OF ERROR
@@ -22,8 +22,8 @@ var forward_drive_to_turn_error = 15; //logic to exit forwardP and turn.
 var forward_drive_error = 3; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = -60; //Minimum throttle value acceptable
-var throttle_max = 60; //Maximum throttle value acceptable
+var throttle_min = -70; //Minimum throttle value acceptable
+var throttle_max = 70; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
