@@ -26,6 +26,11 @@ RAD_TO_DEG = 57.29578
 M_PI = 3.14159265358979323846
 G_GAIN = 0.070  # [deg/s/LSB]  If you change the dps for gyro, you need to update this value accordingly
 AA =  0.40      # Complementary filter constant
+try:
+	MAGNETIC_DECLINATION=sys.arg[1]
+except:
+	print("Missing Arguments: Required Magnetic Declination")
+	exit(0)
 
 #Kalman filter variables
 Q_angle = 0.02
@@ -437,7 +442,12 @@ for num in range(0,loop):	        #Currently this loop runs for 20 reads providi
         #Output to stdout if running stand alone or passed to node.js control program through flush call
         #print("%d,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.8f,%5.2f,%5.2f,%5.2f" % (n, AccXangle, AccYangle, gyroXangle,gyroYangle,gyroZangle,CFangleX,CFangleY, heading, tiltCompensatedHeading, kalmanX,kalmanY))
         total_heading += heading 
+total_heading = total_heading / loop
 
-print("%5.8f" % (total_heading/loop))
+if(MAGNETIC_DECLINATION > total_heading):
+    total_heading = 360 - (MAGNETIC_DECLINATION - total_heading)
+else:
+    total_heading = total_heading - MAGNETIC_DECLINATION
+
+print("%5.8f" % (total_heading))
 sys.stdout.flush()
-
