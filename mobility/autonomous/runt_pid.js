@@ -95,13 +95,13 @@ function setRightSide(rightSpeed) {
     port.write(right_side_buff);
 }
 
-function driveForward(leftSideThrottle, rightSideThrottle) {
+function setMotors(leftSideThrottle, rightSideThrottle) {
     setLeftSide(rightSideThrottle); 
     setRightSide(leftSideThrottle);
 }
 
 function stopRover() {
-    driveForward(0, 0); //calls drive forward zeroed out
+    setMotors(0, 0); //calls drive forward zeroed out
 }
 
 // Any serial data from the arduino will be sent back home
