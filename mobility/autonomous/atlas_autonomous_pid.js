@@ -21,7 +21,7 @@ var onTargetRange = 5; // in meters, distance we want to start to modify the dri
 onTargetRange = geolib.convertUnit('cm',onTargetRange); // immediately convert from meters to cm for comparisons.
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 0; 
+var turning_drive_constant = 53; 
 var forward_drive_constant = 45;
 var forward_drive_modifier = 0; //to modify when driving straight forward
 
@@ -31,8 +31,8 @@ var forward_drive_to_turn_error = 15; //logic to exit forwardP and turn.
 var forward_drive_error = 3; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = -70; //Minimum throttle value acceptable
-var throttle_max = 70; //Maximum throttle value acceptable
+var throttle_min = 30; // Minimum throttle value to move the rover
+var throttle_max = 70; // Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -42,22 +42,21 @@ var distanceModifier; //distance ratio, used as modifer for throttle
 
 //BOOLEAN LOGIC FOR FUNCTIONS
 var doneTurning = false;
-var turning_left = null;
-var turning_right = null;
+var turn_right = null;
 var isTurning = false;
 var isDriving = false; 
 var isPID = false;
 
-var turnCounter = 0;//initialize counter for testing purposes
-var maxTurnCounter = 1000; //max value the turn counter can achieve
-var driveCounter = 0;//initialize counter for testing purposes
-var maxDriveCounter = 5000; //max value the counter can achienve
+
 var pidCounter = 0;//initialize counter for testing purposes
 var maxPidCounter = 1000;//max value the counter can achienve
 
 //----GRAB DATA FROM IMU----
 python_proc.stdout.on('data', function (data){
-    current_heading = parseFloat(data);
+    data = parseFloat(data);
+    if( 0 <= data && data <= 360){
+         current_heading = data;
+    }   
 });
 
 //INCLUDED FOR CONTROL OF THE ROVER WITH UPDATED SERIAL COMMUNICATION
@@ -192,14 +191,22 @@ var rover_autonomous_pid = function() {
         if (pidCounter > maxPidCounter) {
             console.log("----REACHEAD MAXIMUM NUMBER OF CHANCES----");
             clearInterval(pid_timer);
+            if (isTurning) {
+                clearInterval(turn_timer);
+            }
+            if (isDriving) {
+                clearInterval(drive_timer);
+            }
+            stopRover();
         }
         if (!isDriving && !isTurning) {
             pathfinder(); //gets distance and target heading
             calc_heading_delta();
+            output_nav_data();
             if (Math.abs(heading_delta) > turning_drive_error) {
                 isTurning = true;
                 doneTurning = false;
-                console.log('----turningP----')
+                console.log('----turningP----');
                 //----TURNINGP TIMER----
                 turn_timer = setInterval(function() {
                     //FOR TESTING OFF ROVER
@@ -207,11 +214,7 @@ var rover_autonomous_pid = function() {
                     //current_heading--;
                     //---------------------
                     calc_heading_delta();
-                    console.log("Current Heading: " + current_heading);
-                    console.log("Target Heading: " + target_heading);
-                    console.log("Heading Delta: " + heading_delta)
-                    console.log("Turning left:" + turning_left);
-                    console.log("Turning right:" + turning_right);
+
                     if (Math.abs(heading_delta) <= turning_drive_error) {
                         isTurning = false;
                         clearInterval(turn_timer);
@@ -222,74 +225,29 @@ var rover_autonomous_pid = function() {
                     } else {
                         //Calculate the throttle percentage change based on what the proportion is.
                         headingModifier = heading_delta/180;
-                        console.log('turning_left: ' + turning_left);
-                        console.log('turning_right:' + turning_right);
-                        if(turning_right){
+                        let temp_throttle; 
+                        console.log('!turn_right: ' + !turn_right);
+                        console.log('turn_right:' + turn_right);
+                        
+                        temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier))).clamp(throttle_min,throttle_max);
+                        if(turn_right){
                                 console.log('Slowing turning right');
-                                leftThrottle = turning_drive_constant + (53 + (Math.round(throttle_max * headingModifier)));
-                                rightThrottle = (leftThrottle-10)*-1;
-                        }else if(turning_left){
+                                leftThrottle = temp_throttle;
+                                rightThrottle = temp_throttle * -1; // removed temp_throttle - 10
+                        }else{
                                 console.log('Slowing turning left');
-                                rightThrottle = turning_drive_constant + (53 + (Math.round(throttle_max * headingModifier)));
-                                leftThrottle = (rightThrottle-10)*-1;
-                        } else {
-                            console.log('ERROR - Cannot slowly turn left or right');
-                        }
+                                rightThrottle = temp_throttle;
+                                leftThrottle = temp_throttle * -1;
+                        } 
                     }
                     //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
                     //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
-                    if (!doneTurning) {
-                        if (leftThrottle < throttle_max && leftThrottle > throttle_min &&  rightThrottle < throttle_max && rightThrottle > throttle_min){
-                            //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
-                            setMotors(leftThrottle, rightThrottle);
-                            //PUT SET SPEED IN HERE.
-                            previousleftThrottle = leftThrottle;
-                            previousrightThrottle = rightThrottle;
-                            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
-                        } else {
-                            //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
-                            console.log('Throttle Value outside of motor range');
-                            //checks the leftThrottle values to make sure they're within mechanical constraints
-                            if (leftThrottle > throttle_max){
-                                leftThrottle = throttle_max;
-                            } else if (leftThrottle < throttle_min) {
-                                leftThrottle = throttle_min;
-                            } else {
-                                console.log('ERROR - leftThrottle values undefined');
-                                stopRover();
-                                isTurning = false;
-                                clearInterval(turn_timer);
-                            }
-
-                            //checks the rightThrottle values to make sure they're within mechanical constraints
-                            if (rightThrottle > throttle_max) {
-                                rightThrottle = throttle_max;
-                            } else if (rightThrottle < throttle_min) {
-                                rightThrottle = throttle_min;
-                            } else {
-                                console.log('ERROR - rightThrottle values undefined');
-                                stopRover();
-                                isTurning = false;
-                                clearInterval(turn_timer);
-                            }
-                            //PUT SET SPEED HERE AS WELL
-                            setMotors(leftThrottle, rightThrottle);
-                            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
-                        }
-
-                        if (turnCounter > maxTurnCounter) {
-                            clearInterval(turn_timer);
-                            isTurning = false;
-                            stopRover();
-                            console.log('REACHED MAX NUMBER OF CHANCES');
-                        } else {
-                            console.log("----EXECUTING TURN----");
-                        }
+                    if (!doneTurning) {  
+                        setMotors(leftThrottle, rightThrottle);
+                        console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+                        //checks the rightThrottle values to make sure they're within mechanical constraints
                     } else if (doneTurning) {
                         console.log("----DONE TURNING----")
-                        //clearInterval(turn_timer);
-                        //isTurning = false;          
-                        //stopRover();
                     }
                 },50);
             //----DONE TURNINGP----
@@ -299,144 +257,60 @@ var rover_autonomous_pid = function() {
                 console.log('----ForwardPmovement----')
                 //----FORWARDP TIMER----
                 drive_timer = setInterval(function() {
-                    driveCounter++;//for testing purposes only.
                     pathfinder(); //gets distance, distanceModifier modifier and target heading
                     calc_heading_delta(); //calculates best turn towards target heading
-                    console.log("Current Heading: " + current_heading);
-                    console.log("Target Heading: " + target_heading);
-                    console.log("Heading Delta: " + heading_delta)
-                    console.log("Turning left:" + turning_left);
-                    console.log("Turning right:" + turning_right);
+                    output_nav_data();
                     if (Math.abs(heading_delta) <= forward_drive_error) {
                         leftThrottle = (forward_drive_constant + forward_drive_modifier) * distanceModifier;
                         rightThrottle = (forward_drive_constant + forward_drive_modifier) * distanceModifier;
                         console.log('Moving forward at drive constant');
                     } else {
                         //Calculate the throttle percentage change based on what the proportion is.
-                        headingModifier = heading_delta/180
-                        console.log('turning_left: ' + turning_left);
-                        console.log('turning_right:' + turning_right);
-                        if(turning_right){
+                        headingModifier = heading_delta / 180;
+                        console.log('!turn_right: ' + !turn_right);
+                        console.log('turn_right:' + turn_right);
+                        var throttle_offset = Math.round(forward_drive_constant * headingModifier* Math.log(heading_delta) * distanceModifier);
+                        if(turn_right){
                                 console.log('Slowing turning right');
-                                leftThrottle = (forward_drive_constant + (Math.round(forward_drive_constant * headingModifier))*Math.round(Math.log(heading_delta))*distanceModifier);
-                                rightThrottle = (forward_drive_constant - (Math.round(forward_drive_constant * headingModifier))*Math.round(Math.log(heading_delta))*distanceModifier);
-                        }else if(turning_left){
+                                leftThrottle = (forward_drive_constant + throttle_offset);
+                                rightThrottle = (forward_drive_constant - throttle_offset);
+                        }else{
                                 console.log('Slowing turning left');
-                                leftThrottle = (forward_drive_constant - (Math.round(forward_drive_constant * headingModifier))*Math.round(Math.log(heading_delta))*distanceModifier);
-                                rightThrottle = (forward_drive_constant + (Math.round(forward_drive_constant * headingModifier))*Math.round(Math.log(heading_delta))*distanceModifier);
-                        } else {
-                            console.log('ERROR - Cannot slowly turn left or right');
-                        }
-                    }
-                    //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
-                    //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
-
-                    if (leftThrottle <= throttle_max && leftThrottle >= throttle_min &&  rightThrottle <= throttle_max && rightThrottle >= throttle_min){
-                        //rover.set_speed(Math.trunc(leftThrottle), Math.trunc(rightThrottle));
-                        setMotors(leftThrottle, rightThrottle);
+                                leftThrottle = forward_drive_constant - throttle_offset;
+                                rightThrottle = forward_drive_constant + throttle_offset;
+                        }    
+                        setMotors(leftThrottle.clamp(throttle_min, throttle_max), rightThrottle.clamp(throttle_min, throttle_max));
                         //PUT SET SPEED IN HERE.
                         previousleftThrottle = leftThrottle;
                         previousrightThrottle = rightThrottle;
                         console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
-                    } else {
-                        //In a later implementtion I want to call turn.js, as if we're trying to adjust this far we're way off on our heading. 
-                        console.log('Throttle Value outside of motor range');
-                        console.log("Unfixed LeftThrottle:" + leftThrottle);
-                        console.log("Unfixed RightThrottle: " + rightThrottle);
-                        //checks the leftThrottle values to make sure they're within mechanical constraints
-                        if (leftThrottle > throttle_max){
-                            leftThrottle = throttle_max;
-                        } else if (leftThrottle < throttle_min) {
-                            leftThrottle = throttle_min;
-                        } else if (leftThrottle <= throttle_max && leftThrottle >= throttle_min) {
-                        console.log("LEFT THROTTLE OKAY"); 
-                        } else {
-                            console.log('ERROR - leftThrottle values undefined');
-                            stopRover();
-                            isDriving = false;
-                            clearInterval(drive_timer);
-                        }
-
-                        //checks the rightThrottle values to make sure they're within mechanical constraints
-                        if (rightThrottle > throttle_max) {
-                            rightThrottle = throttle_max;
-                        } else if (rightThrottle < throttle_min) {
-                            rightThrottle = throttle_min;
-                        } else if (rightThrottle <= throttle_max && rightThrottle >= throttle_min) {
-                            console.log("RIGHT THROTTLE OK");
-                        } else {
-                            console.log('ERROR - rightThrottle values undefined');
-                            stopRover();
-                            isDriving = false;
-                            clearInterval(drive_timer);
-                        }
-                        //PUT SET SPEED HERE AS WELL
-                        setMotors(leftThrottle, rightThrottle);
-                        console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
-                    }
+                    } 
                     if (Math.abs(heading_delta) >= forward_drive_to_turn_error) { //if i'm past my max for forward P, clear interval and call turn.js
                         isDriving = false;
                         clearInterval(drive_timer);
                         //stopRover();
                     }
-                    if (driveCounter > maxDriveCounter) {
-                        clearInterval(drive_timer);
-                        stopRover();
-                        isDriving = false;
-                        console.log('----REACHED THE END OF LOOP----');
-                    } else {
-                        console.log('Thottle Adjusted');
-                    }
-                },50);
+                },50); // end of drive timer
                 //----END FORWARDP----
                 console.log("Done driving forward");
             } 
         }
         console.log("----CONTINUING----")
-    },200);
+    },200); // end of PID timer 
 }
 
 //Shan's Get heading calc based on logic Shan and Brandon came up with to determine which direction the rover will be turning
 //IE: Is turning left or right the shorter turn?
 function calc_heading_delta(){
     console.log('Calculating Heading Delta & Direction');
-    temp_delta = current_heading - target_heading;
-    console.log('temp_delta: ' + temp_delta);
-    if(current_heading > target_heading){
-        if(Math.abs(temp_delta) > 180){
-            // If we were turning left previously or have never turned right before
-            if(turning_left || turning_right === null){
-                console.log('turning right: '+ current_heading);
-                turning_right = true;
-                turning_left = false;
-            }
-            heading_delta = 360 - current_heading + target_heading;
-        }else{
-              // If we were turning right previously or have never turned left before
-             if(turning_right || turning_left === null){
-                console.log('turning left: '+ current_heading);
-                turning_left = true;
-                turning_right = false;
-            }
-            heading_delta = current_heading - target_heading;
-            }
-    }else{
-        if(Math.abs(temp_delta) > 180){ 
-             if(turning_right || turning_left === null){
-                console.log('turning left: '+ current_heading);
-                turning_left = true;
-                turning_right = false;
-            }
-            heading_delta = 360 - target_heading + current_heading;
-        }else{
-            if(turning_left || turning_right === null){
-                console.log('turning right: '+ current_heading);
-                turning_right = true;
-                turning_left = false;
-            }
-            heading_delta = target_heading - current_heading;
-        }
-    } 
+    let abs_delta = Math.abs(current_heading - target_heading);
+    // xnor operation also note (!turn_right = turn_left)
+    turn_right = current_heading > target_heading === abs_delta > 180; 
+    heading_delta = abs_delta <= 180 ? abs_delta : 360 - abs_delta;
+    
+    if(heading_delta > 360 || heading_delta < 0){
+        throw new RangeError('Heading must be between 0 and 360. Magnetometer probably sent a bad value');
+    }
 }
 
 //uses geolib to get distance and targetHeading. 
@@ -456,3 +330,27 @@ function pathfinder() {
         distanceModifier = 1;
     }
 }
+
+function output_nav_data() {
+    console.log("Current Heading: " + current_heading);
+    console.log("Target Heading: " + target_heading);
+    console.log("Heading Delta: " + heading_delta)
+    console.log("Turning left:" + !turn_right);
+    console.log("Turning right:" + turn_right);
+};
+
+
+/**
+ * Returns a number whose value is limited to the given range.
+ *
+ * Example: limit the output of this computation to between 0 and 255
+ * (x * 255).clamp(0, 255)
+ *
+ * @param {Number} min The lower boundary of the output range
+ * @param {Number} max The upper boundary of the output range
+ * @returns A number in the range [min, max]
+ * @type Number
+ */
+Number.prototype.clamp = function(min, max) {
+  return Math.min(Math.max(this, min), max);
+};
