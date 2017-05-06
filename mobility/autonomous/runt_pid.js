@@ -2,31 +2,37 @@ var sys = require('util');
 var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
 
-//----VARIABLES----
+///----VARIABLES----
 
 //FOR OFF ROVER TESTING:
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
 var current_heading; //leave untouched, written from the IMU
 var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
-var distanceModifier = 1; // ***** TEMPORARY ******* 
+
+var distance; // distance to next waypoint
+var onTargetRange = 5; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
+//onTargetRange = geolib.convertUnit('cm',onTargetRange); // immediately convert from meters to cm for comparisons.
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 0; 
-var forward_drive_constant = 75;
+var turning_drive_constant = 50; 
+var forward_drive_constant = 90;
+var forward_drive_modifier = 0; //to modify when driving straight forward
 
 //DEGREES OF ERROR
-var turning_drive_error = 20;//within 20 degrees stop turn
+var turning_drive_error = 10;//within 20 degrees stop turn
+var forward_drive_to_turn_error = 15; //logic to exit forwardP and turn. 
 var forward_drive_error = 3; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = -127; //Minimum throttle value acceptable
+var throttle_min = 50; //Minimum throttle value acceptable
 var throttle_max = 127; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
 var previousleftThrottle;
-var throttlePercentageChange;
+var headingModifier; //heading ratio, used as modifer for throttle
+var distanceModifier=1; //distance ratio, used as modifer for throttle
 
 //BOOLEAN LOGIC FOR FUNCTIONS
 var doneTurning = false;
@@ -34,11 +40,12 @@ var turning_left = null;
 var turning_right = null;
 var isTurning = false;
 var isDriving = false; 
+var isPID = false;
 
 var turnCounter = 0;//initialize counter for testing purposes
 var maxTurnCounter = 1000; //max value the turn counter can achieve
 var driveCounter = 0;//initialize counter for testing purposes
-var maxDriveCounter = 500; //max value the counter can achienve
+var maxDriveCounter = 5000; //max value the counter can achienve
 var pidCounter = 0;//initialize counter for testing purposes
 var maxPidCounter = 1000;//max value the counter can achienve
 
@@ -98,7 +105,7 @@ function setRightSide(rightSpeed) {
 function setMotors(leftSideThrottle, rightSideThrottle) {
     setLeftSide(rightSideThrottle); 
     setRightSide(leftSideThrottle);
-}
+}``
 
 function stopRover() {
     setMotors(0, 0); //calls drive forward zeroed out
