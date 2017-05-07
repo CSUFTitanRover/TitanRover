@@ -172,3 +172,9 @@ body, #react-app, #react-app > * {
     margin: 5px 0;
     width: 180px;
 }
+
+#map {
+    width: 700px;
+    height: 500px;
+    margin-top: 5px;
+}

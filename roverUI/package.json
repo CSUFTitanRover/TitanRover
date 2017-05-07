@@ -11,10 +11,13 @@
     "c3": "^0.4.11",
     "d3": "^4.2.8",
     "konva": "^1.4.0",
+    "leaflet": "^1.0.3",
     "moment": "^2.17.1",
+    "offline-leaflet-map": "^0.2.0",
     "react": "^15.4.2",
     "react-dom": "^15.3.2",
     "react-konva": "^1.1.1",
+    "react-leaflet": "^1.1.6",
     "react-router": "^2.8.1",
     "socket.io": "^1.5.1"
   },
