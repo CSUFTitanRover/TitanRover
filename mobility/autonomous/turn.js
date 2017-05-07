@@ -200,12 +200,13 @@ function calc_heading_delta(){
     }
 }
 
+
 function output_nav_data() {
     console.log("Current Heading: " + current_heading);
     console.log("Target Heading: " + target_heading);
     console.log("Heading Delta: " + heading_delta)
-    console.log("Turning left: " + !turn_right);
-    console.log("Turning right: " + turn_right);
+    console.log("Turning left:" + !turn_right);
+    console.log("Turning right:" + turn_right);
 };
 
 
