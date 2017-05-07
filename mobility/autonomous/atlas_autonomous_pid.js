@@ -2,7 +2,8 @@ var sys = require('util');
 var geolib = require('geolib');
 var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
-
+class MyEmitter extends EventEmitter {}
+const atlas = new MyEmitter();
 /*----TODO----
 -Implement a check to see whether or not we need to grab data from the IMU at that moment, don't want to overwrite geolibs more acurate calculation
 -Test distanceModifier to make sure we don't stop halfway to onTargetRange
@@ -170,6 +171,13 @@ process.on('SIGINT', function() {
         process.exit();
     },1000);
 });
+
+atlas.on('get_waypoint', pathfinder);
+
+atlas.on('finished_turn', drive);
+
+atlas.on('finished_mission', exit); 
+
 //----END SCRIPT KILL----
 //----END ROVER CONTROL----
 
@@ -329,14 +337,15 @@ function pathfinder() {
     } else {
         distanceModifier = 1;
     }
+    atlas.emit('turn');
 }
 
 function output_nav_data() {
     console.log("Current Heading: " + current_heading);
     console.log("Target Heading: " + target_heading);
     console.log("Heading Delta: " + heading_delta)
-    console.log("Turning left:" + !turn_right);
-    console.log("Turning right:" + turn_right);
+    console.log("Turning left: " + !turn_right);
+    console.log("Turning right: " + turn_right);
 };
 
 
