@@ -199,27 +199,3 @@ function calc_heading_delta(){
         throw new RangeError('Heading must be between 0 and 360. Magnetometer probably sent a bad value');
     }
 }
-
-function output_nav_data() {
-    console.log("Current Heading: " + current_heading);
-    console.log("Target Heading: " + target_heading);
-    console.log("Heading Delta: " + heading_delta)
-    console.log("Turning left: " + !turn_right);
-    console.log("Turning right: " + turn_right);
-};
-
-
-/**
- * Returns a number whose value is limited to the given range.
- *
- * Example: limit the output of this computation to between 0 and 255
- * (x * 255).clamp(0, 255)
- *
- * @param {Number} min The lower boundary of the output range
- * @param {Number} max The upper boundary of the output range
- * @returns A number in the range [min, max]
- * @type Number
- */
-Number.prototype.clamp = function(min, max) {
-  return Math.min(Math.max(this, min), max);
-};
