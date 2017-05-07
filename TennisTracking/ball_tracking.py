@@ -22,7 +22,7 @@ counter = 0
 direction = ""
 
 # define the camera to be the reference to the IP camera stream
-camera = urllib.request.urlopen('http://itwebcammh.fullerton.edu/mjpg/video.mjpg')
+camera = urllib.request.urlopen('http://192.168.1.100/video.mjpg')
 
 bytes = bytes()
 while True:
@@ -80,7 +80,7 @@ while True:
 			if pts[i -1] is None or pts[i] is None:
 				continue
 			# check to see if enough points have been accumulated in buffer
-			if counter >= 10 and i ==1 and pts[-10] is not None:
+			if counter >= 10 and i ==1 and len(pts) > 10:
 				# compute the difference between x and y and re-initialize the direction txt variables
 				dX = pts[-10][0] - pts[i][0]
 				dY = pts[-10][1] - pts[i][1]
