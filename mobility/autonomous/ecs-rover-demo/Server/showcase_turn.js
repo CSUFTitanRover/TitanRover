@@ -1,36 +1,19 @@
 var sys = require('util');
-var sleep = require('sleep');
 var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
+
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
-var current_heading; //leave untouched, written from the IMU
+var heading_delta = null;
+var current_heading = null; //leave untouched, written from the IMU
 var target_heading = 0; //change to desired target heading, will be replaced post calculation of GPS data
-var previous_heading_delta; //leave untouched
-
-//THEN COMMENT THIS OUT
-//DRIVE-CONSTANTS: 
-var turning_drive_constant = 0; 
-
-//DEGREES OF ERROR
-var turning_drive_error = 20;//within 20 degrees stop turn
+var turning_drive_error = 5; //DEGREES OF ERROR
 
 //THROTTLE LOGIC
-var throttle_min = -127; //Minimum throttle value acceptable
+var throttle_min = 30; //Minimum throttle to turn the rover
 var throttle_max = 127; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
-var previousrightThrottle;
-var previousleftThrottle;
-var throttlePercentageChange;
-
-//BOOLEAN LOGIC FOR FUNCTIONS
-var doneTurning = false;
-var turning_left = null;
-var turning_right = null;
-
-var turnCounter = 0;//initialize counter for testing purposes
-var maxTurnCounter = 500; //max value the turn counter can achieve
-
+var turn_timer; 
 /************************* Connect to Showcase UI *************************/ 
 var app = require('express');
 var socket = require('http').Server(app);
@@ -46,18 +29,20 @@ socket.listen(6993, function() {
 // Socket.io is going to be handling all the emits events that the UI needs.
 io.on('connection', function(socketClient) {
     console.log("Client Connected: " + socketClient.id);
-
     socketClient.on('new angle value', function(newAngle) {
         target_heading = newAngle;
+        clearInterval(turn_timer);
+        stopRover(); 
+        turningP();
     });
 
 });
-
 /************************* Connect to Showcase UI *************************/ 
 
 // Get heading,calculate heading and turn immediately.
 python_proc.stdout.on('data', function (data){
     current_heading = parseFloat(data);
+    calc_heading_delta();
 	//winston.info('Current heading: ' + data.toString());
     //calc_heading_delta();
 });
@@ -130,8 +115,8 @@ port.on('data', function(data) {
 });
 
 port.on('open',function(){
-    console.log('open');
-    //setTimeout(main,1000);
+    console.log('port is open');
+
 });
 
 //LOGIC TO KILL ALL PROCESS AND STOP ROVER MID SCRIPT
@@ -155,43 +140,25 @@ process.on('SIGINT', function() {
         process.exit();
     },1000);
 });
-//----END SCRIPT KILL----
-//----END ROVER CONTROL----
-
-// Main Function
-setTimeout(main,3000);//Necesary block for the serial port to open with the arduino
-function main() {
-    clearInterval(main);
-    turningP();
-}
 
 var turningP = function() {
-    console.log('----turningP----')
+    console.log('----turningP----');
     turn_timer = setInterval(function() {
-        //FOR TESTING OFF ROVER
-        turnCounter++;
-        //current_heading--;
-        //---------------------
-        doneTurning = false;
-        calc_heading_delta();
-
         if (Math.abs(heading_delta) <= turning_drive_error) {
-            isTurning = false;
             clearInterval(turn_timer);
-            //stopRover();
+            stopRover();
             console.log('----FOUND HEADING----');
             console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
-            doneTurning = true;
             // Tell the UI we finished turning 
             io.emit('enable knob');
         } else {
             //Calculate the throttle percentage change based on what the proportion is.
-            headingModifier = heading_delta/180;
+            headingModifier = heading_delta / 180;
             let temp_throttle; 
-            console.log('!turn_right: ' + !turn_right);
-            console.log('turn_right:' + turn_right);
-            
-            temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier))).clamp(throttle_min,throttle_max);
+            console.log('turn left: ' + !turn_right);
+            console.log('turn right: ' + turn_right);
+            temp_throttle = Math.round( (throttle_max * headingModifier) + throttle_min);
+            temp_throttle = temp_throttle.clamp(throttle_min,throttle_max);
             if(turn_right){
                     console.log('Slowing turning right');
                     leftThrottle = temp_throttle;
@@ -204,15 +171,11 @@ var turningP = function() {
         }
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
         //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
-        if (!doneTurning) {  
             setMotors(leftThrottle, rightThrottle);
             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
-            //checks the rightThrottle values to make sure they're within mechanical constraints
-        } else if (doneTurning) {
-            console.log("----DONE TURNING----");
-        }
+
     },50);
-}
+};
 
 function calc_heading_delta(){
     console.log('Calculating Heading Delta & Direction');
