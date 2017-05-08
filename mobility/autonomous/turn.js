@@ -1,22 +1,24 @@
 var sys = require('util');
 var sleep = require('sleep');
 var spawn = require("child_process").spawn;
-var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
+
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
 var current_heading; //leave untouched, written from the IMU
-var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
+var target_heading = 200; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
+var magneticDeclination = 12; //12.3 in Fullerton, 15 in Hanksville
+var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 0; 
+var turning_drive_constant = 10; 
 
 //DEGREES OF ERROR
-var turning_drive_error = 20;//within 20 degrees stop turn
+var turning_drive_error = 5//within 20 degrees stop turn
 
 //THROTTLE LOGIC
-var throttle_min = -127; //Minimum throttle value acceptable
-var throttle_max = 127; //Maximum throttle value acceptable
+var throttle_min = 10; //Minimum throttle value acceptable
+var throttle_max = 30; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -25,17 +27,17 @@ var throttlePercentageChange;
 
 //BOOLEAN LOGIC FOR FUNCTIONS
 var doneTurning = false;
-var turning_left = null;
 var turning_right = null;
 
 var turnCounter = 0;//initialize counter for testing purposes
-var maxTurnCounter = 500; //max value the turn counter can achieve
+var maxTurnCounter = 5000; //max value the turn counter can achieve
 
 // Get heading,calculate heading and turn immediately.
 python_proc.stdout.on('data', function (data){
-    current_heading = parseFloat(data);
-	//winston.info('Current heading: ' + data.toString());
-    //calc_heading_delta();
+    data = parseFloat(data);
+    if( 0 <= data && data <= 360){
+         current_heading = data;
+    } 
 });
 
 //-------ROVERCONTROL------
@@ -58,7 +60,7 @@ var right_side_buff = Buffer.from(right_side_arr.buffer);
 var time = new Date();
 var timer;
 function setLeftSide(leftSpeed) {
-    leftSpeed = leftSpeed*-1;
+    //leftSpeed = leftSpeed*-1;
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -73,7 +75,7 @@ function setLeftSide(leftSpeed) {
 }
 
 function setRightSide(rightSpeed) {
-    rightSpeed = rightSpeed*-1;
+    //rightSpeed = rightSpeed*-1;
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -150,11 +152,11 @@ var turningP = function() {
         //---------------------
         doneTurning = false;
         calc_heading_delta();
-
+        output_nav_data();
         if (Math.abs(heading_delta) <= turning_drive_error) {
             isTurning = false;
             clearInterval(turn_timer);
-            //stopRover();
+            stopRover();
             console.log('----FOUND HEADING----');
             console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
             doneTurning = true;
@@ -166,6 +168,7 @@ var turningP = function() {
             console.log('turn_right:' + turn_right);
             
             temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier))).clamp(throttle_min,throttle_max);
+            console.log("temp_throttle" + temp_throttle);
             if(turn_right){
                     console.log('Slowing turning right');
                     leftThrottle = temp_throttle;
@@ -222,5 +225,6 @@ function output_nav_data() {
  * @type Number
  */
 Number.prototype.clamp = function(min, max) {
+  console.log("clamp: " + Math.min(Math.max(this, min), max));
   return Math.min(Math.max(this, min), max);
 };
