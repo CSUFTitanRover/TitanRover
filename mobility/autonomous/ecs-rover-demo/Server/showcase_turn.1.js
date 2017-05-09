@@ -12,14 +12,14 @@ var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IM
 
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 80; 
+var turning_drive_constant = 25; 
 
 //DEGREES OF ERROR
 var turning_drive_error = 5//within 20 degrees stop turn
 
 //THROTTLE LOGIC
-var throttle_min = turning_drive_constant; //Minimum throttle value acceptable
-var throttle_max = 120; //Maximum throttle value acceptable
+var throttle_min = 25; //Minimum throttle value acceptable
+var throttle_max = 35; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -35,6 +35,31 @@ var turnCounter = 0;//initialize counter for testing purposes
 var maxTurnCounter = 5000; //max value the turn counter can achieve
 var invalidHeadingCounter = 0;
 var invalidHeadingCounterMax = 40;
+
+/************************* Connect to Showcase UI *************************/ 
+var app = require('express');
+var socket = require('http').Server(app);
+var io = require('socket.io')(socket);
+
+
+// Start the server
+socket.listen(6993, function() {
+    console.log("============ Server is up and running on port: ", socket.address().port, "=============");
+});
+
+
+// Socket.io is going to be handling all the emits events that the UI needs.
+io.on('connection', function(socketClient) {
+    console.log("Client Connected: " + socketClient.id);
+    socketClient.on('new angle value', function(newAngle) {
+        target_heading = newAngle;
+        clearInterval(turn_timer);
+        stopRover(); 
+        turningP();
+    });
+
+});
+/************************* Connect to Showcase UI *************************/ 
 
 // Get heading,calculate heading and turn immediately.
 python_proc.stdout.on('data', function (data){
@@ -178,6 +203,7 @@ var turningP = function() {
                 isTurning = false;
                 clearInterval(turn_timer);
                 stopRover();
+                io.emit('enable knob');
                 console.log('----FOUND HEADING----');
                 console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
                 doneTurning = true;
@@ -188,7 +214,7 @@ var turningP = function() {
                 console.log('!turn_right: ' + !turn_right);
                 console.log('turn_right:' + turn_right);
                 
-                temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier)));
+                temp_throttle = (throttle_min + (Math.round(throttle_max * headingModifier)));
                 temp_throttle = temp_throttle.clamp(throttle_min,throttle_max);
                 console.log("temp_throttle" + temp_throttle);
                 if(turn_right){

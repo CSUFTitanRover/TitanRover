@@ -8,11 +8,10 @@ var previous_current_heading;
 var target_heading = 200; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
 var magneticDeclination = 12; //12.3 in Fullerton, 15 in Hanksville
-var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro_Old.py", magneticDeclination]);
+var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 25; 
 
 //DEGREES OF ERROR
 var turning_drive_error = 5//within 20 degrees stop turn
@@ -35,6 +34,23 @@ var turnCounter = 0;//initialize counter for testing purposes
 var maxTurnCounter = 5000; //max value the turn counter can achieve
 var invalidHeadingCounter = 0;
 var invalidHeadingCounterMax = 40;
+
+const Winston = require('winston');
+var now = require("performance-now");
+const winston = new (Winston.Logger)({
+    transports: [
+      new (Winston.transports.Console)({
+          'colorize': true
+          
+     }),
+      new (Winston.transports.File)({ 
+          filename: 'autonomous.log',
+          options:{flags: 'w'}, // Overwrite logfile. Remove if you want to append 
+          timestamp: function () {
+          return now();},
+     })
+    ]
+  });
 
 // Get heading,calculate heading and turn immediately.
 python_proc.stdout.on('data', function (data){
@@ -155,12 +171,12 @@ var turningP = function() {
         calc_heading_delta();
         output_nav_data();
         if (isNaN(current_heading)) {
-            console.log("Current Heading is NaN");
+            winston.info("Current Heading is NaN");
             stopRover();
             doneTurning = true;
             clearInterval(turn_timer);
         } else if (current_heading == false) {
-            console.log("Current Heading is false");
+            winston.info("Current Heading is false");
             stopRover();
             doneTurning = true;
             clearInterval(turn_timer);
@@ -179,7 +195,10 @@ var turningP = function() {
                 clearInterval(turn_timer);
                 stopRover();
                 console.log('----FOUND HEADING----');
-                console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
+                winston.info('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
+                setTimeout(function(){
+                    winston.info(current_heading);
+                },2000);
                 doneTurning = true;
             } else {
                 //Calculate the throttle percentage change based on what the proportion is.
@@ -188,7 +207,7 @@ var turningP = function() {
                 console.log('!turn_right: ' + !turn_right);
                 console.log('turn_right:' + turn_right);
                 
-                temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier)));
+                temp_throttle = (throttle_min + (Math.round(throttle_max * headingModifier)));
                 temp_throttle.clamp(throttle_min,throttle_max);
                 console.log("temp_throttle" + temp_throttle);
                 if(turn_right){
