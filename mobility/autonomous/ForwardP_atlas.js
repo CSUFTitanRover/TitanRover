@@ -10,14 +10,14 @@ var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IM
 
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var forward_drive_constant = 75;
+var forward_drive_constant = 55;
 
 //DEGREES OF ERROR
-var forward_drive_error = 4; //within 4 degrees drive straight
+var forward_drive_error = 3; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
 var throttle_min = 30; //Minimum throttle value acceptable
-var throttle_max = 110; //Maximum throttle value acceptable
+var throttle_max = 80; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -28,7 +28,7 @@ var throttlePercentageChange;
 var turning_right = null;
 
 var driveCounter = 0;//initialize counter for testing purposes
-var maxDriveCounter = 5000; //max value the counter can achienve
+var maxDriveCounter = 1000; //max value the counter can achienve
 
 //----GRAB DATA FROM IMU----
 python_proc.stdout.on('data', function (data){
@@ -55,7 +55,7 @@ var right_side_buff = Buffer.from(right_side_arr.buffer);
 var time = new Date();
 var timer;
 function setLeftSide(leftSpeed) {
-    //leftSpeed = leftSpeed*-1;
+    leftSpeed = leftSpeed*-1;
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -70,7 +70,7 @@ function setLeftSide(leftSpeed) {
 }
 
 function setRightSide(rightSpeed) {
-    //rightSpeed = rightSpeed*-1;
+    rightSpeed = rightSpeed*-1;
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -169,7 +169,6 @@ var forwardPMovement = function() {
                 clearInterval(drive_timer);
             }
         } else {
-            invalidHeadingCounter = 0;
             if (Math.abs(heading_delta) <= forward_drive_error) {
                 leftThrottle = (forward_drive_constant + forward_drive_modifier);
                 rightThrottle = (forward_drive_constant + forward_drive_modifier);

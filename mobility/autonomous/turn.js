@@ -153,31 +153,52 @@ var turningP = function() {
         doneTurning = false;
         calc_heading_delta();
         output_nav_data();
-        if (Math.abs(heading_delta) <= turning_drive_error) {
-            isTurning = false;
-            clearInterval(turn_timer);
+        if (isNaN(current_heading)) {
+            console.log("Current Heading is NaN");
             stopRover();
-            console.log('----FOUND HEADING----');
-            console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
             doneTurning = true;
+            clearInterval(turn_timer);
+        } else if (current_heading == false) {
+            console.log("Current Heading is false");
+            stopRover();
+            doneTurning = true;
+            clearInterval(turn_timer);
+        } else if (current_heading == previous_current_heading) {
+            invalidHeadingCounter++
+            if (invalidHeadingCounterMax <= invalidHeadingCounter) {
+                console.log("Current Heading is the same" + invalidHeadingCounterMax + "iterations");
+                stopRover();
+                doneTurning = true;
+                clearInterval(turn_timer);
+            }
         } else {
-            //Calculate the throttle percentage change based on what the proportion is.
-            headingModifier = heading_delta/180;
-            let temp_throttle; 
-            console.log('!turn_right: ' + !turn_right);
-            console.log('turn_right:' + turn_right);
-            
-            temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier))).clamp(throttle_min,throttle_max);
-            console.log("temp_throttle" + temp_throttle);
-            if(turn_right){
-                    console.log('Slowing turning right');
-                    leftThrottle = temp_throttle;
-                    rightThrottle = temp_throttle * -1; // removed temp_throttle - 10
-            }else{
-                    console.log('Slowing turning left');
-                    rightThrottle = temp_throttle;
-                    leftThrottle = temp_throttle * -1;
-            } 
+            invalidHeadingCounter=0;
+            if (Math.abs(heading_delta) <= turning_drive_error) {
+                isTurning = false;
+                clearInterval(turn_timer);
+                stopRover();
+                console.log('----FOUND HEADING----');
+                console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
+                doneTurning = true;
+            } else {
+                //Calculate the throttle percentage change based on what the proportion is.
+                headingModifier = heading_delta/180;
+                let temp_throttle; 
+                console.log('!turn_right: ' + !turn_right);
+                console.log('turn_right:' + turn_right);
+                
+                temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier))).clamp(throttle_min,throttle_max);
+                console.log("temp_throttle" + temp_throttle);
+                if(turn_right){
+                        console.log('Slowing turning right');
+                        leftThrottle = temp_throttle;
+                        rightThrottle = temp_throttle * -1; // removed temp_throttle - 10
+                }else{
+                        console.log('Slowing turning left');
+                        rightThrottle = temp_throttle;
+                        leftThrottle = temp_throttle * -1;
+                } 
+            }
         }
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
         //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
