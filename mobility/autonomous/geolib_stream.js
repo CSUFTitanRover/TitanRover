@@ -18,7 +18,7 @@ var jsonfile = require('jsonfile');
 
 var file = '/home/pi/TitanRover/mobility/runt/node/gps.json' ; 
 var reachIP = '192.168.2.15';
-var reach_shans_hotspot = '172.20.10.7';
+//var reach_shans_hotspot = '172.20.10.7';
 var current_wayPoint = 0;
 var gpsJSON  = {
     'time': null,

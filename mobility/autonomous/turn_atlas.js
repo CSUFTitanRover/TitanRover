@@ -17,8 +17,8 @@ var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IM
 var turning_drive_error = 5//within 20 degrees stop turn
 
 //THROTTLE LOGIC
-var throttle_min = 25; //Minimum throttle value acceptable
-var throttle_max = 35; //Maximum throttle value acceptable
+var turn_throttle_min = 25; //Minimum throttle value acceptable
+var turn_throttle_max = 35; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -28,7 +28,6 @@ var throttlePercentageChange;
 //BOOLEAN LOGIC FOR FUNCTIONS
 var doneTurning = false;
 var turning_right = null;
-var currentHeadingValid = false;
 
 var turnCounter = 0;//initialize counter for testing purposes
 var maxTurnCounter = 5000; //max value the turn counter can achieve
@@ -207,8 +206,8 @@ var turningP = function() {
                 console.log('!turn_right: ' + !turn_right);
                 console.log('turn_right:' + turn_right);
                 
-                temp_throttle = (throttle_min + (Math.round(throttle_max * headingModifier)));
-                temp_throttle.clamp(throttle_min,throttle_max);
+                temp_throttle = (turn_throttle_min + (Math.round(turn_throttle_max * headingModifier)));
+                temp_throttle.clamp(turn_throttle_min,turn_throttle_max);
                 console.log("temp_throttle" + temp_throttle);
                 if(turn_right){
                         console.log('Slowing turning right');
@@ -221,7 +220,7 @@ var turningP = function() {
                 } 
             }
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
-        //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
+        //less than turn_throttle_min and turn_throttle_max. Then sets the rover speed to the calculated value
         }
         if (!doneTurning) {  
             setMotors(leftThrottle, rightThrottle);

@@ -17,8 +17,8 @@ var forward_drive_constant = 75;
 var forward_drive_error = 4; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = 30; //Minimum throttle value acceptable
-var throttle_max = 110; //Maximum throttle value acceptable
+var forward_throttle_min = 30; //Minimum throttle value acceptable
+var forward_throttle_min = 110; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -190,8 +190,8 @@ var forwardPMovement = function() {
                         leftThrottle = forward_drive_constant - throttle_offset;
                         rightThrottle = forward_drive_constant + throttle_offset;
                 }
-                leftThrottle = leftThrottle.clamp(throttle_min, throttle_max);
-                rightThrottle = rightThrottle.clamp(throttle_min, throttle_max);
+                leftThrottle = leftThrottle.clamp(forward_throttle_min, forward_throttle_min);
+                rightThrottle = rightThrottle.clamp(forward_throttle_min, forward_throttle_min);
                 setMotors(leftThrottle, rightThrottle);
                 //PUT SET SPEED IN HERE.
                 previousleftThrottle = leftThrottle;

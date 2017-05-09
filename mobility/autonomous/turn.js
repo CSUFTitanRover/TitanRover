@@ -14,8 +14,8 @@ var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IM
 var turning_drive_error = 5//within 20 degrees stop turn
 
 //THROTTLE LOGIC
-var throttle_min = 50; //Minimum throttle value acceptable
-var throttle_max = 90; //Maximum throttle value acceptable
+var turning_throttle_min = 50; //Minimum throttle value acceptable
+var turning_throttle_max = 90; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -28,7 +28,7 @@ var turning_right = null;
 var currentHeadingValid = false;
 
 var turnCounter = 0;//initialize counter for testing purposes
-var maxTurnCounter = 5000; //max value the turn counter can achieve
+var maxTurnCounter = 1000; //max value the turn counter can achieve
 var invalidHeadingCounter = 0;
 var invalidHeadingCounterMax = 40;
 
@@ -183,8 +183,8 @@ var turningP = function() {
                 let temp_throttle; 
                 console.log('!turn_right: ' + !turn_right);
                 console.log('turn_right:' + turn_right);
-                temp_throttle = (throttle_min + (Math.round(throttle_max * headingModifier)));
-                temp_throttle = temp_throttle.clamp(throttle_min,throttle_max);
+                temp_throttle = (turning_throttle_min + (Math.round(turning_throttle_max * headingModifier)));
+                temp_throttle = temp_throttle.clamp(turning_throttle_min,turning_throttle_max);
                 console.log("temp_throttle" + temp_throttle);
                 if(turn_right){
                         console.log('Slowing turning right');
@@ -198,7 +198,7 @@ var turningP = function() {
             }
         }
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
-        //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
+        //less than turning_throttle_min and turning_throttle_max. Then sets the rover speed to the calculated value
         if (!doneTurning) {  
             setMotors(leftThrottle, rightThrottle);
             previous_current_heading = current_heading;
