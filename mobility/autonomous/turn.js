@@ -10,16 +10,12 @@ var previous_heading_delta; //leave untouched
 var magneticDeclination = 12; //12.3 in Fullerton, 15 in Hanksville
 var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
-//THEN COMMENT THIS OUT
-//DRIVE-CONSTANTS: 
-var turning_drive_constant = 80; 
-
 //DEGREES OF ERROR
 var turning_drive_error = 5//within 20 degrees stop turn
 
 //THROTTLE LOGIC
-var throttle_min = turning_drive_constant; //Minimum throttle value acceptable
-var throttle_max = 120; //Maximum throttle value acceptable
+var throttle_min = 50; //Minimum throttle value acceptable
+var throttle_max = 90; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -173,11 +169,7 @@ var turningP = function() {
                 clearInterval(turn_timer);
             }
         } else {
-<<<<<<< HEAD
-            invalidHeadingCounter=0;
-=======
             invalidHeadingCounter = 0;
->>>>>>> 9919b73d52044f4500ec691e25c87e36591878be
             if (Math.abs(heading_delta) <= turning_drive_error) {
                 isTurning = false;
                 clearInterval(turn_timer);
@@ -191,13 +183,8 @@ var turningP = function() {
                 let temp_throttle; 
                 console.log('!turn_right: ' + !turn_right);
                 console.log('turn_right:' + turn_right);
-                
-<<<<<<< HEAD
-                temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier))).clamp(throttle_min,throttle_max);
-=======
-                temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier)));
+                temp_throttle = (throttle_min + (Math.round(throttle_max * headingModifier)));
                 temp_throttle = temp_throttle.clamp(throttle_min,throttle_max);
->>>>>>> 9919b73d52044f4500ec691e25c87e36591878be
                 console.log("temp_throttle" + temp_throttle);
                 if(turn_right){
                         console.log('Slowing turning right');
@@ -209,13 +196,9 @@ var turningP = function() {
                         leftThrottle = temp_throttle * -1;
                 } 
             }
-<<<<<<< HEAD
         }
-=======
->>>>>>> 9919b73d52044f4500ec691e25c87e36591878be
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
         //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
-        }
         if (!doneTurning) {  
             setMotors(leftThrottle, rightThrottle);
             previous_current_heading = current_heading;
