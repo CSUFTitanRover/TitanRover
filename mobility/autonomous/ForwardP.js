@@ -3,6 +3,7 @@ var spawn = require("child_process").spawn;
 
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
 var current_heading; //leave untouched, written from the IMU
+var previous_current_heading;
 var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
 var magneticDeclination = 12.3; //12.3 in Fullerton, 15 in Hanksville
@@ -171,8 +172,8 @@ var forwardPMovement = function() {
         } else {
             invalidHeadingCounter = 0;
             if (Math.abs(heading_delta) <= forward_drive_error) {
-                leftThrottle = (forward_drive_constant + forward_drive_modifier);
-                rightThrottle = (forward_drive_constant + forward_drive_modifier);
+                leftThrottle = (forward_drive_constant);
+                rightThrottle = (forward_drive_constant);
                 console.log('Moving forward at drive constant');
             } else {
                 //Calculate the throttle percentage change based on what the proportion is.
@@ -188,8 +189,10 @@ var forwardPMovement = function() {
                         console.log('Slowing turning left');
                         leftThrottle = forward_drive_constant - throttle_offset;
                         rightThrottle = forward_drive_constant + throttle_offset;
-                }    
-                setMotors(leftThrottle.clamp(throttle_min, throttle_max), rightThrottle.clamp(throttle_min, throttle_max));
+                }
+                leftThrottle = leftThrottle.clamp(throttle_min, throttle_max);
+                rightThrottle = rightThrottle.clamp(throttle_min, throttle_max);
+                setMotors(leftThrottle, rightThrottle);
                 //PUT SET SPEED IN HERE.
                 previousleftThrottle = leftThrottle;
                 previousrightThrottle = rightThrottle;
@@ -198,7 +201,7 @@ var forwardPMovement = function() {
             if (Math.abs(heading_delta) >= forward_drive_to_turn_error) { //if i'm past my max for forward P, clear interval and call turn.js
                 clearInterval(drive_timer);
                 //stopRover();
-            } else if (driveCounter <= driveCounterMax) {
+            } else if (driveCounter >= maxDriveCounter) {
                 console.log("----Hit max iteration attemtps----")
                 clearInterval(drive_timer);
                 stopRover();
