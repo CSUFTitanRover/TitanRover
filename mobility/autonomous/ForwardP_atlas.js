@@ -3,6 +3,7 @@ var spawn = require("child_process").spawn;
 
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
 var current_heading; //leave untouched, written from the IMU
+var previous_current_heading;
 var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
 var magneticDeclination = 12.3; //12.3 in Fullerton, 15 in Hanksville
@@ -10,14 +11,14 @@ var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IM
 
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var forward_drive_constant = 55;
+var forward_drive_constant = 40;
 
 //DEGREES OF ERROR
 var forward_drive_error = 3; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = 30; //Minimum throttle value acceptable
-var throttle_max = 80; //Maximum throttle value acceptable
+var throttle_min = 20; //Minimum throttle value acceptable
+var throttle_max = 60; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -170,8 +171,8 @@ var forwardPMovement = function() {
             }
         } else {
             if (Math.abs(heading_delta) <= forward_drive_error) {
-                leftThrottle = (forward_drive_constant + forward_drive_modifier);
-                rightThrottle = (forward_drive_constant + forward_drive_modifier);
+                leftThrottle = (forward_drive_constant);
+                rightThrottle = (forward_drive_constant);
                 console.log('Moving forward at drive constant');
             } else {
                 //Calculate the throttle percentage change based on what the proportion is.
@@ -194,10 +195,7 @@ var forwardPMovement = function() {
                 previousrightThrottle = rightThrottle;
                 console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
             } 
-            if (Math.abs(heading_delta) >= forward_drive_to_turn_error) { //if i'm past my max for forward P, clear interval and call turn.js
-                clearInterval(drive_timer);
-                //stopRover();
-            } else if (driveCounter <= driveCounterMax) {
+        if (driveCounter >= maxDriveCounter) {
                 console.log("----Hit max iteration attemtps----")
                 clearInterval(drive_timer);
                 stopRover();
