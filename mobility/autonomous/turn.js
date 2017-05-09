@@ -4,21 +4,22 @@ var spawn = require("child_process").spawn;
 
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
 var current_heading; //leave untouched, written from the IMU
-var target_heading = 200; //change to desired target heading, will be replaced post calculation of GPS data
+var previous_current_heading;
+var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
 var magneticDeclination = 12; //12.3 in Fullerton, 15 in Hanksville
 var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
 //THEN COMMENT THIS OUT
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 10; 
+var turning_drive_constant = 80; 
 
 //DEGREES OF ERROR
 var turning_drive_error = 5//within 20 degrees stop turn
 
 //THROTTLE LOGIC
-var throttle_min = 10; //Minimum throttle value acceptable
-var throttle_max = 30; //Maximum throttle value acceptable
+var throttle_min = turning_drive_constant; //Minimum throttle value acceptable
+var throttle_max = 120; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
@@ -28,16 +29,16 @@ var throttlePercentageChange;
 //BOOLEAN LOGIC FOR FUNCTIONS
 var doneTurning = false;
 var turning_right = null;
+var currentHeadingValid = false;
 
 var turnCounter = 0;//initialize counter for testing purposes
 var maxTurnCounter = 5000; //max value the turn counter can achieve
+var invalidHeadingCounter = 0;
+var invalidHeadingCounterMax = 40;
 
 // Get heading,calculate heading and turn immediately.
 python_proc.stdout.on('data', function (data){
-    data = parseFloat(data);
-    if( 0 <= data && data <= 360){
-         current_heading = data;
-    } 
+    current_heading = parseFloat(data);;
 });
 
 //-------ROVERCONTROL------
@@ -172,7 +173,11 @@ var turningP = function() {
                 clearInterval(turn_timer);
             }
         } else {
+<<<<<<< HEAD
             invalidHeadingCounter=0;
+=======
+            invalidHeadingCounter = 0;
+>>>>>>> 9919b73d52044f4500ec691e25c87e36591878be
             if (Math.abs(heading_delta) <= turning_drive_error) {
                 isTurning = false;
                 clearInterval(turn_timer);
@@ -187,7 +192,12 @@ var turningP = function() {
                 console.log('!turn_right: ' + !turn_right);
                 console.log('turn_right:' + turn_right);
                 
+<<<<<<< HEAD
                 temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier))).clamp(throttle_min,throttle_max);
+=======
+                temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier)));
+                temp_throttle = temp_throttle.clamp(throttle_min,throttle_max);
+>>>>>>> 9919b73d52044f4500ec691e25c87e36591878be
                 console.log("temp_throttle" + temp_throttle);
                 if(turn_right){
                         console.log('Slowing turning right');
@@ -199,17 +209,22 @@ var turningP = function() {
                         leftThrottle = temp_throttle * -1;
                 } 
             }
+<<<<<<< HEAD
         }
+=======
+>>>>>>> 9919b73d52044f4500ec691e25c87e36591878be
         //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
         //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
+        }
         if (!doneTurning) {  
             setMotors(leftThrottle, rightThrottle);
+            previous_current_heading = current_heading;
             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
             //checks the rightThrottle values to make sure they're within mechanical constraints
         } else if (doneTurning) {
             console.log("----DONE TURNING----")
         }
-    },50);
+    },100);
 }
 
 function calc_heading_delta(){
@@ -224,9 +239,9 @@ function calc_heading_delta(){
     }
 }
 
-
 function output_nav_data() {
     console.log("Current Heading: " + current_heading);
+    console.log("Previous Heading: " + previous_current_heading);
     console.log("Target Heading: " + target_heading);
     console.log("Heading Delta: " + heading_delta)
     console.log("Turning left:" + !turn_right);
