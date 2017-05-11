@@ -25,7 +25,7 @@ const int stepsPerRevolution = 200;
 // Joint #1
 const uint8_t joint1_dir_pin = 30;
 const uint8_t joint1_enab_pin = 31;
-const uint8_t joint1_pulse_pin = 32;
+const uint8_t joint1_pulse_pin = 29;
 volatile bool joint1_on = false;
 const uint8_t joint1_limit_pin = A0;
 unsigned int joint1_sensorValue;
@@ -82,10 +82,14 @@ const uint8_t joint7_dir_pin = 46;
 const uint8_t joint7_pulse_pin = 47;
 volatile bool joint7_on = false;
 
+// AssAss globals
+Servo AssAss;
+const uint8_t assass_pwm_pin = 9;
+
 // Additional Global variables needed
 uint8_t val[6];
 int i;
-int delayVal = 2;
+int delayVal = 1;
 uint16_t pwmVal;
 const uint8_t interruptDelay = 250;
 static unsigned long joint4_last_interrupt_time = 0;
@@ -95,14 +99,14 @@ bool Calibrated = false;  // Arm can't be moved until calibrated
 bool debug = false;
 uint8_t analogRead_counter = 0;
 
-SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
-Sabertooth Back(129, SWSerial);
+//SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
+Sabertooth Back(129, Serial1);
 
 void setup()
 {
   SPI.begin();
   Serial.begin(9600);
-  SWSerial.begin(9600);
+  Serial1.begin(9600);
   Back.autobaud();
 
   delay(5);
@@ -155,13 +159,16 @@ void setup()
   joint6_stepper.enableDriver();
 
   // Deselect the slave select pin for joint6 to allow joint7 to communicate
-  digitalWrite(joint6_ss, HIGH);
+  //digitalWrite(joint6_ss, HIGH);
 
   joint7_stepper.init(joint7_ss);
   joint7_stepper.resetSettings();
   joint7_stepper.setCurrentMilliamps(670);
   joint7_stepper.setStepMode(stepsPerRevolution);
   joint7_stepper.enableDriver();
+
+  // Set up AssAss
+  AssAss.attach(assass_pwm_pin);
 
   // Arduino needs these functions to be wrapped in another function
   // This will set certain masks that allow use to detect the HIGH LOW of a pin faster
@@ -287,6 +294,10 @@ void loop()
           }
           debug = !debug;
         }
+        else if (val[1] == 0x05)
+        {
+          operateAssAss(val[2]);
+        }
         break;
       default:
         break;
@@ -295,7 +306,7 @@ void loop()
 
 
   // Check the POT's limits
-  if (analogRead_counter > 4)
+  if (analogRead_counter % 4 == 0)
   {
     joint1_sensorValue = analogRead(joint1_limit_pin);
   }
@@ -308,13 +319,19 @@ void loop()
 
     if (!state && joint1_sensorValue < 600)
     {
-      digitalWrite(joint1_pulse_pin, HIGH);
-      digitalWrite(joint1_pulse_pin, LOW);
+      if (analogRead_counter % 2 == 0)
+      {
+        digitalWrite(joint1_pulse_pin, HIGH);
+        digitalWrite(joint1_pulse_pin, LOW);
+      }
     }
     else if (state && joint1_sensorValue > 69)
     {
-      digitalWrite(joint1_pulse_pin, HIGH);
-      digitalWrite(joint1_pulse_pin, LOW);
+      if (analogRead_counter % 2 == 0)
+      {
+        digitalWrite(joint1_pulse_pin, HIGH);
+        digitalWrite(joint1_pulse_pin, LOW);
+      }
     }
   }
 
@@ -350,7 +367,7 @@ void loop()
       }
     }
 
-    if (!passedLimit)
+    if (!passedLimit && analogRead_counter % 2 == 0)
     {
       digitalWrite(joint4_pulse_pin, HIGH);
       digitalWrite(joint4_pulse_pin, LOW);
@@ -449,6 +466,23 @@ void stepJoint(uint8_t puslePin, uint16_t steps)
   }
 }
 
+/*
+ * Will make the AssAss open and close
+ * @param operation Either 1 or 0 telling the AssAss to open or close
+ */
+void operateAssAss(uint8_t operation)
+{
+  if (operation == 0x01)  // Open
+  {
+    AssAss.write(90);
+  }
+  else if (operation == 0x00) // Close
+  {
+    delay(3000);
+    AssAss.write(0);
+  }
+}
+
 // Will switch the pin based on what byte is sent from the pi
 void setDirectionPin(uint8_t pinValue, uint8_t val)
 {
@@ -471,19 +505,22 @@ void calibrateArm()
 {
 
   Serial.println("Calibrating Arm");
+
+  if (!Calibrated)
+  {
+    joint2.writeMicroseconds(2000);
+    joint3.writeMicroseconds(2000);
+  }
   Calibrated = true;
 
-  joint2.writeMicroseconds(1000);
-  joint3.writeMicroseconds(1000);
-  /*
-    // Run joint4 calibration
-    digitalWrite(joint4_dir_pin, HIGH); // Run clock-wise to limit switch
-    while (!joint4_interrupted)
-    {
-      digitalWrite(joint4_pulse_pin, HIGH);
-      digitalWrite(joint4_pulse_pin, LOW);
-      delay(delayVal);
-    }*/
+  // Run joint4 calibration
+  digitalWrite(joint4_dir_pin, HIGH); // Run clock-wise to limit switch
+  while (!joint4_interrupted)
+  {
+    digitalWrite(joint4_pulse_pin, HIGH);
+    digitalWrite(joint4_pulse_pin, LOW);
+    delay(delayVal);
+  }
 
   // Run joint5 calibration
   digitalWrite(joint5_dir_pin, HIGH);
@@ -494,6 +531,8 @@ void calibrateArm()
     delay(delayVal);
   }
 
+  Serial.println("Finished Calibrating");
+
 }
 
 /*
@@ -501,9 +540,12 @@ void calibrateArm()
 */
 void sendInfo()
 {
+  joint1_sensorValue = analogRead(joint1_limit_pin);
   Serial.print(joint4_TotalSteps);
   Serial.print(":");
-  Serial.println(joint5_TotalSteps);
+  Serial.print(joint5_TotalSteps);
+  Serial.print(":");
+  Serial.println(joint1_sensorValue);
 }
 
 /*
@@ -561,7 +603,6 @@ void stopJoint5()
 */
 void StepOffLimitSwitch(const uint8_t dirPin, const uint8_t pulsePin, const int LimitDistance_Steps)
 {
-  Serial.println("Limit Switch Hit");
   uint8_t bit = digitalPinToBitMask(dirPin);
   uint8_t port = digitalPinToPort(dirPin);
 
@@ -589,12 +630,14 @@ void checkNeedToStepOffSwitch()
 {
   if (joint4_needsStepOff)
   {
+    Serial.println("Joint4 Limit Hit");
     StepOffLimitSwitch(joint4_dir_pin, joint4_pulse_pin, joint4_LimitDistance_Steps);
     joint4_needsStepOff = false;
   }
 
   if (joint5_needsStepOff)
   {
+    Serial.println("Joint5 Limit Hit");
     StepOffLimitSwitch(joint5_dir_pin, joint5_pulse_pin, joint5_LimitDistance_Steps);
     joint5_needsStepOff = false;
   }

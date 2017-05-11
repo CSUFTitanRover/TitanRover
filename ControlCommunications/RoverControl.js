@@ -319,6 +319,10 @@ function handleControl(message) {
     } else if (message.type == "arduinoDebug") {
         roverControl_arr[0] = 0x04ff;
         port.write(roverControl_buff);
+    } else if (message.type == "assass") {
+        roverControl_arr[0] = 0x05ff;
+        roverControl_arr[1] = parseInt(message.value);
+        port.write(roverControl_buff);
     }
 }
 
