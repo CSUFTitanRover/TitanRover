@@ -16,7 +16,7 @@ var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/pytho
 var current_heading; //leave untouched, written from the IMU
 var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
 
-// timers
+// Timers
 var turn_timer; 
 var drive_timer;
 
@@ -35,21 +35,17 @@ var forward_drive_to_turn_error = 15; //logic to exit forwardP and turn.
 var forward_drive_error = 3;          //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = 30; // Minimum throttle value to move the rover
-var throttle_max = 70; // Maximum throttle value acceptable
-var leftThrottle;
-var rightThrottle;
-var previousrightThrottle;
-var previousleftThrottle;
-var headingModifier;        //heading ratio, used as modifer for throttle
-var distanceModifier;       //distance ratio, used as modifer for throttle
+var throttle_min = 30;      // Minimum throttle value to move the rover
+var throttle_max = 70;      // Maximum throttle value acceptable
+var headingModifier;        // heading ratio, used as modifer for throttle
+var distanceModifier;       // distance ratio, used as modifer for throttle
 var distanceThreshold = 20; // We need to be within x cm of target to move on 
-var current_wayPoint = -1;  // -1 because we increment at the start of get_waypoint and want to start at 0; 
+var current_wayPoint = -1;  // -1 because index is incremented immediately; 
 
 // BOOLEAN LOGIC FOR FUNCTIONS
 var turn_right = null;
 
-// Reading waypoints from file 
+// ** SYNCHRONOUS READ **  Reading waypoints from file 
 var fs = require('fs');
 var filename = 'waypoints.json'; // Filename for gps waypoints
 var wayPoints = JSON.parse(fs.readFileSync(filename, 'utf8'));
@@ -62,7 +58,7 @@ atlas.on('get_waypoint',function(){
     current_wayPoint++; 
     if(current_wayPoint >= wayPoints.length()){
        stopRover();
-       console.log("finished");
+       console.log("reached end of waypoints");
     }
     else{
         atlas.emit('turn');
@@ -70,13 +66,24 @@ atlas.on('get_waypoint',function(){
 })
 
 atlas.on('turn',function(){
+    let temp_throttle; 
+    let leftThrottle;
+    let rightThrottle; 
     console.log('---- turning ----')
     calc_heading_delta();
     output_nav_data();
-    //----TURNINGP TIMER----
+    
+    /*
+        Timer Start Condition: 
+            Event is triggered from drive or get_waypoint
+
+        Timer Stop Condition: 
+            If current heading is within nominal range of target heading
+    */
     turn_timer = setInterval(function() {
-        // FOR TESTING OFF ROVER
         calc_heading_delta();
+        console.log('turn_right:' + turn_right);
+            
         if (Math.abs(heading_delta) <= turning_drive_error) {
             clearInterval(turn_timer);
             //stopRover();
@@ -84,13 +91,10 @@ atlas.on('turn',function(){
             console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
             atlas.emit('drive');
         } else {
-            //Calculate the throttle percentage change based on what the proportion is.
+            // proportional error with respect to heading
             headingModifier = heading_delta / 180;
-            let temp_throttle; 
-            console.log('!turn_right: ' + !turn_right);
-            console.log('turn_right:' + turn_right);
-            
-            temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier))).clamp(throttle_min,throttle_max);
+            temp_throttle = (throttle_max * headingModifier).clamp(throttle_min,throttle_max)
+            temp_throttle = Math.round(turning_drive_constant + temp_throttle);
             if(turn_right){
                     console.log('Slowing turning right');
                     leftThrottle = temp_throttle;
@@ -104,32 +108,49 @@ atlas.on('turn',function(){
         // sets the rover speed to the calculated value
         setMotors(leftThrottle, rightThrottle);
         console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
-    },50); // end of turn timer
+    }, 50); // end of turn timer
 }) // end of turn event 
 
+/* 
+    The drive event is triggered after a correct heading is reached 
+    Drive timer adjusts left and right throttle to stay within forward_drive_error
+*/
 atlas.on('drive',function(){
     console.log('---- driving ----')
+    let leftThrottle; 
+    let rightThrottle; 
+    let throttle_offset
+    
+    /*
+        Timer Start Condition: 
+            Event is triggered from turn
+        Stop Conditions: 
+            current heading exceeds error threshold or rover is within stopping distance of target.
+    */
     drive_timer = setInterval(function() {
         pathfinder(); //gets distance, distanceModifier modifier and target heading
         calc_heading_delta(); //calculates best turn towards target heading
         output_nav_data();
-
+        
         if (Math.abs(heading_delta > forward_drive_to_turn_error) || distance < distance_threshold ){
             clearInterval(drive_timer);
             stopRover(); 
-            console.log("Done driving forward");
-            atlas.emit('get_waypoint');
+            console.log("Done driving forward");     
+            distance < distance_threshold ? atlas.emit('get_waypoint') : atlas.emit('turn');    
         }
+        // If heading is nominal, drive forward
         else if (Math.abs(heading_delta) <= forward_drive_error) {
             leftThrottle  = forward_drive_constant;
             rightThrottle = forward_drive_constant;
             console.log('Moving forward at drive constant');
-        } else {
-            //Calculate the throttle percentage change based on what the proportion is.
+        } 
+        // Adjust left and right throttle to maintain nominal heading
+        else {
+            // proportional error with respect to heading
             headingModifier = heading_delta / 180;
             console.log('!turn_right: ' + !turn_right);
             console.log('turn_right:' + turn_right);
-            var throttle_offset = Math.round(forward_drive_constant * headingModifier* Math.log(heading_delta));
+            throttle_offset = Math.round(forward_drive_constant * headingModifier * Math.log(heading_delta));
             if(turn_right){
                 console.log('Slowing turning right');
                 leftThrottle = (forward_drive_constant + throttle_offset);
@@ -144,12 +165,11 @@ atlas.on('drive',function(){
             setMotors(leftThrottle, rightThrottle);
             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
-    },50); // end of drive timer 
+    }, 50); // end of drive timer 
 }) // end of drive event 
 
 //----GRAB DATA FROM IMU----
-python_proc.stdout.on('data', function (data){
-    
+python_proc.stdout.on('data', function (data){   
     let invalidHeadingCounter = 0;
     data = parseFloat(data);  
 
@@ -160,14 +180,14 @@ python_proc.stdout.on('data', function (data){
     else{
         invalidHeadingCounter++;
     }
-
+    
+    // **** WARNING: ARBITRARY COUNTER LIMIT ****
     if(invalidHeadingCounter > 10){
         clearInterval(turn_timer);
         clearInterval(drive_timer);
         stopRover(); 
         console.log("Rover stopped because of bad heading data");
     }
-     
 });
 
 //INCLUDED FOR CONTROL OF THE ROVER WITH UPDATED SERIAL COMMUNICATION
@@ -188,8 +208,6 @@ right_side_arr[0] = 0xC;
 right_side_arr[2] = 0xbbaa;
 var right_side_buff = Buffer.from(right_side_arr.buffer);
 
-var time = new Date();
-var timer;
 function setLeftSide(leftSpeed) {
     leftSpeed = leftSpeed*-1;
     if (leftSpeed < -127 || leftSpeed > 127) {
@@ -244,7 +262,7 @@ port.on('open',function(){
     //setTimeout(main,1000);
 });
 
-// LOGIC TO KILL ALL PROCESS AND STOP ROVER MID SCRIPT
+// KILL ALL PROCESS AND STOP ROVER MID SCRIPT
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     clearInterval(turn_timer);
@@ -265,7 +283,7 @@ process.on('SIGINT', function() {
     setTimeout(function(){ //required to fully stop the rover
         port.close();
         process.exit();
-    },1000);
+    }, 1000);
 });
 //----END SCRIPT KILL----
 //----END ROVER CONTROL----
@@ -304,8 +322,8 @@ function output_nav_data() {
     console.log("Current Heading: " + current_heading);
     console.log("Target Heading: " + target_heading);
     console.log("Heading Delta: " + heading_delta);
-    console.log("Turning left:" + !turn_right);
-    console.log("Turning right:" + turn_right);
+    console.log("Turning left: " + !turn_right);
+    console.log("Turning right: " + turn_right);
 };
 
 /**
