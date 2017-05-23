@@ -24,7 +24,7 @@ var throttlePercentageChange;
 
 //BOOLEAN LOGIC FOR FUNCTIONS
 var doneTurning = false;
-var turning_right = null;
+var turn_right = null;
 var currentHeadingValid = false;
 
 var turnCounter = 0;//initialize counter for testing purposes

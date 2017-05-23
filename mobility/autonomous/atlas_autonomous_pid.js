@@ -1,7 +1,6 @@
 var sys = require('util');
 var geolib = require('geolib');
 var spawn = require("child_process").spawn;
-var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
 
 /*----TODO----
 -Implement a check to see whether or not we need to grab data from the IMU at that moment, don't want to overwrite geolibs more acurate calculation
@@ -13,8 +12,11 @@ var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/pytho
 //FOR OFF ROVER TESTING:
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
 var current_heading; //leave untouched, written from the IMU
+var previous_current_heading;
 var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
 var previous_heading_delta; //leave untouched
+var magneticDeclination = 12; //12.3 in Fullerton, 15 in Hanksville
+var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
 var distance; // distance to next waypoint
 var onTargetRange = 5; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
@@ -31,14 +33,17 @@ var forward_drive_to_turn_error = 15; //logic to exit forwardP and turn.
 var forward_drive_error = 3; //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = 30; // Minimum throttle value to move the rover
-var throttle_max = 70; // Maximum throttle value acceptable
+var turning_throttle_min = 50; //Minimum throttle value acceptable
+var turning_throttle_max = 90; //Maximum throttle value acceptable
+var forward_throttle_min = 30; //Minimum throttle value acceptable
+var forward_throttle_min = 110; //Maximum throttle value acceptable
 var leftThrottle;
 var rightThrottle;
 var previousrightThrottle;
 var previousleftThrottle;
 var headingModifier; //heading ratio, used as modifer for throttle
 var distanceModifier; //distance ratio, used as modifer for throttle
+var throttlePercentageChange;
 
 //BOOLEAN LOGIC FOR FUNCTIONS
 var doneTurning = false;
@@ -46,10 +51,12 @@ var turn_right = null;
 var isTurning = false;
 var isDriving = false; 
 var isPID = false;
-
+var currentHeadingValid = false;
 
 var pidCounter = 0;//initialize counter for testing purposes
 var maxPidCounter = 1000;//max value the counter can achienve
+var invalidHeadingCounter = 0;
+var invalidHeadingCounterMax = 40;
 
 //----GRAB DATA FROM IMU----
 python_proc.stdout.on('data', function (data){
@@ -214,42 +221,64 @@ var rover_autonomous_pid = function() {
                     //current_heading--;
                     //---------------------
                     calc_heading_delta();
-
-                    if (Math.abs(heading_delta) <= turning_drive_error) {
-                        isTurning = false;
-                        clearInterval(turn_timer);
-                        //stopRover();
-                        console.log('----FOUND HEADING----');
-                        console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
+                    if (isNaN(current_heading)) {
+                        console.log("Current Heading is NaN");
+                        stopRover();
                         doneTurning = true;
+                        clearInterval(turn_timer);
+                    } else if (current_heading == false) {
+                        console.log("Current Heading is false");
+                        stopRover();
+                        doneTurning = true;
+                        clearInterval(turn_timer);
+                    } else if (current_heading == previous_current_heading) {
+                        invalidHeadingCounter++
+                        if (invalidHeadingCounterMax <= invalidHeadingCounter) {
+                            console.log("Current Heading is the same" + invalidHeadingCounterMax + "iterations");
+                            stopRover();
+                            doneTurning = true;
+                            clearInterval(turn_timer);
+                        }
                     } else {
-                        //Calculate the throttle percentage change based on what the proportion is.
-                        headingModifier = heading_delta/180;
-                        let temp_throttle; 
-                        console.log('!turn_right: ' + !turn_right);
-                        console.log('turn_right:' + turn_right);
-                        
-                        temp_throttle = (turning_drive_constant + (Math.round(throttle_max * headingModifier))).clamp(throttle_min,throttle_max);
-                        if(turn_right){
-                                console.log('Slowing turning right');
-                                leftThrottle = temp_throttle;
-                                rightThrottle = temp_throttle * -1; // removed temp_throttle - 10
-                        }else{
-                                console.log('Slowing turning left');
-                                rightThrottle = temp_throttle;
-                                leftThrottle = temp_throttle * -1;
-                        } 
+                        invalidHeadingCounter = 0;
+                        if (Math.abs(heading_delta) <= turning_drive_error) {
+                            isTurning = false;
+                            clearInterval(turn_timer);
+                            stopRover();
+                            console.log('----FOUND HEADING----');
+                            console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
+                            doneTurning = true;
+                        } else {
+                            //Calculate the throttle percentage change based on what the proportion is.
+                            headingModifier = heading_delta/180;
+                            let temp_throttle; 
+                            console.log('!turn_right: ' + !turn_right);
+                            console.log('turn_right:' + turn_right);
+                            temp_throttle = (turning_throttle_min + (Math.round(turning_throttle_max * headingModifier)));
+                            temp_throttle = temp_throttle.clamp(turning_throttle_min,turning_throttle_max);
+                            console.log("temp_throttle" + temp_throttle);
+                            if(turn_right){
+                                    console.log('Slowing turning right');
+                                    leftThrottle = temp_throttle;
+                                    rightThrottle = temp_throttle * -1; // removed temp_throttle - 10
+                            }else{
+                                    console.log('Slowing turning left');
+                                    rightThrottle = temp_throttle;
+                                    leftThrottle = temp_throttle * -1;
+                            } 
+                        }
                     }
                     //Checks to see if the currentThrottle values are valid for mechanical input as it is possible that the values can be significantly more or
-                    //less than throttle_min and throttle_max. Then sets the rover speed to the calculated value
+                    //less than turning_throttle_min and turning_throttle_max. Then sets the rover speed to the calculated value
                     if (!doneTurning) {  
                         setMotors(leftThrottle, rightThrottle);
+                        previous_current_heading = current_heading;
                         console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
                         //checks the rightThrottle values to make sure they're within mechanical constraints
                     } else if (doneTurning) {
                         console.log("----DONE TURNING----")
                     }
-                },50);
+                },100);
             //----DONE TURNINGP----
             console.log("Done Turning");
         } else if (Math.abs(heading_delta) <= turning_drive_error) {
@@ -260,37 +289,60 @@ var rover_autonomous_pid = function() {
                     pathfinder(); //gets distance, distanceModifier modifier and target heading
                     calc_heading_delta(); //calculates best turn towards target heading
                     output_nav_data();
-                    if (Math.abs(heading_delta) <= forward_drive_error) {
-                        leftThrottle = (forward_drive_constant + forward_drive_modifier) * distanceModifier;
-                        rightThrottle = (forward_drive_constant + forward_drive_modifier) * distanceModifier;
-                        console.log('Moving forward at drive constant');
-                    } else {
-                        //Calculate the throttle percentage change based on what the proportion is.
-                        headingModifier = heading_delta / 180;
-                        console.log('!turn_right: ' + !turn_right);
-                        console.log('turn_right:' + turn_right);
-                        var throttle_offset = Math.round(forward_drive_constant * headingModifier* Math.log(heading_delta) * distanceModifier);
-                        if(turn_right){
-                                console.log('Slowing turning right');
-                                leftThrottle = (forward_drive_constant + throttle_offset);
-                                rightThrottle = (forward_drive_constant - throttle_offset);
-                        }else{
-                                console.log('Slowing turning left');
-                                leftThrottle = forward_drive_constant - throttle_offset;
-                                rightThrottle = forward_drive_constant + throttle_offset;
-                        }    
-                        setMotors(leftThrottle.clamp(throttle_min, throttle_max), rightThrottle.clamp(throttle_min, throttle_max));
-                        //PUT SET SPEED IN HERE.
-                        previousleftThrottle = leftThrottle;
-                        previousrightThrottle = rightThrottle;
-                        console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
-                    } 
-                    if (Math.abs(heading_delta) >= forward_drive_to_turn_error) { //if i'm past my max for forward P, clear interval and call turn.js
-                        isDriving = false;
+                    if (isNaN(current_heading)) {
+                        console.log("Current Heading is NaN");
+                        stopRover();
                         clearInterval(drive_timer);
-                        //stopRover();
+                    } else if (current_heading == false) {
+                        console.log("Current Heading is false");
+                        stopRover();
+                        clearInterval(drive_timer);
+                    } else if (current_heading == previous_current_heading) {
+                        invalidHeadingCounter++
+                        if (invalidHeadingCounterMax <= invalidHeadingCounter) {
+                            console.log("Current Heading is the same" + invalidHeadingCounterMax + "iterations");
+                            stopRover();
+                            clearInterval(drive_timer);
+                        }
+                    } else {
+                        invalidHeadingCounter = 0;
+                        if (Math.abs(heading_delta) <= forward_drive_error) {
+                            leftThrottle = (forward_drive_constant);
+                            rightThrottle = (forward_drive_constant);
+                            console.log('Moving forward at drive constant');
+                        } else {
+                            //Calculate the throttle percentage change based on what the proportion is.
+                            headingModifier = heading_delta / 180;
+                            console.log('!turn_right: ' + !turn_right);
+                            console.log('turn_right:' + turn_right);
+                            var throttle_offset = Math.round(forward_drive_constant * headingModifier* Math.log(heading_delta));
+                            if(turn_right){
+                                    console.log('Slowing turning right');
+                                    leftThrottle = (forward_drive_constant + throttle_offset);
+                                    rightThrottle = (forward_drive_constant - throttle_offset);
+                            }else{
+                                    console.log('Slowing turning left');
+                                    leftThrottle = forward_drive_constant - throttle_offset;
+                                    rightThrottle = forward_drive_constant + throttle_offset;
+                            }
+                            leftThrottle = leftThrottle.clamp(forward_throttle_min, forward_throttle_min);
+                            rightThrottle = rightThrottle.clamp(forward_throttle_min, forward_throttle_min);
+                            setMotors(leftThrottle, rightThrottle);
+                            //PUT SET SPEED IN HERE.
+                            previousleftThrottle = leftThrottle;
+                            previousrightThrottle = rightThrottle;
+                            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+                        } 
+                        if (Math.abs(heading_delta) >= forward_drive_to_turn_error) { //if i'm past my max for forward P, clear interval and call turn.js
+                            clearInterval(drive_timer);
+                            //stopRover();
+                        } else if (driveCounter >= maxDriveCounter) {
+                            console.log("----Hit max iteration attemtps----")
+                            clearInterval(drive_timer);
+                            stopRover();
+                        }
                     }
-                },50); // end of drive timer
+                },50);
                 //----END FORWARDP----
                 console.log("Done driving forward");
             } 
