@@ -1,4 +1,5 @@
 var sys = require('util');
+var fs = require('fs');
 var geolib = require('geolib');
 var spawn = require("child_process").spawn;
 var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
@@ -37,7 +38,7 @@ var forward_drive_error = 3;          //within 4 degrees drive straight
 //THROTTLE LOGIC
 var throttle_min = 30;      // Minimum throttle value to move the rover
 var throttle_max = 70;      // Maximum throttle value acceptable
-var headingModifier;        // heading ratio, used as modifer for throttle
+var proportional_error;        // heading ratio, used as modifer for throttle
 var distanceModifier;       // distance ratio, used as modifer for throttle
 var distanceThreshold = 20; // We need to be within x cm of target to move on 
 var current_wayPoint = -1;  // -1 because index is incremented immediately; 
@@ -46,7 +47,7 @@ var current_wayPoint = -1;  // -1 because index is incremented immediately;
 var turn_right = null;
 
 // ** SYNCHRONOUS READ **  Reading waypoints from file 
-var fs = require('fs');
+
 var filename = 'waypoints.json'; // Filename for gps waypoints
 var wayPoints = JSON.parse(fs.readFileSync(filename, 'utf8'));
 
@@ -75,7 +76,8 @@ atlas.on('turn',function(){
     
     /*
         Timer Start Condition: 
-            Event is triggered from drive or get_waypoint
+            Triggered upon drive event completion
+            OR called by the get_waypoint event
 
         Timer Stop Condition: 
             If current heading is within nominal range of target heading
@@ -92,9 +94,9 @@ atlas.on('turn',function(){
             atlas.emit('drive');
         } else {
             // proportional error with respect to heading
-            headingModifier = heading_delta / 180;
-            temp_throttle = (throttle_max * headingModifier).clamp(throttle_min,throttle_max)
-            temp_throttle = Math.round(turning_drive_constant + temp_throttle);
+            proportional_error = heading_delta / 180;
+            temp_throttle = Math.round(throttle_max * proportional_error)
+            temp_throttle = (turning_drive_constant + temp_throttle).clamp(throttle_min,throttle_max);
             if(turn_right){
                     console.log('Slowing turning right');
                     leftThrottle = temp_throttle;
@@ -111,10 +113,7 @@ atlas.on('turn',function(){
     }, 50); // end of turn timer
 }) // end of turn event 
 
-/* 
-    The drive event is triggered after a correct heading is reached 
-    Drive timer adjusts left and right throttle to stay within forward_drive_error
-*/
+
 atlas.on('drive',function(){
     console.log('---- driving ----')
     let leftThrottle; 
@@ -123,13 +122,13 @@ atlas.on('drive',function(){
     
     /*
         Timer Start Condition: 
-            Event is triggered from turn
+            Triggered upon turn event completion
         Stop Conditions: 
             current heading exceeds error threshold or rover is within stopping distance of target.
     */
     drive_timer = setInterval(function() {
-        pathfinder(); //gets distance, distanceModifier modifier and target heading
-        calc_heading_delta(); //calculates best turn towards target heading
+        pathfinder();           //gets distance, distanceModifier modifier and target heading
+        calc_heading_delta();   //calculates best turn towards target heading
         output_nav_data();
         
         if (Math.abs(heading_delta > forward_drive_to_turn_error) || distance < distance_threshold ){
@@ -147,16 +146,16 @@ atlas.on('drive',function(){
         // Adjust left and right throttle to maintain nominal heading
         else {
             // proportional error with respect to heading
-            headingModifier = heading_delta / 180;
+            proportional_error = heading_delta / 180;
             console.log('!turn_right: ' + !turn_right);
             console.log('turn_right:' + turn_right);
-            throttle_offset = Math.round(forward_drive_constant * headingModifier * Math.log(heading_delta));
+            throttle_offset = Math.round(forward_drive_constant * proportional_error * Math.log(heading_delta));
             if(turn_right){
-                console.log('Slowing turning right');
+                console.log('Slowly turning right');
                 leftThrottle = (forward_drive_constant + throttle_offset);
                 rightThrottle = (forward_drive_constant - throttle_offset);
             }else{
-                console.log('Slowing turning left');
+                console.log('Slowly turning left');
                 leftThrottle = forward_drive_constant - throttle_offset;
                 rightThrottle = forward_drive_constant + throttle_offset;
             }
@@ -322,7 +321,6 @@ function output_nav_data() {
     console.log("Current Heading: " + current_heading);
     console.log("Target Heading: " + target_heading);
     console.log("Heading Delta: " + heading_delta);
-    console.log("Turning left: " + !turn_right);
     console.log("Turning right: " + turn_right);
 };
 
