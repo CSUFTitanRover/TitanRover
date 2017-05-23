@@ -30,6 +30,7 @@ export default class Waypoints extends Component {
             markers: [],
             rover_position: [33.88255522931054, -117.88273157819734],
             rover_marker: null,
+            ls_waypoints: []
         };
 
         this.socketClient = io.connect(rover_settings.homebase_ip);
@@ -61,20 +62,6 @@ export default class Waypoints extends Component {
         );
     };
 
-    onSaveWaypoint = () => {
-        // in here we send a socket message to server to save the waypoint which the server tells the rover
-        // we receive back an obj {lat: 0, lng: 10}
-        // this.socketClient.emit('save waypoint', (waypoint) => {
-        //     let { lat, lng } = waypoint;
-        //     this.generateMarker(lat, lng);
-        // });
-        let lat = this.state.rover_position[0];
-        let lng = this.state.rover_position[1];
-        const markers = this.state.markers;
-        markers.push(this.generateMarker(lat, lng));
-        this.setState({markers});
-    };
-
     componentDidMount() {
         this.setState({rover_marker: this.generateRoverMarker(this.state.rover_position)});
 
@@ -90,6 +77,21 @@ export default class Waypoints extends Component {
                 rover_marker: this.generateRoverMarker(rover_position)
             });
         }, 10);
+
+        // load localStorage waypoints if they exist
+        let ls_waypoints = JSON.parse(localStorage.getItem("waypoints"));
+
+        if (ls_waypoints) {
+            let generated_markers;
+
+            for (let waypoint of ls_waypoints) {
+                let lat = waypoint[0];
+                let lng = waypoint[1];
+                generated_markers.push(this.generateMarker(lat, lng));
+            }
+
+            this.setState({ls_waypoints: ls_waypoints, markers: generated_markers});
+        }
     }
 
     generateRoverMarker = (latlng) => {
@@ -101,8 +103,52 @@ export default class Waypoints extends Component {
         clearInterval(this.interval);
     }
 
+    handleSaveWaypoint = () => {
+        // in here we send a socket message to server to save the waypoint which the server tells the rover
+        // we receive back an obj {lat: 0, lng: 10}
+        // this.socketClient.emit('save waypoint', (waypoint) => {
+        //     let { lat, lng } = waypoint;
+        //     this.generateMarker(lat, lng);
+        // });
+        const lat = this.state.rover_position[0];
+        const lng = this.state.rover_position[1];
+        const markers = this.state.markers;
+        const ls_waypoints = this.state.ls_waypoints;
+        markers.push(this.generateMarker(lat, lng));
+        this.setState({markers});
+
+        ls_waypoints.push([lat, lng]);
+        this.saveLsWaypoint(ls_waypoints);
+    };
+
+    /**
+     * Helper method to save the ls waypoints
+     * @param {array} updated_ls_waypoints
+     */
+    saveLsWaypoint = (updated_ls_waypoints) => {
+        this.setState({ls_waypoints: updated_ls_waypoints});
+        localStorage.setItem("waypoints", JSON.stringify(updated_ls_waypoints));
+    };
+
+    handleDeleteRecentWaypoint = () => {
+        const markers = this.state.markers;
+        const ls_waypoints = this.state.ls_waypoints;
+
+        // only save the updated waypoints if its valid
+        // pop will return either a valid array or Undefined
+        if (markers.pop() && ls_waypoints.pop()) {
+            this.setState({markers});
+            this.saveLsWaypoint(ls_waypoints);
+        }
+    };
+
+    handleDeleteAllWaypoints = () => {
+        this.setState({markers: [], ls_waypoints: []});
+        localStorage.removeItem("waypoints");
+    };
 
     render() {
+        // starting position of map on load
         const position = [33.88255522931054, -117.88273157819734];
 
         return(
@@ -118,7 +164,9 @@ export default class Waypoints extends Component {
                     {this.state.markers}
                 </Map>
 
-                <Button type="primary" onClick={this.onSaveWaypoint}>Save Waypoint</Button>
+                <Button type="primary" onClick={this.handleSaveWaypoint}>Save Waypoint</Button>
+                <Button type="danger" onClick={this.handleDeleteRecentWaypoint}>Delete Recently Saved Waypoint</Button>
+                <Button type="danger" onClick={this.handleDeleteAllWaypoints}>Delete All Waypoints</Button>
             </BaseModuleTemplate>
         );
     }
