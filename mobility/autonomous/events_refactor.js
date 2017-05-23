@@ -8,6 +8,7 @@ var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/pytho
 -Test distanceModifier to make sure we don't stop halfway to onTargetRange
 -Add reach current GPS location and a way to implement waypoints.
 */
+
 //----VARIABLES----
 
 //FOR OFF ROVER TESTING:
@@ -45,8 +46,13 @@ var distanceModifier;       //distance ratio, used as modifer for throttle
 var distanceThreshold = 20; // We need to be within x cm of target to move on 
 var current_wayPoint = -1;  // -1 because we increment at the start of get_waypoint and want to start at 0; 
 
-//BOOLEAN LOGIC FOR FUNCTIONS
+// BOOLEAN LOGIC FOR FUNCTIONS
 var turn_right = null;
+
+// Reading waypoints from file 
+var fs = require('fs');
+var filename = 'waypoints.json'; // Filename for gps waypoints
+var wayPoints = JSON.parse(fs.readFileSync(filename, 'utf8'));
 
 const EventEmitter = require('events');
 class MyEmitter extends EventEmitter {}
@@ -64,6 +70,7 @@ atlas.on('get_waypoint',function(){
 })
 
 atlas.on('turn',function(){
+    console.log('---- turning ----')
     calc_heading_delta();
     output_nav_data();
     //----TURNINGP TIMER----
@@ -101,8 +108,7 @@ atlas.on('turn',function(){
 }) // end of turn event 
 
 atlas.on('drive',function(){
-    console.log('----ForwardPmovement----')
-    //----FORWARDP TIMER----
+    console.log('---- driving ----')
     drive_timer = setInterval(function() {
         pathfinder(); //gets distance, distanceModifier modifier and target heading
         calc_heading_delta(); //calculates best turn towards target heading
@@ -136,9 +142,6 @@ atlas.on('drive',function(){
             leftThrottle = leftThrottle.clamp(forward_throttle_min, forward_throttle_min);
             rightThrottle = rightThrottle.clamp(forward_throttle_min, forward_throttle_min);
             setMotors(leftThrottle, rightThrottle);
-            //PUT SET SPEED IN HERE.
-            previousleftThrottle = leftThrottle;
-            previousrightThrottle = rightThrottle;
             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
     },50); // end of drive timer 
@@ -146,9 +149,13 @@ atlas.on('drive',function(){
 
 //----GRAB DATA FROM IMU----
 python_proc.stdout.on('data', function (data){
-    data = parseFloat(data);
+    
+    let invalidHeadingCounter = 0;
+    data = parseFloat(data);  
+
     if( 0 <= data && data <= 360){
-         current_heading = data;
+        current_heading = data;
+        invalidHeadingCounter = 0; 
     }  
     else{
         invalidHeadingCounter++;
@@ -283,7 +290,7 @@ function pathfinder() {
     //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
     target_heading = geolib.getBearing(wayPoints[current_wayPoint],wayPoints[current_wayPoint+1]);
     console.log("Current Distance: " + distance);
-    console.log("Target Heading:" + target_heading);
+    console.log("Target Heading: " + target_heading);
 
     if (distance <= onTargetRange) {
         distanceModifier = distance / onTargetRange;
