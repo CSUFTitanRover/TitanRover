@@ -2,11 +2,62 @@ var sys = require('util');
 var geolib = require('geolib');
 var spawn = require("child_process").spawn;
 
-/*----TODO----
--Implement a check to see whether or not we need to grab data from the IMU at that moment, don't want to overwrite geolibs more acurate calculation
--Test distanceModifier to make sure we don't stop halfway to onTargetRange
--Add reach current GPS location and a way to implement waypoints.
-*/
+//Target Waypoint
+var target_gps_location = {
+    //latitude:,
+    //longitude:,
+};
+//---
+
+//TIMS REACH SERVER INFO
+var net = require('net');
+var fs = require("fs");
+var jsonfile = require('jsonfile');
+var previous_gps_packet;
+
+var file = '/home/pi/TitanRover/mobility/runt/node/gps.json' ; 
+var reachIP = '192.168.2.15';
+var reach_shans_hotspot = '172.20.10.7';
+
+var gpsJSON  = {
+    'time': null,
+    'latitude': null,
+    'longitude': null 
+};
+
+var client = new net.Socket();
+client.connect(9001, reachIP, function() {
+	console.log('Connected to reach');
+});
+
+// When we get a data packet from the reach
+client.on('data', function(data,err) { 
+//	console.log(String(data));
+    if(err){
+        console.log("Error!: " + JSON.stringify(err));
+    }
+    /* Example data object from the reach stream 
+        GPST latitude(deg) longitude(deg)  height(m)   Q  ns   sdn(m)   sde(m)   sdu(m)  sdne(m)  sdeu(m)  sdun(m) age(s)  ratio
+        1934 433341.500   33.882028059 -117.882559268    38.7224   5   4   3.9905   3.7742   9.1639   2.7016   4.4366   4.2998   0.00    0.0
+    */
+    // Parse the data into an array
+    data = data.toString().split(" ").filter(the_spaces);
+    var current_gps_packet = {
+            latitude: data[2],
+            longitude: data[3],
+        };
+    //jsonfile.writeFileSync(file, gps_packet);
+});
+
+client.on('close', function() {
+	console.log('Connection closed');
+});
+
+function the_spaces(value) {
+  return value !== '';
+}
+//-----------
+
 //----VARIABLES----
 
 //FOR OFF ROVER TESTING:
@@ -342,7 +393,7 @@ var rover_autonomous_pid = function() {
                             stopRover();
                         }
                     }
-                },50);
+                },100);
                 //----END FORWARDP----
                 console.log("Done driving forward");
             } 
@@ -368,10 +419,13 @@ function calc_heading_delta(){
 //uses geolib to get distance and targetHeading. 
 function pathfinder() {
     //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
-    distance = geolib.getDistance(wayPoints[current_wayPoint],wayPoints[current_wayPoint+1],1,5);
+    if (geolib.getBearing(previous_gps_packet,current_gps_packet) < 20 ) {
+            previous_gps_packet = current_gps_packet;
+    }
+    distance = geolib.getDistance(previous_gps_packet,target_gps_location);
     distance = geolib.convertUnit('cm',distance);
     //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
-    target_heading = geolib.getBearing(wayPoints[current_wayPoint],wayPoints[current_wayPoint+1]);
+    target_heading = geolib.getBearing(previous_gps_packet,target_gps_location);
     console.log("Current Distance: " + distance);
     console.log("Target Heading:" + target_heading);
 

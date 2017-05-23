@@ -168,8 +168,8 @@ atlas.on('drive',function(){
 }) // end of drive event 
 
 //----GRAB DATA FROM IMU----
+var invalidHeadingCounter = 0;
 python_proc.stdout.on('data', function (data){   
-    let invalidHeadingCounter = 0;
     data = parseFloat(data);  
 
     if( 0 <= data && data <= 360){
