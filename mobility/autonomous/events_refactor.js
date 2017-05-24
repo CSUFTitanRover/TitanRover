@@ -7,25 +7,28 @@ var magneticDeclination = 12; //12.3 in Fullerton, 15 in Hanksville
 var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
 /*----TODO----
--Implement a check to see whether or not we need to grab data from the IMU at that moment, don't want to overwrite geolibs more acurate calculation
 -Test distanceModifier to make sure we don't stop halfway to onTargetRange
--Add reach current GPS location and a way to implement waypoints.
+-In getwaypoints we need to mix the logic in for arriving at the final waypoiny to leave onTarget = true. Else we need to reset onTarget = false to allow for setMotors to execute on the timers. 
 */
 
 //----VARIABLES----
 
 //FOR OFF ROVER TESTING:
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
-var current_heading; //leave untouched, written from the IMU
+var current_heading; //leave untouched
 var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
+var imuHeading; //IMU Heading data to be overwritten by python process
+
 
 // Timers
 var turn_timer; 
 var drive_timer;
 
 var distance;          // distance to next waypoint
-var onTargetRange = 1; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
+var onTargetRange = 5; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
+var onTargetError = 1.5; //distance we need to stop at a waypoint
 onTargetRange = geolib.convertUnit('cm',onTargetRange); // immediately convert from meters to cm for comparisons.
+onTargetError = geolib.convertUnit('cm',onTargetError);
 
 //DRIVE-CONSTANTS: 
 var turning_drive_constant = 90; 
@@ -46,9 +49,11 @@ var proportional_error;        // heading ratio, used as modifer for throttle
 var distanceModifier;       // distance ratio, used as modifer for throttle
 var distanceThreshold = 20; // We need to be within x cm of target to move on 
 var current_wayPoint = -1;  // -1 because index is incremented immediately; 
-var currentLocation = null;        // JSON - longitude and latitude {longitiude: 124141, latitude:3515}
+var currentLocation = null;        // JSON - latitude and longitude {latitude: 124141, longitude:3515}
+var previousLocation = null;    // JSON - latitude and longitude {latitude: 124141, longitude:3515}
 // BOOLEAN LOGIC FOR FUNCTIONS
 var turn_right = null;
+var onTarget = false;
 var wayPoints = [{latitude: 33.880505, longitude: -117.882205}];
 // Reach entry point 
 
@@ -102,8 +107,8 @@ atlas.on('turn',function(){
     let rightThrottle; 
     console.log('---- turning ----')
     calc_heading_delta();
+    pathfinder();
     output_nav_data();
-    
     /*
         Timer Start Condition: 
             Triggered upon drive event completion
@@ -115,18 +120,26 @@ atlas.on('turn',function(){
     turn_timer = setInterval(function() {
         calc_heading_delta();
         console.log('turn_right:' + turn_right);
-            
-        if (Math.abs(heading_delta) <= turning_drive_error) {
+
+        if (onTarget) {
+            clearInterval(turn_timer);
+            stopRover();
+            //emit iterate waypoints?
+        }    
+        // if we're within our error we drive
+        else if (Math.abs(heading_delta) <= turning_drive_error) {
             clearInterval(turn_timer);
             console.log('----FOUND HEADING----');
             console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
             console.log("Final heading before drive event: ", current_heading);
             console.log("heading delta:" + heading_delta);
             atlas.emit('drive');
-        } else {
+        } 
+        // we turn if we're not within our error or at distance
+        else {
             // proportional error with respect to heading
             proportional_error = heading_delta / 180;
-            temp_throttle = Math.round(throttle_max * proportional_error)
+            temp_throttle = Math.round(throttle_max * proportional_error * distanceModifier)
             temp_throttle = (turning_drive_constant + temp_throttle).clamp(throttle_min,throttle_max);
             if(turn_right){
                     console.log('Turning right');
@@ -162,7 +175,12 @@ atlas.on('drive',function(){
         calc_heading_delta();   //calculates best turn towards target heading
         output_nav_data();
         
-        if (Math.abs(heading_delta > forward_drive_to_turn_error)) { //removed || distance < distance_threshold 
+        if (onTarget) {
+            clearInterval(drive_timer);
+            stopRover(); 
+            //emit iterate waypoint?
+        }
+        else if (Math.abs(heading_delta > forward_drive_to_turn_error)) { //removed || distance < distance_threshold 
             clearInterval(drive_timer);
             stopRover(); 
             console.log("Done driving forward");     
@@ -183,7 +201,7 @@ atlas.on('drive',function(){
             proportional_error = heading_delta / 180;
             console.log('!turn_right: ' + !turn_right);
             console.log('turn_right:' + turn_right);
-            throttle_offset = Math.round(forward_drive_constant * proportional_error * Math.log(heading_delta));
+            throttle_offset = Math.round(forward_drive_constant * proportional_error * Math.log(heading_delta) * distanceModifier);
             if(turn_right){
                 console.log('Slowly turning right');
                 leftThrottle = (forward_drive_constant + throttle_offset);
@@ -212,9 +230,8 @@ python_proc.stdout.on('data', function (data){
         clearInterval(turn_timer);
         clearInterval(drive_timer);
     } else if ( 0 <= data && data <= 360){
-        current_heading = data;
+        imuHeading = data;
         invalidHeadingCounter = 0;
-        
     }  
     else{
         invalidHeadingCounter++;
@@ -339,10 +356,18 @@ var main = setInterval(()=> {
 //IE: Is turning left or right the shorter turn?
 function calc_heading_delta(){
     console.log('Calculating Heading Delta & Direction');
+    if (drive_timer) {
+        current_heading = geolib.getBearing(previousLocation, currentLocation);
+    } else if (turning_timer) {
+        current_heading = imuHeading;
+    } else {
+        console.log("No timers activated");
+    }
     let abs_delta = Math.abs(current_heading - target_heading);
     // xnor operation also note (!turn_right = turn_left)
     turn_right = current_heading > target_heading === abs_delta > 180; 
     heading_delta = abs_delta <= 180 ? abs_delta : 360 - abs_delta;
+    previousLocation = currentLocation; 
 }
 
 
@@ -355,14 +380,17 @@ function pathfinder() {
     target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
     output_nav_data();
     if (distance <= onTargetRange) {
-        //distanceModifier = distance / onTargetRange;
-        //console.log("distanceModifier Modifier: " + distanceModifier);
-        clearInterval(turn_timer);
-        clearInterval(drive_timer);
-        setTimeout(()=> stopRover(),100);
-        console.log("stopped");
+        distanceModifier = distance / onTargetRange;
+        console.log("distanceModifier Modifier: " + distanceModifier);
     } else {
         distanceModifier = 1;
+    }
+    if (distance <= onTargetError) {
+        clearInterval(turn_timer);
+        clearInterval(drive_timer);
+        stopRover();
+        onTarget = true;
+        console.log("On waypoint");
     }
 }
 
