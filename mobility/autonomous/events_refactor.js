@@ -6,6 +6,25 @@ var net = require('net');
 var magneticDeclination = 12; //12.3 in Fullerton, 15 in Hanksville
 var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
+var now = require('performance-now');
+var Winston = require('winston');
+
+const winston = new (Winston.Logger)({
+    transports: [
+      new (Winston.transports.Console)({
+          'colorize': true
+          
+     }),
+      new (Winston.transports.File)({ 
+          filename: './autonomous.log',
+          options:{flags: 'w'}, // Overwrite logfile. Remove if you want to append 
+          timestamp: function () {
+          return now();},
+     })
+    ]
+  });
+
+
 /*----TODO----
 -Test distanceModifier to make sure we don't stop halfway to onTargetRange
 -In getwaypoints we need to mix the logic in for arriving at the final waypoiny to leave onTarget = true. Else we need to reset onTarget = false to allow for setMotors to execute on the timers. 
@@ -60,13 +79,13 @@ var wayPoints = [{latitude: 33.880505, longitude: -117.882205}];
 var reachIP = '192.168.2.15';
 var client = new net.Socket();
 client.connect(9001, reachIP, function() {
-	console.log('Connected to reach');
+	winston.info('Connected to reach');
 });
 
 client.on('data', function(data,err) { 
-//	console.log(String(data));
+//	winston.info(String(data));
     if(err){
-        console.log("Error!: " + JSON.stringify(err));
+        winston.info("Error!: " + JSON.stringify(err));
     }
     // Parse the data into an array
     data = data.toString().split(" ").filter(theSpaces);
@@ -93,7 +112,7 @@ atlas.on('get_waypoint',function(){
     current_wayPoint++; 
     if(current_wayPoint >= wayPoints.length){
        stopRover();
-       console.log("reached end of waypoints");
+       winston.info("reached end of waypoints");
     }
     else{
         target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
@@ -105,7 +124,7 @@ atlas.on('turn',function(){
     let temp_throttle; 
     let leftThrottle;
     let rightThrottle; 
-    console.log('---- turning ----')
+    winston.info('---- turning ----')
     calc_heading_delta();
     pathfinder();
     output_nav_data();
@@ -119,7 +138,7 @@ atlas.on('turn',function(){
     */
     turn_timer = setInterval(function() {
         calc_heading_delta();
-        console.log('turn_right:' + turn_right);
+        winston.info('turn_right:' + turn_right);
 
         if (onTarget) {
             clearInterval(turn_timer);
@@ -129,10 +148,10 @@ atlas.on('turn',function(){
         // if we're within our error we drive
         else if (Math.abs(heading_delta) <= turning_drive_error) {
             clearInterval(turn_timer);
-            console.log('----FOUND HEADING----');
-            console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
-            console.log("Final heading before drive event: ", current_heading);
-            console.log("heading delta:" + heading_delta);
+            winston.info('----FOUND HEADING----');
+            winston.info('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
+            winston.info("Final heading before drive event: ", current_heading);
+            winston.info("heading delta:" + heading_delta);
             atlas.emit('drive');
         } 
         // we turn if we're not within our error or at distance
@@ -142,16 +161,16 @@ atlas.on('turn',function(){
             temp_throttle = Math.round(throttle_max * proportional_error * distanceModifier)
             temp_throttle = (turning_drive_constant + temp_throttle).clamp(throttle_min,throttle_max);
             if(turn_right){
-                    console.log('Turning right');
+                    winston.info('Turning right');
                     leftThrottle = temp_throttle;
                     rightThrottle = temp_throttle * -1; // removed temp_throttle - 10
             }else{
-                    console.log('Turning left');
+                    winston.info('Turning left');
                     rightThrottle = temp_throttle;
                     leftThrottle = temp_throttle * -1;
             } 
             setMotors(leftThrottle, rightThrottle);
-            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            winston.info("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         }
         // sets the rover speed to the calculated value
     }, 50); // end of turn timer
@@ -159,7 +178,7 @@ atlas.on('turn',function(){
 
 
 atlas.on('drive',function(){
-    console.log('---- driving ----')
+    winston.info('---- driving ----')
     let leftThrottle; 
     let rightThrottle; 
     let throttle_offset
@@ -183,7 +202,7 @@ atlas.on('drive',function(){
         else if (Math.abs(heading_delta > forward_drive_to_turn_error)) { //removed || distance < distance_threshold 
             clearInterval(drive_timer);
             stopRover(); 
-            console.log("Done driving forward");     
+            winston.info("Done driving forward");     
             atlas.emit('turn'); //distance < distance_threshold ? atlas.emit('get_waypoint') : atlas.emit('turn');    
 
         }
@@ -191,30 +210,30 @@ atlas.on('drive',function(){
         else if (Math.abs(heading_delta) <= forward_drive_error) {
             leftThrottle  = forward_drive_constant;
             rightThrottle = forward_drive_constant;
-            console.log('Moving forward at drive constant');
+            winston.info('Moving forward at drive constant');
             setMotors(leftThrottle, rightThrottle);
-            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            winston.info("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
         // Adjust left and right throttle to maintain nominal heading
         else {
             // proportional error with respect to heading
             proportional_error = heading_delta / 180;
-            console.log('!turn_right: ' + !turn_right);
-            console.log('turn_right:' + turn_right);
+            winston.info('!turn_right: ' + !turn_right);
+            winston.info('turn_right:' + turn_right);
             throttle_offset = Math.round(forward_drive_constant * proportional_error * Math.log(heading_delta) * distanceModifier);
             if(turn_right){
-                console.log('Slowly turning right');
+                winston.info('Slowly turning right');
                 leftThrottle = (forward_drive_constant + throttle_offset);
                 rightThrottle = (forward_drive_constant - throttle_offset);
             }else{
-                console.log('Slowly turning left');
+                winston.info('Slowly turning left');
                 leftThrottle = forward_drive_constant - throttle_offset;
                 rightThrottle = forward_drive_constant + throttle_offset;
             }
             leftThrottle = leftThrottle.clamp(forward_throttle_min, forward_throttle_max);
             rightThrottle = rightThrottle.clamp(forward_throttle_min, forward_throttle_max);
             setMotors(leftThrottle, rightThrottle);
-            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            winston.info("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
     }, 50); // end of drive timer 
 }) // end of drive event 
@@ -223,9 +242,9 @@ atlas.on('drive',function(){
 var invalidHeadingCounter = 0;
 python_proc.stdout.on('data', function (data){   
     data = parseFloat(data); 
-    //console.log(data);
+    //winston.info(data);
     if (isNaN(data)) {
-        console.log("Current Heading is NaN");
+        winston.info("Current Heading is NaN");
         stopRover();
         clearInterval(turn_timer);
         clearInterval(drive_timer);
@@ -242,7 +261,7 @@ python_proc.stdout.on('data', function (data){
         clearInterval(turn_timer);
         clearInterval(drive_timer);
         stopRover(); 
-        console.log("Rover stopped because of bad heading data");
+        winston.info("Rover stopped because of bad heading data");
     }
 });
 
@@ -269,13 +288,13 @@ function setLeftSide(leftSpeed) {
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
-    console.log('Y: ' + leftSpeed );
+    winston.info('Y: ' + leftSpeed );
     // Since we are using unsigened ints for serial make it between 0 and 254
     leftSpeed = leftSpeed + 127;
     parseInt(leftSpeed);
     left_side_arr[1] = leftSpeed;
     //onsole.log(left_side_arr);
-    //console.log(left_side_buff);
+    //winston.info(left_side_buff);
     port.write(left_side_buff);
 }
 
@@ -284,13 +303,13 @@ function setRightSide(rightSpeed) {
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
-    console.log('x: ' + rightSpeed);
+    winston.info('x: ' + rightSpeed);
     // Since we are using unsigned ints for serial make it between 0 and 254
     rightSpeed = rightSpeed + 127;
     parseInt(rightSpeed);
     right_side_arr[1] = rightSpeed;
-    //console.log(right_side_arr);
-    //console.log(right_side_buff);
+    //winston.info(right_side_arr);
+    //winston.info(right_side_buff);
     port.write(right_side_buff);
 }
 
@@ -306,7 +325,7 @@ function stopRover() {
 // Any serial data from the arduino will be sent back home
 // and printed to the console
 port.on('data', function(data) {
-    console.log('ArduinoMessage: ' + data);
+    winston.info('ArduinoMessage: ' + data);
     var jsonBuilder = {};
     jsonBuilder.ArduinoMessage = data;
     jsonBuilder.type = 'debug';
@@ -314,13 +333,13 @@ port.on('data', function(data) {
 });
 
 port.on('open',function(){
-    console.log('open');
+    winston.info('open');
     //setTimeout(main,1000);
 });
 
 // KILL ALL PROCESS AND STOP ROVER MID SCRIPT
 process.on('SIGTERM', function() {
-    console.log("STOPPING ROVER");
+    winston.info("STOPPING ROVER");
     clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();  
@@ -331,8 +350,8 @@ process.on('SIGTERM', function() {
 });
 
 process.on('SIGINT', function() {
-    console.log("\n####### JUSTIN LIKES MENS!! #######\n");
-    console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
+    winston.info("\n####### JUSTIN LIKES MENS!! #######\n");
+    winston.info("\t\t╭∩╮（︶︿︶）╭∩╮");
     clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();
@@ -355,13 +374,13 @@ var main = setInterval(()=> {
 //Shan's Get heading calc based on logic Shan and Brandon came up with to determine which direction the rover will be turning
 //IE: Is turning left or right the shorter turn?
 function calc_heading_delta(){
-    console.log('Calculating Heading Delta & Direction');
+    winston.info('Calculating Heading Delta & Direction');
     if (drive_timer) {
         current_heading = geolib.getBearing(previousLocation, currentLocation);
     } else if (turning_timer) {
         current_heading = imuHeading;
     } else {
-        console.log("No timers activated");
+        winston.info("No timers activated");
     }
     let abs_delta = Math.abs(current_heading - target_heading);
     // xnor operation also note (!turn_right = turn_left)
@@ -381,7 +400,7 @@ function pathfinder() {
     output_nav_data();
     if (distance <= onTargetRange) {
         distanceModifier = distance / onTargetRange;
-        console.log("distanceModifier Modifier: " + distanceModifier);
+        winston.info("distanceModifier Modifier: " + distanceModifier);
     } else {
         distanceModifier = 1;
     }
@@ -390,17 +409,17 @@ function pathfinder() {
         clearInterval(drive_timer);
         stopRover();
         onTarget = true;
-        console.log("On waypoint");
+        winston.info("On waypoint");
     }
 }
 
 function output_nav_data() {
-    console.log("Current Heading: " + current_heading);
-    console.log("Target Heading: " + target_heading);
-    console.log("Heading Delta: " + heading_delta);
-    console.log("Distance: ", distance);
-    console.log("Current Location: ", currentLocation);
-    console.log("Turning right: " + turn_right);
+    winston.info("Current Heading: " + current_heading);
+    winston.info("Target Heading: " + target_heading);
+    winston.info("Heading Delta: " + heading_delta);
+    winston.info("Distance: ", distance);
+    winston.info("Current Location: ", currentLocation);
+    winston.info("Turning right: " + turn_right);
 };
 
 /**
