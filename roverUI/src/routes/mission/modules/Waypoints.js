@@ -33,7 +33,7 @@ export default class Waypoints extends Component {
             ls_waypoints: []
         };
 
-        this.socketClient = io.connect(rover_settings.homebase_ip);
+        this.socketClient = io.connect(rover_settings.waypoint_server_ip);
     }
 
     handleMapClick = (e) => {
@@ -65,18 +65,18 @@ export default class Waypoints extends Component {
     componentDidMount() {
         this.setState({rover_marker: this.generateRoverMarker(this.state.rover_position)});
 
-        console.log(this.rover);
-        // Let's fake our moving rover
-        this.interval = setInterval( () => {
-            const rover_position = this.state.rover_position;
-            rover_position[0] += 0.000001;
-            rover_position[1] += 0.000001;
-            // this.rover.setLatLng(rover_position).update();
-            this.setState({
-                rover_position,
-                rover_marker: this.generateRoverMarker(rover_position)
-            });
-        }, 10);
+        // console.log(this.rover);
+        // // Let's fake our moving rover
+        // this.interval = setInterval( () => {
+        //     const rover_position = this.state.rover_position;
+        //     rover_position[0] += 0.000001;
+        //     rover_position[1] += 0.000001;
+        //     // this.rover.setLatLng(rover_position).update();
+        //     this.setState({
+        //         rover_position,
+        //         rover_marker: this.generateRoverMarker(rover_position)
+        //     });
+        // }, 10);
 
         // load localStorage waypoints if they exist
         let ls_waypoints = JSON.parse(localStorage.getItem("waypoints"));
@@ -92,6 +92,14 @@ export default class Waypoints extends Component {
 
             this.setState({ls_waypoints: ls_waypoints, markers: generated_markers});
         }
+
+        // const self = this;
+        // this.socketClient.on('current waypoint', function(gps_packet) {
+        //
+        //     console.log(gps_packet);
+        //     let { latitude, longitude } = gps_packet;
+        //     self.generateMarker(latitude, longitude);
+        // });
     }
 
     generateRoverMarker = (latlng) => {
@@ -106,19 +114,35 @@ export default class Waypoints extends Component {
     handleSaveWaypoint = () => {
         // in here we send a socket message to server to save the waypoint which the server tells the rover
         // we receive back an obj {lat: 0, lng: 10}
-        // this.socketClient.emit('save waypoint', (waypoint) => {
-        //     let { lat, lng } = waypoint;
-        //     this.generateMarker(lat, lng);
-        // });
-        const lat = this.state.rover_position[0];
-        const lng = this.state.rover_position[1];
-        const markers = this.state.markers;
-        const ls_waypoints = this.state.ls_waypoints;
-        markers.push(this.generateMarker(lat, lng));
-        this.setState({markers});
 
-        ls_waypoints.push([lat, lng]);
-        this.saveLsWaypoint(ls_waypoints);
+        /*
+         * Example Data coming back from server
+             {
+                 height: "38.7941",
+                 latitude: "33.881812031",
+                 longitude: "-117.882702717",
+                 q:"5",
+                 time:"02:31:27.400"
+             }
+         */
+
+        const self = this;
+        this.socketClient.emit('save waypoint', function(gps_packet) {
+
+            console.log(gps_packet);
+            let { latitude, longitude } = (gps_packet);
+            console.log(latitude, longitude);
+            self.generateMarker(latitude, longitude);
+        });
+        // const lat = this.state.rover_position[0];
+        // const lng = this.state.rover_position[1];
+        // const markers = this.state.markers;
+        // const ls_waypoints = this.state.ls_waypoints;
+        // markers.push(this.generateMarker(lat, lng));
+        // this.setState({markers});
+        //
+        // ls_waypoints.push([lat, lng]);
+        // this.saveLsWaypoint(ls_waypoints);
     };
 
     /**
