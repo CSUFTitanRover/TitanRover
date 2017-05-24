@@ -2,7 +2,9 @@ var sys = require('util');
 var fs = require('fs');
 var geolib = require('geolib');
 var spawn = require("child_process").spawn;
-var python_proc = spawn('python',["/home/pi/TitanRover/mobility/autonomous/python3/IMU_Acc_Mag_Gyro.py"]);
+var net = require('net');
+var magneticDeclination = 12; //12.3 in Fullerton, 15 in Hanksville
+var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
 /*----TODO----
 -Implement a check to see whether or not we need to grab data from the IMU at that moment, don't want to overwrite geolibs more acurate calculation
@@ -22,49 +24,77 @@ var turn_timer;
 var drive_timer;
 
 var distance;          // distance to next waypoint
-var onTargetRange = 5; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
+var onTargetRange = 1; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
 onTargetRange = geolib.convertUnit('cm',onTargetRange); // immediately convert from meters to cm for comparisons.
 
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 53; 
-var forward_drive_constant = 45;
+var turning_drive_constant = 90; 
+var forward_drive_constant = 65;
 var forward_drive_modifier = 0; //to modify when driving straight forward
 
 //DEGREES OF ERROR
 var turning_drive_error = 10;         // within 20 degrees stop turn
-var forward_drive_to_turn_error = 15; //logic to exit forwardP and turn. 
+var forward_drive_to_turn_error = 17; //logic to exit forwardP and turn. 
 var forward_drive_error = 3;          //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = 30;      // Minimum throttle value to move the rover
-var throttle_max = 70;      // Maximum throttle value acceptable
+var throttle_min = 60;      // Minimum throttle value to move the rover
+var throttle_max = 120;      // Maximum throttle value acceptable
+var forward_throttle_min = 40; //Minimum throttle value acceptable
+var forward_throttle_max = 90; //Maximum throttle value acceptable
 var proportional_error;        // heading ratio, used as modifer for throttle
 var distanceModifier;       // distance ratio, used as modifer for throttle
 var distanceThreshold = 20; // We need to be within x cm of target to move on 
 var current_wayPoint = -1;  // -1 because index is incremented immediately; 
-
+var currentLocation = null;        // JSON - longitude and latitude {longitiude: 124141, latitude:3515}
 // BOOLEAN LOGIC FOR FUNCTIONS
 var turn_right = null;
+var wayPoints = [{latitude: 33.880505, longitude: -117.882205}];
+// Reach entry point 
+
+var reachIP = '192.168.2.15';
+var client = new net.Socket();
+client.connect(9001, reachIP, function() {
+	console.log('Connected to reach');
+});
+
+client.on('data', function(data,err) { 
+//	console.log(String(data));
+    if(err){
+        console.log("Error!: " + JSON.stringify(err));
+    }
+    // Parse the data into an array
+    data = data.toString().split(" ").filter(theSpaces);
+    currentLocation = {
+            latitude: data[2],
+            longitude: data[3]
+        };
+});
+
+function theSpaces(value) {
+  return value !== '';
+}
 
 // ** SYNCHRONOUS READ **  Reading waypoints from file 
-
+/*
 var filename = 'waypoints.json'; // Filename for gps waypoints
 var wayPoints = JSON.parse(fs.readFileSync(filename, 'utf8'));
-
+*/
 const EventEmitter = require('events');
 class MyEmitter extends EventEmitter {}
 const atlas = new MyEmitter();
 
 atlas.on('get_waypoint',function(){
     current_wayPoint++; 
-    if(current_wayPoint >= wayPoints.length()){
+    if(current_wayPoint >= wayPoints.length){
        stopRover();
        console.log("reached end of waypoints");
     }
     else{
+        target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
         atlas.emit('turn');
     }
-})
+});
 
 atlas.on('turn',function(){
     let temp_throttle; 
@@ -88,9 +118,10 @@ atlas.on('turn',function(){
             
         if (Math.abs(heading_delta) <= turning_drive_error) {
             clearInterval(turn_timer);
-            //stopRover();
             console.log('----FOUND HEADING----');
             console.log('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
+            console.log("Final heading before drive event: ", current_heading);
+            console.log("heading delta:" + heading_delta);
             atlas.emit('drive');
         } else {
             // proportional error with respect to heading
@@ -98,18 +129,18 @@ atlas.on('turn',function(){
             temp_throttle = Math.round(throttle_max * proportional_error)
             temp_throttle = (turning_drive_constant + temp_throttle).clamp(throttle_min,throttle_max);
             if(turn_right){
-                    console.log('Slowing turning right');
+                    console.log('Turning right');
                     leftThrottle = temp_throttle;
                     rightThrottle = temp_throttle * -1; // removed temp_throttle - 10
             }else{
-                    console.log('Slowing turning left');
+                    console.log('Turning left');
                     rightThrottle = temp_throttle;
                     leftThrottle = temp_throttle * -1;
             } 
+            setMotors(leftThrottle, rightThrottle);
+            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         }
         // sets the rover speed to the calculated value
-        setMotors(leftThrottle, rightThrottle);
-        console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
     }, 50); // end of turn timer
 }) // end of turn event 
 
@@ -131,17 +162,20 @@ atlas.on('drive',function(){
         calc_heading_delta();   //calculates best turn towards target heading
         output_nav_data();
         
-        if (Math.abs(heading_delta > forward_drive_to_turn_error) || distance < distance_threshold ){
+        if (Math.abs(heading_delta > forward_drive_to_turn_error)) { //removed || distance < distance_threshold 
             clearInterval(drive_timer);
             stopRover(); 
             console.log("Done driving forward");     
-            distance < distance_threshold ? atlas.emit('get_waypoint') : atlas.emit('turn');    
+            atlas.emit('turn'); //distance < distance_threshold ? atlas.emit('get_waypoint') : atlas.emit('turn');    
+
         }
         // If heading is nominal, drive forward
         else if (Math.abs(heading_delta) <= forward_drive_error) {
             leftThrottle  = forward_drive_constant;
             rightThrottle = forward_drive_constant;
             console.log('Moving forward at drive constant');
+            setMotors(leftThrottle, rightThrottle);
+            console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
         // Adjust left and right throttle to maintain nominal heading
         else {
@@ -159,8 +193,8 @@ atlas.on('drive',function(){
                 leftThrottle = forward_drive_constant - throttle_offset;
                 rightThrottle = forward_drive_constant + throttle_offset;
             }
-            leftThrottle = leftThrottle.clamp(forward_throttle_min, forward_throttle_min);
-            rightThrottle = rightThrottle.clamp(forward_throttle_min, forward_throttle_min);
+            leftThrottle = leftThrottle.clamp(forward_throttle_min, forward_throttle_max);
+            rightThrottle = rightThrottle.clamp(forward_throttle_min, forward_throttle_max);
             setMotors(leftThrottle, rightThrottle);
             console.log("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
@@ -170,11 +204,17 @@ atlas.on('drive',function(){
 //----GRAB DATA FROM IMU----
 var invalidHeadingCounter = 0;
 python_proc.stdout.on('data', function (data){   
-    data = parseFloat(data);  
-
-    if( 0 <= data && data <= 360){
+    data = parseFloat(data); 
+    //console.log(data);
+    if (isNaN(data)) {
+        console.log("Current Heading is NaN");
+        stopRover();
+        clearInterval(turn_timer);
+        clearInterval(drive_timer);
+    } else if ( 0 <= data && data <= 360){
         current_heading = data;
-        invalidHeadingCounter = 0; 
+        invalidHeadingCounter = 0;
+        
     }  
     else{
         invalidHeadingCounter++;
@@ -208,7 +248,7 @@ right_side_arr[2] = 0xbbaa;
 var right_side_buff = Buffer.from(right_side_arr.buffer);
 
 function setLeftSide(leftSpeed) {
-    leftSpeed = leftSpeed*-1;
+    //leftSpeed = leftSpeed*-1;
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -223,7 +263,7 @@ function setLeftSide(leftSpeed) {
 }
 
 function setRightSide(rightSpeed) {
-    rightSpeed = rightSpeed * -1;
+    //rightSpeed = rightSpeed * -1;
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -287,7 +327,13 @@ process.on('SIGINT', function() {
 //----END SCRIPT KILL----
 //----END ROVER CONTROL----
 
-setTimeout(()=> atlas.emit('get_waypoint'), 3000); // Timeout used for the serial port to open with the arduino
+var main = setInterval(()=> {
+    if(currentLocation !== null && current_heading !== null){
+        clearInterval(main);
+        setTimeout(() => atlas.emit('get_waypoint'), 3000);
+    }
+}, 100);
+ // Timeout used for the serial port to open with the arduino
 
 //Shan's Get heading calc based on logic Shan and Brandon came up with to determine which direction the rover will be turning
 //IE: Is turning left or right the shorter turn?
@@ -299,19 +345,22 @@ function calc_heading_delta(){
     heading_delta = abs_delta <= 180 ? abs_delta : 360 - abs_delta;
 }
 
+
 //uses geolib to get distance and targetHeading. 
 function pathfinder() {
-    //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
-    distance = geolib.getDistance(wayPoints[current_wayPoint],wayPoints[current_wayPoint+1],1,5);
+    //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation) 
+    distance = geolib.getDistance(currentLocation,wayPoints[current_wayPoint],1,5);
     distance = geolib.convertUnit('cm',distance);
     //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
-    target_heading = geolib.getBearing(wayPoints[current_wayPoint],wayPoints[current_wayPoint+1]);
-    console.log("Current Distance: " + distance);
-    console.log("Target Heading: " + target_heading);
-
+    target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
+    output_nav_data();
     if (distance <= onTargetRange) {
-        distanceModifier = distance / onTargetRange;
-        console.log("distanceModifier Modifier: " + distanceModifier);
+        //distanceModifier = distance / onTargetRange;
+        //console.log("distanceModifier Modifier: " + distanceModifier);
+        clearInterval(turn_timer);
+        clearInterval(drive_timer);
+        setTimeout(()=> stopRover(),100);
+        console.log("stopped");
     } else {
         distanceModifier = 1;
     }
@@ -321,6 +370,8 @@ function output_nav_data() {
     console.log("Current Heading: " + current_heading);
     console.log("Target Heading: " + target_heading);
     console.log("Heading Delta: " + heading_delta);
+    console.log("Distance: ", distance);
+    console.log("Current Location: ", currentLocation);
     console.log("Turning right: " + turn_right);
 };
 
