@@ -4,7 +4,9 @@ var io = require('socket.io')(socket);
 var net = require('net');
 var reachIP = '192.168.2.15';
 var gps_packet; // will be overwritten as new data is coming in from reach server
-
+function the_spaces(value){
+	return value !== '';
+}
 // Start the server
 socket.listen(9999, function() {
     console.log("============ Waypoints Server is up and running on port: ", socket.address().port, "=============");
@@ -46,14 +48,15 @@ io.on('connection', function(socketClient) {
     console.log("Client Connected: " + socketClient.id);
 
     // request from UI
-    socketClient.on('save waypoint', function() {
+    socketClient.on('save waypoint', function(callback) {
         // received a new angle value from the client
         // inside here you can call Turn.js and pass along newAngle
         console.log('Attempting to grab lat, lng from Reach server');
-
+	console.log(gps_packet);
         // code to grab from reach server
 
-        socketClient.emit('current waypoint', gps_packet);
+        callback(gps_packet);
+	console.log('complete');
     });
 
 });
