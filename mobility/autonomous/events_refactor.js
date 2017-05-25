@@ -160,7 +160,7 @@ atlas.on('turn',function(){
         else {
             // proportional error with respect to heading
             proportional_error = heading_delta / 180;
-            temp_throttle = Math.round(throttle_max * proportional_error * distanceModifier)
+            temp_throttle = Math.round(throttle_max * proportional_error * distanceModifier);
             temp_throttle = (turning_drive_constant + temp_throttle).clamp(throttle_min,throttle_max);
             if(turn_right){
                     winston.info('Turning right');
@@ -222,7 +222,10 @@ atlas.on('drive',function(){
             proportional_error = heading_delta / 180;
             winston.info('!turn_right: ' + !turn_right);
             winston.info('turn_right:' + turn_right);
-            throttle_offset = Math.round(forward_drive_constant * proportional_error * 1.5 * Math.log(heading_delta));
+            //throttle_offset = Math.round(forward_drive_constant * proportional_error * 1.5 * Math.log(heading_delta));
+            y = Math.log(max_throttle/forward_drive_constant) * error_percentage;
+            throttle_offset = Math.round(forward_drive_constant * (Math.pow(Math.E,y) * proportional_error));
+            
             if(turn_right){
                 winston.info('Slowly turning right');
                 leftThrottle = (forward_drive_constant + throttle_offset);
