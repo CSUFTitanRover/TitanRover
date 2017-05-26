@@ -1,1 +1,0 @@
-console.log(127*Math.cos(10*Math.PI/180));

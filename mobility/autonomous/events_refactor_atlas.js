@@ -43,25 +43,25 @@ var drive_timer;
 
 var distance;          // distance to next waypoint
 var onTargetRange = 5; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
-var onTargetError = 0.1; //distance we need to stop at a waypoint
+var onTargetError = 0.25; //distance we need to stop at a waypoint
 onTargetRange = geolib.convertUnit('cm',onTargetRange); // immediately convert from meters to cm for comparisons.
 onTargetError = geolib.convertUnit('cm',onTargetError);
 
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 90; 
-var forward_drive_constant = 65;
+var turning_drive_constant = 70; 
+var forward_drive_constant = 57;
 var forward_drive_modifier = 0; //to modify when driving straight forward
 
 //DEGREES OF ERROR
-var turning_drive_error = 7;         // within 20 degrees stop turn
-var forward_drive_to_turn_error = 10; //logic to exit forwardP and turn. 
+var turning_drive_error = 10;         // within 20 degrees stop turn
+var forward_drive_to_turn_error = 12; //logic to exit forwardP and turn. 
 var forward_drive_error = 3;          //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = 100;      // Minimum throttle value to move the rover
-var throttle_max = 120;      // Maximum throttle value acceptable
+var throttle_min = 40;      // Minimum throttle value to move the rover
+var throttle_max = 80;      // Maximum throttle value acceptable
 var forward_throttle_min = 40; //Minimum throttle value acceptable
-var forward_throttle_max = 90; //Maximum throttle value acceptable
+var forward_throttle_max = 75; //Maximum throttle value acceptable
 var proportional_error;        // heading ratio, used as modifer for throttle
 var distanceModifier;       // distance ratio, used as modifer for throttle
 var distanceThreshold = 20; // We need to be within x cm of target to move on 
@@ -71,26 +71,23 @@ var previousLocation = null;    // JSON - latitude and longitude {latitude: 1241
 // BOOLEAN LOGIC FOR FUNCTIONS
 var turn_right = null;
 var onTarget = false;
-var wayPoints = [
-    {latitude: 33.907797253, longitude: -117.888230827}, // 1
-    {latitude: 33.907813544, longitude: -117.888253258}, // 2 
-    {latitude: 33.90784173, longitude: -117.888263651}, // 3
-    {latitude: 33.907855246, longitude: -117.888282362}, // 4 
-    {latitude: 33.907840636, longitude: -117.888309203}, // 5
-    {latitude: 33.907855246, longitude: -117.888282362},  // 6
-    {latitude: 33.90784173, longitude: -117.888263651},
-    {latitude: 33.907813544, longitude: -117.888253258}, 
-    {latitude: 33.907797253, longitude: -117.888230827}
-     ]; 
-
-//  var wayPoints = [
-//     {latitude: 33.9077992, longitude: -117.88823026}, // 1
-//     {latitude: 33.90799779, longitude: -117.88817478}, // 2 
-//     {latitude: 33.90795127, longitude: -117.88819359}, // 3
-//     {latitude: 33.90795765, longitude: -117.88818212}, // 4 
-//     {latitude: 33.90796292, longitude: -117.88821231}, // 5
-//     {latitude: 33.90799283, longitude: -117.88822578}  // 6
+// var wayPoints = [
+//     {latitude: 33.88191951, longitude: -117.88181803}, // 1
+//     {latitude: 33.88194011, longitude: -117.88173795}, // 2 
+//     {latitude: 33.88193196, longitude: -117.88169734}, // 3
+//     {latitude: 33.88188047, longitude: -117.88170818}, // 4 
+//     {latitude: 33.88190807, longitude: -117.88177233}, // 5
+//     {latitude: 33.88192217, longitude: -117.88183641}  // 6
 //     ]; 
+
+ var wayPoints = [
+    {latitude: 33.90798393, longitude: -117.88820058}, // 1
+    {latitude: 33.90799779, longitude: -117.88817478}, // 2 
+    {latitude: 33.90795318, longitude: -117.88819537}, // 3
+    {latitude: 33.88188047, longitude: -117.88170818}, // 4 
+    {latitude: 33.88190807, longitude: -117.88177233}, // 5
+    {latitude: 33.88192217, longitude: -117.88183641}  // 6
+    ]; 
 
 
 // Reach entry point 
@@ -180,7 +177,6 @@ atlas.on('turn',function(){
     */
     turn_timer = setInterval(function() {
         calc_heading_delta();
-        winston.info('*** TURNING ***');
         winston.info('turn_right:' + turn_right);
 
         // if we're within our error we drive
@@ -209,7 +205,7 @@ atlas.on('turn',function(){
                     leftThrottle = temp_throttle * -1;
             } 
             setMotors(leftThrottle, rightThrottle);
-            winston.info("Turn rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            winston.info("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         }
         // sets the rover speed to the calculated value
     }, 50); // end of turn timer
@@ -217,7 +213,7 @@ atlas.on('turn',function(){
 
 
 atlas.on('drive',function(){
-    winston.info('*** DRIVING ***');
+    winston.info('---- driving ----')
     let leftThrottle; 
     let rightThrottle; 
     let throttle_offset
@@ -250,7 +246,7 @@ atlas.on('drive',function(){
             rightThrottle = forward_drive_constant;
             winston.info('Moving forward at drive constant');
             setMotors(leftThrottle, rightThrottle);
-            winston.info("Drive rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            winston.info("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
         // Adjust left and right throttle to maintain nominal heading
         else {
@@ -281,14 +277,13 @@ atlas.on('drive',function(){
             winston.info("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
     }, 50); // end of drive timer 
-}); // end of drive event 
-
+}) // end of drive event 
 
 //----GRAB DATA FROM IMU----
 var invalidHeadingCounter = 0;
 python_proc.stdout.on('data', function (data){   
     data = parseFloat(data); 
-    winston.info("imu data: " + data);
+    //winston.info(data);
     if (isNaN(data)) {
         winston.info("Current Heading is NaN");
         stopRover();
@@ -298,9 +293,12 @@ python_proc.stdout.on('data', function (data){
         current_heading = data;
         invalidHeadingCounter = 0;
     }  
+    else{
+        invalidHeadingCounter++;
+    }
     
     // **** WARNING: ARBITRARY COUNTER LIMIT ****
-    if(invalidHeadingCounter > 20){
+    if(invalidHeadingCounter > 10){
         clearInterval(turn_timer);
         clearInterval(drive_timer);
         stopRover(); 
@@ -327,7 +325,7 @@ right_side_arr[2] = 0xbbaa;
 var right_side_buff = Buffer.from(right_side_arr.buffer);
 
 function setLeftSide(leftSpeed) {
-    //leftSpeed = leftSpeed*-1;
+    leftSpeed = leftSpeed*-1;
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -342,7 +340,7 @@ function setLeftSide(leftSpeed) {
 }
 
 function setRightSide(rightSpeed) {
-    //rightSpeed = rightSpeed * -1;
+    rightSpeed = rightSpeed * -1;
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -422,6 +420,7 @@ function calc_heading_delta(){
     // xnor operation also note (!turn_right = turn_left)
     turn_right = current_heading > target_heading === abs_delta > 180; 
     heading_delta = abs_delta <= 180 ? abs_delta : 360 - abs_delta;
+    previousLocation = currentLocation; 
 }
 
 
@@ -449,7 +448,6 @@ function output_nav_data() {
     winston.info("Distance: ", distance);
     winston.info("Current Location: ", currentLocation);
     winston.info("Turning right: " + turn_right);
-    winston.info('\n');
 };
 
 /**
