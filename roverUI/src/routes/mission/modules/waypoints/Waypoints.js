@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../../templates/BaseModuleTemplate';
-import { Button, Row, Col } from 'antd';
+import { Button, Row, Col, message } from 'antd';
 import io from 'socket.io-client';
 import rover_settings from '../../../../../rover_settings.json';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import ZoomDisplay from 'react-leaflet-zoom-display';
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css'
+import 'leaflet/dist/leaflet.css';
 
 // Needed in order to provide the correct path to marker images
 // https://github.com/PaulLeCam/react-leaflet/issues/255
@@ -66,7 +66,7 @@ export default class Waypoints extends Component {
      * @param customIcon {L.Icon} - Specified Icon to use in place of the default one
      * @return {JSX} - Returns JSX for Marker & Popup
      */
-    generateMarker = (lat, lng, customIcon=L.Icon.Default) => {
+    generateMarker = (lat, lng, customIcon = (new L.Icon.Default)) => {
         return (
             <Marker key={`${lat}-${lng}`} position={new L.LatLng(lat, lng)} icon={customIcon}>
                 <Popup >
@@ -104,10 +104,6 @@ export default class Waypoints extends Component {
             let new_rover_marker = this.generateMarker(latitude, longitude, this.roverIcon);
             this.setState({rover_marker: new_rover_marker});
         });
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval);
     }
 
     handleSaveWaypoint = () => {
@@ -163,6 +159,8 @@ export default class Waypoints extends Component {
         if (waypoint_markers.pop() && waypoint_locations.pop()) {
             this.setState({waypoint_markers, waypoint_locations});
 
+            this.socketClient.emit('delete recent waypoint');
+
             // overwrite the localStorage locations to the recently popped waypoint_locations
             localStorage.setItem("waypoint_locations", JSON.stringify(waypoint_locations));
         }
@@ -172,8 +170,19 @@ export default class Waypoints extends Component {
         let confirmation = confirm("Delete all waypoints?");
 
         if (confirmation) {
+            this.socketClient.emit('delete all waypoints');
             this.setState({waypoint_markers: [], waypoint_locations: []});
             localStorage.removeItem("waypoint_locations");
+        }
+    };
+
+    handleSaveToFile = () => {
+        let confirmation = confirm("Save to file?");
+        if (confirmation) {
+            this.socketClient.emit('save to file', function (err) {
+                message.error("There was an error writing to file. Check console for full error message.");
+                console.log(err);
+            });
         }
     };
 
@@ -196,14 +205,7 @@ export default class Waypoints extends Component {
                                 url='http://localhost:8080/styles/osm-bright/rendered/{z}/{x}/{y}.png'
                             />
                             <ZoomDisplay/>
-                            <Marker ref={ref => {this.test_marker=ref}} position={new L.LatLng(this.state.test_lat, this.state.test_lng)}>
-                                <Popup >
-                                    <div>
-                                        <div>Lat: {this.state.test_lat}</div>
-                                        <div>Lng: {this.state.test_lng}</div>
-                                    </div>
-                                </Popup>
-                            </Marker>
+
                             {this.state.rover_marker}
                             {this.state.waypoint_markers}
                         </Map>
@@ -214,6 +216,9 @@ export default class Waypoints extends Component {
                     <Col span={4}>
                         <Button type="primary" onClick={this.handleSaveWaypoint}>Save Waypoint</Button>
                     </Col>
+                    <Col span={4}>
+                        <Button type="primary" onClick={this.handleSaveToFile}>Save to File</Button>
+                    </Col>
                     <Col span={6}>
                         <Button type="danger" onClick={this.handleDeleteRecentWaypoint}>Delete Recently Saved Waypoint</Button>
                     </Col>
@@ -221,6 +226,7 @@ export default class Waypoints extends Component {
                         <Button type="danger" onClick={this.handleDeleteAllWaypoints}>Delete All Waypoints</Button>
                     </Col>
                 </Row>
+
             </BaseModuleTemplate>
         );
     }
