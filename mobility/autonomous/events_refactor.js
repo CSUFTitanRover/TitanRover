@@ -259,9 +259,11 @@ atlas.on('drive',function(){
             winston.info('!turn_right: ' + !turn_right);
             winston.info('turn_right:' + turn_right);
             //throttle_offset = Math.round(forward_drive_constant * proportional_error * 1.5 * Math.log(heading_delta));
+
             y = Math.log(forward_throttle_max / forward_drive_constant) * proportional_error;
             throttle_offset = Math.round(forward_drive_constant * (Math.pow(Math.E, y) * proportional_error));
             throttle_offset *= throttle_offset * heading_delta;
+
             if(turn_right){
                 winston.info('Slowly turning right');
                 leftThrottle = (forward_drive_constant + throttle_offset);

@@ -6,7 +6,7 @@
 */
 
 var net = require('net');
-var fs = require("fs");
+var fs = require('fs');
 var jsonfile = require('jsonfile');
 
 var file = '/home/pi/TitanRover/mobility/runt/node/gps.json' ; 

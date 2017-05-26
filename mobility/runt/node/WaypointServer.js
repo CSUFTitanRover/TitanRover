@@ -2,11 +2,14 @@ var app = require('express');
 var socket = require('http').Server(app);
 var io = require('socket.io')(socket);
 var net = require('net');
+var fs = require('fs');
+var jsonfile = require('jsonfile');
 var reachIP = '192.168.2.15';
+var file = '/home/pi/TitanRover/mobility/runt/node/gps.json';
+
 var gps_packet; // will be overwritten as new data is coming in from reach server
-function the_spaces(value){
-	return value !== '';
-}
+var temp_waypoint_list = [];
+
 // Start the server
 socket.listen(9999, function() {
     console.log("============ Waypoints Server is up and running on port: ", socket.address().port, "=============");
@@ -28,7 +31,6 @@ raspi_client.on('data', function(data,err) {
     /* Example data object from the reach stream
      GPST latitude(deg) longitude(deg)  height(m)   Q  ns   sdn(m)   sde(m)   sdu(m)  sdne(m)  sdeu(m)  sdun(m) age(s)  ratio
      1934 433341.500   33.882028059 -117.882559268    38.7224   5   4   3.9905   3.7742   9.1639   2.7016   4.4366   4.2998   0.00    0.0
-
      */
 
     // Parse the data into an array
@@ -43,20 +45,45 @@ raspi_client.on('data', function(data,err) {
     };
 });
 
+function the_spaces(value){
+    return value !== '';
+}
+
 // Socket.io is going to be handling all the emits events that the UI needs.
 io.on('connection', function(socketClient) {
     console.log("Client Connected: " + socketClient.id);
 
     // request from UI
     socketClient.on('save waypoint', function(callback) {
-        // received a new angle value from the client
-        // inside here you can call Turn.js and pass along newAngle
-        console.log('Attempting to grab lat, lng from Reach server');
-	console.log(gps_packet);
-        // code to grab from reach server
 
+        // pass off to callback supplied from UI
         callback(gps_packet);
-	console.log('complete');
+
+        // save into our temp list
+        const waypoint = {
+            latitude: gps_packet.latitude,
+            longitude: gps_packet.longitude
+        };
+
+        temp_waypoint_list.push(waypoint);
+    });
+
+    socketClient.on('delete recent waypoint', function () {
+        temp_waypoint_list.pop();
+    });
+
+    socketClient.on('delete all waypoints', function () {
+        temp_waypoint_list = [];
+    });
+
+    socketClient.on('save to file', function (callback) {
+        jsonfile.writeFile(file, temp_waypoint_list, function(err) {
+            if(err) {
+                callback(err)
+            }
+
+            console.log("File saved correctly");
+        });
     });
 
 });
