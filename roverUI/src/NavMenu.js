@@ -46,11 +46,6 @@ class NavMenu extends Component {
                         </Link>
                     </Menu.Item>
 
-                    <Menu.Item key="arm-control">
-                        <Link to="/arm-control" activeClassName="hotfix-item-selected">
-                            <Icon type="user" /> Arm Control
-                        </Link>
-                    </Menu.Item>
                 </SubMenu>
 
                 <SubMenu key="resources"

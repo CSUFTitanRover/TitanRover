@@ -13,7 +13,6 @@ let routes = (
             <Route path="DHT-11" component={Modules.Mission.DHT11} />
             <Route path="Sonic-Range-Finder" component={Modules.Mission.SonicRangeFinder} />
             <Route path="waypoints" component={Modules.Mission.Waypoints} />
-            <Route path="arm-control" component={Modules.Mission.ArmControl} />
             <Route path="livefeeds" component={Modules.Mission.LiveFeeds}>
                 <Route path="/armcamera" component={Modules.Mission.ArmCamera} />
                 <Route path="/frontcamera" component={Modules.Mission.FrontCamera} />
