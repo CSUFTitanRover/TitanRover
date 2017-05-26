@@ -53,6 +53,18 @@ function the_spaces(value){
 io.on('connection', function(socketClient) {
     console.log("Client Connected: " + socketClient.id);
 
+	// emit rover's location every 1.5 seconds
+    setInterval(function() {
+        var rover_location = {
+          latitude: gps_packet.latitude,
+          longitude: gps_packet.longitude
+        };
+
+        socketClient.emit('rover location', rover_location);
+        // if the above doesnt work comment it out & try below
+        //io.emit('rover location', rover_location);
+    }, 1500);
+
     // request from UI
     socketClient.on('save waypoint', function(callback) {
 
