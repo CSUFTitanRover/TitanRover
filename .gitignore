@@ -1,2 +1,7 @@
 .vscode
-node_modules/
+node_modules
+.DS_STORE
+*.txt
+*.log
+*.pid
+connectCSUF.sh
