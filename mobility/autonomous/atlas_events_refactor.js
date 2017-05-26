@@ -380,7 +380,7 @@ right_side_arr[2] = 0xbbaa;
 var right_side_buff = Buffer.from(right_side_arr.buffer);
 
 function setLeftSide(leftSpeed) {
-    //leftSpeed = leftSpeed*-1;
+    leftSpeed = leftSpeed*-1;
     if (leftSpeed < -127 || leftSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
@@ -395,7 +395,7 @@ function setLeftSide(leftSpeed) {
 }
 
 function setRightSide(rightSpeed) {
-    //rightSpeed = rightSpeed * -1;
+    rightSpeed = rightSpeed * -1;
     if (rightSpeed < -127 || rightSpeed > 127) {
         throw new RangeError('speed must be between -127 and 127');
     }
