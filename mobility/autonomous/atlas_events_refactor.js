@@ -7,27 +7,8 @@ var magneticDeclination = 0; //12.3 in Fullerton, 15 in Hanksville
 var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
 var now = require('performance-now');
+var moment = require('moment'); //gets system time
 var Winston = require('winston');
-
-const winston = new (Winston.Logger)({
-    transports: [
-      new (Winston.transports.Console)({
-          'colorize': true
-          
-     }),
-      new (Winston.transports.File)({ 
-          filename: './autonomous.log',
-          options:{flags: 'w'}, // Overwrite logfile. Remove if you want to append 
-          timestamp: function () {
-          return now();},
-     })
-    ]
-  });
-
-/*----TODO----
--Test distanceModifier to make sure we don't stop halfway to onTargetRange
--In getwaypoints we need to mix the logic in for arriving at the final waypoiny to leave onTarget = true. Else we need to reset onTarget = false to allow for setMotors to execute on the timers. 
-*/
 
 //----VARIABLES----
 
@@ -35,7 +16,6 @@ const winston = new (Winston.Logger)({
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
 var current_heading; //leave untouched
 var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
-
 
 // Timers
 var turn_timer; 
@@ -45,23 +25,23 @@ var distance;          // distance to next waypoint
 var onTargetRange = 5; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
 var onTargetError = 0.25; //distance we need to stop at a waypoint
 onTargetRange = geolib.convertUnit('cm',onTargetRange); // immediately convert from meters to cm for comparisons.
-onTargetError = geolib.convertUnit('cm',onTargetError);
+onTargetError = geolib.convertUnit('cm',onTargetError); // immediately convert from meters to cm for comparisons.
 
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 70; 
-var forward_drive_constant = 57;
+var turning_drive_constant = 60; //Turning Motor Constant
+var forward_drive_constant = 50; //ForwardP Motor Constant
 var forward_drive_modifier = 0; //to modify when driving straight forward
 
 //DEGREES OF ERROR
-var turning_drive_error = 10;         // within 20 degrees stop turn
-var forward_drive_to_turn_error = 12; //logic to exit forwardP and turn. 
+var turning_drive_error = 7;         // within 20 degrees stop turn
+var forward_drive_to_turn_error = 10; //logic to exit forwardP and turn. 
 var forward_drive_error = 3;          //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var throttle_min = 40;      // Minimum throttle value to move the rover
-var throttle_max = 80;      // Maximum throttle value acceptable
+var turning_throttle_min = 50;      // Minimum throttle value to move the rover
+var turning_throttle_max = 70;      // Maximum throttle value acceptable
 var forward_throttle_min = 40; //Minimum throttle value acceptable
-var forward_throttle_max = 75; //Maximum throttle value acceptable
+var forward_throttle_max = 60; //Maximum throttle value acceptable
 var proportional_error;        // heading ratio, used as modifer for throttle
 var distanceModifier;       // distance ratio, used as modifer for throttle
 var distanceThreshold = 20; // We need to be within x cm of target to move on 
@@ -71,27 +51,46 @@ var previousLocation = null;    // JSON - latitude and longitude {latitude: 1241
 // BOOLEAN LOGIC FOR FUNCTIONS
 var turn_right = null;
 var onTarget = false;
-// var wayPoints = [
-//     {latitude: 33.88191951, longitude: -117.88181803}, // 1
-//     {latitude: 33.88194011, longitude: -117.88173795}, // 2 
-//     {latitude: 33.88193196, longitude: -117.88169734}, // 3
-//     {latitude: 33.88188047, longitude: -117.88170818}, // 4 
-//     {latitude: 33.88190807, longitude: -117.88177233}, // 5
-//     {latitude: 33.88192217, longitude: -117.88183641}  // 6
+
+//-----WAYPOINTS-----
+var wayPoints = [
+    {latitude: 33.907797253, longitude: -117.888230827}, // 1
+    {latitude: 33.907813544, longitude: -117.888253258}, // 2 
+    {latitude: 33.90784173, longitude: -117.888263651}, // 3
+    {latitude: 33.907855246, longitude: -117.888282362}, // 4 
+    {latitude: 33.907840636, longitude: -117.888309203}, // 5
+    {latitude: 33.907855246, longitude: -117.888282362},  // 6
+    {latitude: 33.90784173, longitude: -117.888263651},
+    {latitude: 33.907813544, longitude: -117.888253258}, 
+    {latitude: 33.907797253, longitude: -117.888230827}
+     ]; 
+
+//  var wayPoints = [
+//     {latitude: 33.9077992, longitude: -117.88823026}, // 1
+//     {latitude: 33.90799779, longitude: -117.88817478}, // 2 
+//     {latitude: 33.90795127, longitude: -117.88819359}, // 3
+//     {latitude: 33.90795765, longitude: -117.88818212}, // 4 
+//     {latitude: 33.90796292, longitude: -117.88821231}, // 5
+//     {latitude: 33.90799283, longitude: -117.88822578}  // 6
 //     ]; 
-
- var wayPoints = [
-    {latitude: 33.90798393, longitude: -117.88820058}, // 1
-    {latitude: 33.90799779, longitude: -117.88817478}, // 2 
-    {latitude: 33.90795318, longitude: -117.88819537}, // 3
-    {latitude: 33.88188047, longitude: -117.88170818}, // 4 
-    {latitude: 33.88190807, longitude: -117.88177233}, // 5
-    {latitude: 33.88192217, longitude: -117.88183641}  // 6
-    ]; 
-
-
-// Reach entry point 
-
+//-----END WAYPOINTS-----
+//-----WINSTON ENTRY POINT-----
+const winston = new (Winston.Logger)({
+    transports: [
+      new (Winston.transports.Console)({
+          'colorize': true
+          
+     }),
+      new (Winston.transports.File)({
+          filename: './autonomous_logs/autonomous_' + moment.format() + '.log',
+          options:{flags: 'w'}, // Overwrite logfile. Remove if you want to append 
+          timestamp: function () {
+          return now();},
+     })
+    ]
+  });
+//----END WINSTON ENTRY----
+//----REACH ENTRY POINT----
 var reachIP = '192.168.2.15';
 var client = new net.Socket();
 client.connect(9001, reachIP, function() {
@@ -99,8 +98,7 @@ client.connect(9001, reachIP, function() {
 });
 
 client.on('data', function(data,err) { 
-//	winston.info(String(data));
-    
+    winston.info("***reachClient***");
     if(err){
         winston.info("Error!: " + JSON.stringify(err));
     }
@@ -112,6 +110,25 @@ client.on('data', function(data,err) {
         };
     
 });
+//----END REACH CODE----
+//----IMU ENTRY----
+var invalidHeadingCounter = 0;
+python_proc.stdout.on('data', function (data){   
+    data = parseFloat(data); 
+    winston.info("***python_proc.stdout***");
+    winston.info("IMU Data:")
+    if (isNaN(data)) {
+        winston.info("Current Heading is NaN");
+        stopRover();
+        clearInterval(turn_timer);
+        clearInterval(drive_timer);
+    } else if ( 0 <= data && data <= 360){
+        current_heading = data;
+    } else {
+        winston.info("ERROR: IMU Heading Out of Range: " + data);
+    }
+});
+//----END IMU----
 
 // *** TEMP CHECK TO STOP ROVER 
 // var locationCounter = 0 ; 
@@ -145,7 +162,7 @@ class MyEmitter extends EventEmitter {}
 const atlas = new MyEmitter();
 
 atlas.on('get_waypoint',function(){
-  
+    winston.info("***get_waypoint***")
     current_wayPoint++; 
      winston.info("getting next waypoint",wayPoints[current_wayPoint]);
     if(current_wayPoint >= wayPoints.length){
@@ -155,6 +172,7 @@ atlas.on('get_waypoint',function(){
     else{
         onTarget = false;
         target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
+        winston.info("get_waypoint adjusted Target Heading:" + target_heading);
         atlas.emit('turn');
     }
 });
@@ -163,10 +181,6 @@ atlas.on('turn',function(){
     let temp_throttle; 
     let leftThrottle;
     let rightThrottle; 
-    winston.info('---- turning ----')
-    calc_heading_delta();
-    pathfinder();
-    output_nav_data();
     /*
         Timer Start Condition: 
             Triggered upon drive event completion
@@ -176,13 +190,12 @@ atlas.on('turn',function(){
             If current heading is within nominal range of target heading
     */
     turn_timer = setInterval(function() {
+        winston.info('***turn_timer***');
         calc_heading_delta();
-        winston.info('turn_right:' + turn_right);
-
         // if we're within our error we drive
         if (Math.abs(heading_delta) <= turning_drive_error) {
             clearInterval(turn_timer);
-            winston.info('----FOUND HEADING----');
+            winston.info('***FOUND HEADING EMITTING DRIVE***');
             winston.info('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
             winston.info("Final heading before drive event: ", current_heading);
             winston.info("heading delta:" + heading_delta);
@@ -192,9 +205,10 @@ atlas.on('turn',function(){
         // we turn if we're not within our error or at distance
         else {
             // proportional error with respect to heading
+            winston.info("***TURNING TOWARDS TARGET***");
             proportional_error = heading_delta / 180;
-            temp_throttle = Math.round(throttle_max * proportional_error);
-            temp_throttle = (turning_drive_constant + temp_throttle).clamp(throttle_min,throttle_max);
+            temp_throttle = Math.round(turning_throttle_max * proportional_error);
+            temp_throttle = (turning_drive_constant + temp_throttle).clamp(turning_throttle_min,turning_throttle_max);
             if(turn_right){
                     winston.info('Turning right');
                     leftThrottle = temp_throttle;
@@ -205,7 +219,7 @@ atlas.on('turn',function(){
                     leftThrottle = temp_throttle * -1;
             } 
             setMotors(leftThrottle, rightThrottle);
-            winston.info("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            winston.info("Turn: Set rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         }
         // sets the rover speed to the calculated value
     }, 50); // end of turn timer
@@ -213,11 +227,9 @@ atlas.on('turn',function(){
 
 
 atlas.on('drive',function(){
-    winston.info('---- driving ----')
     let leftThrottle; 
     let rightThrottle; 
     let throttle_offset
-    
     /*
         Timer Start Condition: 
             Triggered upon turn event completion
@@ -225,86 +237,129 @@ atlas.on('drive',function(){
             current heading exceeds error threshold or rover is within stopping distance of target.
     */
     drive_timer = setInterval(function() {
+        winston.info("***drive_timer***")
         pathfinder();           //gets distance, distanceModifier modifier and target heading
         calc_heading_delta();   //calculates best turn towards target heading
-        output_nav_data();
         
         if (distance < onTargetError) {
             clearInterval(drive_timer);
             stopRover(); 
+            winston.log("***AT WAYPOINT***")
             atlas.emit('get_waypoint');
         }
         else if (Math.abs(heading_delta) > forward_drive_to_turn_error) { //removed || distance < distance_threshold 
             clearInterval(drive_timer);
             stopRover(); 
-            winston.info("Done driving forward");     
+            winston.info("***FORWARDP OUT OF BOUNDS EMITTING TURN***");     
             atlas.emit('turn'); //distance < distance_threshold ? atlas.emit('get_waypoint') : atlas.emit('turn');    
         }
         // If heading is nominal, drive forward
         else if (Math.abs(heading_delta) <= forward_drive_error) {
             leftThrottle  = forward_drive_constant;
             rightThrottle = forward_drive_constant;
-            winston.info('Moving forward at drive constant');
+            winston.info('***MOVING FORWARD AT DRIVE CONSTANT***');
             setMotors(leftThrottle, rightThrottle);
-            winston.info("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            winston.info("Drive: Set rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
         // Adjust left and right throttle to maintain nominal heading
         else {
             // proportional error with respect to heading
+            winston.info("***MOVING FORWARD WITH ADJUSTMENTS***")
             proportional_error = heading_delta / 180;
             winston.info('!turn_right: ' + !turn_right);
             winston.info('turn_right:' + turn_right);
             //throttle_offset = Math.round(forward_drive_constant * proportional_error * 1.5 * Math.log(heading_delta));
+
             y = Math.log(forward_throttle_max / forward_drive_constant) * proportional_error;
             throttle_offset = Math.round(forward_drive_constant * (Math.pow(Math.E, y) * proportional_error));
-            throttle_offset *= throttle_offset * heading_delta;
+            throttle_offset = Math.round(throttle_offset * heading_delta);
+            winston.info("forwardP Throttle Offset: " + throttle_offset);
+
             if(turn_right){
-                winston.info('Slowly turning right');
+                winston.info('forwardP listing right');
                 leftThrottle = (forward_drive_constant + throttle_offset);
                 rightThrottle = (forward_drive_constant - throttle_offset);
             }else{
-                winston.info('Slowly turning left');
+                winston.info('forwardP listing left');
                 leftThrottle = forward_drive_constant - throttle_offset;
                 rightThrottle = forward_drive_constant + throttle_offset;
             }
-            leftThrottle *= distanceModifier*leftThrottle;
-            rightThrottle *= distanceModifier*rightThrottle;
+            leftThrottle = distanceModifier*leftThrottle;
+            rightThrottle = distanceModifier*rightThrottle;
             leftThrottle = leftThrottle.clamp(forward_throttle_min, forward_throttle_max);
             rightThrottle = rightThrottle.clamp(forward_throttle_min, forward_throttle_max);
-            
         
             setMotors(leftThrottle, rightThrottle);
-            winston.info("Setting rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
+            winston.info("Drive: Set rover speed - Left: " + leftThrottle + ", right:" + rightThrottle);
         } 
     }, 50); // end of drive timer 
-}) // end of drive event 
+}); // end of drive event 
 
-//----GRAB DATA FROM IMU----
-var invalidHeadingCounter = 0;
-python_proc.stdout.on('data', function (data){   
-    data = parseFloat(data); 
-    //winston.info(data);
-    if (isNaN(data)) {
-        winston.info("Current Heading is NaN");
-        stopRover();
-        clearInterval(turn_timer);
-        clearInterval(drive_timer);
-    } else if ( 0 <= data && data <= 360){
-        current_heading = data;
-        invalidHeadingCounter = 0;
-    }  
-    else{
+//Shan's Get heading calc based on logic Shan and Brandon came up with to determine which direction the rover will be turning
+//IE: Is turning left or right the shorter turn?
+function calc_heading_delta(){
+    //Check for non-updated heading values from the IMU
+    winston.info('***calc_heading_delta***');
+    if(current_heading == previousHeading) {
         invalidHeadingCounter++;
+        winston.info("IMU Heading same as previous");
+    } else {
+        previousHeading = current_heading;
+        invalidHeadingCounter = 0;
+        winston.info("IMU Heading validified");
     }
-    
-    // **** WARNING: ARBITRARY COUNTER LIMIT ****
-    if(invalidHeadingCounter > 10){
-        clearInterval(turn_timer);
+    if (invalidHeadingCounter >= 20) {
         clearInterval(drive_timer);
-        stopRover(); 
-        winston.info("Rover stopped because of bad heading data");
+        clearInterval(turn_timer);
+        stopRover();
+        winston.info("ERROR: IMU Heading Invalid");
     }
-});
+    let abs_delta = Math.abs(current_heading - target_heading);
+    winston.info("Current Heading: " + current_heading);
+    winston.info("Target Heading: " + target_heading);
+    // xnor operation also note (!turn_right = turn_left)
+    turn_right = current_heading > target_heading === abs_delta > 180; 
+    heading_delta = abs_delta <= 180 ? abs_delta : 360 - abs_delta;
+}
+
+
+//uses geolib to get distance and targetHeading. 
+function pathfinder() {
+    //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation) 
+    winston.info("***pathfinder***")
+    distance = geolib.getDistance(currentLocation,wayPoints[current_wayPoint],1,5);
+    distance = geolib.convertUnit('cm',distance);
+    winston.info("Current Location: ", currentLocation);
+    winston.info("Target Location: "+ wayPoints[current_wayPoint]);
+    winston.info("Distance: ", distance);
+    //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
+    target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
+    winston.info("pathfinder updated Target Heading: " + target_heading);
+    output_nav_data();
+    if (distance <= onTargetRange) {
+        winston.info("***ON TARGET RANGE***")
+        distanceModifier = distance / onTargetRange;
+        winston.info("Distance Modifier: " + distanceModifier);
+    } else {
+        distanceModifier = 1;
+    }
+}
+
+/**
+ * Returns a number whose value is limited to the given range.
+ *
+ * Example: limit the output of this computation to between 0 and 255
+ * (x * 255).clamp(0, 255)
+ *
+ * @param {Number} min The lower boundary of the output range
+ * @param {Number} max The upper boundary of the output range
+ * @returns A number in the range [min, max]
+ * @type Number
+ */
+
+Number.prototype.clamp = function(min, max) {
+  return Math.min(Math.max(this, min), max);
+};
 
 //INCLUDED FOR CONTROL OF THE ROVER WITH UPDATED SERIAL COMMUNICATION
 //-------ROVERCONTROL------
@@ -380,7 +435,7 @@ port.on('open',function(){
 
 // KILL ALL PROCESS AND STOP ROVER MID SCRIPT
 process.on('SIGTERM', function() {
-    winston.info("STOPPING ROVER");
+    winston.info("***STOPPING ROVER ON SIGTERM***");
     clearInterval(turn_timer);
     clearInterval(drive_timer);
     stopRover();  
@@ -391,6 +446,7 @@ process.on('SIGTERM', function() {
 });
 
 process.on('SIGINT', function() {
+    winston.info("***STOPPING ROVER ON SIGINT***")
     winston.info("\n####### JUSTIN LIKES MENS!! #######\n");
     winston.info("\t\t╭∩╮（︶︿︶）╭∩╮");
     clearInterval(turn_timer);
@@ -406,62 +462,9 @@ process.on('SIGINT', function() {
 
 var main = setInterval(()=> {
     if(currentLocation !== null && current_heading !== null){
+        winston.info("***EVENTS_REFACTORED BOOTED***")
         clearInterval(main);
         setTimeout(() => atlas.emit('get_waypoint'), 3000);
     }
 }, 100);
  // Timeout used for the serial port to open with the arduino
-
-//Shan's Get heading calc based on logic Shan and Brandon came up with to determine which direction the rover will be turning
-//IE: Is turning left or right the shorter turn?
-function calc_heading_delta(){
-    winston.info('Calculating Heading Delta & Direction');
-    let abs_delta = Math.abs(current_heading - target_heading);
-    // xnor operation also note (!turn_right = turn_left)
-    turn_right = current_heading > target_heading === abs_delta > 180; 
-    heading_delta = abs_delta <= 180 ? abs_delta : 360 - abs_delta;
-    previousLocation = currentLocation; 
-}
-
-
-//uses geolib to get distance and targetHeading. 
-function pathfinder() {
-    //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation) 
-    distance = geolib.getDistance(currentLocation,wayPoints[current_wayPoint],1,5);
-    distance = geolib.convertUnit('cm',distance);
-    //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
-    target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
-    winston.info('***** new heading ****:', target_heading);
-    output_nav_data();
-    if (distance <= onTargetRange) {
-        distanceModifier = distance / onTargetRange;
-        winston.info("distanceModifier Modifier: " + distanceModifier);
-    } else {
-        distanceModifier = 1;
-    }
-}
-
-function output_nav_data() {
-    winston.info("Current Heading: " + current_heading);
-    winston.info("Target Heading: " + target_heading);
-    winston.info("Heading Delta: " + heading_delta);
-    winston.info("Distance: ", distance);
-    winston.info("Current Location: ", currentLocation);
-    winston.info("Turning right: " + turn_right);
-};
-
-/**
- * Returns a number whose value is limited to the given range.
- *
- * Example: limit the output of this computation to between 0 and 255
- * (x * 255).clamp(0, 255)
- *
- * @param {Number} min The lower boundary of the output range
- * @param {Number} max The upper boundary of the output range
- * @returns A number in the range [min, max]
- * @type Number
- */
-
-Number.prototype.clamp = function(min, max) {
-  return Math.min(Math.max(this, min), max);
-};
