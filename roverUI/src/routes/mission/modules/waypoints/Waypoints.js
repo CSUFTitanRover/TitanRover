@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../../templates/BaseModuleTemplate';
-import { Button, Row, Col, message } from 'antd';
+import { Button, Row, Col, message, Input, Card } from 'antd';
 import io from 'socket.io-client';
 import rover_settings from '../../../../../rover_settings.json';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -27,7 +27,7 @@ export default class Waypoints extends Component {
             zoomLevel: 17,
             waypoint_locations: [],
             waypoint_markers: [],
-            rover_position: [33.88255522931054, -117.88273157819734],
+            rover_position: {latitude: 0, longitude: 0},
             rover_marker: null,
         };
 
@@ -102,7 +102,7 @@ export default class Waypoints extends Component {
             let { latitude, longitude } = gps_packet;
 
             let new_rover_marker = this.generateMarker(latitude, longitude, this.roverIcon);
-            this.setState({rover_marker: new_rover_marker});
+            this.setState({rover_marker: new_rover_marker, rover_position: gps_packet});
         });
     }
 
@@ -195,8 +195,8 @@ export default class Waypoints extends Component {
         const position = [33.88255522931054, -117.88273157819734];
 
         return(
-            <BaseModuleTemplate moduleName="Waypoints">
-                <Row>
+            <BaseModuleTemplate moduleName="Waypoints" className="waypoints">
+                <Row className="map-row">
                     <Col span={24}>
                         <Map ref={(map) => {this.map = map}} id="map" center={position} zoom={this.state.zoomLevel} maxZoom={20}
                              onZoom={this.handleMapZoom}
@@ -212,17 +212,30 @@ export default class Waypoints extends Component {
                     </Col>
                 </Row>
 
+                <Row>
+                    <Card title="Current Rover Position">
+                        <Row type="flex" gutter={50}>
+                            <Col span={6}>
+                                <Input addonBefore="latitude" value={this.state.rover_position.latitude}/>
+                            </Col>
+                            <Col span={6}>
+                                <Input addonBefore="longitude" value={this.state.rover_position.longitude}/>
+                            </Col>
+                        </Row>
+                    </Card>
+                </Row>
+
                 <Row type="flex">
-                    <Col span={4}>
+                    <Col md={4}>
                         <Button type="primary" onClick={this.handleSaveWaypoint}>Save Waypoint</Button>
                     </Col>
-                    <Col span={4}>
+                    <Col md={4}>
                         <Button type="primary" onClick={this.handleSaveToFile}>Save to File</Button>
                     </Col>
-                    <Col span={6}>
+                    <Col md={6}>
                         <Button type="danger" onClick={this.handleDeleteRecentWaypoint}>Delete Recently Saved Waypoint</Button>
                     </Col>
-                    <Col span={4}>
+                    <Col md={4}>
                         <Button type="danger" onClick={this.handleDeleteAllWaypoints}>Delete All Waypoints</Button>
                     </Col>
                 </Row>
