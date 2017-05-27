@@ -269,6 +269,14 @@ void loop()
         // pwmVal should contain the total steps in both bytes val[2] and val[3]
         stepJointHandler(val[1], pwmVal);
         break;
+      case 0x0B:
+        //motor activation for the autonomous tasks
+        back.motor(1,val[2]-127);
+        break;
+      case 0x0C:
+        //motor activation for the autonomous tasks
+        back.motor(2,val[2]-127);
+        break;
       case 0xff:  // Auxillary functions
         if (val[1] == 0x01) // Calibrate the arm
         {
