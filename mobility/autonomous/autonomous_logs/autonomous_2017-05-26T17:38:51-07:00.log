@@ -1,0 +1,624 @@
+{"level":"info","message":"open","timestamp":1838.265076}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1882.433027}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":1892.200725}
+{"level":"info","message":"Connected to reach","timestamp":1903.785828}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1958.505387}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1960.197477}
+{"level":"info","message":"***reachClient***","timestamp":1965.328593}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1973.553629}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1974.52931}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1988.951664}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1993.840748}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1997.916338}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2000.298119}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2003.966677}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2005.517465}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2009.546128}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2011.363896}
+{"level":"info","message":"***EVENTS_REFACTORED BOOTED***","timestamp":2018.90747}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2033.821962}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2035.232176}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2038.769431}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2040.835794}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2047.222332}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2048.630255}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2055.972005}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2057.570033}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2064.752304}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2066.325175}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2077.096992}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2078.525124}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2086.178386}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2087.737038}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2096.150356}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2099.67709}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2106.25566}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2107.886761}
+{"level":"info","message":"***reachClient***","timestamp":2114.78528}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2117.530188}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2118.722953}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2124.093602}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2125.789859}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2133.3101}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2135.030107}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2142.48165}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":2145.970727}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2152.306796}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2154.0967}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2160.91626}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2162.543663}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2169.761299}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2171.168388}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2178.676962}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2180.272386}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2189.181174}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2191.678685}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2198.546006}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2199.988981}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2207.160471}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2208.682821}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2216.29676}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2217.922444}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2225.038933}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2226.92066}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2234.284494}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2237.573831}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2251.583892}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2258.69887}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2268.117244}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2269.587407}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2275.285817}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2277.199106}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2285.22513}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2293.839959}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2296.37372}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2297.756955}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2305.944178}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2307.590071}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2316.271775}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2317.718187}
+{"level":"info","message":"***reachClient***","timestamp":2341.215997}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2344.179812}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2345.72336}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2384.125193}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2386.128639}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2388.525316}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2390.417095}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2394.005913}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2428.367311}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2437.557976}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2439.643766}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2451.201316}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2453.719712}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2468.353109}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2475.428868}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2480.145972}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2481.67676}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2512.537101}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2514.463308}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2516.242326}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2517.431237}
+{"level":"info","message":"***reachClient***","timestamp":2518.868691}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2524.359496}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2526.503151}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2528.518004}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2529.577331}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2537.115333}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2539.421436}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2545.210107}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2546.43954}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2553.887384}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2555.274474}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2564.63842}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2567.194525}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2574.371275}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2577.143422}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2583.146886}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2585.054759}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2592.517395}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2595.075323}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2602.004519}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2604.265154}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2611.441071}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2614.167124}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2622.577212}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2623.950187}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2643.860586}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2645.051164}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2652.430779}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2653.71542}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2668.054701}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2673.81634}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2690.577298}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2715.484333}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2717.184392}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2718.144084}
+{"level":"info","message":"***reachClient***","timestamp":2719.428673}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2721.472744}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2722.674051}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2730.899295}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2734.745927}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2740.820015}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2746.802802}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2753.442726}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2754.560023}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2762.558755}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2767.243827}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2787.701885}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2788.712097}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2790.132312}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2791.997893}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2794.320559}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2795.304626}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2803.250754}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2804.374925}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2812.224803}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2813.36736}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2822.250159}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2823.353028}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2831.46473}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2832.743694}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2841.433679}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2843.150822}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2851.492265}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2852.633988}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2860.660898}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2861.873716}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2869.933803}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2870.959015}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2879.114207}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2880.311608}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2888.621071}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2889.629669}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2898.248456}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2899.416378}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2907.567507}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2908.689699}
+{"level":"info","message":"***reachClient***","timestamp":2910.686895}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2916.626244}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2917.555415}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2925.932743}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2927.081445}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2934.634447}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2935.683045}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2944.346937}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2945.573557}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2953.392549}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2954.531408}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2962.801131}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2963.980355}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2971.90117}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2972.969821}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2980.713969}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2982.064496}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2989.817758}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":2991.091983}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2998.67639}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3001.358954}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3017.406003}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3018.41809}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3020.202108}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3021.059404}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3032.905497}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3033.936074}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3037.692601}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3038.630053}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3047.509258}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3048.506397}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3056.67336}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3058.45243}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3066.68158}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3067.698876}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3075.712609}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3076.733551}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3084.447334}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3085.445411}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3093.346487}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3094.320033}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3102.19564}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3103.29403}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3111.375836}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3112.554174}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3120.792387}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3121.940986}
+{"level":"info","message":"***reachClient***","timestamp":3123.451669}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3130.368783}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3132.022956}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3139.542312}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3140.555702}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3148.956832}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3149.994284}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3158.732603}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3159.891254}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3167.743007}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3168.731188}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3176.942005}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3178.065968}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3185.735064}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3186.796474}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3195.078906}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3195.974847}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3206.250777}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3207.60771}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3216.438165}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3218.173798}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3226.864877}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3228.171966}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3237.041275}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3238.516281}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3249.428568}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3250.838158}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3264.386914}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3265.550773}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3270.12673}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3271.287048}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3279.238541}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3280.469067}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3290.487235}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3291.751459}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3303.287551}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3304.5949}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3310.935813}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3312.299257}
+{"level":"info","message":"***reachClient***","timestamp":3318.104177}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3322.252112}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3323.555659}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3330.97116}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3332.189447}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3341.433497}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3342.992723}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3351.482082}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3352.573076}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3363.941407}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3365.688237}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3372.913998}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3374.211087}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3380.678458}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3381.517264}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3390.203031}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3391.186577}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3399.414841}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3400.258074}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3408.432589}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3409.505718}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3417.866952}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3418.681435}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3427.402254}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3428.422311}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3436.096771}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3436.921514}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3444.769881}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3445.769729}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3455.299666}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3456.477744}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3464.461998}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3465.847368}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3475.808557}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3476.998771}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3485.901986}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3487.148554}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3495.650205}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3496.650835}
+{"level":"info","message":"***reachClient***","timestamp":3506.278741}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3514.090077}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3515.285603}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3527.456853}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3528.773317}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3538.926799}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3539.870293}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3551.142581}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3553.052485}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3563.552687}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3564.846494}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3572.370173}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3573.799554}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3585.100072}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3586.840079}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3597.107415}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3598.909559}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3606.406153}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3608.544861}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3625.826498}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3627.367755}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3634.474765}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3635.791281}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3643.485845}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3644.670121}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3652.38828}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3653.650473}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3662.021186}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3663.691766}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3671.247736}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3672.830816}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3681.059081}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3682.845755}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3689.862452}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3691.130739}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3699.207909}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3700.673645}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3708.577377}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3712.978386}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3720.693263}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3721.940195}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3727.306312}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3728.583141}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3736.302237}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3737.72917}
+{"level":"info","message":"***reachClient***","timestamp":3739.396365}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3745.607381}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3746.937699}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3754.459398}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3755.793623}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3763.579021}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3764.951527}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3773.048906}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3774.758132}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3781.644047}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3782.86499}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3790.449711}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3791.867529}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3799.327822}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3800.409077}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3808.189475}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3809.564793}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3817.001805}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3818.090195}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3825.916322}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3827.061171}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3834.54511}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3835.616364}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3843.400825}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3844.46208}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3852.421073}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3853.75561}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3861.141944}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3862.487262}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3869.957034}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3871.04782}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3878.906448}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3880.204734}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3887.597162}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3888.638}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3896.471888}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3897.61757}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3905.334479}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3906.40839}
+{"level":"info","message":"***reachClient***","timestamp":3908.352773}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3914.180767}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3915.201292}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3922.988409}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3924.111487}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3931.929802}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3933.11012}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3940.779528}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":3963.684835}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3998.456132}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4000.380098}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4002.57016}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4003.866936}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4011.314781}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4012.975257}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4020.266851}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4021.617222}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4029.911372}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4031.239347}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4038.876723}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4040.286417}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4049.178955}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4050.618024}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4059.929992}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4061.666874}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4069.587065}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4072.27067}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4081.027531}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4082.555506}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4090.391373}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4092.887895}
+{"level":"info","message":"***reachClient***","timestamp":4097.355779}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4101.017878}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4103.829869}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4112.8047}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4114.252518}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4123.298808}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4126.027621}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4153.93993}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4155.379884}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4163.882889}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4165.360604}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4174.534342}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4176.250183}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4184.729855}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4186.120017}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4195.690058}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4196.747667}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4204.202595}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4205.243537}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4213.963627}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4214.993007}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4223.706638}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4224.961643}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4233.07121}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4234.02486}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4244.562093}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4245.819702}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4254.842033}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4256.318446}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4265.128849}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4265.896769}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4273.50727}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4274.938162}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4283.032311}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4284.001795}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4292.160216}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4293.242981}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4304.030059}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4312.99041}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4314.470677}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4315.361618}
+{"level":"info","message":"***reachClient***","timestamp":4317.945796}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4321.664614}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4322.864463}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4331.58648}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4332.611745}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4341.568034}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4343.228718}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4350.808803}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4351.961568}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4360.434417}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4361.416453}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4369.61977}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4371.183631}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4385.212337}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4386.147602}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4393.203882}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4394.213887}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4404.215857}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4405.674353}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4414.582673}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4416.083721}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4425.997722}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4427.470437}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4440.789192}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4442.27248}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4450.368036}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4451.589447}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4461.257823}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4462.956111}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4474.566578}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4475.948459}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4483.505523}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4484.658341}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4492.90947}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4494.11734}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4501.726748}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4503.032691}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4510.835381}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4515.619725}
+{"level":"info","message":"***reachClient***","timestamp":4517.802547}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4520.764591}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":4522.034596}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4531.227969}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4532.939279}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4539.974309}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4541.291971}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4549.515444}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4550.839669}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4558.872829}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4560.009396}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4567.909639}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4569.207196}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4577.029209}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4578.071349}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4586.244093}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4587.531443}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4595.105694}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4596.027625}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4604.064743}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4605.156571}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4613.354575}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4614.38484}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4622.452688}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4623.689255}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4631.491112}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4632.754503}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4640.231775}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4641.555375}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4649.661556}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4650.523695}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4658.602428}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4659.691807}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4667.560748}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4668.479606}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4676.7536}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4677.909803}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4685.612649}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4686.563903}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4695.235347}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4696.391289}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4704.501064}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4705.555704}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4713.761208}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4714.800067}
+{"level":"info","message":"***reachClient***","timestamp":4716.447626}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4727.345278}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4728.322469}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4735.331302}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4736.08042}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4740.851117}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4741.948883}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4750.81439}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4751.671841}
+{"level":"info","message":"ArduinoMessage: Bytes Switched Clearing Buffer\r","timestamp":4755.675348}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4760.345942}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4761.509905}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4769.099052}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4770.043744}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4778.60175}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4779.767744}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4787.59106}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4788.54872}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4797.559072}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4798.870171}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4806.616767}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4807.776043}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4816.058423}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4817.205667}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4825.238671}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4826.242477}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4834.353762}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4835.467361}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4844.699068}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4845.660791}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4854.339422}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4855.515573}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4864.911968}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4865.867284}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4874.469092}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4875.8129}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4883.427152}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4884.312}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4892.878651}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4893.962094}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4902.754423}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4903.775209}
+{"level":"info","message":"***reachClient***","timestamp":4908.452417}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4913.000666}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4914.188848}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4933.251899}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4934.75352}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4940.459378}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4942.124646}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4954.548762}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4956.18054}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4965.020683}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4967.045015}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4974.941195}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4976.977558}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4986.085826}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4987.321561}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4995.139668}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4996.63608}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5003.882726}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5005.358931}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5012.613285}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5013.834905}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5022.019159}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5025.874645}
+{"level":"info","message":"***get_waypoint***","timestamp":5032.412277}
+{"latitude":33.9077992,"longitude":-117.88823026,"level":"info","message":"getting next waypoint","timestamp":5040.843043}
+{"level":"info","message":"get_waypoint adjusted Target Heading:348.43412625859924","timestamp":5062.405636}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5065.991277}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5067.123573}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5068.676393}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5070.005409}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5076.388613}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5077.788047}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5086.853763}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5087.989185}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5095.401404}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5096.634326}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5103.889462}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5105.257749}
+{"level":"info","message":"***reachClient***","timestamp":5112.249863}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5114.07211}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":5114.997062}
