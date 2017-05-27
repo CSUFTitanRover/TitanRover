@@ -20,15 +20,20 @@ from LSM303_U import *
 from L3GD20_GYRO import *
 import datetime
 bus = smbus.SMBus(1)
+import socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-host = "127.0.0.1"
-port = 5000
-
-mySocket = socket.socket()
-mySocket.bind((host, port))
-
-mySocket.listen(1)
-conn, addr = mySocket.accept()
+sock.bind(("", 9015))
+sock.listen(1)
+ 
+handshake = '\
+HTTP/1.1 101 Web Socket Protocol Handshake\r\n\
+Upgrade: WebSocket\r\n\
+Connection: Upgrade\r\n\
+WebSocket-Origin: http://localhost:8888\r\n\
+WebSocket-Location: ws://localhost:9999/\r\n\r\n\
+'
+handshaken = False
 
 RAD_TO_DEG = 57.29578
 M_PI = 3.14159265358979323846
@@ -294,6 +299,14 @@ kalmanX = kalmanY = 0.0
 
 a = datetime.datetime.now()                                             #Gyro Timing Control
 
+print "TCPServer Waiting for client on port 9015"
+
+import sys
+ 
+data = ''
+header = ''
+ 
+client, address = sock.accept()
 
 while True:
 	total_heading = 0.0
@@ -463,6 +476,4 @@ while True:
 	#print("%5.8f" % (total_heading))
 	#sys.stdout.flush()
 
-	conn.send(data.encode("%5.8f" % (total_heading)))
-
-conn.close()
+	client.send("%5.8f" % (total_heading))
