@@ -127,9 +127,9 @@ imu_socket.on('data', function(data){
     winston.info("IMU Data: " + data);
     if (isNaN(data)) {
         winston.info("Current Heading is NaN");
-        stopRover();
         clearInterval(turn_timer);
         clearInterval(drive_timer);
+        stopRover();
     } else if ( 0 <= data && data <= 360){
         current_heading = data;
     } else {
@@ -181,7 +181,6 @@ atlas.on('get_waypoint',function(){
        winston.info("reached end of waypoints");
     }
     else{
-        onTarget = false;
         target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
         winston.info("get_waypoint adjusted Target Heading:" + target_heading);
         atlas.emit('turn');
@@ -322,7 +321,7 @@ function calc_heading_delta(){
     if (invalidHeadingCounter >= 20) {
         clearInterval(drive_timer);
         clearInterval(turn_timer);
-        stopRover();
+        setTimeout(()=>{ stopRover();},1000);
         winston.info("ERROR: IMU Heading Invalid");
     }
     let abs_delta = Math.abs(current_heading - target_heading);
