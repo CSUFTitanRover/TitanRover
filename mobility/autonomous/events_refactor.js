@@ -72,7 +72,6 @@ const winston = new (Winston.Logger)({
     transports: [
       new (Winston.transports.Console)({
           'colorize': true
-          
      }),
       new (Winston.transports.File)({
           filename: './autonomous_logs/autonomous_' + moment().format() + '.log',
@@ -256,7 +255,7 @@ atlas.on('drive',function(){
         if (distance < onTargetError) {
             clearInterval(drive_timer);
             stopRover(); 
-            winston.log("***AT WAYPOINT***")
+            winston.log("***AT WAYPOINT***");
             atlas.emit('get_waypoint');
         }
         else if (Math.abs(heading_delta) > forward_drive_to_turn_error) { //removed || distance < distance_threshold 
@@ -284,7 +283,7 @@ atlas.on('drive',function(){
 
             y = Math.log(forward_throttle_max / forward_drive_constant) * proportional_error;
             throttle_offset = Math.round(forward_drive_constant * (Math.pow(Math.E, y) * proportional_error));
-            throttle_offset = Math.round(throttle_offset * heading_delta);
+            //throttle_offset = Math.round(throttle_offset * heading_delta);
             winston.info("forwardP Throttle Offset: " + throttle_offset);
 
             if(turn_right){
@@ -348,7 +347,7 @@ function pathfinder() {
     target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
     winston.info("pathfinder updated Target Heading: " + target_heading);
     if (distance <= onTargetRange) {
-        winston.info("***ON TARGET RANGE***")
+        winston.info("***ON TARGET RANGE***");
         distanceModifier = distance / onTargetRange;
         winston.info("Distance Modifier: " + distanceModifier);
     } else {
