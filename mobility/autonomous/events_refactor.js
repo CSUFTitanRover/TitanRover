@@ -4,13 +4,19 @@ var geolib = require('geolib');
 var spawn = require("child_process").spawn;
 var net = require('net');
 var magneticDeclination = 0; //12.3 in Fullerton, 15 in Hanksville
-var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
+//var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Server.py", magneticDeclination]);
 
 var now = require('performance-now');
 var moment = require('moment'); //gets system time
 var Winston = require('winston');
 
 //----VARIABLES----
+//----IMU Client Socket-----
+var imu_net = require('net'),
+    imu_port = 9015,
+    imu_host = 'localhost'
+    imu_socket = imu_net.createConnection(imu_port,imu_host);
+//----End IMU Socket--------
 
 //FOR OFF ROVER TESTING:
 //Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
@@ -28,8 +34,8 @@ onTargetRange = geolib.convertUnit('cm',onTargetRange); // immediately convert f
 onTargetError = geolib.convertUnit('cm',onTargetError); // immediately convert from meters to cm for comparisons.
 
 //DRIVE-CONSTANTS: 
-var turning_drive_constant = 60; //Turning Motor Constant
-var forward_drive_constant = 50; //ForwardP Motor Constant
+var turning_drive_constant = 90; //Turning Motor Constant
+var forward_drive_constant = 90; //ForwardP Motor Constant
 var forward_drive_modifier = 0; //to modify when driving straight forward
 
 //DEGREES OF ERROR
@@ -38,41 +44,28 @@ var forward_drive_to_turn_error = 10; //logic to exit forwardP and turn.
 var forward_drive_error = 3;          //within 4 degrees drive straight
 
 //THROTTLE LOGIC
-var turning_throttle_min = 50;      // Minimum throttle value to move the rover
-var turning_throttle_max = 70;      // Maximum throttle value acceptable
-var forward_throttle_min = 40; //Minimum throttle value acceptable
-var forward_throttle_max = 60; //Maximum throttle value acceptable
+var turning_throttle_min = 60;      // Minimum throttle value to move the rover
+var turning_throttle_max = 120;      // Maximum throttle value acceptable
+var forward_throttle_min = 60; //Minimum throttle value acceptable
+var forward_throttle_max = 120; //Maximum throttle value acceptable
 var proportional_error;        // heading ratio, used as modifer for throttle
 var distanceModifier;       // distance ratio, used as modifer for throttle
 var distanceThreshold = 20; // We need to be within x cm of target to move on 
 var current_wayPoint = -1;  // -1 because index is incremented immediately; 
 var currentLocation = null;        // JSON - latitude and longitude {latitude: 124141, longitude:3515}
 var previousLocation = null;    // JSON - latitude and longitude {latitude: 124141, longitude:3515}
+var previousHeading = 0;
 // BOOLEAN LOGIC FOR FUNCTIONS
 var turn_right = null;
 var onTarget = false;
 
 //-----WAYPOINTS-----
-var wayPoints = [
-    {latitude: 33.907797253, longitude: -117.888230827}, // 1
-    {latitude: 33.907813544, longitude: -117.888253258}, // 2 
-    {latitude: 33.90784173, longitude: -117.888263651}, // 3
-    {latitude: 33.907855246, longitude: -117.888282362}, // 4 
-    {latitude: 33.907840636, longitude: -117.888309203}, // 5
-    {latitude: 33.907855246, longitude: -117.888282362},  // 6
-    {latitude: 33.90784173, longitude: -117.888263651},
-    {latitude: 33.907813544, longitude: -117.888253258}, 
-    {latitude: 33.907797253, longitude: -117.888230827}
+//for parking lot at CSUF
+  var wayPoints = [
+     {latitude: 33.88190324, longitude: -117.88184383}, // 1
+     {latitude: 33.88190630, longitude: -117.88185768}, // 6
+     {latitude: 33.88192443, longitude: -117.88176335}, // 2
      ]; 
-
-//  var wayPoints = [
-//     {latitude: 33.9077992, longitude: -117.88823026}, // 1
-//     {latitude: 33.90799779, longitude: -117.88817478}, // 2 
-//     {latitude: 33.90795127, longitude: -117.88819359}, // 3
-//     {latitude: 33.90795765, longitude: -117.88818212}, // 4 
-//     {latitude: 33.90796292, longitude: -117.88821231}, // 5
-//     {latitude: 33.90799283, longitude: -117.88822578}  // 6
-//     ]; 
 //-----END WAYPOINTS-----
 //-----WINSTON ENTRY POINT-----
 const winston = new (Winston.Logger)({
@@ -82,7 +75,7 @@ const winston = new (Winston.Logger)({
           
      }),
       new (Winston.transports.File)({
-          filename: './autonomous_logs/autonomous_' + moment.format() + '.log',
+          filename: './autonomous_logs/autonomous_' + moment().format() + '.log',
           options:{flags: 'w'}, // Overwrite logfile. Remove if you want to append 
           timestamp: function () {
           return now();},
@@ -112,11 +105,11 @@ client.on('data', function(data,err) {
 });
 //----END REACH CODE----
 //----IMU ENTRY----
-var invalidHeadingCounter = 0;
+/*var invalidHeadingCounter = 0;
 python_proc.stdout.on('data', function (data){   
     data = parseFloat(data); 
     winston.info("***python_proc.stdout***");
-    winston.info("IMU Data:")
+    winston.info("IMU Data: " + data);
     if (isNaN(data)) {
         winston.info("Current Heading is NaN");
         stopRover();
@@ -127,6 +120,25 @@ python_proc.stdout.on('data', function (data){
     } else {
         winston.info("ERROR: IMU Heading Out of Range: " + data);
     }
+});
+*/
+imu_socket.on('data', function(data){
+    data = parseFloat(data); 
+    winston.info("***python_proc.stdout***");
+    winston.info("IMU Data: " + data);
+    if (isNaN(data)) {
+        winston.info("Current Heading is NaN");
+        stopRover();
+        clearInterval(turn_timer);
+        clearInterval(drive_timer);
+    } else if ( 0 <= data && data <= 360){
+        current_heading = data;
+    } else {
+        winston.info("ERROR: IMU Heading Out of Range: " + data);
+    }
+});
+imu_socket.on('SIGINT',function(){
+    imu_socket.exit();
 });
 //----END IMU----
 
@@ -330,12 +342,11 @@ function pathfinder() {
     distance = geolib.getDistance(currentLocation,wayPoints[current_wayPoint],1,5);
     distance = geolib.convertUnit('cm',distance);
     winston.info("Current Location: ", currentLocation);
-    winston.info("Target Location: "+ wayPoints[current_wayPoint]);
+    winston.info("Target Location: ",wayPoints[current_wayPoint]);
     winston.info("Distance: ", distance);
     //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
     target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
     winston.info("pathfinder updated Target Heading: " + target_heading);
-    output_nav_data();
     if (distance <= onTargetRange) {
         winston.info("***ON TARGET RANGE***")
         distanceModifier = distance / onTargetRange;

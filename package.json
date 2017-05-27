@@ -16,6 +16,7 @@
     "johnny-five": "^0.10.0",
     "joystick": "^0.1.2",
     "microseconds": "^0.1.0",
+    "moment": "^2.18.1",
     "mongodb": "^2.2.10",
     "performance-now": "^2.1.0",
     "request": "^2.75.0",
