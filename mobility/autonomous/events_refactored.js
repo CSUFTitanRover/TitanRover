@@ -19,9 +19,9 @@ var Winston = require('winston');
 //----End IMU Socket--------
 
 //FOR OFF ROVER TESTING:
-//Inject a current_heading, if not, leave undefined ex: var current_heading; You may also adjust target heading depending on when we have waypoints
-var current_heading; //leave untouched
-var target_heading = 65; //change to desired target heading, will be replaced post calculation of GPS data
+//Inject a currentHeading, if not, leave undefined ex: var currentHeading; You may also adjust target heading depending on when we have waypoints
+var currentHeading; //leave untouched
+var targetHeading = 65; //change to desired target heading, will be replaced post calculation of GPS data
 
 // Timers
 var turn_timer; 
@@ -58,6 +58,14 @@ var previousHeading = 0;
 // BOOLEAN LOGIC FOR FUNCTIONS
 var turn_right = null;
 var onTarget = false;
+
+var invalidHeadingCounter = 0;
+var invalidLocationCounter = 0;
+
+var previousLocation = {
+    latitude: 0,
+    longitude: 0
+};
 
 //-----WAYPOINTS-----
 //for parking lot at CSUF
@@ -111,9 +119,9 @@ client.connect(9001, reachIP, function() {
 });
 
 client.on('data', function(data,err) { 
-    //winston.info("***reachClient***");
+    winston.info("***reachClient***");
     if(err){
-        winston.info("Error!: " + JSON.stringify(err));
+        winston.info("Error: " + JSON.stringify(err));
     }
     // Parse the data into an array
     data = data.toString().split(" ").filter(theSpaces);
@@ -121,7 +129,8 @@ client.on('data', function(data,err) {
             latitude: data[2],
             longitude: data[3]
         };
-    
+    badData = false;
+    winston.info("Updated GPS Location: ", currentLocation);
 });
 
 //  UNIX SOCKET 
@@ -139,20 +148,19 @@ imu_client.on('data',function(data,err){
     winston.info("*** UNIX sockets ***");
     winston.info("IMU Data: " + data);
     if (isNaN(data)) {
-        winston.info("Current Heading is NaN");
+        winston.info("ERROR: Current Heading is NaN");
         clearInterval(turn_timer);
         clearInterval(drive_timer);
         stopRover();
     } else if ( 0 <= data && data <= 360){
-        current_heading = data;
+        currentHeading = data;
+        badData = false;
     } else {
         winston.info("ERROR: IMU Heading Out of Range: " + data);
     }
 });
 //----END REACH CODE----
 //----IMU ENTRY----
-var invalidHeadingCounter = 0;
-
 // python_proc.stdout.on('data', function (data){   
 //     data = parseFloat(data); 
 //     winston.info("***python_proc.stdout***");
@@ -163,7 +171,7 @@ var invalidHeadingCounter = 0;
 //         clearInterval(drive_timer);
 //         stopRover();
 //     } else if ( 0 <= data && data <= 360){
-//         current_heading = data;
+//         currentHeading = data;
 //     } else {
 //         winston.info("ERROR: IMU Heading Out of Range: " + data);
 //     }
@@ -179,7 +187,7 @@ var invalidHeadingCounter = 0;
 //         clearInterval(drive_timer);
 //         stopRover();
 //     } else if ( 0 <= data && data <= 360){
-//         current_heading = data;
+//         currentHeading = data;
 //     } else {
 //         winston.info("ERROR: IMU Heading Out of Range: " + data);
 //     }
@@ -233,8 +241,8 @@ atlas.on('get_waypoint',function(){
        winston.info("reached end of waypoints");
     }
     else{
-        target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
-        winston.info("get_waypoint adjusted Target Heading:" + target_heading);
+        targetHeading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
+        winston.info("get_waypoint adjusted Target Heading:" + targetHeading);
         atlas.emit('turn');
     }
 });
@@ -255,11 +263,14 @@ atlas.on('turn',function(){
         winston.info('***turn_timer***');
         calc_heading_delta();
         // if we're within our error we drive
-        if (Math.abs(heading_delta) <= turning_drive_error) {
+        if (badData) {
+            winston.info("ERROR: Bad Data Stopping Rover")
+            stopRover();
+        } else if (Math.abs(heading_delta) <= turning_drive_error) {
             clearInterval(turn_timer);
             winston.info('***FOUND HEADING EMITTING DRIVE***');
-            winston.info('Current Heading: ' + current_heading + " Target Heading: " + target_heading);
-            winston.info("Final heading before drive event: ", current_heading);
+            winston.info('Current Heading: ' + currentHeading + " Target Heading: " + targetHeading);
+            winston.info("Final heading before drive event: ", currentHeading);
             winston.info("heading delta:" + heading_delta);
             stopRover();
             atlas.emit('drive');
@@ -302,8 +313,11 @@ atlas.on('drive',function(){
         winston.info("***drive_timer***")
         pathfinder();           //gets distance, distanceModifier modifier and target heading
         calc_heading_delta();   //calculates best turn towards target heading
-        
-        if (distance < onTargetError) {
+        if (badData) {
+            winston.info("ERROR: Bad Data Stopping Rover")
+            stopRover();
+        }
+        else if (distance < onTargetError) {
             clearInterval(drive_timer);
             stopRover(); 
             winston.log("***AT WAYPOINT***");
@@ -362,25 +376,35 @@ atlas.on('drive',function(){
 function calc_heading_delta(){
     //Check for non-updated heading values from the IMU
     winston.info('***calc_heading_delta***');
-    if(current_heading == previousHeading) {
+    if(currentHeading == previousHeading) {
         invalidHeadingCounter++;
-        winston.info("Invalid Headingcounter: ", invalidHeadingCounter);
+        winston.info("Invalid Heading, counter: ", invalidHeadingCounter);
     } else {
-        previousHeading = current_heading;
+        previousHeading = currentHeading;
         invalidHeadingCounter = 0;
         winston.info("IMU Heading validified");
     }
-    if (invalidHeadingCounter >= 20) {
-        clearInterval(drive_timer);
-        clearInterval(turn_timer);
-        setTimeout(()=>{ stopRover();},3000);
-        winston.info("ERROR: IMU Heading Invalid");
+    if (previousLocation.lattitude === currentLocation.lattitude && previousLocation.longitude === currentLocation.longitude) {
+        invalidLocationCounter++;
+        winston.info("Invalid Location, counter: ", invalidLocationCounter);
+    } else {
+        previousLocation = currentLocation;
+        invalidLocationCounter = 0;
+        winston.info("GPS Location validified");
     }
-    let abs_delta = Math.abs(current_heading - target_heading);
-    winston.info("Current Heading: " + current_heading);
-    winston.info("Target Heading: " + target_heading);
+    if (invalidHeadingCounter >= 50 || invalidLocationCounter >= 10) {
+        badData = true;
+        if (invalidHeadingCounter >= 50) {
+            winston.info("ERROR: IMU Heading Invalid", currentHeading);
+        } else {
+            winston.info("ERROR: GPS Location Invalid: ", currentLocation);
+        }
+    }
+    let abs_delta = Math.abs(currentHeading - targetHeading);
+    winston.info("Current Heading: " + currentHeading);
+    winston.info("Target Heading: " + targetHeading);
     // xnor operation also note (!turn_right = turn_left)
-    turn_right = current_heading > target_heading === abs_delta > 180; 
+    turn_right = currentHeading > targetHeading === abs_delta > 180; 
     heading_delta = abs_delta <= 180 ? abs_delta : 360 - abs_delta;
 }
 
@@ -389,14 +413,26 @@ function calc_heading_delta(){
 function pathfinder() {
     //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation) 
     winston.info("***pathfinder***")
-    distance = geolib.getDistance(currentLocation,wayPoints[current_wayPoint],1,5);
-    distance = geolib.convertUnit('cm',distance);
     winston.info("Current Location: ", currentLocation);
     winston.info("Target Location: ",wayPoints[current_wayPoint]);
+    var tempDistance = Distance;
+    try {
+    distance = geolib.getDistance(currentLocation,wayPoints[current_wayPoint],1,5);
+    distance = geolib.convertUnit('cm',distance);
     winston.info("Distance: ", distance);
+    } catch(e) {
+        winston.info("GEOLIB ERROR: ", e);
+        distance = tempDistance;
+    }
     //This geolib function needs to be (myGPSlocation,current_waypointGPSlocation)
-    target_heading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
-    winston.info("pathfinder updated Target Heading: " + target_heading);
+    var tempTargetHeading = targetHeading;
+    try {
+        targetHeading = geolib.getBearing(currentLocation,wayPoints[current_wayPoint]);
+    } catch (e){
+        winston.info("GEOLIB ERROR: ", e);
+        targetHeading = tempTargetHeading;
+    }
+    winston.info("pathfinder updated Target Heading: " + targetHeading);
     if (distance <= onTargetRange) {
         winston.info("***ON TARGET RANGE***");
         distanceModifier = distance / onTargetRange;
@@ -522,7 +558,7 @@ process.on('SIGINT', function() {
 //----END ROVER CONTROL----
 
 var main = setInterval(()=> {
-    if(currentLocation !== null && current_heading !== null){
+    if(currentLocation !== null && currentHeading !== null){
         winston.info("***EVENTS_REFACTORED BOOTED***")
         clearInterval(main);
         setTimeout(() => atlas.emit('get_waypoint'), 3000);
