@@ -1,0 +1,2338 @@
+{"level":"info","message":"open","timestamp":1644.627263}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1687.90746}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":1698.129486}
+{"level":"info","message":"Connected to reach","timestamp":1713.949194}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1761.399879}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1763.761869}
+{"level":"info","message":"***reachClient***","timestamp":1772.633316}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1783.460396}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1784.667329}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1792.252103}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1796.706446}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1800.312921}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1801.680375}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1805.497216}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1808.0553}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1812.422664}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1814.026577}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1821.088745}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1823.266151}
+{"level":"info","message":"***EVENTS_REFACTORED BOOTED***","timestamp":1825.905955}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1839.525912}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1841.25165}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1848.520641}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1850.613046}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1856.196145}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1858.163654}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1865.545667}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1867.753541}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1874.262842}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1876.46681}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1883.236164}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1885.027526}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1895.619085}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1900.339107}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1903.15938}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1904.41074}
+{"level":"info","message":"***reachClient***","timestamp":1907.321066}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1910.693321}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1912.161608}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1919.527996}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1921.359203}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1927.934285}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1929.754657}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1936.402136}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1940.956896}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1945.126655}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1948.570577}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1955.236909}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1956.728739}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1963.237466}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1964.530389}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1972.004173}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1973.603608}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1984.521262}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1986.354134}
+{"level":"info","message":"***python_proc.stdout***","timestamp":1989.686337}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":1991.028739}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2000.079666}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2003.119992}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2008.076004}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2010.175024}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2016.555053}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2021.907526}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2025.49374}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2029.124903}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2036.315456}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2053.440066}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2071.91041}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2073.74771}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2076.458921}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2078.864869}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2097.82532}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2102.191225}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2105.76046}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2109.771989}
+{"level":"info","message":"***reachClient***","timestamp":2115.997903}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2122.701632}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2136.752321}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2152.591612}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2158.109554}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2161.861758}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2164.732865}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2168.837155}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2172.289827}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2179.23241}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2181.75013}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2188.454275}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2192.196115}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2199.36245}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2204.574349}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2208.683743}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2211.164327}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2215.816796}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2222.026512}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2225.775331}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2228.763522}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2234.29813}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2235.898711}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2243.781819}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2245.525786}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2252.583214}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2254.265617}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2260.684865}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2261.989402}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2269.486572}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2271.38757}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2279.628181}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2281.375637}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2288.55692}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2290.461772}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2296.358986}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2300.051087}
+{"level":"info","message":"***reachClient***","timestamp":2303.119538}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2308.03055}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2309.415348}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2314.31886}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2315.910794}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2323.668069}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2326.374019}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2335.875937}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2337.55407}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2347.786513}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2350.038606}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2355.822591}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2358.067237}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2371.840633}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2376.314612}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2381.803282}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":2383.665114}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2394.213547}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2400.526441}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2422.047216}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2423.559983}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2426.557862}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2427.780315}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2443.039239}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2444.411954}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2446.007742}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2447.163685}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2456.207528}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2458.013161}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2471.685776}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2472.925782}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2477.42674}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2483.607705}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2486.252196}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2501.693361}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2504.265768}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2505.335513}
+{"level":"info","message":"***reachClient***","timestamp":2516.22525}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2517.951039}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2519.210055}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2522.678457}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2524.460183}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2532.771367}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2533.920591}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2539.889473}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2541.06552}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2548.903212}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2550.06853}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2558.107733}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2559.366801}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2566.869179}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2568.202935}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2579.491737}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2580.83117}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2585.335253}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2587.276616}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2594.106752}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2596.296397}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2603.594347}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2606.095869}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2612.089594}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2613.45908}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2621.11901}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2623.788918}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2629.670247}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2631.387807}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2638.684039}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2640.009253}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2648.350385}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2650.414405}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2657.085216}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2658.474337}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2664.91869}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2666.977605}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2674.088367}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2675.548582}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2683.412837}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2686.916134}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2692.196002}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2694.380699}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2701.223439}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2703.161989}
+{"level":"info","message":"***reachClient***","timestamp":2706.673099}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2709.71228}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2734.840832}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2761.171213}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2763.438306}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2778.765928}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2780.592083}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2783.324803}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2785.220177}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2804.054846}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2805.355789}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2807.721998}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2808.859712}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2812.102487}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2813.46442}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2821.671385}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2823.818738}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2831.577159}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2832.829457}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2840.097354}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":2841.384391}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2848.631664}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2850.008389}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2858.444105}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2859.754267}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2866.943675}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2869.813271}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2877.260493}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2878.575499}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2885.724698}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2887.555904}
+{"level":"info","message":"***reachClient***","timestamp":2893.666766}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2895.958755}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2898.307672}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2903.246289}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2905.745206}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2912.536435}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2915.023947}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2921.343923}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2922.879712}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2930.45308}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2931.750742}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2939.290151}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2941.621881}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2953.348757}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2956.314448}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2961.870827}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2963.093593}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2968.056585}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2969.258309}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2978.105172}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2979.900545}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2992.647739}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2993.855557}
+{"level":"info","message":"***python_proc.stdout***","timestamp":2997.270312}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":2998.460161}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3006.499573}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3007.521661}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3015.606437}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3016.663161}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3024.648354}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3025.735598}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3033.9785}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3035.718665}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3044.586361}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":3045.800065}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3052.041447}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3053.521402}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3060.728623}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3061.869513}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3069.876216}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3071.091639}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3079.140165}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3080.59762}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3090.151934}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3092.25111}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3100.788806}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3102.136155}
+{"level":"info","message":"***reachClient***","timestamp":3104.011216}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3109.457595}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3110.65833}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3117.153672}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3118.382063}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3126.013244}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3127.090644}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3134.654637}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3136.467198}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3145.513437}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3146.524275}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3154.923376}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3156.183382}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3163.874927}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3165.135454}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3172.608873}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3173.952265}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3181.769019}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3183.396214}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3190.752967}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3192.303234}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3199.550871}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3200.740929}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3208.322422}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3212.599316}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3217.879184}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3219.128304}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3227.457249}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3230.647993}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3236.902917}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3238.776311}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3245.930823}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3247.504945}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3256.410871}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3258.403796}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3264.652679}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3265.721017}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3274.309598}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3276.039919}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3283.752193}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3285.803557}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3292.674422}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3294.140053}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3301.664723}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3303.066917}
+{"level":"info","message":"***reachClient***","timestamp":3305.791617}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3310.522837}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3311.765707}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3319.371471}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3321.171531}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3328.803441}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3330.505949}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3340.998705}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3342.690483}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3347.028993}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3348.427906}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3355.786168}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3357.831021}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3366.555801}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3369.250136}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3376.544596}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3379.763465}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3385.38646}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3387.048394}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3393.862957}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3395.356089}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3403.383573}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3414.571749}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3416.313216}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3417.477648}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3420.877247}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3422.402358}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3430.074841}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3432.19308}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3438.949725}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3440.579941}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3448.101069}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":3450.557643}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3456.498295}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":3457.956479}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3465.3762}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":3467.366782}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3474.370616}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":3476.492605}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3483.804357}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":3485.16577}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3491.893509}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":3493.193254}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3500.5186}
+{"level":"info","message":"IMU Data: 177.52388733","timestamp":3501.802356}
+{"level":"info","message":"***reachClient***","timestamp":3505.419196}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3509.351037}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3510.604688}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3518.320296}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3520.538952}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3527.246327}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3528.648468}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3537.478717}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3539.434143}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3545.575473}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3546.701884}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3553.910772}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3554.975933}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3562.658416}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3563.838786}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3571.33658}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3572.394398}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3580.007401}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3581.305949}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3589.317288}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3591.312245}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3597.555867}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3598.888894}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3606.313303}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3607.619038}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3614.927978}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3616.088295}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3624.034373}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3625.190056}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3632.579569}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3633.824366}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3654.555294}
+{"level":"info","message":"IMU Data: 178.44343253","timestamp":3684.732672}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3687.098828}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3688.408574}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3695.5472}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3696.616737}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3701.759677}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3703.341976}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3710.409091}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3711.48045}
+{"level":"info","message":"***reachClient***","timestamp":3716.210368}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3719.776843}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3721.308829}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3729.178083}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3730.281474}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3738.970524}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3740.601417}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3747.451136}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3749.081195}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3756.953992}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3758.415925}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3765.805491}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":3766.968569}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3774.891886}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3776.348976}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3784.124741}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3785.444122}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3792.963948}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3794.267808}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3802.423887}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3804.55973}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3811.925597}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3813.243364}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3820.498397}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3821.828455}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3838.5515}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3840.479582}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3842.736207}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3844.825539}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3851.709581}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3854.338395}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3859.106698}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3861.253115}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3871.127587}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3873.699474}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3881.865553}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3883.592592}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3890.703458}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3893.331751}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3900.332616}
+{"level":"info","message":"IMU Data: 178.13232116","timestamp":3903.293984}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3910.821362}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3912.333817}
+{"level":"info","message":"***reachClient***","timestamp":3914.212419}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3919.850257}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3921.402504}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3928.942174}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3930.713015}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3936.757522}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3938.398936}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3947.290331}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3950.088937}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3956.133653}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3957.416992}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3964.597493}
+{"level":"info","message":"IMU Data: 178.15238973","timestamp":3965.793124}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3973.61592}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3974.725508}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3983.83055}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3985.154827}
+{"level":"info","message":"***python_proc.stdout***","timestamp":3993.92044}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":3995.73998}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4002.23553}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4003.47814}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4011.551771}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4013.266206}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4021.1077}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4022.493071}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4031.254569}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4033.925988}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4043.66473}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4056.650362}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4059.9097}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4064.560242}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4066.714262}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4068.905731}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4071.796682}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4072.821426}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4081.402819}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4082.595116}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4090.352496}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4091.319375}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4099.226599}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4100.24952}
+{"level":"info","message":"***reachClient***","timestamp":4101.729787}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4109.386541}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4110.454358}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4118.920491}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4119.89362}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4128.354649}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4129.472727}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4138.052245}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4139.065635}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4147.501767}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4148.6287}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4156.420819}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4157.389573}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4165.534558}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4166.478781}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4175.33679}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4176.524348}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4184.361728}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4185.256263}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4193.089684}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4194.088907}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4203.0215}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4204.041297}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4212.858993}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4214.007071}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4222.286797}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4223.292583}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4231.890226}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4232.812522}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4240.846725}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4241.685531}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4249.410983}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4250.254633}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4258.544931}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4259.493894}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4267.161325}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4268.331174}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4276.226158}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4277.076943}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4284.907864}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4285.725629}
+{"level":"info","message":"***reachClient***","timestamp":4290.406692}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4293.914989}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4294.798014}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4302.708675}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4303.472324}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4311.340902}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4312.154968}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4320.041463}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4320.836362}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4329.585413}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4331.280733}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4339.40978}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4340.45291}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4348.206748}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4349.285034}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4356.664599}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4357.564447}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4365.143231}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4365.974485}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4374.008793}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4382.516175}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4383.778733}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4384.470664}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4391.539029}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4392.63518}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4400.219433}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4401.908243}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4409.033068}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4409.857238}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4418.696497}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4420.085306}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4427.001952}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4428.577219}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4436.555537}
+{"level":"info","message":"IMU Data: 178.4518423","timestamp":4437.899502}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4444.141822}
+{"level":"info","message":"IMU Data: 178.46016171","timestamp":4445.362713}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4453.200144}
+{"level":"info","message":"IMU Data: 178.46016171","timestamp":4454.631401}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4462.31003}
+{"level":"info","message":"IMU Data: 178.46016171","timestamp":4463.324149}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4471.668562}
+{"level":"info","message":"IMU Data: 178.46016171","timestamp":4472.670025}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4480.913292}
+{"level":"info","message":"IMU Data: 178.46016171","timestamp":4482.012776}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4491.420476}
+{"level":"info","message":"IMU Data: 178.46016171","timestamp":4492.494387}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4501.253646}
+{"level":"info","message":"IMU Data: 178.46016171","timestamp":4503.04006}
+{"level":"info","message":"***reachClient***","timestamp":4504.824495}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4507.838155}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4508.913472}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4516.582309}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4517.557939}
+{"level":"info","message":"ArduinoMessage: Bytes Switched Clearing Buffer\r","timestamp":4521.319415}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4525.581934}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4526.576782}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4534.45687}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4536.560734}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4543.23665}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4544.195353}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4553.002112}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4555.000975}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4561.290014}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4562.917261}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4570.474327}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4572.311471}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4579.524733}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4580.61979}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4587.798261}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4588.895453}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4606.996526}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4609.425703}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4617.766627}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4620.221638}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4628.808292}
+{"level":"info","message":"IMU Data: 178.14240963","timestamp":4630.000641}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4639.398913}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4641.728612}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4648.375465}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4649.735419}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4658.252698}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4670.185877}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4678.079091}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4679.799515}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4688.722837}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4691.44535}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4701.754928}
+{"level":"info","message":"IMU Data: 177.82131992","timestamp":4703.139257}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4711.326274}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4712.503206}
+{"level":"info","message":"***reachClient***","timestamp":4715.970566}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4721.385174}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4722.557732}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4730.797457}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4731.966785}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4741.263442}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4742.203395}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4751.297759}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4752.434171}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4767.554188}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4769.53878}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4774.308281}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4775.277661}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4783.899783}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4784.968747}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4792.990137}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4793.778631}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4803.124663}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4804.135918}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4812.648457}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4813.768149}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4823.142671}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4824.170645}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4832.393703}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4833.326416}
+{"level":"info","message":"***get_waypoint***","timestamp":4836.600181}
+{"latitude":33.9077992,"longitude":-117.88823026,"level":"info","message":"getting next waypoint","timestamp":4842.2088}
+{"level":"info","message":"get_waypoint adjusted Target Heading:348.43408275999064","timestamp":4868.549233}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4872.626231}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4873.689309}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4875.349421}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4876.507291}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4885.011184}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4886.108741}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4896.712852}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4898.440308}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4909.241607}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4910.289268}
+{"level":"info","message":"***reachClient***","timestamp":4913.192354}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4919.605509}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4920.903744}
+{"level":"info","message":"***turn_timer***","timestamp":4924.365218}
+{"level":"info","message":"***calc_heading_delta***","timestamp":4927.04497}
+{"level":"info","message":"IMU Heading validified","timestamp":4928.838572}
+{"level":"info","message":"Current Heading: 177.83308532","timestamp":4930.850612}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":4932.196869}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":4935.36105}
+{"level":"info","message":"Turning right","timestamp":4937.439445}
+{"level":"info","message":"Y: 70","timestamp":4940.062009}
+{"level":"info","message":"x: -70","timestamp":4945.385106}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":4946.912873}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4948.616579}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4949.511948}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4959.308086}
+{"level":"info","message":"IMU Data: 177.83308532","timestamp":4960.339029}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4969.816416}
+{"level":"info","message":"IMU Data: 179.68861296","timestamp":4972.898409}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":4976.733583}
+{"level":"info","message":"***python_proc.stdout***","timestamp":4980.973654}
+{"level":"info","message":"IMU Data: 179.68861296","timestamp":4982.168347}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5000.018012}
+{"level":"info","message":"IMU Data: 179.68861296","timestamp":5001.063642}
+{"level":"info","message":"***turn_timer***","timestamp":5002.729431}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5003.6923}
+{"level":"info","message":"IMU Heading validified","timestamp":5004.769336}
+{"level":"info","message":"Current Heading: 179.68861296","timestamp":5005.60085}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5006.382052}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5008.718104}
+{"level":"info","message":"Turning right","timestamp":5009.749828}
+{"level":"info","message":"Y: 70","timestamp":5010.521967}
+{"level":"info","message":"x: -70","timestamp":5011.574003}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5012.553226}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5013.957347}
+{"level":"info","message":"IMU Data: 179.68861296","timestamp":5014.770945}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5015.9322}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5026.963969}
+{"level":"info","message":"IMU Data: 179.68861296","timestamp":5027.917828}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5033.887386}
+{"level":"info","message":"IMU Data: 180","timestamp":5034.843797}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5042.107997}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5046.554684}
+{"level":"info","message":"IMU Data: 180","timestamp":5047.787398}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5058.879324}
+{"level":"info","message":"IMU Data: 180","timestamp":5060.217871}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5062.479809}
+{"level":"info","message":"***turn_timer***","timestamp":5064.077993}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5065.051435}
+{"level":"info","message":"IMU Heading validified","timestamp":5065.958158}
+{"level":"info","message":"Current Heading: 180","timestamp":5066.842902}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5067.854156}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5068.771192}
+{"level":"info","message":"Turning right","timestamp":5069.796092}
+{"level":"info","message":"Y: 70","timestamp":5070.826253}
+{"level":"info","message":"x: -70","timestamp":5071.840633}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5072.785585}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5075.05096}
+{"level":"info","message":"IMU Data: 180","timestamp":5076.033621}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5084.27569}
+{"level":"info","message":"IMU Data: 180","timestamp":5085.69528}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5096.593611}
+{"level":"info","message":"IMU Data: 180","timestamp":5097.772366}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5103.538695}
+{"level":"info","message":"***reachClient***","timestamp":5105.066983}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5107.349806}
+{"level":"info","message":"IMU Data: 180","timestamp":5108.436061}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5117.10058}
+{"level":"info","message":"IMU Data: 180","timestamp":5118.52819}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5123.364515}
+{"level":"info","message":"***turn_timer***","timestamp":5124.530353}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5125.2727}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5126.021089}
+{"level":"info","message":"Current Heading: 180","timestamp":5126.715467}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5127.505107}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5128.612299}
+{"level":"info","message":"Turning right","timestamp":5129.595637}
+{"level":"info","message":"Y: 70","timestamp":5130.373505}
+{"level":"info","message":"x: -70","timestamp":5131.247832}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5132.031117}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5133.961074}
+{"level":"info","message":"IMU Data: 180","timestamp":5134.769827}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5142.226736}
+{"level":"info","message":"IMU Data: 180","timestamp":5143.153199}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5153.563403}
+{"level":"info","message":"IMU Data: 180","timestamp":5154.548095}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5161.200469}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5165.136477}
+{"level":"info","message":"IMU Data: 180","timestamp":5166.248565}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5176.342153}
+{"level":"info","message":"IMU Data: 180","timestamp":5177.362001}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5180.67811}
+{"level":"info","message":"***turn_timer***","timestamp":5183.349581}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5184.175835}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5184.98688}
+{"level":"info","message":"Current Heading: 180","timestamp":5185.91277}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5186.788399}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5187.541788}
+{"level":"info","message":"Turning right","timestamp":5188.432521}
+{"level":"info","message":"Y: 70","timestamp":5189.070805}
+{"level":"info","message":"x: -70","timestamp":5189.793569}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5190.583624}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5192.550925}
+{"level":"info","message":"IMU Data: 180","timestamp":5193.357179}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5198.024336}
+{"level":"info","message":"IMU Data: 180","timestamp":5199.024288}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5208.248757}
+{"level":"info","message":"IMU Data: 180","timestamp":5209.141053}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5217.410622}
+{"level":"info","message":"IMU Data: 180","timestamp":5218.724274}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5222.269759}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5230.808861}
+{"level":"info","message":"IMU Data: 180","timestamp":5231.788449}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5241.406305}
+{"level":"info","message":"IMU Data: 180","timestamp":5242.528914}
+{"level":"info","message":"***turn_timer***","timestamp":5243.539492}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5244.411058}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5245.408146}
+{"level":"info","message":"Current Heading: 180","timestamp":5246.291796}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5247.095081}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5248.081179}
+{"level":"info","message":"Turning right","timestamp":5248.943319}
+{"level":"info","message":"Y: 70","timestamp":5249.703583}
+{"level":"info","message":"x: -70","timestamp":5250.598014}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5251.541143}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5253.867716}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5255.460797}
+{"level":"info","message":"IMU Data: 180","timestamp":5256.418561}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5268.558565}
+{"level":"info","message":"IMU Data: 180","timestamp":5269.995967}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5279.388823}
+{"level":"info","message":"IMU Data: 180","timestamp":5280.452317}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5282.282534}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5292.04112}
+{"level":"info","message":"IMU Data: 180","timestamp":5293.018885}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5300.47569}
+{"level":"info","message":"***reachClient***","timestamp":5302.983879}
+{"level":"info","message":"***turn_timer***","timestamp":5304.303937}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5305.142534}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5305.923736}
+{"level":"info","message":"Current Heading: 180","timestamp":5306.692854}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5307.444003}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5308.454216}
+{"level":"info","message":"Turning right","timestamp":5309.275001}
+{"level":"info","message":"Y: 70","timestamp":5309.990838}
+{"level":"info","message":"x: -70","timestamp":5310.965374}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5311.784075}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5313.170123}
+{"level":"info","message":"IMU Data: 180","timestamp":5313.947106}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5326.225808}
+{"level":"info","message":"IMU Data: 180","timestamp":5327.246386}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5338.833574}
+{"level":"info","message":"IMU Data: 180","timestamp":5339.816964}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5341.755306}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5348.222419}
+{"level":"info","message":"IMU Data: 180","timestamp":5349.203049}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5360.149297}
+{"level":"info","message":"IMU Data: 180","timestamp":5361.16477}
+{"level":"info","message":"***turn_timer***","timestamp":5362.349515}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5363.247332}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5364.016658}
+{"level":"info","message":"Current Heading: 180","timestamp":5364.735411}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5365.425415}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5366.136147}
+{"level":"info","message":"Turning right","timestamp":5366.878182}
+{"level":"info","message":"Y: 70","timestamp":5367.56157}
+{"level":"info","message":"x: -70","timestamp":5368.763919}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5369.897623}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5371.336327}
+{"level":"info","message":"IMU Data: 182.84661692","timestamp":5372.217217}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5374.110246}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5383.107058}
+{"level":"info","message":"IMU Data: 182.84661692","timestamp":5384.107323}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5394.341641}
+{"level":"info","message":"IMU Data: 182.84661692","timestamp":5395.320656}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5409.853535}
+{"level":"info","message":"IMU Data: 182.84661692","timestamp":5411.526615}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5413.089331}
+{"level":"info","message":"***turn_timer***","timestamp":5435.825997}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5437.212931}
+{"level":"info","message":"IMU Heading validified","timestamp":5438.556114}
+{"level":"info","message":"Current Heading: 182.84661692","timestamp":5439.863568}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5441.169563}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5442.342538}
+{"level":"info","message":"Turning right","timestamp":5443.510928}
+{"level":"info","message":"Y: 70","timestamp":5444.662652}
+{"level":"info","message":"x: -70","timestamp":5446.008284}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5447.258185}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5449.430799}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5451.853154}
+{"level":"info","message":"IMU Data: 184.10811218","timestamp":5453.190191}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5455.911818}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":5457.292762}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5467.329579}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":5469.273442}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5479.256925}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":5480.538858}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5483.787988}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5493.979753}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":5495.210384}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5498.035501}
+{"level":"info","message":"***turn_timer***","timestamp":5499.646863}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5500.756659}
+{"level":"info","message":"IMU Heading validified","timestamp":5501.768279}
+{"level":"info","message":"Current Heading: 184.06336599","timestamp":5502.897086}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5504.036674}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5514.13271}
+{"level":"info","message":"Turning right","timestamp":5515.369174}
+{"level":"info","message":"Y: 70","timestamp":5516.315689}
+{"level":"info","message":"x: -70","timestamp":5517.563195}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5518.667523}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5520.630344}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5521.557588}
+{"level":"info","message":"***reachClient***","timestamp":5522.82676}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5524.675206}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5525.551617}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5531.619874}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5532.848265}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5544.337588}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5545.616709}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5550.538398}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5555.616807}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5556.96124}
+{"level":"info","message":"***turn_timer***","timestamp":5569.788434}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5571.152815}
+{"level":"info","message":"IMU Heading validified","timestamp":5572.257977}
+{"level":"info","message":"Current Heading: 183.75172907","timestamp":5575.134813}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5576.388048}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5577.3855}
+{"level":"info","message":"Turning right","timestamp":5578.610193}
+{"level":"info","message":"Y: 70","timestamp":5579.583271}
+{"level":"info","message":"x: -70","timestamp":5580.612182}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5581.754791}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5583.921676}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5584.957983}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5587.042003}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5588.472738}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5589.498733}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5596.604911}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5597.397623}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5606.009433}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5607.093136}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5611.502375}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5620.994033}
+{"level":"info","message":"IMU Data: 183.75172907","timestamp":5623.357117}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5631.493665}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5632.526742}
+{"level":"info","message":"***turn_timer***","timestamp":5634.899982}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5636.089571}
+{"level":"info","message":"IMU Heading validified","timestamp":5637.25067}
+{"level":"info","message":"Current Heading: 184.37476228","timestamp":5638.204581}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5639.000522}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5639.76563}
+{"level":"info","message":"Turning right","timestamp":5640.89652}
+{"level":"info","message":"Y: 70","timestamp":5641.722618}
+{"level":"info","message":"x: -70","timestamp":5642.633768}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5643.59372}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5656.714405}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5658.243735}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5660.744684}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5666.707159}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5670.466604}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5673.362815}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5674.397195}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5679.269769}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5683.298277}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5684.337397}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5695.085883}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5696.710422}
+{"level":"info","message":"***turn_timer***","timestamp":5698.367357}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5699.772311}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5701.001848}
+{"level":"info","message":"Current Heading: 184.37476228","timestamp":5702.484511}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5704.106654}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5705.265149}
+{"level":"info","message":"Turning right","timestamp":5706.8925}
+{"level":"info","message":"Y: 70","timestamp":5708.281673}
+{"level":"info","message":"x: -70","timestamp":5709.561731}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5710.929081}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5714.120554}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5715.245767}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5716.634315}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5718.977243}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5720.196519}
+{"level":"info","message":"***reachClient***","timestamp":5723.312575}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5726.251182}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5728.294213}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5742.923342}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5747.098778}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5748.719983}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5770.255967}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5772.06608}
+{"level":"info","message":"***turn_timer***","timestamp":5774.374476}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5775.834639}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5777.239177}
+{"level":"info","message":"Current Heading: 184.37476228","timestamp":5778.710746}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5780.089763}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5781.395029}
+{"level":"info","message":"Turning right","timestamp":5782.612066}
+{"level":"info","message":"Y: 70","timestamp":5783.785248}
+{"level":"info","message":"x: -70","timestamp":5786.07578}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5788.326207}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5791.162157}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5793.709721}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5797.187966}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5806.603634}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5808.290986}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5816.088209}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5817.387798}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5822.770844}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5829.967335}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5831.46854}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5836.627105}
+{"level":"info","message":"***turn_timer***","timestamp":5841.233428}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5842.684529}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5843.720835}
+{"level":"info","message":"Current Heading: 184.37476228","timestamp":5844.954956}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5846.89236}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5848.82914}
+{"level":"info","message":"Turning right","timestamp":5850.364303}
+{"level":"info","message":"Y: 70","timestamp":5851.616445}
+{"level":"info","message":"x: -70","timestamp":5853.335775}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5855.197451}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5857.247512}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5859.617054}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5866.204636}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5867.835217}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5875.793274}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5876.996978}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5885.849779}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5888.483593}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":5889.927506}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5896.731183}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":5898.333482}
+{"level":"info","message":"***reachClient***","timestamp":5903.153347}
+{"level":"info","message":"***turn_timer***","timestamp":5906.614197}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5908.352903}
+{"level":"info","message":"IMU Heading validified","timestamp":5912.479588}
+{"level":"info","message":"Current Heading: 183.77228361","timestamp":5913.78199}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5915.176892}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5916.411637}
+{"level":"info","message":"Turning right","timestamp":5917.98904}
+{"level":"info","message":"Y: 70","timestamp":5920.023112}
+{"level":"info","message":"x: -70","timestamp":5921.59687}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5923.003386}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5925.071365}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":5928.552995}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5929.794563}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5938.038768}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":5939.531587}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5941.494357}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":5945.646355}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5949.869395}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":5951.24987}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":5955.635776}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5960.247411}
+{"level":"info","message":"IMU Data: 184.08561678","timestamp":5961.756324}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5971.821058}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":5972.697677}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":5974.036329}
+{"level":"info","message":"***turn_timer***","timestamp":5978.474109}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5979.794845}
+{"level":"info","message":"IMU Heading validified","timestamp":5980.823339}
+{"level":"info","message":"Current Heading: 184.06336599","timestamp":5981.771208}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":5982.59142}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5983.92653}
+{"level":"info","message":"Turning right","timestamp":5985.26862}
+{"level":"info","message":"Y: 70","timestamp":5986.532428}
+{"level":"info","message":"x: -70","timestamp":5988.000559}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":5988.974158}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5990.526613}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":5991.435054}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5993.457928}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":5994.287515}
+{"level":"info","message":"***python_proc.stdout***","timestamp":5999.598321}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":6000.782493}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6010.043942}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":6011.358114}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6019.269765}
+{"level":"info","message":"IMU Data: 184.06336599","timestamp":6020.805658}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6022.546499}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6028.351942}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6029.536427}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6038.277196}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6039.898037}
+{"level":"info","message":"***turn_timer***","timestamp":6041.854087}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6043.432324}
+{"level":"info","message":"IMU Heading validified","timestamp":6044.514829}
+{"level":"info","message":"Current Heading: 183.77228361","timestamp":6045.322228}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6046.059315}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6047.45703}
+{"level":"info","message":"Turning right","timestamp":6048.889588}
+{"level":"info","message":"Y: 70","timestamp":6050.163136}
+{"level":"info","message":"x: -70","timestamp":6051.143193}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6052.315854}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6053.722579}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6054.415239}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6057.532024}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6059.425678}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6060.843549}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6067.884467}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6070.202447}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6077.427636}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6078.768267}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6082.104168}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6086.988461}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6088.903314}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6096.070013}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6097.484499}
+{"level":"info","message":"***reachClient***","timestamp":6101.532017}
+{"level":"info","message":"***turn_timer***","timestamp":6103.602808}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6105.477348}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6107.029647}
+{"level":"info","message":"Current Heading: 183.77228361","timestamp":6108.67455}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6109.836847}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6110.957842}
+{"level":"info","message":"Turning right","timestamp":6112.116284}
+{"level":"info","message":"Y: 70","timestamp":6113.137383}
+{"level":"info","message":"x: -70","timestamp":6114.30468}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6115.717811}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6118.345636}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6119.572933}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6121.29091}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6126.932498}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6128.456307}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6136.605928}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6138.585885}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6143.898305}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6147.176654}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6148.99161}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6157.836546}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6160.210463}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6165.947156}
+{"level":"info","message":"***turn_timer***","timestamp":6168.614877}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6170.786866}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6172.77724}
+{"level":"info","message":"Current Heading: 183.77228361","timestamp":6174.476518}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6176.108036}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6177.986951}
+{"level":"info","message":"Turning right","timestamp":6179.054248}
+{"level":"info","message":"Y: 70","timestamp":6179.982377}
+{"level":"info","message":"x: -70","timestamp":6181.158997}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6182.231241}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6184.906879}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6186.229228}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6188.012414}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6189.029606}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6195.87271}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6196.978653}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6205.191399}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6206.394998}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6214.536962}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6216.654576}
+{"level":"info","message":"IMU Data: 183.77228361","timestamp":6218.836253}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6225.414616}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":6227.441865}
+{"level":"info","message":"***turn_timer***","timestamp":6234.494345}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6237.163212}
+{"level":"info","message":"IMU Heading validified","timestamp":6238.980199}
+{"level":"info","message":"Current Heading: 184.37476228","timestamp":6240.644009}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6243.862878}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6246.800339}
+{"level":"info","message":"Turning right","timestamp":6249.251965}
+{"level":"info","message":"Y: 70","timestamp":6252.934065}
+{"level":"info","message":"x: -70","timestamp":6255.261941}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6258.416695}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6262.057649}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":6264.931256}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6269.048827}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6275.514794}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":6278.300432}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6285.617913}
+{"level":"info","message":"IMU Data: 184.37476228","timestamp":6287.822142}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6290.349133}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6295.592646}
+{"level":"info","message":"IMU Data: 184.01958249","timestamp":6297.06307}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6307.933536}
+{"level":"info","message":"IMU Data: 184.01958249","timestamp":6311.256781}
+{"level":"info","message":"***turn_timer***","timestamp":6314.223357}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6316.548159}
+{"level":"info","message":"IMU Heading validified","timestamp":6319.668642}
+{"level":"info","message":"Current Heading: 184.01958249","timestamp":6321.17667}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6323.234856}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6324.892312}
+{"level":"info","message":"Turning right","timestamp":6326.451069}
+{"level":"info","message":"Y: 70","timestamp":6328.576912}
+{"level":"info","message":"x: -70","timestamp":6330.719422}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6332.376252}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6335.051004}
+{"level":"info","message":"IMU Data: 184.01958249","timestamp":6336.671689}
+{"level":"info","message":"***reachClient***","timestamp":6339.389566}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6342.037182}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6344.408443}
+{"level":"info","message":"IMU Data: 184.01958249","timestamp":6346.082826}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6352.210875}
+{"level":"info","message":"IMU Data: 184.01958249","timestamp":6353.99932}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6361.139301}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6364.325878}
+{"level":"info","message":"IMU Data: 184.01958249","timestamp":6366.330106}
+{"level":"info","message":"***turn_timer***","timestamp":6397.397384}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6399.338539}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6400.676461}
+{"level":"info","message":"Current Heading: 184.01958249","timestamp":6405.566275}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6407.038157}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6408.914832}
+{"level":"info","message":"Turning right","timestamp":6410.237026}
+{"level":"info","message":"Y: 70","timestamp":6411.420313}
+{"level":"info","message":"x: -70","timestamp":6412.948913}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6414.386628}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6416.095438}
+{"level":"info","message":"IMU Data: 184.01958249","timestamp":6417.110339}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6418.782742}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6421.505046}
+{"level":"info","message":"IMU Data: 184.01958249","timestamp":6422.897136}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6430.4529}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6431.815615}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6439.637942}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6440.813052}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6447.057299}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6448.974964}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6450.246116}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6457.839275}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6459.009437}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6462.860965}
+{"level":"info","message":"***turn_timer***","timestamp":6465.675353}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6466.843275}
+{"level":"info","message":"IMU Heading validified","timestamp":6467.937811}
+{"level":"info","message":"Current Heading: 184.66054548","timestamp":6468.834118}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6469.565163}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6470.211363}
+{"level":"info","message":"Turning right","timestamp":6470.856106}
+{"level":"info","message":"Y: 70","timestamp":6471.465484}
+{"level":"info","message":"x: -70","timestamp":6472.241581}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6472.974032}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6474.560915}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6475.658315}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6477.525824}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6478.440359}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6484.968098}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6486.396906}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6493.765846}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6494.669809}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6502.712294}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6504.276051}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6506.177674}
+{"level":"info","message":"***reachClient***","timestamp":6510.440454}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6512.816142}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6513.710157}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6522.050508}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6523.518691}
+{"level":"info","message":"***turn_timer***","timestamp":6524.747187}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6525.632295}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6526.455632}
+{"level":"info","message":"Current Heading: 184.66054548","timestamp":6527.397199}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6528.319703}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6529.089915}
+{"level":"info","message":"Turning right","timestamp":6529.86846}
+{"level":"info","message":"Y: 70","timestamp":6530.645651}
+{"level":"info","message":"x: -70","timestamp":6531.621489}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6532.396024}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6533.597592}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6534.273845}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6536.449376}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6540.077882}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6540.948146}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6550.253554}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6551.625852}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6561.02553}
+{"level":"info","message":"IMU Data: 184.68589984","timestamp":6562.653402}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6566.533472}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6571.609745}
+{"level":"info","message":"IMU Data: 184.68589984","timestamp":6573.753401}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6582.78089}
+{"level":"info","message":"***turn_timer***","timestamp":6584.724128}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6586.342834}
+{"level":"info","message":"IMU Heading validified","timestamp":6587.869039}
+{"level":"info","message":"Current Heading: 184.68589984","timestamp":6589.509202}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6590.815511}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6592.104214}
+{"level":"info","message":"Turning right","timestamp":6593.69594}
+{"level":"info","message":"Y: 70","timestamp":6594.897561}
+{"level":"info","message":"x: -70","timestamp":6596.372932}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6597.828772}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6600.576128}
+{"level":"info","message":"IMU Data: 184.68589984","timestamp":6602.394835}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6604.732085}
+{"level":"info","message":"IMU Data: 184.68589984","timestamp":6606.184487}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6623.334983}
+{"level":"info","message":"IMU Data: 184.68589984","timestamp":6624.99723}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6631.372624}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6636.34124}
+{"level":"info","message":"IMU Data: 184.68589984","timestamp":6639.191722}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6644.980603}
+{"level":"info","message":"IMU Data: 184.68589984","timestamp":6646.548058}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6648.802704}
+{"level":"info","message":"***turn_timer***","timestamp":6650.992818}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6654.316375}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6655.52763}
+{"level":"info","message":"Current Heading: 184.68589984","timestamp":6656.629354}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6657.511129}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6662.644017}
+{"level":"info","message":"Turning right","timestamp":6663.595063}
+{"level":"info","message":"Y: 70","timestamp":6664.4234}
+{"level":"info","message":"x: -70","timestamp":6666.068252}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6668.082063}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6670.644939}
+{"level":"info","message":"IMU Data: 184.68589984","timestamp":6672.195051}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6680.079931}
+{"level":"info","message":"IMU Data: 184.68589984","timestamp":6680.94556}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6694.738592}
+{"level":"info","message":"IMU Data: 184.63546343","timestamp":6695.916878}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6703.968634}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6709.044282}
+{"level":"info","message":"IMU Data: 184.63546343","timestamp":6711.299032}
+{"level":"info","message":"***reachClient***","timestamp":6714.099514}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6718.153178}
+{"level":"info","message":"IMU Data: 184.63546343","timestamp":6721.089858}
+{"level":"info","message":"***turn_timer***","timestamp":6723.744037}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6725.032064}
+{"level":"info","message":"IMU Heading validified","timestamp":6726.189465}
+{"level":"info","message":"Current Heading: 184.63546343","timestamp":6732.522098}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6733.691791}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6734.774713}
+{"level":"info","message":"Turning right","timestamp":6735.867843}
+{"level":"info","message":"Y: 70","timestamp":6736.677586}
+{"level":"info","message":"x: -70","timestamp":6737.455611}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6740.135519}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6741.42615}
+{"level":"info","message":"IMU Data: 184.63546343","timestamp":6742.081413}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6743.724389}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6751.914583}
+{"level":"info","message":"IMU Data: 184.63546343","timestamp":6753.335527}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6769.214663}
+{"level":"info","message":"IMU Data: 184.96974073","timestamp":6770.144875}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6771.655247}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6779.987212}
+{"level":"info","message":"IMU Data: 184.96974073","timestamp":6780.855601}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6790.301009}
+{"level":"info","message":"IMU Data: 184.96974073","timestamp":6791.181065}
+{"level":"info","message":"***turn_timer***","timestamp":6792.092788}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6792.776021}
+{"level":"info","message":"IMU Heading validified","timestamp":6793.435503}
+{"level":"info","message":"Current Heading: 184.96974073","timestamp":6794.154152}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6794.810874}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6795.39921}
+{"level":"info","message":"Turning right","timestamp":6796.154005}
+{"level":"info","message":"Y: 70","timestamp":6796.872914}
+{"level":"info","message":"x: -70","timestamp":6797.824325}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6798.696152}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6800.616577}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6803.553206}
+{"level":"info","message":"IMU Data: 184.96974073","timestamp":6804.321438}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6811.386054}
+{"level":"info","message":"IMU Data: 184.96974073","timestamp":6812.404652}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6821.284849}
+{"level":"info","message":"IMU Data: 184.66054548","timestamp":6822.197822}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6827.386909}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6831.315416}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6832.318806}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6841.234628}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6842.202289}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6849.173259}
+{"level":"info","message":"***turn_timer***","timestamp":6850.558786}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6851.600197}
+{"level":"info","message":"IMU Heading validified","timestamp":6853.548643}
+{"level":"info","message":"Current Heading: 184.71153095","timestamp":6854.284584}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6854.876722}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6855.512663}
+{"level":"info","message":"Turning right","timestamp":6856.110061}
+{"level":"info","message":"Y: 70","timestamp":6856.632251}
+{"level":"info","message":"x: -70","timestamp":6857.401005}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6858.258873}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6859.803776}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6860.528102}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6861.776129}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6862.385819}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6870.469763}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6871.293464}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6880.038557}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6880.8583}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6889.175213}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6890.642147}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6891.389286}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6901.078289}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6903.004391}
+{"level":"info","message":"***reachClient***","timestamp":6904.435544}
+{"level":"info","message":"***turn_timer***","timestamp":6908.833949}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6909.667807}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6910.447134}
+{"level":"info","message":"Current Heading: 184.71153095","timestamp":6911.102553}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6911.725317}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6912.382924}
+{"level":"info","message":"Turning right","timestamp":6912.995114}
+{"level":"info","message":"Y: 70","timestamp":6913.550169}
+{"level":"info","message":"x: -70","timestamp":6914.243922}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6914.930227}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6916.478411}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6917.101018}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6918.96936}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6921.180152}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6926.065278}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6931.219989}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6932.12166}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6940.667324}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6941.99707}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":6946.425424}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6951.135133}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6953.229309}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6960.007413}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6960.815281}
+{"level":"info","message":"***turn_timer***","timestamp":6965.838534}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6966.655881}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6967.349061}
+{"level":"info","message":"Current Heading: 184.71153095","timestamp":6969.907667}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":6970.885171}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6971.666529}
+{"level":"info","message":"Turning right","timestamp":6972.406741}
+{"level":"info","message":"Y: 70","timestamp":6973.202057}
+{"level":"info","message":"x: -70","timestamp":6974.09404}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":6975.033784}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6976.76848}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6977.473743}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":6978.815156}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6980.406569}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6981.099072}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6989.647393}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":6990.539012}
+{"level":"info","message":"***python_proc.stdout***","timestamp":6999.592386}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":7000.381713}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7008.243989}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7009.777902}
+{"level":"info","message":"IMU Data: 184.71153095","timestamp":7010.572228}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7020.279148}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7021.265246}
+{"level":"info","message":"***turn_timer***","timestamp":7026.300947}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7027.24668}
+{"level":"info","message":"IMU Heading validified","timestamp":7028.290279}
+{"level":"info","message":"Current Heading: 184.39870535","timestamp":7029.188408}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7030.114662}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7030.890603}
+{"level":"info","message":"Turning right","timestamp":7031.664565}
+{"level":"info","message":"Y: 70","timestamp":7032.355141}
+{"level":"info","message":"x: -70","timestamp":7033.131655}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7033.893898}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7036.930735}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7037.819958}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7039.331215}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7040.884295}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7041.662632}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7049.814961}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7050.6646}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7059.058857}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7059.965007}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7065.836232}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7070.020574}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7070.916724}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7078.199622}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7079.109731}
+{"level":"info","message":"***turn_timer***","timestamp":7086.228565}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7087.247112}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7088.166439}
+{"level":"info","message":"Current Heading: 184.39870535","timestamp":7088.885088}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7089.542591}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7090.189781}
+{"level":"info","message":"Turning right","timestamp":7090.829159}
+{"level":"info","message":"Y: 70","timestamp":7091.47135}
+{"level":"info","message":"x: -70","timestamp":7092.237551}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7092.978648}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7094.422092}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7095.135117}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7096.571738}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7097.88716}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7098.669977}
+{"level":"info","message":"***reachClient***","timestamp":7101.764209}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7106.8809}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7107.906113}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7116.569694}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7117.893138}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7122.346596}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7131.017833}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7131.984192}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7142.406531}
+{"level":"info","message":"IMU Data: 184.39870535","timestamp":7143.467526}
+{"level":"info","message":"***turn_timer***","timestamp":7144.64649}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7145.726182}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7146.641447}
+{"level":"info","message":"Current Heading: 184.39870535","timestamp":7147.558847}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7148.629372}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7149.576304}
+{"level":"info","message":"Turning right","timestamp":7151.341468}
+{"level":"info","message":"Y: 70","timestamp":7152.849652}
+{"level":"info","message":"x: -70","timestamp":7153.89622}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7154.854453}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7156.341856}
+{"level":"info","message":"IMU Data: 185.3363201","timestamp":7157.238318}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7159.281973}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7161.724693}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7162.888188}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7170.499942}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7171.654218}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7179.384826}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7180.434206}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7183.379324}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7189.178881}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7190.262116}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7198.037724}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7199.288199}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7205.157549}
+{"level":"info","message":"***turn_timer***","timestamp":7207.332923}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7208.549595}
+{"level":"info","message":"IMU Heading validified","timestamp":7209.456006}
+{"level":"info","message":"Current Heading: 185.30732685","timestamp":7210.206218}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7211.046794}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7211.946069}
+{"level":"info","message":"Turning right","timestamp":7212.882063}
+{"level":"info","message":"Y: 70","timestamp":7213.621285}
+{"level":"info","message":"x: -70","timestamp":7214.609415}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7216.45135}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7219.488343}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7220.524286}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7225.528788}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7226.576814}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7235.372375}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7237.498218}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7246.40055}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7249.528846}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7251.926669}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7257.480184}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7259.265766}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7266.939811}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7270.09118}
+{"level":"info","message":"***turn_timer***","timestamp":7280.330446}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7282.228371}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7284.185567}
+{"level":"info","message":"Current Heading: 185.30732685","timestamp":7286.097972}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7288.218815}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7289.804083}
+{"level":"info","message":"Turning right","timestamp":7291.466122}
+{"level":"info","message":"Y: 70","timestamp":7292.700711}
+{"level":"info","message":"x: -70","timestamp":7294.134311}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7296.825938}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7300.746893}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7302.806799}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7305.844417}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7308.377241}
+{"level":"info","message":"IMU Data: 185.58724396","timestamp":7309.710164}
+{"level":"info","message":"***reachClient***","timestamp":7312.368353}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7317.056656}
+{"level":"info","message":"IMU Data: 185.58724396","timestamp":7319.943023}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7323.969708}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7326.580345}
+{"level":"info","message":"IMU Data: 185.58724396","timestamp":7328.050456}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7335.250073}
+{"level":"info","message":"IMU Data: 185.58724396","timestamp":7336.738413}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7343.837977}
+{"level":"info","message":"IMU Data: 185.58724396","timestamp":7345.024805}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7348.841906}
+{"level":"info","message":"***turn_timer***","timestamp":7350.302225}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7351.404678}
+{"level":"info","message":"IMU Heading validified","timestamp":7353.144582}
+{"level":"info","message":"Current Heading: 185.58724396","timestamp":7354.206097}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7355.208289}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7356.042876}
+{"level":"info","message":"Turning right","timestamp":7356.793922}
+{"level":"info","message":"Y: 70","timestamp":7357.462987}
+{"level":"info","message":"x: -70","timestamp":7358.539815}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7359.372371}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7361.566912}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7362.368895}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7370.399296}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7371.79722}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7379.450015}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7380.937939}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7390.436576}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7392.524763}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7395.297119}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7401.068135}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7403.029498}
+{"level":"info","message":"***turn_timer***","timestamp":7409.968488}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7411.372714}
+{"level":"info","message":"IMU Heading validified","timestamp":7412.49324}
+{"level":"info","message":"Current Heading: 185.30732685","timestamp":7413.824548}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7415.437159}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7416.524612}
+{"level":"info","message":"Turning right","timestamp":7417.558836}
+{"level":"info","message":"Y: 70","timestamp":7419.945149}
+{"level":"info","message":"x: -70","timestamp":7421.30703}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7422.40516}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7425.196996}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7427.208151}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7429.407432}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7431.472493}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7433.134741}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7439.568885}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7440.925193}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7448.469759}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7449.678358}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7454.593068}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7457.103757}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7458.774806}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7466.541665}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7469.238135}
+{"level":"info","message":"***turn_timer***","timestamp":7474.895401}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7478.054634}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7478.876148}
+{"level":"info","message":"Current Heading: 185.30732685","timestamp":7479.565318}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7480.262821}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7481.069544}
+{"level":"info","message":"Turning right","timestamp":7481.951423}
+{"level":"info","message":"Y: 70","timestamp":7485.405085}
+{"level":"info","message":"x: -70","timestamp":7486.565871}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7487.761554}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7489.361509}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7491.613811}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7492.578138}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7494.268302}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7495.307422}
+{"level":"info","message":"***reachClient***","timestamp":7502.254277}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7503.581626}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7504.315119}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7517.031167}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7518.485601}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7520.591653}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7526.061157}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7527.098974}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7538.197723}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7540.629505}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7541.871334}
+{"level":"info","message":"***turn_timer***","timestamp":7543.275975}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7545.745674}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7547.589224}
+{"level":"info","message":"Current Heading: 185.30732685","timestamp":7548.928345}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7550.053298}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7551.070386}
+{"level":"info","message":"Turning right","timestamp":7551.968151}
+{"level":"info","message":"Y: 70","timestamp":7552.676123}
+{"level":"info","message":"x: -70","timestamp":7554.37311}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7555.736814}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7561.097255}
+{"level":"info","message":"IMU Data: 185.30732685","timestamp":7562.415022}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7565.342275}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7566.344675}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7575.246956}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7576.61441}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7586.029036}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7587.299771}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7588.852227}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7595.842467}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7597.818674}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7605.545168}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7607.18955}
+{"level":"info","message":"***turn_timer***","timestamp":7609.156851}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7610.718108}
+{"level":"info","message":"IMU Heading validified","timestamp":7612.155667}
+{"level":"info","message":"Current Heading: 189.56328383","timestamp":7613.901092}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7615.265473}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7616.420895}
+{"level":"info","message":"Turning right","timestamp":7617.336628}
+{"level":"info","message":"Y: 70","timestamp":7620.02013}
+{"level":"info","message":"x: -70","timestamp":7621.84243}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7623.190613}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7625.196196}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7627.536883}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7630.388355}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7632.821387}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7635.027074}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7641.314811}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7644.112949}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7649.549693}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7650.862668}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7654.714769}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7658.970257}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7660.261461}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7667.95134}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7670.810624}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7672.64282}
+{"level":"info","message":"***turn_timer***","timestamp":7674.274077}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7676.006429}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7677.084351}
+{"level":"info","message":"Current Heading: 189.56328383","timestamp":7678.19696}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7679.193839}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7680.10551}
+{"level":"info","message":"Turning right","timestamp":7681.000931}
+{"level":"info","message":"Y: 70","timestamp":7681.872029}
+{"level":"info","message":"x: -70","timestamp":7682.908388}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7683.908288}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7689.355761}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7698.851221}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7700.950398}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7703.721348}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7706.485163}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7707.505584}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7712.722848}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7713.851863}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7716.454375}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7721.42195}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7722.547685}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7730.288553}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7731.356683}
+{"level":"info","message":"***reachClient***","timestamp":7745.476279}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7747.287017}
+{"level":"info","message":"IMU Data: 189.56328383","timestamp":7748.268115}
+{"level":"info","message":"***turn_timer***","timestamp":7749.254161}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7749.899894}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7750.413438}
+{"level":"info","message":"Current Heading: 189.56328383","timestamp":7750.89995}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7752.002039}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7752.645844}
+{"level":"info","message":"Turning right","timestamp":7753.340482}
+{"level":"info","message":"Y: 70","timestamp":7753.979756}
+{"level":"info","message":"x: -70","timestamp":7754.955281}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7755.961328}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7758.323057}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7760.08468}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7761.011507}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7772.861093}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7773.84417}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7782.449053}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7785.969538}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7789.43945}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7801.48461}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7803.130971}
+{"level":"info","message":"***turn_timer***","timestamp":7806.515727}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7807.535679}
+{"level":"info","message":"IMU Heading validified","timestamp":7808.461673}
+{"level":"info","message":"Current Heading: 192.83177904","timestamp":7809.313396}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7809.975951}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7810.570276}
+{"level":"info","message":"Turning right","timestamp":7811.261738}
+{"level":"info","message":"Y: 70","timestamp":7811.835282}
+{"level":"info","message":"x: -70","timestamp":7812.492889}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7813.135184}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7814.206074}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7815.950405}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7816.655513}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7821.213346}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7822.087309}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7830.201356}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7831.750634}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7838.857802}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7839.912755}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7842.914435}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7847.527582}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7848.691389}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7856.423352}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7857.503825}
+{"level":"info","message":"***turn_timer***","timestamp":7863.847136}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7864.887193}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7865.599383}
+{"level":"info","message":"Current Heading: 192.83177904","timestamp":7866.515065}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7867.298714}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7868.11351}
+{"level":"info","message":"Turning right","timestamp":7868.847367}
+{"level":"info","message":"Y: 70","timestamp":7869.56487}
+{"level":"info","message":"x: -70","timestamp":7870.417166}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7871.072377}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7872.788427}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7873.825671}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7874.45906}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7875.913858}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7876.486256}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7882.745139}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7883.496705}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7891.422367}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7892.79904}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7900.371522}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7901.317881}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7903.078358}
+{"level":"info","message":"***reachClient***","timestamp":7904.663469}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7909.231094}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7910.049327}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7917.923843}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7919.298432}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7921.028961}
+{"level":"info","message":"***turn_timer***","timestamp":7922.879699}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7923.621629}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7924.237257}
+{"level":"info","message":"Current Heading: 192.83177904","timestamp":7925.057886}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7925.988463}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7926.800185}
+{"level":"info","message":"Turning right","timestamp":7927.557481}
+{"level":"info","message":"Y: 70","timestamp":7928.39738}
+{"level":"info","message":"x: -70","timestamp":7929.404416}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7930.294629}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7932.092658}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7933.044954}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7935.843977}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7939.683734}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7946.391578}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7947.344446}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7953.762705}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7955.015784}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":7962.269255}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7963.707438}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7964.709005}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7971.431745}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7972.536437}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":7978.381464}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7980.171524}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7981.04533}
+{"level":"info","message":"***turn_timer***","timestamp":7982.472837}
+{"level":"info","message":"***calc_heading_delta***","timestamp":7983.247528}
+{"level":"info","message":"IMU Heading same as previous","timestamp":7984.165501}
+{"level":"info","message":"Current Heading: 192.83177904","timestamp":7984.943057}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":7985.742383}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":7986.875201}
+{"level":"info","message":"Turning right","timestamp":7987.903591}
+{"level":"info","message":"Y: 70","timestamp":7988.80047}
+{"level":"info","message":"x: -70","timestamp":7990.053341}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":7991.132408}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7992.776895}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7993.885806}
+{"level":"info","message":"***python_proc.stdout***","timestamp":7998.194993}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":7999.090049}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8006.946543}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":8008.158215}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8015.892991}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":8016.879349}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8019.698633}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8024.737615}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":8025.749807}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8033.832813}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":8035.011516}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8039.678673}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8042.536655}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":8043.575618}
+{"level":"info","message":"***turn_timer***","timestamp":8044.472705}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8045.344011}
+{"level":"info","message":"IMU Heading same as previous","timestamp":8046.049223}
+{"level":"info","message":"Current Heading: 192.83177904","timestamp":8046.734486}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8047.40824}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8048.509338}
+{"level":"info","message":"Turning right","timestamp":8049.257206}
+{"level":"info","message":"Y: 70","timestamp":8049.884918}
+{"level":"info","message":"x: -70","timestamp":8050.686067}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8051.547113}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8053.232173}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":8054.051499}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8060.467154}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":8061.527732}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8069.36433}
+{"level":"info","message":"IMU Data: 192.83177904","timestamp":8070.528658}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8078.178225}
+{"level":"info","message":"IMU Data: 197.86009407","timestamp":8079.274115}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8080.9873}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8087.304308}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8088.511553}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8095.816431}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8096.989613}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8100.992392}
+{"level":"info","message":"***turn_timer***","timestamp":8102.477138}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8103.566883}
+{"level":"info","message":"IMU Heading validified","timestamp":8104.402616}
+{"level":"info","message":"Current Heading: 198.53424817","timestamp":8105.303922}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8105.96179}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8106.574657}
+{"level":"info","message":"Turning right","timestamp":8107.172629}
+{"level":"info","message":"Y: 70","timestamp":8107.945497}
+{"level":"info","message":"x: -70","timestamp":8109.074565}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8110.102642}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8111.613639}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8112.290725}
+{"level":"info","message":"***reachClient***","timestamp":8113.171719}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8115.013654}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8115.715324}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8122.961295}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8123.903278}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8131.659564}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8132.748163}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8138.986889}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8140.729606}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8141.540287}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8159.041825}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8160.449644}
+{"level":"info","message":"***turn_timer***","timestamp":8161.827828}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8162.659498}
+{"level":"info","message":"IMU Heading same as previous","timestamp":8163.73018}
+{"level":"info","message":"Current Heading: 198.53424817","timestamp":8164.777529}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8165.673314}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8166.622381}
+{"level":"info","message":"Turning right","timestamp":8167.872074}
+{"level":"info","message":"Y: 70","timestamp":8168.779266}
+{"level":"info","message":"x: -70","timestamp":8169.904532}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8170.956932}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8172.615013}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8173.675018}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8175.328411}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8177.503421}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8178.893739}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8187.87701}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8190.13426}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8197.10924}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8199.211906}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8204.197397}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8206.798243}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8208.553251}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8216.047608}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8217.121832}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8220.330076}
+{"level":"info","message":"***turn_timer***","timestamp":8221.614613}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8222.316804}
+{"level":"info","message":"IMU Heading same as previous","timestamp":8222.963004}
+{"level":"info","message":"Current Heading: 198.53424817","timestamp":8223.641862}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8224.421292}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8225.047962}
+{"level":"info","message":"Turning right","timestamp":8225.699736}
+{"level":"info","message":"Y: 70","timestamp":8226.312968}
+{"level":"info","message":"x: -70","timestamp":8227.102971}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8227.977194}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8230.168402}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8230.949604}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8233.923732}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8234.766861}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8243.157993}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8244.365967}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8252.444702}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8253.463613}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8256.660555}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8261.390316}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8262.364904}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8271.143382}
+{"level":"info","message":"IMU Data: 198.53424817","timestamp":8273.291882}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8278.693208}
+{"level":"info","message":"***turn_timer***","timestamp":8281.468846}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8283.236823}
+{"level":"info","message":"IMU Heading same as previous","timestamp":8284.819434}
+{"level":"info","message":"Current Heading: 198.53424817","timestamp":8285.700584}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8286.42814}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8287.113716}
+{"level":"info","message":"Turning right","timestamp":8287.995855}
+{"level":"info","message":"Y: 70","timestamp":8288.954558}
+{"level":"info","message":"x: -70","timestamp":8290.043156}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8291.032536}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8293.370932}
+{"level":"info","message":"IMU Data: 202.44912452","timestamp":8294.350312}
+{"level":"info","message":"***reachClient***","timestamp":8297.94637}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8299.755389}
+{"level":"info","message":"IMU Data: 202.44912452","timestamp":8300.838466}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8307.781259}
+{"level":"info","message":"IMU Data: 202.44912452","timestamp":8309.172515}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8316.724373}
+{"level":"info","message":"IMU Data: 202.44912452","timestamp":8317.837555}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8323.222267}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8325.8028}
+{"level":"info","message":"IMU Data: 202.44912452","timestamp":8326.906867}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8334.738518}
+{"level":"info","message":"IMU Data: 202.44912452","timestamp":8335.997378}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8339.090048}
+{"level":"info","message":"***turn_timer***","timestamp":8341.853603}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8342.796732}
+{"level":"info","message":"IMU Heading validified","timestamp":8343.661163}
+{"level":"info","message":"Current Heading: 202.44912452","timestamp":8344.442052}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8345.182108}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8345.927944}
+{"level":"info","message":"Turning right","timestamp":8346.635083}
+{"level":"info","message":"Y: 70","timestamp":8347.315242}
+{"level":"info","message":"x: -70","timestamp":8348.515508}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8349.371554}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8351.241823}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8352.256671}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8353.790116}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8354.578817}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8362.354426}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8363.197138}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8371.463791}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8372.391035}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8379.546849}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8386.138598}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8387.928867}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8396.233488}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8398.053548}
+{"level":"info","message":"***turn_timer***","timestamp":8399.967672}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8400.73903}
+{"level":"info","message":"IMU Heading validified","timestamp":8401.573773}
+{"level":"info","message":"Current Heading: 204.02650658","timestamp":8402.759195}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8403.779096}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8404.531443}
+{"level":"info","message":"Turning right","timestamp":8405.339832}
+{"level":"info","message":"Y: 70","timestamp":8406.01796}
+{"level":"info","message":"x: -70","timestamp":8407.111559}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8408.001511}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8409.654227}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8410.985795}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8411.690434}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8414.612895}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8415.569671}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8427.596236}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8430.136977}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8437.485969}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8438.745194}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8440.802755}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8446.621845}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8448.077476}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8458.101845}
+{"level":"info","message":"***turn_timer***","timestamp":8460.682899}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8462.413271}
+{"level":"info","message":"IMU Heading same as previous","timestamp":8465.111929}
+{"level":"info","message":"Current Heading: 204.02650658","timestamp":8467.544389}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8469.032156}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8470.208411}
+{"level":"info","message":"Turning right","timestamp":8471.233885}
+{"level":"info","message":"Y: 70","timestamp":8472.161129}
+{"level":"info","message":"x: -70","timestamp":8473.062226}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8473.782646}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8486.438434}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8487.441876}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8490.022981}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8491.018403}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8509.115569}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8511.140683}
+{"level":"info","message":"***reachClient***","timestamp":8513.852154}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8516.804667}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8520.380881}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8521.965003}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8524.463192}
+{"level":"info","message":"***turn_timer***","timestamp":8526.234346}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8527.300809}
+{"level":"info","message":"IMU Heading same as previous","timestamp":8528.671857}
+{"level":"info","message":"Current Heading: 204.02650658","timestamp":8530.110978}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8532.025258}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8533.228336}
+{"level":"info","message":"Turning right","timestamp":8534.376727}
+{"level":"info","message":"Y: 70","timestamp":8535.294752}
+{"level":"info","message":"x: -70","timestamp":8536.802155}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8538.21862}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8541.261238}
+{"level":"info","message":"IMU Data: 204.02650658","timestamp":8542.4439}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8544.556305}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8545.880582}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8553.18072}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8554.654216}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8563.574413}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8564.566814}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8568.017715}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8571.28747}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8572.52258}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8581.251526}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8582.853929}
+{"level":"info","message":"***turn_timer***","timestamp":8589.006718}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8590.214848}
+{"level":"info","message":"IMU Heading validified","timestamp":8591.178343}
+{"level":"info","message":"Current Heading: 207.84757826","timestamp":8592.213087}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8593.010538}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8594.476014}
+{"level":"info","message":"Turning right","timestamp":8595.360393}
+{"level":"info","message":"Y: 70","timestamp":8596.303158}
+{"level":"info","message":"x: -70","timestamp":8597.610143}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8598.912753}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8600.651251}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8601.650474}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8605.357887}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8607.787533}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8609.365353}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8617.449088}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8619.894308}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8626.317567}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8627.960855}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8629.79076}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8634.667657}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8636.235737}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8643.439364}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8644.702651}
+{"level":"info","message":"***turn_timer***","timestamp":8650.40299}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8651.741746}
+{"level":"info","message":"IMU Heading same as previous","timestamp":8652.730969}
+{"level":"info","message":"Current Heading: 207.84757826","timestamp":8653.632015}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8654.483009}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8655.210512}
+{"level":"info","message":"Turning right","timestamp":8655.888223}
+{"level":"info","message":"Y: 70","timestamp":8656.511403}
+{"level":"info","message":"x: -70","timestamp":8657.579742}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8658.525944}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8660.759548}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8662.173461}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8662.840651}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8670.551364}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8671.667411}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8679.773125}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8680.705942}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8688.204726}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8690.022183}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8691.731097}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8697.107163}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8698.501961}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8706.058819}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8707.454398}
+{"level":"info","message":"***turn_timer***","timestamp":8709.956285}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8710.711236}
+{"level":"info","message":"IMU Heading same as previous","timestamp":8711.507854}
+{"level":"info","message":"Current Heading: 207.84757826","timestamp":8712.497234}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8713.206664}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8714.096825}
+{"level":"info","message":"Turning right","timestamp":8715.074277}
+{"level":"info","message":"Y: 70","timestamp":8716.18423}
+{"level":"info","message":"x: -70","timestamp":8717.170172}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8718.531741}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8720.169665}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8721.949934}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8722.703322}
+{"level":"info","message":"***reachClient***","timestamp":8723.687858}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8726.463548}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8727.316469}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8732.868369}
+{"level":"info","message":"IMU Data: 207.84757826","timestamp":8734.220146}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8741.933098}
+{"level":"info","message":"IMU Data: 212.79349315","timestamp":8742.851644}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8748.904016}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8750.891369}
+{"level":"info","message":"IMU Data: 212.79349315","timestamp":8752.558043}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8759.584013}
+{"level":"info","message":"IMU Data: 212.79349315","timestamp":8760.731258}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8768.462387}
+{"level":"info","message":"IMU Data: 212.79349315","timestamp":8770.480313}
+{"level":"info","message":"***turn_timer***","timestamp":8771.464224}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8772.13756}
+{"level":"info","message":"IMU Heading validified","timestamp":8772.876991}
+{"level":"info","message":"Current Heading: 212.79349315","timestamp":8773.472827}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8774.14158}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8774.707572}
+{"level":"info","message":"Turning right","timestamp":8775.508722}
+{"level":"info","message":"Y: 70","timestamp":8776.503205}
+{"level":"info","message":"x: -70","timestamp":8777.401647}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8778.316495}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8779.647699}
+{"level":"info","message":"IMU Data: 212.79349315","timestamp":8780.360046}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8781.971408}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8786.064239}
+{"level":"info","message":"IMU Data: 212.79349315","timestamp":8787.108671}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8794.699904}
+{"level":"info","message":"IMU Data: 212.79349315","timestamp":8795.523449}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8804.442657}
+{"level":"info","message":"IMU Data: 212.79349315","timestamp":8806.622406}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8810.440132}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8812.767018}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8814.183483}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8821.873674}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8822.843679}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8826.045673}
+{"level":"info","message":"***turn_timer***","timestamp":8828.878082}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8830.966373}
+{"level":"info","message":"IMU Heading validified","timestamp":8831.887939}
+{"level":"info","message":"Current Heading: 214.85920685","timestamp":8832.940236}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8833.651281}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8834.382378}
+{"level":"info","message":"Turning right","timestamp":8835.101027}
+{"level":"info","message":"Y: 70","timestamp":8836.037854}
+{"level":"info","message":"x: -70","timestamp":8837.356246}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8838.486095}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8840.920429}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8841.877256}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8849.207186}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8850.864589}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8858.209675}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8859.627286}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8867.087893}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8868.32868}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8870.565201}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8876.502051}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8877.531535}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8885.763135}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8887.155641}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8889.146015}
+{"level":"info","message":"***turn_timer***","timestamp":8890.486646}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8891.29514}
+{"level":"info","message":"IMU Heading same as previous","timestamp":8892.123477}
+{"level":"info","message":"Current Heading: 214.85920685","timestamp":8893.153377}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8894.071038}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8894.931823}
+{"level":"info","message":"Turning right","timestamp":8895.889171}
+{"level":"info","message":"Y: 70","timestamp":8897.98366}
+{"level":"info","message":"x: -70","timestamp":8899.240697}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8900.389088}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8902.918787}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8904.120719}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8907.428599}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8908.492302}
+{"level":"info","message":"***reachClient***","timestamp":8910.141893}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8914.995092}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8916.510308}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8923.972321}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8925.207066}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8933.051113}
+{"level":"info","message":"IMU Data: 214.85920685","timestamp":8934.921903}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8936.423576}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8941.955008}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":8944.100955}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":8948.799987}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8951.726511}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":8953.148185}
+{"level":"info","message":"***turn_timer***","timestamp":8954.455795}
+{"level":"info","message":"***calc_heading_delta***","timestamp":8955.30934}
+{"level":"info","message":"IMU Heading validified","timestamp":8956.114448}
+{"level":"info","message":"Current Heading: 218.15722659","timestamp":8957.057473}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":8958.013832}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":8958.956388}
+{"level":"info","message":"Turning right","timestamp":8959.855976}
+{"level":"info","message":"Y: 70","timestamp":8960.837751}
+{"level":"info","message":"x: -70","timestamp":8962.072653}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":8963.213491}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8964.609852}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":8965.460377}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8969.362634}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":8970.457535}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8978.024341}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":8979.112002}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8987.149851}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":8988.431784}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":8994.406031}
+{"level":"info","message":"***python_proc.stdout***","timestamp":8996.267862}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":8997.340002}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9004.810089}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":9005.959261}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9013.677578}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":9014.995032}
+{"level":"info","message":"***turn_timer***","timestamp":9016.263319}
+{"level":"info","message":"***calc_heading_delta***","timestamp":9017.200354}
+{"level":"info","message":"IMU Heading same as previous","timestamp":9018.305672}
+{"level":"info","message":"Current Heading: 218.15722659","timestamp":9019.443646}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":9020.33766}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":9021.117924}
+{"level":"info","message":"Turning right","timestamp":9022.38194}
+{"level":"info","message":"Y: 70","timestamp":9024.36945}
+{"level":"info","message":"x: -70","timestamp":9025.900967}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":9026.994149}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9028.613115}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":9029.501609}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":9032.184642}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9034.976582}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":9036.153618}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9048.879094}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":9051.005978}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":9056.316784}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9062.545354}
+{"level":"info","message":"IMU Data: 218.15722659","timestamp":9064.806875}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9073.809156}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9076.873702}
+{"level":"info","message":"***turn_timer***","timestamp":9083.437273}
+{"level":"info","message":"***calc_heading_delta***","timestamp":9085.718898}
+{"level":"info","message":"IMU Heading validified","timestamp":9087.84771}
+{"level":"info","message":"Current Heading: 221.52476722","timestamp":9090.013345}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":9092.23221}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":9093.564195}
+{"level":"info","message":"Turning right","timestamp":9094.912795}
+{"level":"info","message":"Y: 70","timestamp":9096.110144}
+{"level":"info","message":"x: -70","timestamp":9098.351092}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":9101.227459}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9103.278927}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9105.005862}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":9106.88259}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9109.666144}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9110.667294}
+{"level":"info","message":"***reachClient***","timestamp":9112.773971}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9115.154242}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9116.363883}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9124.451316}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9125.440956}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":9130.904367}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9134.1611}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9135.585065}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9142.613275}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9143.863801}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":9150.619509}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9153.783118}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9155.135676}
+{"level":"info","message":"***turn_timer***","timestamp":9156.422453}
+{"level":"info","message":"***calc_heading_delta***","timestamp":9157.465114}
+{"level":"info","message":"IMU Heading same as previous","timestamp":9159.108403}
+{"level":"info","message":"Current Heading: 221.52476722","timestamp":9161.102214}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":9162.801909}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":9164.256083}
+{"level":"info","message":"Turning right","timestamp":9165.571193}
+{"level":"info","message":"Y: 70","timestamp":9166.610208}
+{"level":"info","message":"x: -70","timestamp":9168.515946}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":9170.786998}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9173.360031}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9174.600089}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9180.677304}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9182.369916}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9189.279739}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9190.353182}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9198.015144}
+{"level":"info","message":"IMU Data: 221.52476722","timestamp":9199.107493}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":9200.6425}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9216.563302}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9217.451431}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":9219.547118}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9222.024161}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9225.137144}
+{"level":"info","message":"***turn_timer***","timestamp":9226.095377}
+{"level":"info","message":"***calc_heading_delta***","timestamp":9226.756735}
+{"level":"info","message":"IMU Heading validified","timestamp":9231.082484}
+{"level":"info","message":"Current Heading: 223.59137126","timestamp":9232.134572}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":9232.877544}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":9233.530203}
+{"level":"info","message":"Turning right","timestamp":9238.226162}
+{"level":"info","message":"Y: 70","timestamp":9239.5607}
+{"level":"info","message":"x: -70","timestamp":9240.824195}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":9245.682395}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9255.508429}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9256.825311}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9260.185691}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9261.961115}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9271.412721}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9272.730436}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":9274.923415}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9278.351243}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9279.466248}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9288.750978}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9289.816191}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":9294.261889}
+{"level":"info","message":"***turn_timer***","timestamp":9298.999411}
+{"level":"info","message":"***calc_heading_delta***","timestamp":9299.984363}
+{"level":"info","message":"IMU Heading same as previous","timestamp":9300.771658}
+{"level":"info","message":"Current Heading: 223.59137126","timestamp":9302.158696}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":9304.264695}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":9305.200221}
+{"level":"info","message":"Turning right","timestamp":9305.95387}
+{"level":"info","message":"Y: 70","timestamp":9306.550018}
+{"level":"info","message":"x: -70","timestamp":9307.21049}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":9307.953358}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9309.245708}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9310.130399}
+{"level":"info","message":"***reachClient***","timestamp":9311.723792}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9313.061142}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9313.849531}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9320.615656}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9321.894308}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9330.470493}
+{"level":"info","message":"IMU Data: 223.59137126","timestamp":9331.670811}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":9339.40043}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9340.949916}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9341.947681}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9349.924437}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9351.144182}
+{"level":"info","message":"***turn_timer***","timestamp":9358.770415}
+{"level":"info","message":"***calc_heading_delta***","timestamp":9359.753649}
+{"level":"info","message":"IMU Heading validified","timestamp":9360.469954}
+{"level":"info","message":"Current Heading: 226.62333253","timestamp":9361.093082}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":9361.725481}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":9362.387463}
+{"level":"info","message":"Turning right","timestamp":9363.047414}
+{"level":"info","message":"Y: 70","timestamp":9363.642833}
+{"level":"info","message":"x: -70","timestamp":9364.663827}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":9365.411122}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9367.008421}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9367.919884}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":9370.064998}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9371.271097}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9371.93735}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9382.660525}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9383.827405}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9392.165204}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9393.05927}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":9395.557147}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9401.110297}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9402.599262}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9411.207479}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9412.032274}
+{"level":"info","message":"***turn_timer***","timestamp":9416.028074}
+{"level":"info","message":"***calc_heading_delta***","timestamp":9417.580894}
+{"level":"info","message":"IMU Heading same as previous","timestamp":9418.86965}
+{"level":"info","message":"Current Heading: 226.62333253","timestamp":9419.737362}
+{"level":"info","message":"Target Heading: 348.43408275999064","timestamp":9420.407573}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":9421.023045}
+{"level":"info","message":"Turning right","timestamp":9421.665912}
+{"level":"info","message":"Y: 70","timestamp":9422.310343}
+{"level":"info","message":"x: -70","timestamp":9423.216336}
+{"level":"info","message":"Turn: Set rover speed - Left: 70, right:-70","timestamp":9423.922017}
+{"level":"info","message":"ArduinoMessage: 12:0:57:0:170:187\r","timestamp":9424.990147}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9426.362236}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9426.98177}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9431.355124}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9432.319243}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9440.435374}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9441.186888}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9449.711875}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9450.44292}
+{"level":"info","message":"ArduinoMessage: 11:0:197:0:170:187\r","timestamp":9453.325589}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9459.370148}
+{"level":"info","message":"IMU Data: 226.62333253","timestamp":9460.237392}
+{"level":"info","message":"***python_proc.stdout***","timestamp":9469.541237}
