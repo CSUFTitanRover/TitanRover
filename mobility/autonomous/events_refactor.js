@@ -4,7 +4,7 @@ var geolib = require('geolib');
 var spawn = require("child_process").spawn;
 var net = require('net');
 var magneticDeclination = 0; //12.3 in Fullerton, 15 in Hanksville
-//var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Server.py", magneticDeclination]);
+//var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 
 var now = require('performance-now');
 var moment = require('moment'); //gets system time
@@ -12,10 +12,10 @@ var Winston = require('winston');
 
 //----VARIABLES----
 //----IMU Client Socket-----
-var imu_net = require('net'),
-    imu_port = 9015,
-    imu_host = 'localhost'
-    imu_socket = imu_net.createConnection(imu_port,imu_host);
+// var imu_net = require('net'),
+//     imu_port = 9015,
+//     imu_host = 'localhost'
+//     imu_socket = imu_net.createConnection(imu_port,imu_host);
 //----End IMU Socket--------
 
 //FOR OFF ROVER TESTING:
@@ -62,9 +62,30 @@ var onTarget = false;
 //-----WAYPOINTS-----
 //for parking lot at CSUF
   var wayPoints = [
-     {latitude: 33.88190324, longitude: -117.88184383}, // 1
-     {latitude: 33.88190630, longitude: -117.88185768}, // 6
-     {latitude: 33.88192443, longitude: -117.88176335}, // 2
+     {latitude: 33.88215365, longitude: -117.88161841}, // 1
+     {latitude: 33.88210346, longitude: -117.88163178}, // 2
+     {latitude: 33.88210607, longitude: -117.88168939}, // 3
+     {latitude: 33.88214708, longitude: -117.88173965}, // 4
+     {latitude: 33.88210346, longitude: -117.88163178}, // 2
+     {latitude: 33.88215365, longitude: -117.88161841}, // 1 
+     {latitude: 33.88215365, longitude: -117.88161841}, // 1
+     {latitude: 33.88214708, longitude: -117.88173965}, //  4 
+     {latitude: 33.88215365, longitude: -117.88161841}, // 1
+     {latitude: 33.88210346, longitude: -117.88163178}, // 2
+     {latitude: 33.88210607, longitude: -117.88168939}, // 3
+     {latitude: 33.88214708, longitude: -117.88173965}, // 4
+     {latitude: 33.88210346, longitude: -117.88163178}, // 2
+     {latitude: 33.88215365, longitude: -117.88161841}, // 1 
+     {latitude: 33.88215365, longitude: -117.88161841}, // 1
+     {latitude: 33.88214708, longitude: -117.88173965}, //  4 
+     {latitude: 33.88215365, longitude: -117.88161841}, // 1
+     {latitude: 33.88210346, longitude: -117.88163178}, // 2
+     {latitude: 33.88210607, longitude: -117.88168939}, // 3
+     {latitude: 33.88214708, longitude: -117.88173965}, // 4
+     {latitude: 33.88210346, longitude: -117.88163178}, // 2
+     {latitude: 33.88215365, longitude: -117.88161841}, // 1 
+     {latitude: 33.88215365, longitude: -117.88161841}, // 1
+     {latitude: 33.88214708, longitude: -117.88173965} //  4 
      ]; 
 //-----END WAYPOINTS-----
 //-----WINSTON ENTRY POINT-----
@@ -90,7 +111,7 @@ client.connect(9001, reachIP, function() {
 });
 
 client.on('data', function(data,err) { 
-    winston.info("***reachClient***");
+    //winston.info("***reachClient***");
     if(err){
         winston.info("Error!: " + JSON.stringify(err));
     }
@@ -102,43 +123,74 @@ client.on('data', function(data,err) {
         };
     
 });
+
+//  UNIX SOCKET 
+var imu_client = new net.Socket();
+
+imu_client.connect('/home/pi/TitanRover/GPS/IMU/Python_Version/imu_sock', function(){
+    winston.info("Connected to IMU via UNIX socket ");
+});
+
+imu_client.on('data',function(data,err){
+    if(err){
+        winston.info('Error: ', err);
+    }
+    data = parseFloat(data);
+    winston.info("*** UNIX sockets ***");
+    winston.info("IMU Data: " + data);
+    if (isNaN(data)) {
+        winston.info("Current Heading is NaN");
+        clearInterval(turn_timer);
+        clearInterval(drive_timer);
+        stopRover();
+    } else if ( 0 <= data && data <= 360){
+        current_heading = data;
+    } else {
+        winston.info("ERROR: IMU Heading Out of Range: " + data);
+    }
+});
 //----END REACH CODE----
 //----IMU ENTRY----
-/*var invalidHeadingCounter = 0;
-python_proc.stdout.on('data', function (data){   
-    data = parseFloat(data); 
-    winston.info("***python_proc.stdout***");
-    winston.info("IMU Data: " + data);
-    if (isNaN(data)) {
-        winston.info("Current Heading is NaN");
-        stopRover();
-        clearInterval(turn_timer);
-        clearInterval(drive_timer);
-    } else if ( 0 <= data && data <= 360){
-        current_heading = data;
-    } else {
-        winston.info("ERROR: IMU Heading Out of Range: " + data);
-    }
-});
-*/
-imu_socket.on('data', function(data){
-    data = parseFloat(data); 
-    winston.info("***python_proc.stdout***");
-    winston.info("IMU Data: " + data);
-    if (isNaN(data)) {
-        winston.info("Current Heading is NaN");
-        clearInterval(turn_timer);
-        clearInterval(drive_timer);
-        stopRover();
-    } else if ( 0 <= data && data <= 360){
-        current_heading = data;
-    } else {
-        winston.info("ERROR: IMU Heading Out of Range: " + data);
-    }
-});
-imu_socket.on('SIGINT',function(){
-    imu_socket.exit();
-});
+var invalidHeadingCounter = 0;
+
+// python_proc.stdout.on('data', function (data){   
+//     data = parseFloat(data); 
+//     winston.info("***python_proc.stdout***");
+//     winston.info("IMU Data: " + data);
+//     if (isNaN(data)) {
+//         winston.info("Current Heading is NaN");
+//         clearInterval(turn_timer);
+//         clearInterval(drive_timer);
+//         stopRover();
+//     } else if ( 0 <= data && data <= 360){
+//         current_heading = data;
+//     } else {
+//         winston.info("ERROR: IMU Heading Out of Range: " + data);
+//     }
+// });
+
+// imu_socket.on('data', function(data){
+//     data = parseFloat(data); 
+//     //winston.info("***python_proc.stdout***");
+//     //winston.info("IMU Data: " + data);
+//     if (isNaN(data)) {
+//         winston.info("Current Heading is NaN");
+//         clearInterval(turn_timer);
+//         clearInterval(drive_timer);
+//         stopRover();
+//     } else if ( 0 <= data && data <= 360){
+//         current_heading = data;
+//     } else {
+//         winston.info("ERROR: IMU Heading Out of Range: " + data);
+//     }
+// });
+// imu_socket.on('SIGINT',function(){
+//     imu_socket.exit();
+// });
+
+// imu_socket.on('end',function(){
+//    console.log('imu disconnected'); 
+// })
 //----END IMU----
 
 // *** TEMP CHECK TO STOP ROVER 
@@ -280,8 +332,8 @@ atlas.on('drive',function(){
             winston.info('turn_right:' + turn_right);
             //throttle_offset = Math.round(forward_drive_constant * proportional_error * 1.5 * Math.log(heading_delta));
 
-            y = Math.log(forward_throttle_max / forward_drive_constant) * proportional_error;
-            throttle_offset = Math.round(forward_drive_constant * (Math.pow(Math.E, y) * proportional_error));
+            y = Math.log(forward_throttle_max) * proportional_error;
+            throttle_offset = Math.round(forward_drive_constant * (Math.pow(Math.E, y)));
             //throttle_offset = Math.round(throttle_offset * heading_delta);
             winston.info("forwardP Throttle Offset: " + throttle_offset);
 
@@ -312,7 +364,7 @@ function calc_heading_delta(){
     winston.info('***calc_heading_delta***');
     if(current_heading == previousHeading) {
         invalidHeadingCounter++;
-        winston.info("IMU Heading same as previous");
+        winston.info("Invalid Headingcounter: ", invalidHeadingCounter);
     } else {
         previousHeading = current_heading;
         invalidHeadingCounter = 0;
@@ -321,7 +373,7 @@ function calc_heading_delta(){
     if (invalidHeadingCounter >= 20) {
         clearInterval(drive_timer);
         clearInterval(turn_timer);
-        setTimeout(()=>{ stopRover();},1000);
+        setTimeout(()=>{ stopRover();},3000);
         winston.info("ERROR: IMU Heading Invalid");
     }
     let abs_delta = Math.abs(current_heading - target_heading);
