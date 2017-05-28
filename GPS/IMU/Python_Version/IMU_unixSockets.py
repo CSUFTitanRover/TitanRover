@@ -12,7 +12,7 @@
 ####################################################################################
 import socket
 import sys
-
+import os 
 import smbus
 import time
 import math
@@ -21,6 +21,24 @@ from L3GD20_GYRO import *
 import datetime
 bus = smbus.SMBus(1)
 import socket
+
+server_address = './imu_sock' #its a stanky sock
+sys.stderr = open('log.txt', 'w')
+# Make sure the socket does not already exist
+try:
+    os.unlink(server_address)
+except OSError:
+    if os.path.exists(server_address):
+        raise
+
+sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+
+# Bind the socket to the port
+print >> sys.stderr, 'starting up on %s' % server_address
+sock.bind(server_address)
+
+# Listen for incoming connections
+sock.listen(1)
 
 RAD_TO_DEG = 57.29578
 M_PI = 3.14159265358979323846
@@ -286,30 +304,17 @@ kalmanX = kalmanY = 0.0
 
 a = datetime.datetime.now()                                             #Gyro Timing Control
 while True:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        sock.bind(("", 9015))
-        sock.listen(1)
-         
-        handshake = '\
-        HTTP/1.1 101 Web Socket Protocol Handshake\r\n\
-        Upgrade: WebSocket\r\n\
-        Connection: Upgrade\r\n\
-        WebSocket-Origin: http://localhost:8888\r\n\
-        WebSocket-Location: ws://localhost:9999/\r\n\r\n\
-        '
-        handshaken = False
-
-
-        print "TCPServer Waiting for client on port 9015"
-
+       # Wait for a connection
+        print >> sys.stderr, 'waiting for a connection'
+       
         import sys
          
         data = ''
         header = ''
          
-        client, address = sock.accept()
+        connection, client_address = sock.accept()
         try:
+                print >>sys.stderr, 'connection from', client_address
                 while True:
                         total_heading = 0.0
                         #loop = 1                     #High the loops the greater the accuracy
@@ -422,13 +427,10 @@ while True:
                         ##########Direction Requirement#####Calculate pitch and roll########
                         ####################################################################
                         #Us these two lines when the IMU is right side up.  IC's facing sky 
-                        
                         pitch = math.asin(accXnorm)
-                        temp = accYnorm/math.cos(pitch)
+                        temp  = accYnorm/math.cos(pitch)
                         if temp <= 1 and temp >= -1:
-                          roll = -math.asin(accYnorm/math.cos(pitch))
-                        
-                       
+                                roll = -math.asin(temp) 
                         #
                         #Us these four lines when the IMU is upside down. IC's facing earth
                         #accXnorm = -accXnorm				#flip Xnorm as the IMU is upside down
@@ -483,6 +485,8 @@ while True:
                         #print("%5.8f" % (total_heading))
                         #sys.stdout.flush()
 
-                        client.send(str(total_heading))
+                        connection.sendall(str(total_heading))
         except IOError as e:
-                client.close()
+                connection.close()
+
+

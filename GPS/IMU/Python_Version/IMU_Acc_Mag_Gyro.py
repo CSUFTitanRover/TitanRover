@@ -400,7 +400,10 @@ while True:
 	####################################################################
 	#Us these two lines when the IMU is right side up.  IC's facing sky 
 	pitch = math.asin(accXnorm)
-	roll = -math.asin(accYnorm/math.cos(pitch))
+	temp = accYnorm/math.cos(pitch)
+	if temp <= 1 and temp >= -1:
+	    roll = -math.asin(accYnorm/math.cos(pitch))
+
 	#
 	#Us these four lines when the IMU is upside down. IC's facing earth
 	#accXnorm = -accXnorm				#flip Xnorm as the IMU is upside down
