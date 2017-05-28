@@ -339,20 +339,12 @@ function armControl(message) {
         // Determine which axis should be which joint.
         switch (axis) {
             case 0:
-                /*
-                    // Thumb button had to be pressed in order to use joint6
-                    if (thumbPressed) {
-                        port.write(arm.joint6_360Unlimited(message));
-                    } else {
-                        port.write(arm.joint3_linear2(message, getPwmValue(message.value, 32767, -32767)));
-                    }*/
-
-                port.write(arm.joint6_360Unlimited(message));
+                // Doing Nothing
                 break;
             case 1:
                 // Thumb button had to be pressed in order to use joint4
                 if (thumbPressed) {
-                    port.write(arm.joint4_rotateWrist(message));
+                    port.write(arm.joint7_gripper(message));
                 } else {
                     if (triggerPressed) {
                         port.write(arm.joint3_linear2(message, getPwmValue(message.value, 32767, -32767)));
@@ -366,16 +358,22 @@ function armControl(message) {
                 }
                 break;
             case 2:
-                port.write(arm.joint1_rotatingBase(message));
+                if (thumbPressed) {
+                    message.value *= -1;
+                    port.write(arm.joint6_360Unlimited(message));
+                } else {
+                    port.write(arm.joint1_rotatingBase(message));
+                }
                 break;
             case 3:
                 // This is the throttle
                 break;
             case 4:
-                port.write(arm.joint5_90degree(message));
+                message.value *= -1;
+                port.write(arm.joint4_rotateWrist(message));
                 break;
             case 5:
-                port.write(arm.joint7_gripper(message));
+                port.write(arm.joint5_90degree(message));
                 break;
             default:
                 throw new RangeError('invalid armcontrol axis');

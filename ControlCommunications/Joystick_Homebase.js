@@ -111,6 +111,8 @@ const SET_ARDUINO_DEBUG = {
 const SEND_CONTROL_AFTER = 20;
 var packet_count = 0;
 
+var gotRoverConnect = false;
+
 // Arm Variables
 var arm_joint = false;
 
@@ -127,6 +129,7 @@ socket.on('message', function(message, remote) {
     if (msg.type == "rover_ack") {
         //console.log("Rover sent an ack");
         packet_count = 0;
+        gotRoverConnect = true;
         send_to_rover(CONTROL_MESSAGE_ACK);
     } else if (msg.type == "debug") {
         console.log(msg);
@@ -150,6 +153,13 @@ function send_to_rover(message) {
         }
     });
 }
+
+setInterval(function() {
+    if (gotRoverConnect) {
+        console.log('##### Rover is Connected #####');
+    }
+    gotRoverConnect = false;
+}, 5000);
 
 
 // Joystick for Mobility
@@ -187,6 +197,15 @@ function handleJoystick_1(event) {
 
     if (event.type == 'axis') {
         event.commandType = 'arm';
+
+        if (event.number == 1) {
+            event.value *= -1;
+        } else if (event.number == 2) {
+            if (event.value > -2000 && event.value < 2000) {
+                event.value = 0;
+            }
+        }
+
         send_to_rover(event);
     }
 
