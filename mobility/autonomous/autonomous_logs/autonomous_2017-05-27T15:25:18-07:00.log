@@ -1,0 +1,285 @@
+{"level":"info","message":"open","timestamp":1589.213342}
+{"level":"info","message":"Connected to reach","timestamp":1599.977039}
+{"level":"info","message":"***EVENTS_REFACTORED BOOTED***","timestamp":1949.241021}
+{"level":"info","message":"ArduinoMessage: Bytes Switched Clearing Buffer\r","timestamp":4528.8097}
+{"level":"info","message":"***get_waypoint***","timestamp":4954.333832}
+{"latitude":33.88215365,"longitude":-117.88161841,"level":"info","message":"getting next waypoint","timestamp":4960.791093}
+{"level":"info","message":"get_waypoint adjusted Target Heading:121.66616421311153","timestamp":4971.004585}
+{"level":"info","message":"***turn_timer***","timestamp":5023.845162}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5025.725361}
+{"level":"info","message":"IMU Heading validified","timestamp":5026.762856}
+{"level":"info","message":"Current Heading: undefined","timestamp":5027.742278}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5028.605295}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5029.732425}
+{"level":"info","message":"Turning right","timestamp":5031.025335}
+{"level":"info","message":"Y: NaN","timestamp":5033.107981}
+{"level":"info","message":"x: NaN","timestamp":5036.474475}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5037.715355}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5064.463402}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5085.756632}
+{"level":"info","message":"***turn_timer***","timestamp":5089.143699}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5089.994893}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5091.026242}
+{"level":"info","message":"Current Heading: undefined","timestamp":5092.492693}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5093.335762}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5095.214086}
+{"level":"info","message":"Turning right","timestamp":5096.365018}
+{"level":"info","message":"Y: NaN","timestamp":5097.226993}
+{"level":"info","message":"x: NaN","timestamp":5098.232248}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5099.073026}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5135.820347}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5147.477687}
+{"level":"info","message":"***turn_timer***","timestamp":5150.424078}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5153.189638}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5156.403737}
+{"level":"info","message":"Current Heading: undefined","timestamp":5157.725866}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5158.870965}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5159.932366}
+{"level":"info","message":"Turning right","timestamp":5160.981996}
+{"level":"info","message":"Y: NaN","timestamp":5162.030272}
+{"level":"info","message":"x: NaN","timestamp":5164.488333}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5166.997488}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5192.407156}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5212.403726}
+{"level":"info","message":"***turn_timer***","timestamp":5219.505722}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5221.803836}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5223.827941}
+{"level":"info","message":"Current Heading: undefined","timestamp":5225.05507}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5226.259492}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5227.376309}
+{"level":"info","message":"Turning right","timestamp":5230.345149}
+{"level":"info","message":"Y: NaN","timestamp":5232.458212}
+{"level":"info","message":"x: NaN","timestamp":5234.656065}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5237.073241}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5266.599296}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5283.741609}
+{"level":"info","message":"***turn_timer***","timestamp":5288.780647}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5291.732351}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5292.670315}
+{"level":"info","message":"Current Heading: undefined","timestamp":5295.096762}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5296.33212}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5297.370657}
+{"level":"info","message":"Turning right","timestamp":5298.533308}
+{"level":"info","message":"Y: NaN","timestamp":5299.87502}
+{"level":"info","message":"x: NaN","timestamp":5301.35069}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5302.537924}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5347.339633}
+{"level":"info","message":"***turn_timer***","timestamp":5355.137981}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5357.50474}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5360.867484}
+{"level":"info","message":"Current Heading: undefined","timestamp":5362.594715}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5364.097416}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5365.607201}
+{"level":"info","message":"Turning right","timestamp":5367.13011}
+{"level":"info","message":"Y: NaN","timestamp":5368.678175}
+{"level":"info","message":"x: NaN","timestamp":5370.573479}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5372.30321}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5375.479705}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5405.826328}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5417.1732}
+{"level":"info","message":"***turn_timer***","timestamp":5424.968058}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5426.376177}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5427.387995}
+{"level":"info","message":"Current Heading: undefined","timestamp":5428.302938}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5429.373402}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5430.375376}
+{"level":"info","message":"Turning right","timestamp":5431.412611}
+{"level":"info","message":"Y: NaN","timestamp":5432.350471}
+{"level":"info","message":"x: NaN","timestamp":5433.554163}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5434.735094}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5462.213503}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5483.562253}
+{"level":"info","message":"***turn_timer***","timestamp":5485.35938}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5486.860102}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5489.293215}
+{"level":"info","message":"Current Heading: undefined","timestamp":5490.536855}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5491.525496}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5492.474085}
+{"level":"info","message":"Turning right","timestamp":5496.70245}
+{"level":"info","message":"Y: NaN","timestamp":5503.708406}
+{"level":"info","message":"x: NaN","timestamp":5507.181618}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5509.642804}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5536.182206}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5554.57795}
+{"level":"info","message":"***turn_timer***","timestamp":5560.6274}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5561.977966}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5562.931087}
+{"level":"info","message":"Current Heading: undefined","timestamp":5563.869832}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5564.764307}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5565.510189}
+{"level":"info","message":"Turning right","timestamp":5566.985859}
+{"level":"info","message":"Y: NaN","timestamp":5574.038325}
+{"level":"info","message":"x: NaN","timestamp":5575.792326}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5577.282736}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5606.37322}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5626.377862}
+{"level":"info","message":"***turn_timer***","timestamp":5639.097696}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5640.073421}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5640.872688}
+{"level":"info","message":"Current Heading: undefined","timestamp":5641.727527}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5642.542419}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5643.341478}
+{"level":"info","message":"Turning right","timestamp":5644.20564}
+{"level":"info","message":"Y: NaN","timestamp":5645.180896}
+{"level":"info","message":"x: NaN","timestamp":5646.437088}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5647.50677}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5674.955074}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5696.15143}
+{"level":"info","message":"***turn_timer***","timestamp":5699.08303}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5700.126411}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5701.016719}
+{"level":"info","message":"Current Heading: undefined","timestamp":5703.179052}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5711.667344}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5713.436294}
+{"level":"info","message":"Turning right","timestamp":5714.500612}
+{"level":"info","message":"Y: NaN","timestamp":5716.916798}
+{"level":"info","message":"x: NaN","timestamp":5718.824809}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5719.932721}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5748.922736}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5766.01406}
+{"level":"info","message":"***turn_timer***","timestamp":5772.911422}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5774.123603}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5775.073651}
+{"level":"info","message":"Current Heading: undefined","timestamp":5776.178073}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5777.213797}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5778.116761}
+{"level":"info","message":"Turning right","timestamp":5779.029569}
+{"level":"info","message":"Y: NaN","timestamp":5779.910971}
+{"level":"info","message":"x: NaN","timestamp":5781.106382}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5782.115283}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5809.959419}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5831.337024}
+{"level":"info","message":"***turn_timer***","timestamp":5832.968787}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5833.860605}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5834.650862}
+{"level":"info","message":"Current Heading: undefined","timestamp":5835.616638}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5836.548196}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5837.325745}
+{"level":"info","message":"Turning right","timestamp":5838.174907}
+{"level":"info","message":"Y: NaN","timestamp":5839.139434}
+{"level":"info","message":"x: NaN","timestamp":5840.271095}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5841.238069}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5867.385599}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5891.421055}
+{"level":"info","message":"***turn_timer***","timestamp":5893.296931}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5895.571556}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5896.578061}
+{"level":"info","message":"Current Heading: undefined","timestamp":5897.464151}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5898.279251}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5899.09633}
+{"level":"info","message":"Turning right","timestamp":5899.893201}
+{"level":"info","message":"Y: NaN","timestamp":5900.812572}
+{"level":"info","message":"x: NaN","timestamp":5903.468497}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5904.707084}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5933.83736}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":5953.711742}
+{"level":"info","message":"***turn_timer***","timestamp":5955.205016}
+{"level":"info","message":"***calc_heading_delta***","timestamp":5956.241574}
+{"level":"info","message":"IMU Heading same as previous","timestamp":5957.124799}
+{"level":"info","message":"Current Heading: undefined","timestamp":5958.016982}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":5958.684999}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":5959.816504}
+{"level":"info","message":"Turning right","timestamp":5960.661188}
+{"level":"info","message":"Y: NaN","timestamp":5961.250299}
+{"level":"info","message":"x: NaN","timestamp":5962.73149}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":5963.709298}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":5990.072503}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":6011.276411}
+{"level":"info","message":"***turn_timer***","timestamp":6015.122173}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6016.25972}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6017.122737}
+{"level":"info","message":"Current Heading: undefined","timestamp":6017.995389}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":6018.820489}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6019.611683}
+{"level":"info","message":"Turning right","timestamp":6020.497304}
+{"level":"info","message":"Y: NaN","timestamp":6021.285737}
+{"level":"info","message":"x: NaN","timestamp":6022.479377}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":6025.252489}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":6053.814902}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":6076.415991}
+{"level":"info","message":"***turn_timer***","timestamp":6099.369629}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6100.419155}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6101.219776}
+{"level":"info","message":"Current Heading: undefined","timestamp":6102.048418}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":6103.072997}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6103.978721}
+{"level":"info","message":"Turning right","timestamp":6104.820123}
+{"level":"info","message":"Y: NaN","timestamp":6105.817202}
+{"level":"info","message":"x: NaN","timestamp":6106.991988}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":6107.935838}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":6133.934826}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":6153.838271}
+{"level":"info","message":"***turn_timer***","timestamp":6158.610175}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6159.894387}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6160.744852}
+{"level":"info","message":"Current Heading: undefined","timestamp":6161.568233}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":6162.411823}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6163.280308}
+{"level":"info","message":"Turning right","timestamp":6164.159835}
+{"level":"info","message":"Y: NaN","timestamp":6165.09181}
+{"level":"info","message":"x: NaN","timestamp":6166.457845}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":6167.437476}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":6195.100571}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":6216.563956}
+{"level":"info","message":"***turn_timer***","timestamp":6218.451395}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6219.451703}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6220.33123}
+{"level":"info","message":"Current Heading: undefined","timestamp":6221.15784}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":6221.910389}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6222.61351}
+{"level":"info","message":"Turning right","timestamp":6223.771734}
+{"level":"info","message":"Y: NaN","timestamp":6224.917509}
+{"level":"info","message":"x: NaN","timestamp":6226.21042}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":6227.236821}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":6252.614979}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":6272.638424}
+{"level":"info","message":"***turn_timer***","timestamp":6279.37438}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6280.617343}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6281.490881}
+{"level":"info","message":"Current Heading: undefined","timestamp":6282.414366}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":6283.231653}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6284.078264}
+{"level":"info","message":"Turning right","timestamp":6284.866125}
+{"level":"info","message":"Y: NaN","timestamp":6285.785964}
+{"level":"info","message":"x: NaN","timestamp":6287.003458}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":6287.968297}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":6317.95836}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":6335.279682}
+{"level":"info","message":"***turn_timer***","timestamp":6345.553903}
+{"level":"info","message":"***calc_heading_delta***","timestamp":6346.908584}
+{"level":"info","message":"IMU Heading same as previous","timestamp":6348.106599}
+{"level":"info","message":"ERROR: IMU Heading Invalid","timestamp":6349.957892}
+{"level":"info","message":"Current Heading: undefined","timestamp":6351.133355}
+{"level":"info","message":"Target Heading: 121.66616421311153","timestamp":6355.300002}
+{"level":"info","message":"***TURNING TOWARDS TARGET***","timestamp":6356.455569}
+{"level":"info","message":"Turning right","timestamp":6357.465147}
+{"level":"info","message":"Y: NaN","timestamp":6358.43832}
+{"level":"info","message":"x: NaN","timestamp":6359.584616}
+{"level":"info","message":"Turn: Set rover speed - Left: NaN, right:NaN","timestamp":6360.592372}
+{"level":"info","message":"ArduinoMessage: 11:0:0:0:170:187\r","timestamp":6387.862187}
+{"level":"info","message":"ArduinoMessage: 12:0:0:0:170:187\r","timestamp":6408.907137}
+{"level":"info","message":"Y: 0","timestamp":7350.674285}
+{"level":"info","message":"x: 0","timestamp":7352.246257}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":7384.514069}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":7404.66095}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":13005.710797}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":13006.739178}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":13007.974224}
+{"level":"info","message":"Y: 0","timestamp":13009.188697}
+{"level":"info","message":"x: 0","timestamp":13010.882647}
+{"level":"info","message":"***python_proc.stdout***","timestamp":13013.884404}
+{"level":"info","message":"IMU Data: NaN","timestamp":13015.230022}
+{"level":"info","message":"Current Heading is NaN","timestamp":13016.663557}
+{"level":"info","message":"Y: 0","timestamp":13018.101102}
+{"level":"info","message":"x: 0","timestamp":13019.428335}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":13064.792959}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":13066.056494}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":13085.166974}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":13104.877504}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":13151.744203}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":13152.574616}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":13153.247946}
+{"level":"info","message":"Y: 0","timestamp":13153.896693}
+{"level":"info","message":"x: 0","timestamp":13154.6032}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":13186.431326}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":13207.51586}

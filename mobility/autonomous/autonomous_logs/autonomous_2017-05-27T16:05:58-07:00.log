@@ -1,0 +1,230 @@
+{"level":"info","message":"open","timestamp":1191.612931}
+{"level":"info","message":"Connected to IMU via UNIX socket ","timestamp":1209.992216}
+{"level":"info","message":"Connected to reach","timestamp":1213.7035}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38 36 32 2e 33 31 31 36 34 36 31 30 38 38 36 32 2e 33 31 31 36 34 36 31 30 38 38 36 32 2e 33 31 31 36 34 36 31 30 ... >","timestamp":1255.467412}
+{"level":"info","message":"Current Heading is NaN","timestamp":1257.26131}
+{"level":"info","message":"Y: 0","timestamp":1260.051192}
+{"level":"info","message":"x: 0","timestamp":1265.175386}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37 36 32 2e 30 38 39 36 39 38 33 31 36 37 36 32 2e 30 38 39 36 39 38 33 31 36 37 36 32 2e 30 38 39 36 39 38 33 31 ... >","timestamp":1278.627508}
+{"level":"info","message":"Current Heading is NaN","timestamp":1279.885627}
+{"level":"info","message":"Y: 0","timestamp":1280.948643}
+{"level":"info","message":"x: 0","timestamp":1282.297334}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1289.381362}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1297.355282}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1306.494092}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1316.741646}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1325.913373}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1335.789054}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1344.641094}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1354.258756}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1364.315217}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1374.535272}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1384.606681}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1394.30502}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1404.373356}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1413.960237}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1423.471857}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1433.131915}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1443.464573}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1453.25114}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1462.86776}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1472.899117}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1482.923183}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1492.887302}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1503.593969}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1514.693654}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1524.687095}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1534.922879}
+{"level":"info","message":"<Buffer 36 32 2e 30 38 39 36 39 38 33 31 36 37>","timestamp":1547.285006}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1556.537357}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1567.176629}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1577.390694}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1586.131537}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1597.33643}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1606.782686}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1616.319307}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1624.739474}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1633.307766}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1642.091734}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1650.883618}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1659.912481}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1668.644417}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":1677.462083}
+{"level":"info","message":"<Buffer 36 31 2e 38 36 38 36 35 37 36 33 35 39>","timestamp":1686.84636}
+{"level":"info","message":"<Buffer 36 31 2e 38 36 38 36 35 37 36 33 35 39>","timestamp":1698.108702}
+{"level":"info","message":"<Buffer 36 31 2e 38 36 38 36 35 37 36 33 35 39>","timestamp":1706.866419}
+{"level":"info","message":"<Buffer 36 31 2e 38 36 38 36 35 37 36 33 35 39>","timestamp":1754.319158}
+{"level":"info","message":"<Buffer 36 31 2e 38 36 38 36 35 37 36 33 35 39 36 31 2e 38 36 38 36 35 37 36 33 35 39 36 31 2e 38 36 38 36 35 37 36 33 35 39 36 31 2e 38 36 38 36 35 37 36 33 ... >","timestamp":1776.240458}
+{"level":"info","message":"Current Heading is NaN","timestamp":1791.614914}
+{"level":"info","message":"Y: 0","timestamp":1793.053345}
+{"level":"info","message":"x: 0","timestamp":1795.343178}
+{"level":"info","message":"<Buffer 36 31 2e 38 36 38 36 35 37 36 33 35 39 36 31 2e 38 36 38 36 35 37 36 33 35 39 36 31 2e 38 36 38 36 35 37 36 33 35 39 36 31 2e 38 36 38 36 35 37 36 33 ... >","timestamp":1803.91173}
+{"level":"info","message":"Current Heading is NaN","timestamp":1805.545524}
+{"level":"info","message":"Y: 0","timestamp":1807.012131}
+{"level":"info","message":"x: 0","timestamp":1808.247073}
+{"level":"info","message":"<Buffer 36 31 2e 38 36 38 36 35 37 36 33 35 39>","timestamp":1813.474392}
+{"level":"info","message":"<Buffer 36 31 2e 38 36 38 36 35 37 36 33 35 39>","timestamp":1820.742846}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1841.465662}
+{"level":"info","message":"Current Heading is NaN","timestamp":1844.299919}
+{"level":"info","message":"Y: 0","timestamp":1845.49382}
+{"level":"info","message":"x: 0","timestamp":1847.446206}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1853.203886}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1858.771203}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1863.576284}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1871.862754}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1880.17938}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1898.731009}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1908.634451}
+{"level":"info","message":"Current Heading is NaN","timestamp":1921.114025}
+{"level":"info","message":"Y: 0","timestamp":1922.395946}
+{"level":"info","message":"x: 0","timestamp":1931.449809}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1933.585267}
+{"level":"info","message":"Current Heading is NaN","timestamp":1934.828021}
+{"level":"info","message":"Y: 0","timestamp":1935.978745}
+{"level":"info","message":"x: 0","timestamp":1937.095823}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1939.031282}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1949.263889}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1954.755321}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1964.20715}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1973.913769}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1983.549972}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":1992.311128}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2000.951607}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2009.636929}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2018.984957}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2027.861528}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2036.607788}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2045.89743}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2055.746237}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2064.673433}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2073.705941}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2082.712095}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2091.684291}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2100.341906}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2109.469882}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2118.21359}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2126.953079}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2136.238086}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2145.481166}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2154.342998}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2164.684927}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2173.472332}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2182.406351}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2191.445057}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2206.052174}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":2208.733202}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":2209.572782}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":2210.915119}
+{"level":"info","message":"Y: 0","timestamp":2211.83725}
+{"level":"info","message":"x: 0","timestamp":2212.721152}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2219.963565}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2221.935222}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2230.328462}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2240.911588}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2249.650973}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2258.626189}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2267.479688}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2276.81157}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2285.528611}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2294.592057}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2306.581009}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2317.644497}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2332.095156}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2334.013115}
+{"level":"info","message":"<Buffer 36 32 2e 32 30 36 35 37 32 35 38 38>","timestamp":2341.657974}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2350.421942}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2359.085337}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2368.292532}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2376.59244}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2385.216044}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2394.22475}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2402.911739}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2411.682322}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2420.601237}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2429.54661}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2439.39677}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2447.773344}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2456.475594}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2465.600237}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2474.086133}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2483.035413}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2492.035057}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2500.899909}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2509.782679}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2518.670136}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2527.650248}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2536.421508}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2545.255944}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2554.131474}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2563.725698}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2575.276476}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2586.078663}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2596.124604}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2602.335719}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2611.269113}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2620.189487}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2629.102673}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2638.147525}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2647.008888}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2655.655044}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2664.224638}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2673.161157}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2682.298977}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2691.352683}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2700.596753}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2709.621501}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2718.270052}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2727.119801}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":2736.117934}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2745.106433}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2754.038108}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2762.951398}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2771.985469}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2780.885009}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2789.782882}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2798.830443}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":2807.731337}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2817.795819}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2827.725875}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2836.388854}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2846.688908}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2855.302721}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2863.888512}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2872.795865}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2881.701238}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2890.650101}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2899.671099}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2935.730039}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39 36 32 2e 34 32 37 39 30 30 31 36 32 39 36 32 2e 34 32 37 39 30 30 31 36 32 39 36 32 2e 34 32 37 39 30 30 31 36 ... >","timestamp":2947.496023}
+{"level":"info","message":"Current Heading is NaN","timestamp":2948.749819}
+{"level":"info","message":"Y: 0","timestamp":2949.741898}
+{"level":"info","message":"x: 0","timestamp":2951.245484}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2956.126398}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2962.999698}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2983.038247}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2985.850004}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2990.81373}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":2999.510719}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":3008.116614}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3016.689854}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3025.398093}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3033.936749}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3042.941393}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3052.315931}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3062.726662}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3071.611567}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3080.948032}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3098.817737}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3101.586265}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3112.049964}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3118.959618}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3127.779784}
+{"level":"info","message":"<Buffer 36 32 2e 33 31 31 36 34 36 31 30 38 38>","timestamp":3137.043697}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":3146.035164}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":3155.534232}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":3168.503701}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":3174.426016}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":3183.373733}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":3193.403528}
+{"level":"info","message":"<Buffer 36 32 2e 35 34 33 32 35 37 37 31 35 34>","timestamp":3203.922747}
+{"level":"info","message":"<Buffer 36 32 2e 34 32 37 39 30 30 31 36 32 39>","timestamp":3210.818808}

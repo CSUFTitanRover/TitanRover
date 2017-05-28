@@ -1,0 +1,881 @@
+{"level":"info","message":"open","timestamp":1332.404822}
+{"level":"info","message":"Connected to IMU via UNIX socket ","timestamp":1350.417859}
+{"level":"info","message":"Connected to reach","timestamp":1353.880603}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1383.431866}
+{"level":"info","message":"IMU Data: 62.311646108862","timestamp":1389.677356}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1400.692355}
+{"level":"info","message":"IMU Data: 62.311646108862","timestamp":1401.867714}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1408.182527}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":1409.165386}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1415.705615}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":1418.739611}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1421.807825}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":1422.970163}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1429.22857}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":1430.865125}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1437.944518}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":1439.154303}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1447.955407}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1449.246807}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1456.847655}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1458.118118}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1465.436988}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1466.748909}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1474.537986}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1475.823032}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1483.30862}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1484.580593}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1493.397165}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1495.157365}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1501.2627}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1502.525402}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1510.124584}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1511.45265}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1519.337196}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1520.773491}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1527.904081}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1529.182616}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1537.249869}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1538.556738}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1545.773682}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1547.073363}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1554.386088}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1555.673894}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1563.17542}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1565.956448}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1572.452094}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1573.749796}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1581.045698}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1582.391317}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1590.538256}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1591.845542}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1599.019934}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1600.456333}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1609.420248}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1611.653258}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1617.516094}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1618.78864}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1626.23902}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1627.538129}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1635.002936}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1636.271315}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1643.887529}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1645.223668}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1653.951698}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1655.416691}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1664.878833}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1669.95485}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1674.231079}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1677.265804}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1680.231415}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1681.675939}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1691.644224}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1693.220518}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1701.746206}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1702.9962}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1708.860651}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1710.381164}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1717.749097}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1719.082684}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1736.518225}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1738.138321}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1740.256592}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1741.755804}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1744.887507}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1746.497291}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1759.151552}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":1773.544712}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1776.700269}
+{"level":"info","message":"IMU Data: 62.20657258862","timestamp":1777.883441}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1780.591813}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1781.912744}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1789.093699}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1790.498379}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1798.21355}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1799.448857}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1806.466583}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1807.612046}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1817.19101}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1819.023606}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1825.12368}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1826.349299}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1835.722847}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":1836.996539}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1845.094364}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1846.341858}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1853.647344}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1854.854213}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1862.546051}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1863.787242}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1871.204446}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1872.447305}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1880.078518}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1881.354657}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1888.724361}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1890.084146}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1897.526975}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1898.768166}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1906.39214}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1907.654269}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1915.143452}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1916.455424}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1924.06846}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1925.318454}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1932.70545}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1933.952423}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1941.397178}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1942.707432}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1951.22911}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1952.543478}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":1963.000146}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":1968.20585}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2021.199656}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":2032.926474}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2034.545789}
+{"level":"info","message":"IMU Data: 62.311646108862","timestamp":2035.285993}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2043.250017}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":2044.141732}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2052.094297}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":2052.992262}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2060.683266}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":2061.63998}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2070.144314}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":2071.086393}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2078.220525}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":2079.280884}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2098.687821}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":2099.639014}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2101.201767}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":2102.093586}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2106.175754}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":2107.445435}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2114.956961}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2116.280184}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2124.262593}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2125.139203}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2132.984165}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2133.838119}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2141.773341}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2142.639952}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2150.547986}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2151.400482}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2160.413407}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2161.325226}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2168.252848}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2169.123781}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2177.025878}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2177.878479}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2185.793388}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2186.65078}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2194.555064}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2195.436154}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2203.508927}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2204.363142}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2212.171489}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2213.068776}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2221.175404}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2222.017691}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2232.244829}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2233.125815}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2241.295306}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2242.160979}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2250.153128}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2251.070311}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2259.436833}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2260.643441}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2268.052155}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2268.907099}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2277.076122}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2277.933201}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2285.706341}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2286.55118}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2294.787651}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2295.650459}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2303.61391}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2304.451145}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2312.322826}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2314.713075}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2322.407256}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2323.348554}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2330.225916}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2331.087787}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2338.666188}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2339.494309}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2347.700988}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2348.527077}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2356.613809}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2358.068802}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2367.075946}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2367.934014}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2375.761633}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":2376.632045}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2384.500184}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":2385.359294}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2393.263266}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":2394.096023}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2401.849631}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":2402.691398}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2410.801671}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":2411.689271}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2419.452983}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":2420.478186}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2428.317263}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":2429.176842}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2437.160918}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":2438.026278}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2447.099932}
+{"level":"info","message":"IMU Data: 62.5432577154","timestamp":2448.219614}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2455.722703}
+{"level":"info","message":"IMU Data: 62.5432577154","timestamp":2456.712229}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2464.638337}
+{"level":"info","message":"IMU Data: 62.5432577154","timestamp":2465.715519}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2473.712564}
+{"level":"info","message":"IMU Data: 62.5432577154","timestamp":2474.735475}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2482.55476}
+{"level":"info","message":"IMU Data: 62.5432577154","timestamp":2483.604547}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2491.57555}
+{"level":"info","message":"IMU Data: 62.5432577154","timestamp":2492.544764}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2500.751495}
+{"level":"info","message":"IMU Data: 62.5432577154","timestamp":2501.830396}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2509.666243}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2511.130559}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2519.409581}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2520.479889}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2528.254122}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2529.132867}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2537.030746}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2538.112251}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2545.869713}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2546.741376}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2554.671754}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2555.556125}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2563.366191}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2564.23577}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2572.167711}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2573.013175}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2581.057928}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2581.942559}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2589.716584}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2590.75335}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2598.490135}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2599.382266}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2607.234155}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2608.208994}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2618.770557}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2619.527741}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2627.154319}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2628.12697}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2634.314336}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2635.698757}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2643.14372}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2644.01205}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2651.898209}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2652.768986}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2660.745562}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2661.632849}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2669.441926}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2670.416609}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2678.129957}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2678.985109}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2686.890696}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2687.764181}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2695.639559}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2696.507836}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2704.378892}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2705.238888}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2713.121558}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2713.974887}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2721.87938}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2722.72797}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2730.709337}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2731.607718}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2739.449034}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2740.442988}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2749.114352}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2750.133045}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2757.004991}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2757.854153}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2765.730053}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2766.5901}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2774.446156}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2775.31386}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2783.20877}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2784.066474}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2791.93904}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2792.788359}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2800.757278}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2801.659826}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2809.541923}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2810.549054}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2818.351985}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2819.262189}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2827.105848}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2828.008448}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2835.908306}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2836.807312}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2844.722482}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2845.632165}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2853.511606}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2854.413893}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2862.313334}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2863.209579}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2871.305998}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2872.416514}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2879.946998}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2880.920379}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2888.712476}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2889.614035}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2897.570298}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2898.448054}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2906.348068}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":2907.265668}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2915.154588}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":2916.024427}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2923.90892}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":2924.751364}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2932.588774}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":2933.488145}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2941.304305}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":2942.257789}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2954.560751}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":2955.476215}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2962.102485}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":2962.994824}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2970.942129}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":2971.82374}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2979.708545}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2980.714842}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2988.528138}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2989.390113}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":2997.286168}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":2998.171268}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3006.047844}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3006.925132}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3014.846083}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3015.737225}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3023.652238}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3024.493849}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3032.427873}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3033.319483}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3041.214184}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3042.058868}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3050.166953}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3051.083668}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3058.94014}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3059.792323}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3067.712858}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3068.569624}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3076.484742}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3077.350623}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3085.281939}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3086.157143}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3094.11325}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3094.965225}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3102.900968}
+{"level":"info","message":"IMU Data: 62.5432577154","timestamp":3103.781797}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3111.675613}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3112.556911}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3120.529945}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3121.426399}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3129.281517}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3130.271512}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3138.055745}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3138.935012}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3146.832942}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3147.738303}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3155.509463}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3156.379146}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3164.288483}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3165.163791}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3173.27672}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3174.163591}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3181.707148}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3182.635998}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3202.536318}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3224.015589}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3225.168708}
+{"level":"info","message":"IMU Data: 62.322549206662","timestamp":3225.757507}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3231.069096}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3231.898936}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3239.791085}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3240.783007}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3248.598178}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3249.441663}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3257.288448}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3258.13735}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3266.100384}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3266.942568}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3274.841904}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3275.653619}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3283.630768}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3284.460191}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3292.332757}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3293.198795}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3301.187037}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3301.999585}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3309.945432}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3310.916261}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3318.766795}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3319.592781}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3327.558107}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3328.393207}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3336.261502}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3337.082019}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3345.020314}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3345.860414}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3353.879906}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3354.66933}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3362.643926}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3366.538491}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3372.958824}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3373.835018}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3380.475454}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3381.316648}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3389.203693}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3390.138637}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3397.929588}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3398.744168}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3406.639129}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3407.488344}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3415.367785}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3416.188614}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3424.061024}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3424.86602}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3432.746971}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3433.586551}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3441.484325}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3442.288436}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3450.274595}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3451.120111}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3458.990125}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3459.770382}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3467.745447}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3468.537839}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3476.416499}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3477.219829}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3485.184634}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3486.012025}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3493.854383}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3494.727139}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3502.579497}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3503.426889}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3511.370757}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3512.192575}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3520.223422}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3521.073782}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3528.963796}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3529.769105}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3537.708806}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3538.546927}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3546.446732}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3547.282301}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3555.487053}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3556.341476}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3563.869877}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3564.684144}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3572.624834}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3573.469101}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3581.399062}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3582.217079}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3590.256051}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3591.097036}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3598.998717}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3599.96892}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3607.785237}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3608.612576}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3616.53634}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3617.362273}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3625.29687}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":3626.113845}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3634.024588}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3634.838751}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3642.760744}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3643.566625}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3651.508618}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3652.315697}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3660.314929}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3661.15003}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3669.059054}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3670.00608}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3677.695731}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3678.514581}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3686.39272}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3687.220059}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3695.192312}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3696.013871}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3703.902791}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3704.731016}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3712.611186}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3713.460244}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3721.343592}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3722.171661}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3730.188653}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3731.115471}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3738.878454}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3739.72944}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3747.627006}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3748.472366}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3756.357328}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":3757.188834}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3766.732173}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3767.741856}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3775.425412}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3776.368793}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3784.210786}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3785.280625}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3793.156003}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3794.086155}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3801.941169}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3802.907362}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3810.752689}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3811.710705}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3819.41848}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3820.492277}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3828.128542}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3829.082444}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3837.027926}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3837.995421}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3845.750592}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3846.70465}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3854.590289}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3855.577523}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3863.334882}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3864.300294}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3871.904163}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3872.837075}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3881.0249}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3882.16203}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3889.804076}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3899.761944}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3901.260323}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3902.059381}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3907.333314}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3908.266382}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3916.079521}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3917.016861}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3924.89052}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3925.82463}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3933.700321}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3934.652348}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3942.467883}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3943.39491}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3951.262684}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3952.198617}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3960.271442}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3961.185969}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3968.845463}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3969.782282}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3977.650264}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3978.533489}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3986.486732}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3987.427873}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":3995.282627}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":3996.179914}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4004.073521}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4004.972007}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4012.778948}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4013.697277}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4021.531197}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4022.451193}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4030.462091}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4031.401566}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4039.054914}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4040.150221}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4047.855965}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4048.759919}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4056.677277}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4057.667949}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4065.440776}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4066.340251}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4074.395107}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4075.343644}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4083.11819}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4084.045529}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4091.856533}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4092.759029}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4100.811542}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4101.739558}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4109.373167}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4110.48139}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4118.159426}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4119.112547}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4126.955998}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4127.895368}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4135.861736}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4136.713242}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4144.592058}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4145.525752}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4153.50639}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4154.448573}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":4162.490305}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":4163.467435}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":4164.995449}
+{"level":"info","message":"Y: 0","timestamp":4167.96908}
+{"level":"info","message":"x: 0","timestamp":4174.656339}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4183.312599}
+{"level":"info","message":"IMU Data: 62.427900162962","timestamp":4184.171189}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4189.357049}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4190.406575}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4198.033309}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4198.937472}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4206.809308}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4207.750033}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4215.745463}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4216.690875}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4224.462504}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4225.340885}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4233.32293}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4234.179748}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4247.964369}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4248.885979}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4253.002522}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4253.857361}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4260.425663}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4261.554824}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4268.987496}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4270.276448}
+{"level":"info","message":"ArduinoMessage: Bytes Switched Clearing Buffer\r","timestamp":4273.682525}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4277.909901}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4278.819011}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4286.703608}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4287.642874}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4295.471899}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4296.299134}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4304.04118}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4304.94727}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4312.727076}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4313.88707}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4321.630366}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4322.700569}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4330.759801}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4331.687036}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4339.590956}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4340.655117}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":4343.938382}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":4344.927857}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":4345.781759}
+{"level":"info","message":"Y: 0","timestamp":4347.531438}
+{"level":"info","message":"x: 0","timestamp":4349.144034}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4351.574335}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4352.719069}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4357.451338}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4358.579093}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4366.366294}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4367.526705}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4375.319011}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4376.398069}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":4380.372945}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4384.48579}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4385.528649}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4393.414861}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4394.485481}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":4402.354818}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4404.061893}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4405.141106}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4411.16915}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4412.173989}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4419.975826}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4421.090977}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4428.59094}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4429.48328}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4437.518501}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4438.645944}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4446.269188}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4447.195121}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4455.232061}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4456.323202}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4464.134309}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4465.098576}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":4466.357215}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":4467.287627}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":4468.170279}
+{"level":"info","message":"Y: 0","timestamp":4468.955015}
+{"level":"info","message":"x: 0","timestamp":4470.03027}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4473.249526}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4474.219677}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4482.020889}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4483.551767}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4491.408708}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4492.500943}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4500.141895}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":4501.095015}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":4503.023704}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4509.079248}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":4510.131013}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4517.890663}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":4518.972845}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":4523.230898}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4526.875255}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":4527.791084}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4535.508859}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":4536.637603}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4544.243191}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":4545.184593}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4553.100909}
+{"level":"info","message":"IMU Data: 62.3225492066","timestamp":4554.234601}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4561.896231}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4562.817164}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4570.83426}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4571.944515}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4579.683332}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4580.797441}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4588.292144}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4589.414691}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4596.990435}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4597.917879}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4605.845705}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4606.983877}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4614.525663}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4615.445554}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":4622.668384}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":4624.022336}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":4624.800613}
+{"level":"info","message":"Y: 0","timestamp":4625.770087}
+{"level":"info","message":"x: 0","timestamp":4626.641542}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4628.390804}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4629.217935}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4632.626304}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4633.928173}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4641.477511}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4642.552402}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4650.356114}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4651.259287}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":4658.000764}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4659.654038}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4660.657835}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4668.053164}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4668.936232}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4676.666299}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4677.628065}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":4679.371442}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4685.506256}
+{"level":"info","message":"IMU Data: 62.4279001629","timestamp":4686.389116}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4694.175433}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4695.116834}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4702.818359}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4703.77799}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4711.501598}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4712.409667}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4720.263327}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4721.21728}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4728.855212}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4729.797135}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4737.582045}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4738.470322}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4746.189503}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4747.056009}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4754.849513}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4755.803415}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4763.628377}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4764.495195}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4772.191877}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4773.075987}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4780.911626}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4781.815632}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":4784.279162}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":4785.357178}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":4786.187486}
+{"level":"info","message":"Y: 0","timestamp":4786.875556}
+{"level":"info","message":"x: 0","timestamp":4787.971748}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4790.528663}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4791.5347}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4799.338464}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4800.405438}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4808.237535}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4809.277999}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4817.442386}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":4818.455611}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":4822.383769}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4826.739268}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4827.469786}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4835.783183}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4836.593387}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":4843.25049}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4844.937982}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4845.86454}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4854.039448}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4854.809184}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4862.970499}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4863.914869}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4871.815925}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4872.58816}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4880.809787}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4881.714679}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4890.272085}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4891.072394}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4899.143084}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4900.171881}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4908.016791}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4908.792933}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4916.839612}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4917.774035}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4925.671861}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4926.443993}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4936.57311}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4937.528522}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":4941.099599}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":4942.13251}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":4943.028964}
+{"level":"info","message":"Y: 0","timestamp":4944.070938}
+{"level":"info","message":"x: 0","timestamp":4945.055465}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4946.307021}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4947.137747}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4954.70422}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4957.769309}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4963.170325}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4964.117404}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4971.922939}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4972.854965}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":4977.854004}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":4997.593491}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":4999.002391}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5000.361967}
+{"level":"info","message":"IMU Data: 62.311646108862","timestamp":5001.250036}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":5002.850601}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5007.640942}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":5008.619115}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5016.342984}
+{"level":"info","message":"IMU Data: 62.3116461088","timestamp":5017.483499}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5025.051014}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5026.041166}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5033.711753}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5034.850342}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5042.405722}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5043.4153}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5051.220887}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5052.375569}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5060.052615}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5061.102402}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5068.745333}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5069.966161}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5077.571332}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5078.626483}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5086.298634}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5087.450347}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5095.130101}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5096.128846}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5103.845684}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5105.369374}
+{"level":"info","message":"***STOPPING ROVER ON SIGINT***","timestamp":5106.73317}
+{"level":"info","message":"\n####### JUSTIN LIKES MENS!! #######\n","timestamp":5107.586655}
+{"level":"info","message":"\t\t╭∩╮（︶︿︶）╭∩╮","timestamp":5108.354881}
+{"level":"info","message":"Y: 0","timestamp":5109.173314}
+{"level":"info","message":"x: 0","timestamp":5110.205549}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5112.836005}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5113.937354}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5121.788722}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5122.927414}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5130.720449}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5131.942422}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5139.406032}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5140.556131}
+{"level":"info","message":"ArduinoMessage: 11:0:127:0:170:187\r","timestamp":5142.41784}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5148.398905}
+{"level":"info","message":"IMU Data: 62.206572588","timestamp":5149.531608}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5158.081462}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":5159.136405}
+{"level":"info","message":"ArduinoMessage: 12:0:127:0:170:187\r","timestamp":5162.799044}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5166.523192}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":5167.520948}
+{"level":"info","message":"*** UNIX sockets ***","timestamp":5175.281848}
+{"level":"info","message":"IMU Data: 62.0896983167","timestamp":5176.431113}
