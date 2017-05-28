@@ -91,10 +91,12 @@ io.on('connection', function(socketClient) {
     socketClient.on('save to file', function (callback) {
         jsonfile.writeFile(file, temp_waypoint_list, function(err) {
             if(err) {
+		console.log("File did not save correctly.");
                 callback(err)
             }
-
-            console.log("File saved correctly");
+	    else {
+                console.log("File saved correctly.");
+	    }
         });
     });
 
