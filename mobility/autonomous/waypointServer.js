@@ -9,6 +9,8 @@ var file = '/home/pi/TitanRover/mobility/runt/node/gps.json';
 
 var gps_packet; // will be overwritten as new data is coming in from reach server
 var temp_waypoint_list = [];
+var average_waypoints = [];
+var averagePoint = 0;
 
 // Start the server
 socket.listen(9999, function() {
@@ -37,12 +39,14 @@ raspi_client.on('data', function(data,err) {
     data = data.toString().split(" ").filter(the_spaces);
 
     gps_packet = {
-        time: data[1],
         latitude: data[2],
         longitude: data[3],
-        height: data[4],
-        q: data[5]
     };
+    if(averagePoint == 50){
+	averagePoint = 0;
+    }
+    average_waypoints[averagePoint] = gps_packet;
+    averagePoint = averagePoint + 1;
 });
 
 function the_spaces(value){
@@ -67,17 +71,29 @@ io.on('connection', function(socketClient) {
 
     // request from UI
     socketClient.on('save waypoint', function(callback) {
+	setTimeout(function(){
+	    var averaged_gps_packet = {
+        	latitude: 0,
+        	longitude: 0
+            };	    
+	    for(var i = 0; i < 50; i++){
+	    	averaged_gps_packet.latitude = average_waypoints[i].latitude + averaged_gps_packet.latitude;
+		averaged_gps_packet.longitude = average_waypoints[i].longitude + averaged_gps_packet.longitude;
+	    }
+	    averaged_gps_packet.latitude = averaged_gps_packet.latitude/50;
+	    averaged_gps_packet.longitude = averaged_gps_packet.longitude/50;
+	
+	    // pass off to callback supplied from UI
+            callback(averaged_gps_packet);
 
-        // pass off to callback supplied from UI
-        callback(gps_packet);
+            // save into our temp list
+            const waypoint = {
+               latitude: averaged_gps_packet.latitude,
+               longitude: averaged_gps_packet.longitude
+            };
 
-        // save into our temp list
-        const waypoint = {
-            latitude: gps_packet.latitude,
-            longitude: gps_packet.longitude
-        };
-
-        temp_waypoint_list.push(waypoint);
+            temp_waypoint_list.push(waypoint);
+	}, 10000);
     });
 
     socketClient.on('delete recent waypoint', function () {
