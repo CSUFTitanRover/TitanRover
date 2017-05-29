@@ -201,7 +201,7 @@ function handleJoystick_1(event) {
         if (event.number == 1) {
             event.value *= -1;
         } else if (event.number == 2) {
-            if (event.value > -2000 && event.value < 2000) {
+            if (event.value > -30000 && event.value < 30000) {
                 event.value = 0;
             }
         }
@@ -222,9 +222,9 @@ function handleJoystick_1(event) {
             event.commandType = 'arm';
             arm_joint = (arm_joint) ? false : true;
             if (arm_joint) {
-                console.log("Joint 4 and 6 ## ONLINE ##\nJoint 2 and 3 ## OFFLINE ##");
+                console.log("Joint 6 and 7 ## ONLINE ##\nJoint 1, 2 and 3 ## OFFLINE ##");
             } else {
-                console.log("Joint 2 and 3 ## ONLINE ##\nJoint 4 and 6 ## OFFLINE ##");
+                console.log("Joint 1, 2 and 3 ## ONLINE ##\nJoint 6 and 7 ## OFFLINE ##");
             }
             send_to_rover(event);
         } else if (event.number == 6 && event.value == 1) { // Button 7: Start the calibration sequence

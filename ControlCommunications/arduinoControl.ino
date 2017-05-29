@@ -31,8 +31,10 @@ const uint8_t joint1_limit_pin = A0;
 unsigned int joint1_sensorValue;
 uint8_t joint1_bit;
 uint8_t joint1_port;
-const int upperLimit = 625;
-const int lowerLimit = 50;
+const int upperLimit = 630;
+const int lowerLimit = 55;
+const int middlePoint = 346;
+volatile bool centerJoint1 = false;
 
 // Joint #2
 Servo joint2;
@@ -50,10 +52,10 @@ volatile bool joint4_on = false;
 volatile bool joint4_interrupted = false;
 volatile bool joint4_needsStepOff = false;
 const uint8_t joint4_interrupt_pin = 3;
-volatile int joint4_TotalSteps = 0;
+unsigned int joint4_TotalSteps = 0;
 uint8_t joint4_bit;
 uint8_t joint4_port;
-const int joint4_StepsLimit = 5570;
+const int joint4_StepsLimit = 7330;
 bool joint4passedLimit = false;
 const int joint4_LimitDistance_Steps = 100;
 
@@ -65,10 +67,10 @@ volatile bool joint5_on = false;
 volatile bool joint5_interrupted = false;
 volatile bool joint5_needsStepOff = false;
 const uint8_t joint5_interrupt_pin = 2;
-volatile int joint5_TotalSteps = 0;
+unsigned int joint5_TotalSteps = 0;
 uint8_t joint5_bit;
 uint8_t joint5_port;
-const int joint5_StepsLimit = 100000;
+const int joint5_StepsLimit = 1000000;
 bool joint5passedLimit = false;
 const int joint5_LimitDistance_Steps = 1000;
 
@@ -102,6 +104,7 @@ static unsigned long last_interrupt_time = 0;
 
 bool Calibrated = false;  // Arm can't be moved until calibrated
 bool debug = false;
+bool ignoreLimit = true;
 uint8_t analogRead_counter = 0;
 
 //SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
@@ -168,7 +171,7 @@ void setup()
 
   joint7_stepper.init(joint7_ss);
   joint7_stepper.resetSettings();
-  joint7_stepper.setCurrentMilliamps(670);
+  joint7_stepper.setCurrentMilliamps(1250);
   joint7_stepper.setStepMode(stepsPerRevolution);
   joint7_stepper.enableDriver();
 
@@ -276,11 +279,11 @@ void loop()
         break;
       case 0x0B:
         //motor activation for the autonomous tasks
-        back.motor(1, val[2] - 127);
+        Back.motor(1, val[2] - 127);
         break;
       case 0x0C:
         //motor activation for the autonomous tasks
-        back.motor(2, val[2] - 127);
+        Back.motor(2, val[2] - 127);
         break;
       case 0xff:  // Auxillary functions
         if (val[1] == 0x01) // Calibrate the arm
@@ -311,8 +314,13 @@ void loop()
         {
           operateAssAss(val[2]);
         }
+        else if (val[1] == 0x06)
+        {
+          centerJoint1 = val[2];
+        }
         break;
       default:
+        Serial.println("DON'T UNDERSTAND COMMAND");
         break;
     } // end of switch
   } // endif serial.available()
@@ -324,12 +332,25 @@ void loop()
     joint1_sensorValue = analogRead(joint1_limit_pin);
   }
 
-
+  // If we are centering the joint1 during autonomous
+  if (centerJoint1)
+  {
+    if (joint1_sensorValue > middlePoint + 15)
+    {
+      digitalWrite(joint1_dir_pin, LOW);
+      digitalWrite(joint1_pulse_pin, HIGH);
+      digitalWrite(joint1_pulse_pin, LOW);
+    } else if (joint1_sensorValue < middlePoint - 15)
+    {
+      digitalWrite(joint1_dir_pin, HIGH);
+      digitalWrite(joint1_pulse_pin, HIGH);
+      digitalWrite(joint1_pulse_pin, LOW);
+    }
+  }
   // Drive the stepper motors if they are activated
-  if (joint1_on && Calibrated)
+  else if (joint1_on && Calibrated)
   {
     uint8_t state = (*portOutputRegister(joint1_port) & joint1_bit) ? HIGH : LOW;
-
     if (state && joint1_sensorValue < upperLimit)
     {
       if (analogRead_counter % 2 == 0)
@@ -361,14 +382,21 @@ void loop()
     // Update the step count
     if (!state)
     {
-      joint4_TotalSteps--;
-      if (joint4_TotalSteps < joint4_StepsLimit)
+      // Check within limit
+      if (joint4_TotalSteps <= joint4_StepsLimit && joint4_TotalSteps > 0)
       {
+        joint4_TotalSteps--;
         joint4passedLimit = false;
+      }
+      else
+      {
+        // Stop movement and reset steps back to within limit
+        joint4passedLimit = true;
       }
     }
     else
     {
+      // Check within limit
       if (joint4_TotalSteps < joint4_StepsLimit)
       {
         joint4_TotalSteps++;
@@ -376,11 +404,13 @@ void loop()
       }
       else
       {
+        // Stop movement and reset steps back to within limit
         joint4passedLimit = true;
       }
     }
 
-    if (!joint4passedLimit && analogRead_counter % 2 == 0)
+    // Check if joint4TotalSteps has passed its limit
+    if (!joint4passedLimit && analogRead_counter % 3 == 0)
     {
       digitalWrite(joint4_pulse_pin, HIGH);
       digitalWrite(joint4_pulse_pin, LOW);
@@ -400,17 +430,10 @@ void loop()
     // Update the step count
     if (state)
     {
-      joint5_TotalSteps--;
-      if (joint5_TotalSteps < joint5_StepsLimit)
+      // Check within limit
+      if (joint5_TotalSteps <= joint5_StepsLimit && joint5_TotalSteps > 0)
       {
-        joint5passedLimit = false;
-      }
-    }
-    else
-    {
-      if (joint5_TotalSteps < joint5_StepsLimit)
-      {
-        joint5_TotalSteps++;
+        joint5_TotalSteps--;
         joint5passedLimit = false;
       }
       else
@@ -418,7 +441,22 @@ void loop()
         joint5passedLimit = true;
       }
     }
+    else
+    {
+      // Check within limit
+      if (joint5_TotalSteps < joint5_StepsLimit)
+      {
+        joint5_TotalSteps++;
+        joint5passedLimit = false;
+      }
+      else
+      {
+        // Stop movement and reset steps back to within limit
+        joint5passedLimit = true;
+      }
+    }
 
+    // Check if joint5TotalSteps has passed its limit
     if (!joint5passedLimit)
     {
       digitalWrite(joint5_pulse_pin, HIGH);
@@ -441,7 +479,7 @@ void loop()
   delay(delayVal);
   analogRead_counter++;
 
-}
+} // END LOOP
 
 void stepJointHandler(uint8_t joint, int16_t steps)
 {
@@ -544,6 +582,7 @@ void calibrateArm()
     joint3.writeMicroseconds(2000);
     }*/
   Calibrated = true;
+  ignoreLimit = false;
 
   // Run joint4 calibration
   digitalWrite(joint4_dir_pin, LOW); // Run clock-wise to limit switch
@@ -551,8 +590,9 @@ void calibrateArm()
   {
     digitalWrite(joint4_pulse_pin, HIGH);
     digitalWrite(joint4_pulse_pin, LOW);
-    delay(delayVal);
+    delay(3);
   }
+  checkNeedToStepOffSwitch();
 
   // Run joint5 calibration
   digitalWrite(joint5_dir_pin, HIGH);
@@ -562,6 +602,9 @@ void calibrateArm()
     digitalWrite(joint5_pulse_pin, LOW);
     delay(delayVal);
   }
+  checkNeedToStepOffSwitch();
+
+  ignoreLimit = true;
 
 
   Serial.println("Finished Calibrating");
@@ -594,19 +637,14 @@ void stopJoint4()
     uint8_t state = (*portOutputRegister(joint4_port) & joint4_bit) ? HIGH : LOW;
 
     // Limit switch has been activated
-    if (!state)
+    if (!state && !ignoreLimit)
     {
+      ignore_time = joint4_interrupt_time;
       joint4_interrupted = true;
       joint4_on = false;
       joint4_needsStepOff = true;
       joint4_TotalSteps = 0;
-      ignore_time = joint4_interrupt_time;
-
-      if (joint4_interrupt_time - ignore_time > ignoreDelay) {
-        joint4_needsStepOff = true;
-      }
     }
-
 
     if (debug)
     {
@@ -627,24 +665,17 @@ void stopJoint5()
   unsigned long joint5_interrupt_time = millis();
   if (joint5_interrupt_time - last_interrupt_time > interruptDelay)
   {
-
-
     uint8_t state = (*portOutputRegister(joint5_port) & joint5_bit) ? HIGH : LOW;
 
-
     // Limit switch has been activated
-    if (state)
+    if (state && !ignoreLimit)
     {
-      joint5_TotalSteps = 0;
-      joint5_interrupted = true;
+      ignore_time = joint5_interrupt_time;
       joint5_on = false;
+      joint5_interrupted = true;
+      joint5_TotalSteps = 0;
       joint5_needsStepOff = true;
 
-      ignore_time = joint5_interrupt_time;
-
-      if (joint5_interrupt_time - ignore_time > ignoreDelay) {
-        joint5_needsStepOff = true;
-      }
     }
 
     if (debug)
