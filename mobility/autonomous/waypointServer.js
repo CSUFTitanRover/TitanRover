@@ -5,7 +5,7 @@ var net = require('net');
 var fs = require('fs');
 var jsonfile = require('jsonfile');
 var reachIP = '192.168.2.15';
-var file = '/home/pi/TitanRover/mobility/runt/node/gps.json';
+var file = '/home/pi/TitanRover/mobility/autonomous/gps.json';
 
 var gps_packet; // will be overwritten as new data is coming in from reach server
 var temp_waypoint_list = [];
