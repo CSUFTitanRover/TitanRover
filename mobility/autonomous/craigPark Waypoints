@@ -1,0 +1,18 @@
+#by handicap
+{latitude: 33.907797253, longitude: -117.888230827}, // 1
+    {latitude: 33.907813544, longitude: -117.888253258}, // 2 
+    {latitude: 33.90784173, longitude: -117.888263651}, // 3
+    {latitude: 33.907855246, longitude: -117.888282362}, // 4 
+    {latitude: 33.907840636, longitude: -117.888309203}, // 5
+    {latitude: 33.907855246, longitude: -117.888282362},  // 6
+    {latitude: 33.90784173, longitude: -117.888263651},
+    {latitude: 33.907813544, longitude: -117.888253258}, 
+    {latitude: 33.907797253, longitude: -117.888230827}
+
+#parking lot
+    {latitude: 33.9077992, longitude: -117.88823026}, // 1
+     {latitude: 33.90799779, longitude: -117.88817478}, // 2 
+     {latitude: 33.90795127, longitude: -117.88819359}, // 3
+     {latitude: 33.90795765, longitude: -117.88818212}, // 4 
+     {latitude: 33.90796292, longitude: -117.88821231}, // 5
+     {latitude: 33.90799283, longitude: -117.88822578}  // 6
