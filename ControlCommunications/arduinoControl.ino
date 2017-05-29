@@ -52,10 +52,10 @@ volatile bool joint4_on = false;
 volatile bool joint4_interrupted = false;
 volatile bool joint4_needsStepOff = false;
 const uint8_t joint4_interrupt_pin = 3;
-unsigned int joint4_TotalSteps = 0;
+unsigned long joint4_TotalSteps = 0;
 uint8_t joint4_bit;
 uint8_t joint4_port;
-const int joint4_StepsLimit = 7330;
+const unsigned long joint4_StepsLimit = 7330;
 bool joint4passedLimit = false;
 const int joint4_LimitDistance_Steps = 100;
 
@@ -67,10 +67,10 @@ volatile bool joint5_on = false;
 volatile bool joint5_interrupted = false;
 volatile bool joint5_needsStepOff = false;
 const uint8_t joint5_interrupt_pin = 2;
-unsigned int joint5_TotalSteps = 0;
+unsigned long joint5_TotalSteps = 0;
 uint8_t joint5_bit;
 uint8_t joint5_port;
-const int joint5_StepsLimit = 1000000;
+const unsigned long joint5_StepsLimit = 50500;
 bool joint5passedLimit = false;
 const int joint5_LimitDistance_Steps = 1000;
 
@@ -524,7 +524,7 @@ void stepJointHandler(uint8_t joint, int16_t steps)
 */
 void stepJoint(uint8_t puslePin, uint16_t steps)
 {
-  for (int i = 0; i < steps; ++i)
+  for (unsigned int i = 0; i < steps; ++i)
   {
     digitalWrite(puslePin, HIGH);
     digitalWrite(puslePin, LOW);
