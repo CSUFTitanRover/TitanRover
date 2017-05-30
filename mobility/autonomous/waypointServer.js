@@ -77,12 +77,12 @@ io.on('connection', function(socketClient) {
         	longitude: 0
             };	    
 	    for(var i = 0; i < 50; i++){
-	    	averaged_gps_packet.latitude = average_waypoints[i].latitude + averaged_gps_packet.latitude;
-		averaged_gps_packet.longitude = average_waypoints[i].longitude + averaged_gps_packet.longitude;
+	    	averaged_gps_packet.latitude = parseFloat(average_waypoints[i].latitude) + parseFloat(averaged_gps_packet.latitude);
+		averaged_gps_packet.longitude = parseFloat(average_waypoints[i].longitude) + parseFloat(averaged_gps_packet.longitude);
 	    }
 	    averaged_gps_packet.latitude = averaged_gps_packet.latitude/50;
 	    averaged_gps_packet.longitude = averaged_gps_packet.longitude/50;
-	
+	    console.log('avearaged waypoint: ',averaged_gps_packet);	
 	    // pass off to callback supplied from UI
             callback(averaged_gps_packet);
 

@@ -6,9 +6,7 @@
 #include <Wire.h>
 /*------*/
 /*DEFINE ALL TRIG PINS AND NECESARY VARIABLES FOR USAGE*/
-#define TRIGPIN 9//Sonic Range Finder
-#define ECHOPIN 10//Sonic Range Finder
-#define DHT_DATALINE 13 //DHT11 dataline pin.
+#define DHT_DATALINE 7 //DHT11 dataline pin.
 #define DECAGON_DATALINE 2 //5TE Dataline(RED WIRE)
 #define INVERTED 1 //FOR 5TE SOIL, NOT A PIN
 
@@ -27,8 +25,6 @@ void setup() {
   sdi_serial_connection.begin(); //Start the SDI connection
   Serial.begin(9600); //start and specify the baud rate of our data
   pinMode(DHT_DATALINE, OUTPUT);
-  pinMode(TRIGPIN, OUTPUT);
-  pinMode(ECHOPIN, INPUT);
   Wire.begin();
   Serial.println("...SENSORS INITIALIZED"); //visually see in the stream that we're ready to recieve data
   Serial.println("...TIMERS INITIALIZED");
@@ -38,8 +34,6 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   SoilSensor();
-  TempuratureSensor();
-  SonicRangeFinder();
   
   if(CO2HasStarted == false) {
     startCO2();//needs AT LEASST 10MS between start and Read
@@ -55,21 +49,6 @@ void loop() {
 }
 
 /*ALL FUNCTIONS TO RUN SENSORS IN LOOP*/
-/*SONIC RANGE FINDER*/
-void SonicRangeFinder() {
-  long duration, distance;
-  digitalWrite(TRIGPIN, LOW);
-  delayMicroseconds(2);
-  digitalWrite(TRIGPIN, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(TRIGPIN, LOW);
-  duration = pulseIn(ECHOPIN, HIGH);
-  distance = (duration/2)/29.1;
-  Serial.print("03:");
-  Serial.print(distance);
-  Serial.println("/");
-}
-/*------*/
 /*DHT11*/
 void TempuratureSensor() {
   start_test ();
