@@ -99,7 +99,13 @@ var previousLocation = {
      {latitude: 33.88214708, longitude: -117.88173965} //  4 
 */
 
-var wayPoints = JSON.parse(fs.readFileSync(file, 'utf8'));
+//var wayPoints = JSON.parse(fs.readFileSync(file, 'utf8'));
+var wayPoints = [{latitude: 33.88166706, longitude: -117.88262079}, //1
+                    {latitude: 33.88153043, longitude: -117.88262113},  //2
+		                    {latitude: 33.88147698, longitude: -117.88298218},  //3 
+				                    {latitude: 33.88130529, longitude: -117.88304519},  //4
+						                    {latitude: 33.88134085, longitude: -117.88262929}   //5
+								                    ];
 //-----END WAYPOINTS-----
 //-----WINSTON ENTRY POINT-----
 const winston = new (Winston.Logger)({
@@ -170,6 +176,7 @@ imu_client.on('data',function(data,err){
 });
 imu_client.on('end',function(){
    console.log('ERROR: imu disconnected'); 
+   badHeadingData = true;
 });
 //----END REACH CODE----
 //----IMU ENTRY----
@@ -578,6 +585,11 @@ process.on('SIGINT', function() {
 
 process.on('uncaughtException', function (err) {
   winston.info('Caught exception: ' + err);
+  badHeading = true;
+  clearInterval(drive_timer);
+  clearInterval(turn_timer);
+  stopRover();
+  process.kill();
 });
 
 //----END SCRIPT KILL----
