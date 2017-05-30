@@ -111,13 +111,15 @@ const SET_ARDUINO_DEBUG = {
 const SEND_CONTROL_AFTER = 20;
 var packet_count = 0;
 
+var gotRoverConnect = false;
+
 // Arm Variables
 var arm_joint = false;
 
 // Socket event handlers
 socket.on('listening', function() {
     console.log('Running control on: ' + socket.address().address + ':' + socket.address().port);
-    send_to_rover(SET_ARDUINO_DEBUG);
+    //send_to_rover(SET_ARDUINO_DEBUG);
 });
 
 // When we recieve a packet from the rover it is acking a control packet
@@ -127,6 +129,7 @@ socket.on('message', function(message, remote) {
     if (msg.type == "rover_ack") {
         //console.log("Rover sent an ack");
         packet_count = 0;
+        gotRoverConnect = true;
         send_to_rover(CONTROL_MESSAGE_ACK);
     } else if (msg.type == "debug") {
         console.log(msg);
@@ -151,6 +154,13 @@ function send_to_rover(message) {
     });
 }
 
+setInterval(function() {
+    if (gotRoverConnect) {
+        console.log('##### Rover is Connected #####');
+    }
+    gotRoverConnect = false;
+}, 5000);
+
 
 // Joystick for Mobility
 function handleJoystick_0(event) {
@@ -161,14 +171,24 @@ function handleJoystick_0(event) {
             event.commandType = "mobility";
             send_to_rover(event);
         }
-    } else if (event.number == 9 && event.value == 1) { // Button 10: Get back debug statistics
-        send_to_rover(GET_DEBUG_STATS);
-    } else if (event.number == 10 && event.value == 1) { // Button 11: Determine which joystick is what
-        console.log("Mobility Joystick!!");
-    } else if (event.number == 11 && event.value == 1) { // Button 12: Turn on Arduino debug statements
-        send_to_rover(SET_ARDUINO_DEBUG);
     }
-}
+
+    if (event.type == 'button') {
+
+        // Handle each button seperatly since they could have different uses such as
+        // hold down of press once
+        if (event.number == 6) { // Button 7: Open/Close AssAss
+            event.commandType = 'control';
+            event.type = 'assass';
+            send_to_rover(event);
+        } else if (event.number == 9 && event.value == 1) { // Button 10: Get back debug statistics
+            send_to_rover(GET_DEBUG_STATS);
+        } else if (event.number == 10 && event.value == 1) { // Button 11: Determine which joystick is what
+            console.log("Mobility Joystick!!");
+        } else if (event.number == 11 && event.value == 1) { // Button 12: Turn on Arduino debug statements
+            send_to_rover(SET_ARDUINO_DEBUG);
+        }
+    }
 }
 
 
@@ -177,6 +197,15 @@ function handleJoystick_1(event) {
 
     if (event.type == 'axis') {
         event.commandType = 'arm';
+
+        if (event.number == 1) {
+            event.value *= -1;
+        } else if (event.number == 2) {
+            if (event.value > -30000 && event.value < 30000) {
+                event.value = 0;
+            }
+        }
+
         send_to_rover(event);
     }
 
@@ -193,9 +222,9 @@ function handleJoystick_1(event) {
             event.commandType = 'arm';
             arm_joint = (arm_joint) ? false : true;
             if (arm_joint) {
-                console.log("Joint 4 and 6 ## ONLINE ##\nJoint 2 and 3 ## OFFLINE ##");
+                console.log("Joint 6 and 7 ## ONLINE ##\nJoint 1, 2 and 3 ## OFFLINE ##");
             } else {
-                console.log("Joint 2 and 3 ## ONLINE ##\nJoint 4 and 6 ## OFFLINE ##");
+                console.log("Joint 1, 2 and 3 ## ONLINE ##\nJoint 6 and 7 ## OFFLINE ##");
             }
             send_to_rover(event);
         } else if (event.number == 6 && event.value == 1) { // Button 7: Start the calibration sequence

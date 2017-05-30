@@ -119,7 +119,7 @@ controller.on('disconnecting', function() {
 });
 
 controller.on('connection:change', function(data) {
-    console.log(data);
+    console.log('ConnectionChanged: ' + data);
 });
 
 // Shifting joystick values from 0-255 to -127.5 to 127.5
@@ -127,8 +127,8 @@ controller.on('connection:change', function(data) {
 controller.on('left:move', function(data) {
     event = {
         number: 2,
-        x: (data.x - 127.5) * 0.25,
-        y: ((data.y - 127.5) * 0.25) * -1,
+        x: (data.x - 127.5) * 0.50,
+        y: ((data.y - 127.5) * 0.50),
         commandType: "mobility"
     };
 
@@ -140,6 +140,7 @@ controller.on('left:move', function(data) {
     if (event.x < 1.5 && event.x > -1.5) {
         event.x = 0;
     }
+    console.log(event);
     send_to_rover(event);
 });
 /*

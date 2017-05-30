@@ -16,8 +16,13 @@ greenLower = (29, 86, 6)
 greenUpper = (64, 255, 255)
 pts = deque(maxlen=args["buffer"])
 
+# initialize the frame counter and the cordinate deltas
+counter = 0
+(dX, dY) = (0,0)
+direction = ""
+
 # define the camera to be the reference to the IP camera stream
-camera = urllib.request.urlopen('http://itwebcammh.fullerton.edu/mjpg/video.mjpg')
+camera = urllib.request.urlopen('http://192.168.1.100/video.mjpg')
 
 bytes = bytes()
 while True:
@@ -64,23 +69,59 @@ while True:
 				# then update the list of tracked points
 				cv2.circle(frame, (int(x), int(y)), int(radius), (0,255,255), 2)
 				cv2.circle(frame, center, 5, (0,0, 255), -1)
+				# update the points queue
+				pts.appendleft(center)
 
-		# update the points queue
-		pts.appendleft(center)
+
 
 		# loop over the set of tracked points
-		for i in range(1, len(pts)):
+		for i in np.arange(1, len(pts)):
 			# if either of the tracked points are None, ignore them
 			if pts[i -1] is None or pts[i] is None:
 				continue
+			# check to see if enough points have been accumulated in buffer
+			if counter >= 10 and i ==1 and len(pts) > 10:
+				# compute the difference between x and y and re-initialize the direction txt variables
+				dX = pts[-10][0] - pts[i][0]
+				dY = pts[-10][1] - pts[i][1]
+				(dirX, dirY) = ("","")
 
-			# otherwise, compute the thickness of the line and draw
-			# tthe connecting lines
-			thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
-			cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
+				# ensure there is significant movement in the x direction
+				if np.abs(dX) > 20:
+					# x direction
+					if np.sign(dX) == 1:
+						dirX = "East"
+					else:
+						dirX = "West"
+
+				if np.abs(dY) > 20:
+					# y direction
+					if np.sign(dY) == 1:
+						dirX = "North"
+					else:
+						dirX = "South"
+
+				# handle when both directions are non-empty
+				if dirX !="" and dirY !="":
+
+					direction = "{}-{}".format(dirY, dirX)
+				# otherwise only one direction is non-empty
+				else:
+					direction = dirX if dirX != "" else dirY
+
+				# compute the thickness of the line and draw connecting lines
+				thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
+				cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
+
+		# display the movement deltas and direction in the frame
+		cv2.putText(frame, direction, (10,3), cv2.FONT_HERSHEY_SIMPLEX,0.65, (0, 0, 255),3)
+		cv2.putText(frame, "dX: {}, dY: {}".format(dX, dY), (10,frame.shape[0]-10), cv2.FONT_HERSHEY_SIMPLEX,0.35, (0, 0, 255),1)
+
 
 		# display the frame on the screen
 		cv2.imshow('Frame', frame )
+		key = cv2.waitKey(1) & 0xFF
+		counter += 1
 
 		if cv2.waitKey(1) == 27:
 			exit(0)

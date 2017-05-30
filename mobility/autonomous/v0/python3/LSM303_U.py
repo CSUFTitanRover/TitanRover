@@ -26,7 +26,6 @@ LSM303_CRB_REG_M			=	0x01
 LSM303_MR_REG_M	        		=	0x02
 LSM303_ACCEL_CTRL_REG1_A		=	0x20
 LSM303_ACCEL_CTRL_REG2_A                =       0X21
-LSM303_ACCEL_CTRL_REG4_A                =       0x23
 
 #                                                   // DEFAULT    TYPE
 #      LSM303_REGISTER_ACCEL_CTRL_REG1_A         = 0x20,   // 00000111   rw
