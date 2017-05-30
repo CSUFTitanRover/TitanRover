@@ -8,7 +8,7 @@
 /*DEFINE ALL TRIG PINS AND NECESARY VARIABLES FOR USAGE*/
 #define TRIGPIN 9//Sonic Range Finder
 #define ECHOPIN 10//Sonic Range Finder
-#define DHT_DATALINE 8 //DHT11 dataline pin.
+#define DHT_DATALINE 13 //DHT11 dataline pin.
 #define DECAGON_DATALINE 2 //5TE Dataline(RED WIRE)
 #define INVERTED 1 //FOR 5TE SOIL, NOT A PIN
 
