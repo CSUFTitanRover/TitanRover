@@ -1,27 +1,31 @@
-var net = require('net'),
-  port = 9015,
-  host = 'localhost'
-  socket = net.createConnection(port, host);
-  
-socket.on('data', function(data) {
-   console.log('received: ' + data);
-   //console.log(typeof data);
-   //console.log(JSON.parse(data));
-   //data = data.split(" ");
-   //for(var i = 0; i < data.length; i++){
-   //	console.log(i + " " + data[1]);
-   //}
+var net = require('net');
+var now = require('performance-now');
+var moment = require('moment');
+
+var imu_client = new net.Socket();
+
+var currentHeading; 
+
+imu_client.connect('/home/pi/TitanRover/GPS/IMU/Python_Version/imu_sock', function(){
+    winston.info("Connected to IMU via UNIX socket ");
 });
 
-socket.on('connect', function() {
-    console.log('connected');
+imu_client.on('data',function(data,err){
+    if(err){
+        winston.info('Error: ', err);
+    }
+    data = parseFloat(data);
+    winston.info("*** UNIX sockets ***");
+    winston.info("IMU Data: " + data);
+    if (isNaN(data)) {
+        winston.info("ERROR: Current Heading is NaN");
+        stopRover();
+    } else if ( 0 <= data && data <= 360){
+        currentHeading = data;
+    } else {
+        winston.info("ERROR: IMU Heading Out of Range: " + data);
+    }
 });
-
-socket.on('SIGINT', function() {
-    socket.exit();
-
-});
-
-socket.on('end', function() {
-    console.log('closed');
+imu_client.on('end',function(){
+   console.log('ERROR: imu disconnected'); 
 });
