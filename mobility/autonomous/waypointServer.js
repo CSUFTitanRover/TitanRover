@@ -8,6 +8,7 @@ var reachIP = '192.168.2.15';
 var file = '/home/pi/TitanRover/mobility/autonomous/gps.json';
 
 var gps_packet; // will be overwritten as new data is coming in from reach server
+var rover_location;
 var temp_waypoint_list = [];
 var average_waypoints = [];
 var averagePoint = 0;
@@ -42,6 +43,7 @@ raspi_client.on('data', function(data,err) {
         latitude: data[2],
         longitude: data[3],
     };
+    rover_location = gps_packet;
     if(averagePoint == 50){
 	averagePoint = 0;
     }
@@ -58,16 +60,13 @@ io.on('connection', function(socketClient) {
     console.log("Client Connected: " + socketClient.id);
 
 	// emit rover's location every 1.5 seconds
-    setInterval(function() {
-        var rover_location = {
-          latitude: gps_packet.latitude,
-          longitude: gps_packet.longitude
-        };
-
-        socketClient.emit('rover location', rover_location);
-        // if the above doesnt work comment it out & try below
-        //io.emit('rover location', rover_location);
-    }, 1500);
+    setTimeout(function() {
+        setInterval(function() {
+            //socketClient.emit('rover location', rover_location);
+            // if the above doesnt work comment it out & try below
+            io.emit('rover location', rover_location);
+        }, 1500);
+    },1500);
 
     // request from UI
     socketClient.on('save waypoint', function(callback) {
