@@ -1,10 +1,24 @@
 var net = require('net');
 var now = require('performance-now');
 var moment = require('moment');
-
+var Winston = require('winston');
 var imu_client = new net.Socket();
 
 var currentHeading; 
+
+const winston = new (Winston.Logger)({
+    transports: [
+      new (Winston.transports.Console)({
+          'colorize': true
+     }),
+      new (Winston.transports.File)({
+          filename: './autonomous_logs/autonomous_' + moment().format() + '.log',
+          options:{flags: 'w'}, // Overwrite logfile. Remove if you want to append 
+          timestamp: function () {
+          return now();},
+     })
+    ]
+  });
 
 imu_client.connect('/home/pi/TitanRover/GPS/IMU/Python_Version/imu_sock', function(){
     winston.info("Connected to IMU via UNIX socket ");
