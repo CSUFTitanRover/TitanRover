@@ -140,7 +140,7 @@ export default class Waypoints extends Component {
             // then save waypoint location to local storage just in case someone accidentally refreshes
             this.save_ls_waypoint_location(latitude, longitude);
 
-            message.success("Average Waypoint Saved!");
+            message.info("Average Waypoint Saved!");
         });
     };
 
@@ -185,9 +185,14 @@ export default class Waypoints extends Component {
     handleSaveToFile = () => {
         let confirmation = confirm("Save to file?");
         if (confirmation) {
-            this.socketClient.emit('save to file', function (err) {
-                message.error("There was an error writing to file. Check console for full error message.");
-                console.log(err);
+            this.socketClient.emit('save to file', function (err, success=null) {
+                if(err) {
+                    message.error("There was an error writing to file. Check console for full error message.");
+                    console.log(err);
+                }
+                else if(success) {
+                    message.success("File saved correctly to file on raspi!");
+                }
             });
         }
     };

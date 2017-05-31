@@ -108,8 +108,11 @@ io.on('connection', function(socketClient) {
             if(err) {
                 callback(err)
             }
-
-            console.log("File saved correctly");
+            else {
+                const success = true;
+                callback(err, success);
+                console.log("File saved correctly");
+            }
         });
     });
 
