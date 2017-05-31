@@ -1,5 +1,4 @@
 var sys = require('util');
-var fs = require('fs');
 var geolib = require('geolib');
 var spawn = require("child_process").spawn;
 var net = require('net');
@@ -99,13 +98,7 @@ var previousLocation = {
      {latitude: 33.88214708, longitude: -117.88173965} //  4 
 */
 
-//var wayPoints = JSON.parse(fs.readFileSync(file, 'utf8'));
-var wayPoints = [{latitude: 33.88166706, longitude: -117.88262079}, //1
-                    {latitude: 33.88153043, longitude: -117.88262113},  //2
-		                    {latitude: 33.88147698, longitude: -117.88298218},  //3 
-				                    {latitude: 33.88130529, longitude: -117.88304519},  //4
-						                    {latitude: 33.88134085, longitude: -117.88262929}   //5
-								                    ];
+var wayPoints = JSON.parse(fs.readFileSync(file, 'utf8'));
 //-----END WAYPOINTS-----
 //-----WINSTON ENTRY POINT-----
 const winston = new (Winston.Logger)({
