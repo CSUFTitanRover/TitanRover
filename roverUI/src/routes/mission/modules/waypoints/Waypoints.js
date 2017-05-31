@@ -8,6 +8,7 @@ import ZoomDisplay from 'react-leaflet-zoom-display';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+
 // Needed in order to provide the correct path to marker images
 // https://github.com/PaulLeCam/react-leaflet/issues/255
 delete L.Icon.Default.prototype._getIconUrl;
@@ -29,15 +30,17 @@ export default class Waypoints extends Component {
             waypoint_markers: [],
             rover_position: {latitude: 0, longitude: 0},
             rover_marker: null,
+            manual_lat: 0,
+            manual_lng: 0
         };
 
         this.socketClient = io.connect(rover_settings.waypoint_server_ip);
 
         // to be used as a custom icon for the rover
         this.roverIcon = L.icon({
-            iconUrl: './rover-marker-icon.png',
-            iconRetinaUrl: './rover-marker-icon-2x.png',
-            shadowUrl: './rover-marker-shadow.png',
+            iconUrl: require('./rover-marker-icon.png'),
+            iconRetinaUrl: require('./rover-marker-icon-2x.png'),
+            shadowUrl: require('./rover-marker-shadow.png'),
             iconSize:    [25, 41],
             iconAnchor:  [12, 41],
             popupAnchor: [1, -34],
@@ -87,8 +90,8 @@ export default class Waypoints extends Component {
             let generated_markers;
 
             for (let location of waypoint_locations) {
-                let lat = location[0];
-                let lng = location[1];
+                let lat = parseFloat(location[0]);
+                let lng = parseFloat(location[1]);
                 generated_markers.push(this.generateMarker(lat, lng));
             }
 
@@ -104,6 +107,7 @@ export default class Waypoints extends Component {
             let new_rover_marker = this.generateMarker(latitude, longitude, this.roverIcon);
             this.setState({rover_marker: new_rover_marker, rover_position: gps_packet});
         });
+
     }
 
     handleSaveWaypoint = () => {
@@ -135,6 +139,8 @@ export default class Waypoints extends Component {
 
             // then save waypoint location to local storage just in case someone accidentally refreshes
             this.save_ls_waypoint_location(latitude, longitude);
+
+            message.success("Average Waypoint Saved!");
         });
     };
 
@@ -190,9 +196,21 @@ export default class Waypoints extends Component {
         this.socketClient.disconnect();
     }
 
+    handleManualLat = ({target}) => {
+        this.setState({manual_lat: target.value});
+
+    };
+
+    handleManualLng = ({target}) => {
+        this.setState({manual_lng: target.value});
+    };
+
     render() {
         // starting position of map on load
         const position = [33.88255522931054, -117.88273157819734];
+
+        // testing rover marker
+        let new_rover_marker = this.generateMarker(33.88255522931054, -117.88273157819734, this.roverIcon);
 
         return(
             <BaseModuleTemplate moduleName="Waypoints" className="waypoints">
@@ -205,11 +223,27 @@ export default class Waypoints extends Component {
                                 url='http://localhost:8080/styles/osm-bright/rendered/{z}/{x}/{y}.png'
                             />
                             <ZoomDisplay/>
-
-                            {this.state.rover_marker}
+                            {new_rover_marker}
+                            {/*{this.state.rover_marker}*/}
                             {this.state.waypoint_markers}
                         </Map>
                     </Col>
+                </Row>
+
+                <Row>
+                    <Card title="Add Waypoint Marker">
+                        <Row type="flex" gutter={50}>
+                            <Col span={6}>
+                                <Input addonBefore="latitude" value={this.state.manual_lat} onChange={this.handleManualLat} />
+                            </Col>
+                            <Col span={6}>
+                                <Input addonBefore="longitude" value={this.state.manual_lng} onChange={this.handleManualLng} />
+                            </Col>
+                            <Col span={6}>
+                                <Button type="primary" onClick={this.handleManualWaypointMarker}>Add Waypoint Marker</Button>
+                            </Col>
+                        </Row>
+                    </Card>
                 </Row>
 
                 <Row>
@@ -243,4 +277,13 @@ export default class Waypoints extends Component {
             </BaseModuleTemplate>
         );
     }
+
+    handleManualWaypointMarker = () => {
+        const newMarker = this.generateMarker(this.state.manual_lat, this.state.manual_lng);
+
+        const waypoint_markers = this.state.waypoint_markers;
+        waypoint_markers.push(newMarker);
+
+        this.setState({waypoint_markers});
+    };
 }
