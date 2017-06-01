@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../../templates/BaseModuleTemplate';
-import { Button, Row, Col, message, Input, Card } from 'antd';
+import { Button, Row, Col, message, Input, Card, Table, Modal } from 'antd';
 import io from 'socket.io-client';
 import rover_settings from '../../../../../rover_settings.json';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -31,7 +31,8 @@ export default class Waypoints extends Component {
             rover_position: {latitude: 0, longitude: 0},
             rover_marker: null,
             manual_lat: 0,
-            manual_lng: 0
+            manual_lng: 0,
+            waypoint_table_data: [],
         };
 
         this.socketClient = io.connect(rover_settings.waypoint_server_ip);
@@ -100,14 +101,20 @@ export default class Waypoints extends Component {
 
         // handle when the rover's location is sent to the UI from the raspi server
         this.socketClient.on('rover location', (gps_packet) => {
-            console.log("rover's location:");
-            console.log(gps_packet);
+            // console.log("rover's location:");
+            // console.log(gps_packet);
             let { latitude, longitude } = gps_packet;
 
             let new_rover_marker = this.generateMarker(latitude, longitude, this.roverIcon);
             this.setState({rover_marker: new_rover_marker, rover_position: gps_packet});
         });
 
+        this.socketClient.on('successful autonomy', () => {
+            Modal.success({
+                title: 'Successful Autonomy Misssion',
+                content: 'Rover has finished its mission!'
+            })
+        });
     }
 
     handleSaveWaypoint = () => {
@@ -126,7 +133,6 @@ export default class Waypoints extends Component {
          */
 
         this.socketClient.emit('save waypoint', (gps_packet) => {
-
             console.log(gps_packet);
             let { latitude, longitude } = (gps_packet);
             console.log(latitude, longitude);
@@ -141,6 +147,15 @@ export default class Waypoints extends Component {
             this.save_ls_waypoint_location(latitude, longitude);
 
             message.info("Average Waypoint Saved!");
+
+            // handle adding to the waypoint table
+            const waypoint_table_data = this.state.waypoint_table_data;
+            waypoint_table_data.push({
+                latitude: latitude,
+                longitude:  longitude,
+                key: waypoint_table_data.length + 1
+            });
+            this.setState({waypoint_table_data});
         });
     };
 
@@ -185,14 +200,14 @@ export default class Waypoints extends Component {
     handleSaveToFile = () => {
         let confirmation = confirm("Save to file?");
         if (confirmation) {
-            this.socketClient.emit('save to file', function (err, success=null) {
+            this.socketClient.emit('save to file', function (err) {
                 if(err) {
                     message.error("There was an error writing to file. Check console for full error message.");
-                    console.log(err);
+                    console.error(err);
+                    return;
                 }
-                else if(success) {
-                    message.success("File saved correctly to file on raspi!");
-                }
+
+                message.success("File saved correctly to file on raspi!");
             });
         }
     };
@@ -210,12 +225,45 @@ export default class Waypoints extends Component {
         this.setState({manual_lng: target.value});
     };
 
+    handleManualWaypointMarker = () => {
+        const newMarker = this.generateMarker(this.state.manual_lat, this.state.manual_lng);
+
+        const waypoint_markers = this.state.waypoint_markers;
+        waypoint_markers.push(newMarker);
+
+        this.setState({waypoint_markers});
+
+        // handle adding to the waypoint table
+        const waypoint_table_data = this.state.waypoint_table_data;
+        waypoint_table_data.push({
+            latitude: this.state.manual_lat,
+            longitude:  this.state.manual_lng,
+            key: waypoint_table_data.length + 1
+        });
+        this.setState({waypoint_table_data});
+
+    };
+
     render() {
         // starting position of map on load
-        const position = [33.88255522931054, -117.88273157819734];
+        const position = [38.371454855300016,-110.70428294928003];
 
         // testing rover marker
-        let new_rover_marker = this.generateMarker(33.88255522931054, -117.88273157819734, this.roverIcon);
+        // let new_rover_marker = this.generateMarker(33.88255522931054, -117.88273157819734, this.roverIcon);
+
+        const columns = [{
+            title: 'Key',
+            dataIndex: 'key',
+            key: 'key',
+        }, {
+            title: 'Latitude',
+            dataIndex: 'latitude',
+            key: 'latitude',
+        }, {
+            title: 'Longitude',
+            dataIndex: 'longitude',
+            key: 'longitude',
+        }];
 
         return(
             <BaseModuleTemplate moduleName="Waypoints" className="waypoints">
@@ -228,10 +276,28 @@ export default class Waypoints extends Component {
                                 url='http://localhost:8080/styles/osm-bright/rendered/{z}/{x}/{y}.png'
                             />
                             <ZoomDisplay/>
-                            {new_rover_marker}
-                            {/*{this.state.rover_marker}*/}
+                            {this.state.rover_marker}
                             {this.state.waypoint_markers}
                         </Map>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Card title="Current Rover Position">
+                        <Row type="flex" gutter={50}>
+                            <Col span={6}>
+                                <Input addonBefore="latitude" value={this.state.rover_position.latitude}/>
+                            </Col>
+                            <Col span={6}>
+                                <Input addonBefore="longitude" value={this.state.rover_position.longitude}/>
+                            </Col>
+                        </Row>
+                    </Card>
+                </Row>
+
+                <Row>
+                    <Col span={24}>
+                        <Table columns={columns} dataSource={this.state.waypoint_table_data}/>
                     </Col>
                 </Row>
 
@@ -251,18 +317,6 @@ export default class Waypoints extends Component {
                     </Card>
                 </Row>
 
-                <Row>
-                    <Card title="Current Rover Position">
-                        <Row type="flex" gutter={50}>
-                            <Col span={6}>
-                                <Input addonBefore="latitude" value={this.state.rover_position.latitude}/>
-                            </Col>
-                            <Col span={6}>
-                                <Input addonBefore="longitude" value={this.state.rover_position.longitude}/>
-                            </Col>
-                        </Row>
-                    </Card>
-                </Row>
 
                 <Row type="flex">
                     <Col md={4}>
@@ -282,13 +336,4 @@ export default class Waypoints extends Component {
             </BaseModuleTemplate>
         );
     }
-
-    handleManualWaypointMarker = () => {
-        const newMarker = this.generateMarker(this.state.manual_lat, this.state.manual_lng);
-
-        const waypoint_markers = this.state.waypoint_markers;
-        waypoint_markers.push(newMarker);
-
-        this.setState({waypoint_markers});
-    };
 }

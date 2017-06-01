@@ -1,11 +1,10 @@
 {
 "old_homebase_ip": "192.168.1.122:6993",
 "homebase_ip": "127.0.0.1:6993",
-"waypoint_server_ip": "192.168.1.117:9999",
+"waypoint_server_ip": "192.168.1.107:9999",
 "sensorsList": [
     {"sensorName": "Decagon-5TE", "sensorID":"01"},
-    {"sensorName": "DHT-11", "sensorID": "02"},
-    {"sensorName": "Sonic-Range-Finder", "sensorID": "03"}
+    {"sensorName": "DHT-11", "sensorID": "02"}
   ]
 }
 
