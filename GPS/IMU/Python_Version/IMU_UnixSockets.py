@@ -478,10 +478,10 @@ while True:
                         total_heading = heading 
                         #total_heading = total_heading / loop
                         
-                        if(MAGNETIC_DECLINATION > total_heading):
-                                total_heading = 360 - (MAGNETIC_DECLINATION - total_heading)
+                        if(MAGNETIC_DECLINATION + total_heading > 360):
+                                total_heading = (MAGNETIC_DECLINATION + total_heading) - 360
                         else:
-                                total_heading = total_heading - MAGNETIC_DECLINATION
+                                total_heading = total_heading + MAGNETIC_DECLINATION
 
                         #print("%5.8f" % (total_heading))
                         #sys.stdout.flush()

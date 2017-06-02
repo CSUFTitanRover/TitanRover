@@ -103,6 +103,21 @@ io.on('connection', function(socketClient) {
 	    averaged_gps_packet.longitude = averaged_gps_packet.longitude/50;
 	    console.log('avearaged waypoint: ',averaged_gps_packet);	
 	    // pass off to callback supplied from UI
+
+            var averaged_gps_packet = {
+                latitude: 0,
+                longitude: 0
+            };
+
+            for(var i = 0; i < 50; i++){
+                averaged_gps_packet.latitude = parseFloat(average_waypoints[i].latitude) + parseFloat(averaged_gps_packet.latitude);
+                averaged_gps_packet.longitude = parseFloat(average_waypoints[i].longitude) + parseFloat(averaged_gps_packet.longitude);
+            }
+
+            averaged_gps_packet.latitude = averaged_gps_packet.latitude/50;
+            averaged_gps_packet.longitude = averaged_gps_packet.longitude/50;
+            console.log('averaged waypoint: ',averaged_gps_packet);
+            // pass off to callback supplied from UI
             callback(averaged_gps_packet);
 
             // save into our temp list
@@ -112,7 +127,7 @@ io.on('connection', function(socketClient) {
             };
 
             temp_waypoint_list.push(waypoint);
-	}, 10000);
+        }, 10000);
     });
 
     socketClient.on('delete recent waypoint', function () {
@@ -129,11 +144,16 @@ io.on('connection', function(socketClient) {
                 callback(err);
             }
             else {
-                const success = true;
-                callback(err, success);
+                // const success = true;
+                // callback(err, success);
                 console.log("File saved correctly");
             }
         });
+    });
+
+    socketClient.on('mission finished', function() {
+        console.log('mission finished called from scratch.js');
+        io.emit('successful autonomy');
     });
 
 });
