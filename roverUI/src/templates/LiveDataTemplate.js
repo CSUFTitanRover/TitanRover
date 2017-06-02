@@ -70,12 +70,11 @@ class LiveDataTemplate extends Component {
 
     componentDidUpdate() {
         this.chart.flow({
-            // json: [this.state.dataObj],
-            // keys: {
-            //     x: 'timestamp',
-            //     value: this.state.dataKeys,
-            // },
-            columns: [this.state.dataObj],
+            json: [this.state.dataObj],
+            keys: {
+                x: 'timestamp',
+                value: this.state.dataKeys,
+            },
             length: (this.dataPointsCounter > 15) ? 1 : 0
         });
     }

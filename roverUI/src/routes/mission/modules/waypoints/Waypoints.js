@@ -169,7 +169,7 @@ export default class Waypoints extends Component {
             let { latitude, longitude } = gps_packet;
 
             let new_rover_marker = this.generateMarker(latitude, longitude, this.roverIcon);
-            console.log(gps_packet);
+            // console.log(gps_packet);
             this.setState({
                 rover_marker: new_rover_marker,
                 rover_position: gps_packet
@@ -357,7 +357,7 @@ export default class Waypoints extends Component {
 
     render() {
         // starting position of map on load
-        const position = [38.371402909,-110.704230193];
+        const position = [38.398069314, -110.792613235];
 
         // testing rover marker
         // let new_rover_marker = this.generateMarker(33.88255522931054, -117.88273157819734, this.roverIcon);
