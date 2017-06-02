@@ -12,6 +12,31 @@ var rover_location;
 var temp_waypoint_list = [];
 var average_waypoints = [];
 var averagePoint = 0;
+var currentHeading;
+
+// UNIX SOCKET 
+var imu_client = new net.Socket();
+
+imu_client.connect('/home/pi/TitanRover/GPS/IMU/Python_Version/imu_sock', function(){
+    winston.info("Connected to IMU via UNIX socket ");
+});
+
+imu_client.on('data',function(data,err){
+    if(err){
+        winston.info('Error: ', err);
+    }
+    data = parseFloat(data);
+    winston.info("*** UNIX sockets ***");
+    winston.info("IMU Data: " + data);
+    if ( 0 <= data && data <= 360){
+        currentHeading = data;
+        if (badHeadingData && (currentHeading != previousHeading)) {
+            badHeadingData = false;
+        }
+    } else {
+        winston.info("ERROR: IMU Heading Out of Range: " + data);
+    }
+});
 
 // Start the server
 socket.listen(9999, function() {
@@ -30,7 +55,6 @@ raspi_client.on('data', function(data,err) {
     if(err){
         console.log("Error!: " + JSON.stringify(err));
     }
-
     /* Example data object from the reach stream
      GPST latitude(deg) longitude(deg)  height(m)   Q  ns   sdn(m)   sde(m)   sdu(m)  sdne(m)  sdeu(m)  sdun(m) age(s)  ratio
      1934 433341.500   33.882028059 -117.882559268    38.7224   5   4   3.9905   3.7742   9.1639   2.7016   4.4366   4.2998   0.00    0.0
@@ -65,6 +89,7 @@ io.on('connection', function(socketClient) {
             //socketClient.emit('rover location', rover_location);
             // if the above doesnt work comment it out & try below
             io.emit('rover location', rover_location);
+            io.emit('heading', currentHeading);
         }, 1500);
     },1500);
 
@@ -77,7 +102,7 @@ io.on('connection', function(socketClient) {
             };	    
 	    for(var i = 0; i < 50; i++){
 	    	averaged_gps_packet.latitude = parseFloat(average_waypoints[i].latitude) + parseFloat(averaged_gps_packet.latitude);
-		averaged_gps_packet.longitude = parseFloat(average_waypoints[i].longitude) + parseFloat(averaged_gps_packet.longitude);
+		    averaged_gps_packet.longitude = parseFloat(average_waypoints[i].longitude) + parseFloat(averaged_gps_packet.longitude);
 	    }
 	    averaged_gps_packet.latitude = averaged_gps_packet.latitude/50;
 	    averaged_gps_packet.longitude = averaged_gps_packet.longitude/50;
@@ -106,7 +131,7 @@ io.on('connection', function(socketClient) {
     socketClient.on('save to file', function (callback) {
         jsonfile.writeFile(file, temp_waypoint_list, function(err) {
             if(err) {
-                callback(err)
+                callback(err);
             }
             else {
                 const success = true;
