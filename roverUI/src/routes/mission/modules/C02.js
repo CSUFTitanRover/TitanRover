@@ -12,6 +12,7 @@ class C02 extends Component {
 
     renderChart() {
         const data_rows = [
+            ['C02 (PPM)'],
             [ '351' ],
             [ '351' ],
             [ '351' ],
@@ -208,7 +209,7 @@ class C02 extends Component {
         this.chart = c3.generate({
             bindto: '#' + this.chartID.toString(),
             data: {
-                rows: data_rows
+                rows: data_rows,
             },
             zoom: {
                 enabled: true

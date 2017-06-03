@@ -9,7 +9,7 @@ class Surround extends Component {
           <BaseModuleTemplate moduleName="360 Degree View" tagColor="green">
               <Tabs defaultActiveKey="1">
                   <TabPane tab="Stream 1" key="1">
-                      <img src="http://192.168.1.100/video.mjpg" width="1280" height="720"/>
+                      <img src="http://192.168.1.100/video.mjpg" className="camera-stream"/>
                   </TabPane>
               </Tabs>
           </BaseModuleTemplate>

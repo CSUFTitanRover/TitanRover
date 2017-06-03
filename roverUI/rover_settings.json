@@ -1,8 +1,9 @@
 {
-"old_homebase_ip": "192.168.1.122:6993",
-"homebase_ip": "127.0.0.1:6993",
-"waypoint_server_ip": "192.168.1.132:9999",
-"sensorsList": [
+  "old_homebase_ip": "192.168.1.122:6993",
+  "homebase_ip": "127.0.0.1:6993",
+  "waypoint_server_ip": "192.168.1.132:9999",
+  "wifi_waypoint_server_ip": "192.168.1.107:9999",
+  "sensorsList": [
     {"sensorName": "Decagon-5TE", "sensorID":"01"},
     {"sensorName": "C02", "sensorID": "04"}
   ]

@@ -10,6 +10,11 @@ body, #react-app, #react-app > * {
     background: white;
 }
 
+.camera-stream {
+    width: 100%;
+    height: 720px;
+}
+
 .logo {
     position: absolute;
     width: 100%;

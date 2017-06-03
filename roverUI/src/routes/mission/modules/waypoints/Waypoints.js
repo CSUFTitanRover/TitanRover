@@ -49,27 +49,51 @@ class DMSWaypointMarker extends Component {
         return (
             <div>
                 <Row type="flex">
-                    <Input.Group compact>
+                    {/* Latitude Input Group */}
+                    <Input.Group>
                         <Col span={24}>
-                            <Input addonBefore="Degrees" value={this.props.decimal_lat} defaultValue={0}
-                                   onChange={this.props.handleLatChange} />
-                            <Input addonBefore="Minutes" value={this.props.decimal_lat} defaultValue={0}
-                                   onChange={this.props.handleLatChange} />
-                            <Input addonBefore="Seconds" value={this.props.decimal_lat} defaultValue={0}
-                                   onChange={this.props.handleLatChange} />
-                            <Select value={this.props.decimal_lat} onChange={this.props.handleLatChange}
-                                    defaultValue="N" placeholder="Select Direction" style={{minWidth: 150}}>
-                                <Select.Option value="N">N</Select.Option>
-                                <Select.Option value="W">W</Select.Option>
-                                <Select.Option value="E">E</Select.Option>
-                                <Select.Option value="S">S</Select.Option>
+                            <h3>Latitude</h3>
+                            <Input addonBefore="Degrees" value={this.props.dms_latitude_degrees} defaultValue={0}
+                                   onChange={this.props.handleLatitudeDegreesChange} />
+                            <Input addonBefore="Minutes" value={this.props.dms_latitude_minutes} defaultValue={0}
+                                   onChange={this.props.handleLatitudeMinutesChange} />
+                            <Input addonBefore="Seconds" value={this.props.dms_latitude_seconds} defaultValue={0}
+                                   onChange={this.props.handleLatitudeSecondsChange} />
+                            <Select defaultValue="north" style={{ width: 120 }} value={this.props.dms_latitude_direction}
+                                    onChange={this.props.handleLatitudeDirectionChange}>
+                                <Option value="north">North</Option>
+                                <Option value="south">South</Option>
+                                <Option value="east">East</Option>
+                                <Option value="west">West</Option>
                             </Select>
                         </Col>
                     </Input.Group>
                 </Row>
                 <Row>
+                    {/* Longitude Input Group */}
+                    <Input.Group>
+                        <Col span={24}>
+                            <h3>Longitude</h3>
+                            <Input addonBefore="Degrees" value={this.props.dms_longitude_degrees} defaultValue={0}
+                                   onChange={this.props.handleLongitudeDegreesChange} />
+                            <Input addonBefore="Minutes" value={this.props.dms_longitude_minutes} defaultValue={0}
+                                   onChange={this.props.handleLongitudeMinutesChange} />
+                            <Input addonBefore="Seconds" value={this.props.dms_longitude_seconds} defaultValue={0}
+                                   onChange={this.props.handleLongitudeSecondsChange} />
+                            <Select defaultValue="north" style={{ width: 120 }} value={this.props.dms_longitude_direction}
+                                    onChange={this.props.handleLongitudeDirectionChange}>
+                                <Option value="north">North</Option>
+                                <Option value="south">South</Option>
+                                <Option value="east">East</Option>
+                                <Option value="west">West</Option>
+                            </Select>
+
+                        </Col>
+                    </Input.Group>
+                </Row>
+                <Row>
                     <Col span={6}>
-                        <Button type="primary" onClick={this.props.handleAddSexaWaypoint}>Add Waypoint Marker</Button>
+                        <Button type="primary" onClick={this.props.handleDmsAddWaypoint}>Add Waypoint Marker</Button>
                     </Col>
                 </Row>
             </div>
@@ -91,6 +115,9 @@ export default class Waypoints extends Component {
             target_heading: 0,
             target_marker: null,
 
+            // homebase marker
+            homebase_marker: null,
+
             // rover marker
             rover_position: {latitude: 0, longitude: 0},
             rover_marker: null,
@@ -100,9 +127,16 @@ export default class Waypoints extends Component {
             decimal_lat: 0,
             decimal_lng: 0,
             // dms waypoints
-            dms_degrees: 0,
-            dms_minutes: 0,
-            dms_seconds: 0,
+            dms_latitude_degrees: 0,
+            dms_latitude_minutes: 0,
+            dms_latitude_seconds: 0,
+            dms_longitude_degrees: 0,
+            dms_longitude_minutes: 0,
+            dms_longitude_seconds: 0,
+
+            // dms direction
+            dms_longitude_direction: 'north',
+            dms_latitude_direction: 'north'
         };
 
         this.socketClient = io.connect(rover_settings.waypoint_server_ip);
@@ -111,7 +145,19 @@ export default class Waypoints extends Component {
         this.roverIcon = L.icon({
             iconUrl: require('./rover-marker-icon.png'),
             iconRetinaUrl: require('./rover-marker-icon-2x.png'),
-            shadowUrl: require('./rover-marker-shadow.png'),
+            shadowUrl: require('./marker-shadow.png'),
+            iconSize:    [25, 41],
+            iconAnchor:  [12, 41],
+            popupAnchor: [1, -34],
+            tooltipAnchor: [16, -28],
+            shadowSize:  [41, 41]
+        });
+
+        // to be used as a custom icon for the homebase
+        this.homebaseIcon = L.icon({
+            iconUrl: require('./homebase-marker-icon.png'),
+            iconRetinaUrl: require('./homebase-marker-icon-2x.png'),
+            shadowUrl: require('./marker-shadow.png'),
             iconSize:    [25, 41],
             iconAnchor:  [12, 41],
             popupAnchor: [1, -34],
@@ -314,18 +360,21 @@ export default class Waypoints extends Component {
         const target_position = this.state.target_position;
         target_position.latitude = this.state.decimal_lat;
         target_position.longitude = this.state.decimal_lng;
-        this.setState({target_position});
 
         // regenerate and update target marker
-        let new_target_marker = this.generateMarker(this.state.decimal_lat, this.state.decimal_lng);
+        let new_target_marker = this.generateMarker(
+            parseFloat(this.state.decimal_lat),
+            parseFloat(this.state.decimal_lng)
+        );
 
         // finally add location to the table
+        // we only have 1 latlng to add to the table
         const waypoint_table_data = this.state.waypoint_table_data;
-        waypoint_table_data.push({
+        waypoint_table_data[0] = {
             latitude: this.state.decimal_lat,
             longitude: this.state.decimal_lng,
-            key: this.state.waypoint_table_data.length + 1
-        });
+            key: 1
+        };
 
         this.setState({
             target_position,
@@ -335,29 +384,113 @@ export default class Waypoints extends Component {
     };
 
     /* functions to handle adding waypoint via DMS */
-    // handleDmsDegreeChange = ({target}) => {
-    //     this.setState({dms_degrees: target.value});
-    // };
-    //
-    // handleDmsMinuteChange = ({target}) => {
-    //     this.setState({dms_minutes: target.value});
-    // };
-    // handleDmsSecondChange = ({target}) => {
-    //     this.setState({dms_seconds: target.value});
-    // };
-    //
-    // handleDmsAddWaypoint = () => {
-    // };
+    // Latutude DMS Handlers
+    handleLatitudeDegreesChange = ({target}) => {
+        this.setState({dms_latitude_degrees: target.value});
+    };
 
-    handleMapClick = ({latlng}) => {
-      this.test.push(
-          this.generateMarker(latlng.lat, latlng.lng)
-      );
+    handleLatitudeMinutesChange = ({target}) => {
+        this.setState({dms_latitude_minutes: target.value});
+    };
+    handleLatitudeSecondsChange = ({target}) => {
+        this.setState({dms_latitude_seconds: target.value});
+    };
+
+    handleLatitudeDirectionChange = (value) => {
+        this.setState({dms_latitude_direction: value});
+    };
+
+    // Longitude DMS Handlers
+    handleLongitudeDegreesChange = ({target}) => {
+        this.setState({dms_longitude_degrees: target.value});
+    };
+    handleLongitudeMinutesChange = ({target}) => {
+        this.setState({dms_longitude_minutes: target.value});
+    };
+
+    handleLongitudeSecondsChange = ({target}) => {
+        this.setState({dms_longitude_seconds: target.value});
+    };
+
+    handleLongitudeDirectionChange = (value) => {
+        this.setState({dms_longitude_direction: value});
+    };
+
+    handleDmsAddWaypoint = () => {
+        // calculating the decimal format for both lat and lng
+        let calculated_latitude_decimial,
+            calculated_latitude_minutes = Math.abs(parseFloat(this.state.dms_latitude_minutes)) / 60,
+            calculated_latitude_seconds = Math.abs(parseFloat(this.state.dms_latitude_seconds)) / 3600;
+
+        let calculated_longitude_decimial,
+            calculated_longitude_minutes = Math.abs(parseFloat(this.state.dms_longitude_minutes)) / 60,
+            calculated_longitude_seconds = Math.abs(parseFloat(this.state.dms_longitude_seconds)) / 3600;
+
+        calculated_latitude_decimial = Math.abs(parseFloat(this.state.dms_latitude_degrees)) + calculated_latitude_minutes + calculated_latitude_seconds;
+        calculated_longitude_decimial = Math.abs(parseFloat(this.state.dms_longitude_degrees)) + calculated_longitude_minutes + calculated_longitude_seconds;
+
+        // finally apply negative depending on West or East
+        switch (this.state.dms_latitude_direction) {
+            case 'south':
+            case 'west':
+                calculated_latitude_decimial *= -1;
+        }
+
+        switch (this.state.dms_longitude_direction) {
+            case 'south':
+            case 'west':
+                calculated_longitude_decimial *= -1;
+        }
+
+
+        console.info(`Calculated Latitude: ${calculated_latitude_decimial}`);
+        console.info(`Calculated Longitude: ${calculated_longitude_decimial}`);
+
+        // updating target position
+        const target_position = this.state.target_position;
+        target_position.latitude = calculated_latitude_decimial;
+        target_position.longitude = calculated_longitude_decimial;
+
+        // regenerate and update target marker
+        let new_target_marker = this.generateMarker(
+            calculated_latitude_decimial,
+            calculated_longitude_decimial
+        );
+
+        // finally add location to the table
+        // we only have 1 latlng to add to the table
+        const waypoint_table_data = this.state.waypoint_table_data;
+        waypoint_table_data[0] = {
+            latitude: calculated_latitude_decimial,
+            longitude: calculated_longitude_decimial,
+            key: 1
+        };
+
+        this.setState({
+            target_position,
+            waypoint_table_data,
+            target_marker: new_target_marker
+        });
+    };
+
+    handleAddHomebaseMarker = () => {
+        let homebase_marker = this.generateMarker(
+            this.state.rover_position.latitude,
+            this.state.rover_position.longitude,
+            this.homebaseIcon
+        );
+
+        this.setState({
+            homebase_marker: homebase_marker
+        })
     };
 
     render() {
         // starting position of map on load
-        const position = [38.398069314, -110.792613235];
+        const position = [
+            38.371422690,
+            -110.704306553
+        ];
 
         // testing rover marker
         // let new_rover_marker = this.generateMarker(33.88255522931054, -117.88273157819734, this.roverIcon);
@@ -381,14 +514,15 @@ export default class Waypoints extends Component {
                 <Row className="map-row">
                     <Col span={24}>
                         <Map ref={(map) => {this.map = map}} id="map" center={position} zoom={this.state.zoomLevel} maxZoom={20}
-                             onZoom={this.handleMapZoom} onClick={this.handleMapClick}
+                             onZoom={this.handleMapZoom}
                         >
                             <TileLayer
-                                url='http://localhost:8080/styles/osm-bright/rendered/{z}/{x}/{y}.png'
+                                url='http://192.168.1.124:8080/styles/osm-bright/rendered/{z}/{x}/{y}.png'
                             />
                             <ZoomDisplay/>
                             {this.state.rover_marker}
                             {this.state.target_marker}
+                            {this.state.homebase_marker}
                         </Map>
                     </Col>
                 </Row>
@@ -402,6 +536,9 @@ export default class Waypoints extends Component {
                             </Col>
                             <Col span={6}>
                                 <Input addonBefore="longitude" value={this.state.rover_position.longitude}/>
+                            </Col>
+                            <Col span={6}>
+                                <Button onClick={this.handleAddHomebaseMarker} type="primary">Add Homebase Marker</Button>
                             </Col>
                         </Row>
                     </Card>
@@ -434,9 +571,27 @@ export default class Waypoints extends Component {
                                     handleLngChange={this.handleDecimalLngChange}
                                 />
                             </Tabs.TabPane>
-                            {/*<Tabs.TabPane tab="Degrees-Minutes-Seconds Waypoint" key="2">*/}
-                                {/*<DMSWaypointMarker />*/}
-                            {/*</Tabs.TabPane>*/}
+                            <Tabs.TabPane tab="Degrees-Minutes-Seconds Waypoint" key="2">
+                                <DMSWaypointMarker
+                                    dms_latitude_degrees={this.state.dms_latitude_degrees}
+                                    dms_latitude_minutes={this.state.dms_latitude_minutes}
+                                    dms_latitude_seconds={this.state.dms_latitude_seconds}
+                                    dms_longitude_degrees={this.state.dms_longitude_degrees}
+                                    dms_longitude_minutes={this.state.dms_longitude_minutes}
+                                    dms_longitude_seconds={this.state.dms_longitude_seconds}
+                                    dms_latitude_direction={this.state.dms_latitude_direction}
+                                    dms_longitude_direction={this.state.dms_longitude_direction}
+                                    handleDmsAddWaypoint={this.handleDmsAddWaypoint}
+                                    handleLatitudeDegreesChange={this.handleLatitudeDegreesChange}
+                                    handleLatitudeMinutesChange={this.handleLatitudeMinutesChange}
+                                    handleLatitudeSecondsChange={this.handleLatitudeSecondsChange}
+                                    handleLongitudeDegreesChange={this.handleLongitudeDegreesChange}
+                                    handleLongitudeMinutesChange={this.handleLongitudeMinutesChange}
+                                    handleLongitudeSecondsChange={this.handleLongitudeSecondsChange}
+                                    handleLatitudeDirectionChange={this.handleLatitudeDirectionChange}
+                                    handleLongitudeDirectionChange={this.handleLongitudeDirectionChange}
+                                />
+                            </Tabs.TabPane>
                         </Tabs>
                     </Col>
 

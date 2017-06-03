@@ -10,7 +10,7 @@ class ArmCamera extends Component {
           <BaseModuleTemplate moduleName="Arm Camera" tagColor="green">
               <Tabs defaultActiveKey="1" >
                   <TabPane tab="Stream 1" key="1">
-                      <img src="http://192.168.1.101/video.mjpg" width="1280" height="720"/>
+                      <img src="http://192.168.1.101/video.mjpg" className="camera-stream"/>
                   </TabPane>
               </Tabs>
           </BaseModuleTemplate>
