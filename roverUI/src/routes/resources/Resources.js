@@ -5,7 +5,7 @@ class Resources extends Component {
     render() {
         return (
             <div>
-                <QueryData/>
+                {/* Components go in here if you want an overview of Resources */}
             </div>
         );
     }

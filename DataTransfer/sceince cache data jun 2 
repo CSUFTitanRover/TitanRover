@@ -1,0 +1,858 @@
+weffe@weffe-Inspiron-3558:~/Desktop/mongodb-linux-x86_64-ubuntu1604-3.4.2/bin$ ssh pi@192.168.1.107
+ssh: connect to host 192.168.1.107 port 22: No route to host
+weffe@weffe-Inspiron-3558:~/Desktop/mongodb-linux-x86_64-ubuntu1604-3.4.2/bin$ ssh pi@192.168.1.107
+ssh: connect to host 192.168.1.107 port 22: No route to host
+weffe@weffe-Inspiron-3558:~/Desktop/mongodb-linux-x86_64-ubuntu1604-3.4.2/bin$ ssh pi@192.168.1.107
+ssh: connect to host 192.168.1.107 port 22: No route to host
+weffe@weffe-Inspiron-3558:~/Desktop/mongodb-linux-x86_64-ubuntu1604-3.4.2/bin$ ssh pi@192.168.1.132
+The authenticity of host '192.168.1.132 (192.168.1.132)' can't be established.
+ECDSA key fingerprint is SHA256:dcJoGImFEMLIb54g2ig6pAyhNUahJ6/7yx2Pv7rQTFE.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '192.168.1.132' (ECDSA) to the list of known hosts.
+pi@192.168.1.132's password: 
+Permission denied, please try again.
+pi@192.168.1.132's password: 
+Permission denied, please try again.
+pi@192.168.1.132's password: 
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Thu Jun  1 18:32:19 2017 from vipassana
+pi@tr1:~ $ ls
+Adafruit-Raspberry-Pi-Python-Code  node_modules  Templates
+Arduino                            oldconffiles  test1.js
+Desktop                            Pictures      TitanRover
+Documents                          Public        Videos
+Downloads                          pynmea2       vim-config
+gps.json                           python_games  vscode
+Music                              sixpair       waypointServer.js
+node_latest_armhf.deb              sixpair.c
+pi@tr1:~ $ cd TitanRover/
+pi@tr1:~/TitanRover $ ls
+app.js                 DataTransfer  node_modules  Robotics        test
+arm_controller.js      Examples      package.json  roverUI
+baseStation            GPS           PiTests       StartUpScripts
+ControlCommunications  mobility      README.md     TennisTracking
+pi@tr1:~/TitanRover $ cd DataTransfer/
+pi@tr1:~/TitanRover/DataTransfer $ ls
+example_client.js     Joystick_Sender.js  ScienceSensors      test.sh
+homebase_server.js    maptileserver       sensorCollector.js
+joystick_receiver.js  README.md           sensor_reader.py
+pi@tr1:~/TitanRover/DataTransfer $ node sensorCollector.js 
+events.js:163
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: Error Resource temporarily unavailable Cannot lock port
+pi@tr1:~/TitanRover/DataTransfer $ cd ../
+pi@tr1:~/TitanRover $ ls
+app.js                 DataTransfer  node_modules  Robotics        test
+arm_controller.js      Examples      package.json  roverUI
+baseStation            GPS           PiTests       StartUpScripts
+ControlCommunications  mobility      README.md     TennisTracking
+pi@tr1:~/TitanRover $ node sensorCollector.js 
+module.js:472
+    throw err;
+    ^
+
+Error: Cannot find module '/home/pi/TitanRover/sensorCollector.js'
+    at Function.Module._resolveFilename (module.js:470:15)
+    at Function.Module._load (module.js:418:25)
+    at Module.runMain (module.js:605:10)
+    at run (bootstrap_node.js:423:7)
+    at startup (bootstrap_node.js:147:9)
+    at bootstrap_node.js:538:3
+pi@tr1:~/TitanRover $ ls
+app.js                 DataTransfer  node_modules  Robotics        test
+arm_controller.js      Examples      package.json  roverUI
+baseStation            GPS           PiTests       StartUpScripts
+ControlCommunications  mobility      README.md     TennisTracking
+pi@tr1:~/TitanRover $ cd DataTransfer/
+pi@tr1:~/TitanRover/DataTransfer $ ls
+example_client.js     Joystick_Sender.js  ScienceSensors      test.sh
+homebase_server.js    maptileserver       sensorCollector.js
+joystick_receiver.js  README.md           sensor_reader.py
+pi@tr1:~/TitanRover/DataTransfer $ node sensorCollector.js 
+events.js:163
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: Error Resource temporarily unavailable Cannot lock port
+pi@tr1:~/TitanRover/DataTransfer $ vim sensorCollector.js 
+pi@tr1:~/TitanRover/DataTransfer $ node sensorCollector.js 
+[ '\n01', '1.08', '0.00', '38.3/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '04', '351/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '351/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '\n01', '1.08', '0.00', '38.3/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '04', '351/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '351/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '351/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '\n01', '1.08', '0.00', '38.3/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '04', '351/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '351/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '351/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '...SENSORS INITIALIZED' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '...TIMERS INITIALIZED' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+###### We have lost connection!! ######
+======== Saving data now!!! ========
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '347/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '368/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '368/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '375/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '375/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '374/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '374/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '374/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '427/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '427/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '431/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '431/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '483/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '483/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '483/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '482/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '482/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '434/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '04', '434/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '313/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.3/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '313/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '313/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '310/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '310/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '312/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '312/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '312/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '322/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '322/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '320/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '320/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '328/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '328/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '330/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '330/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '325/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '325/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.07', '0.00', '38.2/' ]
+[ '04', '326/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '326/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '04', '326/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.2/' ]
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '04', '329/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '04', '329/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.1/' ]
+[ '01', '1.07', '0.00', '38.1/' ]
+[ '04', '328/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.1/' ]
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '04', '328/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.1/' ]
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '01', '1.07', '0.00', '38.1/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '01', '1.07', '0.00', '38.1/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '01', '1.07', '0.00', '38.1/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '04', '325/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '01', '1.07', '0.00', '38.1/' ]
+[ '04', '325/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.1/' ]
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '04', '322/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.1/' ]
+[ '01', '1.07', '0.00', '38.0/' ]
+[ '04', '322/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.0/' ]
+[ '01', '1.08', '0.00', '38.0/' ]
+[ '04', '322/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.0/' ]
+[ '01', '1.08', '0.00', '38.0/' ]
+[ '04', '317/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.0/' ]
+[ '01', '1.07', '0.00', '38.0/' ]
+[ '04', '317/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.0/' ]
+[ '01', '1.07', '0.00', '38.0/' ]
+[ '04', '313/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.0/' ]
+[ '01', '1.07', '0.00', '38.0/' ]
+[ '04', '313/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '38.0/' ]
+[ '01', '1.07', '0.00', '38.0/' ]
+[ '04', '315/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '38.0/' ]
+[ '01', '1.08', '0.00', '38.0/' ]
+[ '04', '315/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.9/' ]
+[ '01', '1.07', '0.00', '37.9/' ]
+[ '04', '315/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.9/' ]
+[ '01', '1.07', '0.00', '37.9/' ]
+[ '04', '328/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.9/' ]
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '04', '328/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '04', '322/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '04', '322/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '01', '1.08', '0.00', '37.8/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '04', '326/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.8/' ]
+[ '01', '1.07', '0.00', '37.7/' ]
+[ '04', '326/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '37.7/' ]
+[ '01', '1.07', '0.00', '37.7/' ]
+[ '04', '325/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.7/' ]
+[ '01', '1.07', '0.00', '37.7/' ]
+[ '04', '325/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.7/' ]
+[ '01', '1.07', '0.00', '37.7/' ]
+[ '04', '321/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.7/' ]
+[ '01', '1.08', '0.00', '37.7/' ]
+[ '04', '321/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.7/' ]
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '04', '321/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.7/' ]
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '04', '325/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '04', '325/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '04', '326/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '37.6/' ]
+[ '01', '1.07', '0.00', '37.6/' ]
+[ '04', '326/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.5/' ]
+[ '01', '1.07', '0.00', '37.5/' ]
+[ '04', '326/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '37.5/' ]
+[ '01', '1.07', '0.00', '37.5/' ]
+[ '04', '322/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '37.5/' ]
+[ '01', '1.07', '0.00', '37.5/' ]
+[ '04', '322/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.5/' ]
+[ '01', '1.08', '0.00', '37.5/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.5/' ]
+[ '01', '1.07', '0.00', '37.5/' ]
+[ '04', '324/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '37.4/' ]
+[ '01', '1.08', '0.00', '37.4/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '04', '327/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '01', '1.07', '0.00', '37.4/' ]
+[ '04', '329/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '04', '329/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '04', '330/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '04', '330/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '04', '332/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '04', '332/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.3/' ]
+[ '01', '1.07', '0.00', '37.2/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.2/' ]
+[ '01', '1.07', '0.00', '37.2/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.2/' ]
+[ '01', '1.07', '0.00', '37.2/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.2/' ]
+[ '01', '1.07', '0.00', '37.2/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.2/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.08', '0.00', '37.1/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.08', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '331/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '332/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '332/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.1/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '333/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '01', '1.07', '0.00', '37.0/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '334/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '338/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '338/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '04', '338/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.9/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '338/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.8/' ]
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '04', '336/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '01', '1.07', '0.00', '36.7/' ]
+[ '04', '337/' ]
+###### ID NOT RECOGNIZED IGNORING IT ######
+
+

@@ -1,107 +1,202 @@
-h3 {
-    font-weight: bold;
-    font-size: 20px;
-    padding-bottom: 15px;
-    color: darkorange;
+@import '~antd/dist/antd.css';
+
+/* Stretching the modules vertically all the way */
+html {
+    height: 100vh;
 }
 
-img{
-    background-color: black;
-}
-
-#nav-header {
-    min-width: 250px;
-    min-height: 100vh; /*might need to change when the main content has srollbars*/
-    background: #242424;
-    display: flex;
-    flex-flow: column;
-    color: white;
-    flex-grow: 1;
-}
-
-#main-content {
-    width: 100%;
-    height: 100%;
+body, #react-app, #react-app > * {
+    min-height: 100vh;
     background: white;
-    padding: 20px;
 }
 
-#root {
-    display: flex;
+.camera-stream {
+    width: 100%;
+    height: 720px;
+}
+
+.logo {
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    font-size: 24px;
+    text-align: center;
+    background: darkorange;
+    color: white;
+    font-weight: bold;
+    box-shadow: inset 0 0 25px orange;
+    transition: ease 300ms;
+    white-space: nowrap;
+}
+
+.logo:hover {
+    box-shadow: inset 0 0 30px 10px #ffaf4d;
+}
+
+.ant-layout-sider-collapsed .logo {
+    font-size: 18px;
+}
+
+.ant-layout-sider-collapsed .ant-menu-submenu-inline > .ant-menu-submenu-title:after {
+    right: 96px;
 }
 
 #met {
-    padding: 10px;
-    width: 330px;
-    border: 1px solid lightgrey;
+    color: white;
 }
 
-#met span {
-    padding-right: 5px;
-    color: #086298;
+.time-box {
 }
 
-#met .utc {
-    color: black;
-    font-weight: bold;
+.time-box .value {
+    margin: 0 3px;
 }
 
-#met .controls {
-    margin: 10px 0 0 0;
+.date, .formatted-time{
+    font-weight: normal !important;
+}
 
-}
-#met .controls button {
-    padding: 2px 10px;
-}
-#met .controls button:last-child {
-    margin-left: 10px;
-}
 .module {
-    padding: 10px;
-    border: 1px solid lightgrey;
-    margin-bottom: 20px;
+    margin: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 5px;
 }
 
 .module .controls {
-    margin-bottom: 15px;
-}
-.module .controls.query-data {
-    border: 1px solid gray;
-    display: flex;
-}
-.module .controls.query-data h4 {
-    color: royalblue;
-    padding-bottom: 10px;
-    font-weight: bold;
-}
-.module .controls.query-data > *{
-    padding: 10px;
+    margin: 7px 0;
 }
 
-.module .controls.query-data .sensor-option {
-    padding: 7px;
+.ant-tag-text {
+     font-size: 14px;
+     font-weight: bold;
+ }
+
+.generation-options {
+    min-width: 200px;
+    max-width: 900px;
+}
+
+.generation-options .ant-select-selection__placeholder {
+    color: darkgray;
+}
+
+.generation-options .ant-select-selection__choice, .generation-options .ant-select-selection__choice__remove {
+    color: white;
+    background: #108ee9 !important;
+}
+
+.time-pickers {
+    display: flex;
+    padding-top: 20px;
+}
+
+.time-pickers > * {
+    padding-bottom: 10px;
+    margin: 0 100px 0 0;
+}
+
+.queryByTimerange-settings .ant-time-picker-input::-webkit-input-placeholder {
+    /* setting the placeholder text color to a darker color */
+    color: rgba(0, 0, 0, 0.4) !important;
+}
+
+#chart-panels .controls {
+    margin: 0;
+}
+
+#chart-panels .ant-layout {
+    background: white;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+#chart-panels .ant-layout:last-child {
+    margin-bottom: 0px;
+}
+
+#chart-panels .ant-layout-header {
+    border-radius: 5px 5px 0 0;
+    padding: 0 15px;
+    z-index: 9999;
+}
+
+#chart-panels .ant-layout-content {
+    padding-top: 20px;
+}
+
+/* Media query to hide sensor name in chart panels */
+ @media (max-width: 992px) {
+    #chart-panels .ant-tag {
+        display: none !important;
+    }
+}
+/* hotfix for the highlighting the current item selected after page refresh or page load*/
+#navMenu .ant-menu-item > a {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    padding-left: 50px;
+}
+
+#navMenu .hotfix-item-selected {
+    background-color: #108ee9;
+    color: white !important;
+    transition: all ease 300ms;
+}
+#navMenu .hotfix-item-selected > * {
+    color: white !important;
+}
+
+.sonic-range-value {
+    padding: 15px;
+    text-align: center;
+    border-radius: 5px;
+    border: 2px solid #108ee9;
+}
+
+#bookmark-options {
+    display: flex;
+    align-items: baseline;
     border-bottom: 1px solid gray;
 }
-.module .controls.query-data .sensor-option:last-child {
-    border-bottom: none;
+#bookmark-options .bookmarks:first-child {
+    margin-right: 75px;
 }
 
-.module .controls.query-data .options-border {
-    border-left: 1px solid gray;
-    padding: 0px;
+#bookmark-options > * {
+    padding: 0 20px 10px 0;
 }
 
-.module .controls.query-data .options-container {
-    border: 1px solid gray;
-    min-height: 34px;
+#bookmark-options .options button{
+    margin: 5px 0;
+    width: 180px;
 }
 
-.module .controls.query-data .timerange {
+.waypoints .ant-row {
+    margin: 15px 0;
+}
+
+.waypoints .map-row {
     margin-top: 5px;
 }
-.module .controls.query-data .timerange span {
-    padding: 0px 5px;
+
+#map {
+    width: 100%;
+    height: 750px;
 }
-.hidden {
-    display: none !important;
+
+.rover-marker {
+    -webkit-filter: saturate(3);
+    filter: saturate(3);
+}
+
+.leaflet-control-zoom-display {
+    padding: 2px 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: white;
+    cursor: default;
 }
