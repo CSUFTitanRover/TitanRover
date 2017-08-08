@@ -9,10 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
+    "body-parser": "^1.15.2",
+    "dgram": "^1.0.1",
+    "express": "^4.14.0",
+=======
     "body-parser": "^1.17.2",
     "dgram": "^1.0.1",
     "diff-steer": "0.0.2",
     "express": "^4.15.3",
+>>>>>>> master2017
     "geolib": "^2.0.22",
     "johnny-five": "^0.10.0",
     "joystick": "^0.1.2",
@@ -20,6 +26,17 @@
     "microseconds": "^0.1.0",
     "moment": "^2.18.1",
     "mongodb": "^2.2.10",
+<<<<<<< HEAD
+    "request": "^2.75.0",
+    "rpi-gpio": "^0.7.0",
+    "serialport": "^4.0.6",
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3"
+  },
+  "devDependencies": {
+    "sleep": "^5.1.0",
+    "winston": "^2.3.1"
+=======
     "performance-now": "^2.1.0",
     "request": "^2.75.0",
     "serialport": "^4.0.7",
@@ -32,5 +49,6 @@
     "socket.io-client": "^1.7.3",
     "dualshock-controller": "^1.1.1",
     "gamepad": "^1.4.2"
+>>>>>>> master2017
   }
 }
