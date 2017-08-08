@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, Row, Col, Tag } from 'antd';
 import moment from 'moment';
 
 class MissionElapsedTime extends Component {
@@ -74,20 +74,26 @@ class MissionElapsedTime extends Component {
         let resetDisabledState = (this.state.resetDisabled) ? 'disabled' : null;
 
         return (
-            <div id="met">
-                <h3>Mission Elapsed Time</h3>
-                <div className="time-box">
-                    <span className="utc">UTC</span>
-                    <span className="date">{this.date}</span>
-                    <time>
-                        {formatted_time}
-                    </time>
-                </div>
-                <div className="controls">
+            <Row id="met" type="flex">
+                <Col xs={1} sm={7} md={6} lg={5} xl={3}>
+                    <h3>Mission Elapsed Time</h3>
+                </Col>
+                <Col xs={13} sm={8} md={7} lg={6} xl={4}>
+                    <Tag className="time-box" color="green">
+                        <span className="utc value">UTC</span>
+                        <span className="date value">{this.date}</span>
+                        <span className="formatted-time value" style={this.state.isRunning ? {color: 'black'} : null}>
+                            {formatted_time}
+                        </span>
+                    </Tag>
+                </Col>
+                <Col xs={8} sm={5} md={4} lg={4} xl={3}>
                     <Button type="primary" onClick={this.handleStartAndPause}>{isRunningState}</Button>
+                </Col>
+                <Col xs={2} sm={4} md={4} lg={4} xl={3}>
                     <Button type="danger" onClick={this.handleReset} disabled={resetDisabledState}>Reset</Button>
-                </div>
-            </div>
+                </Col>
+            </Row>
         )
     }
 

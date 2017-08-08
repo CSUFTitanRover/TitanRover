@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import BaseModuleTemplate from '../../../templates/BaseModuleTemplate';
 import ChartPanelTemplate from '../../../templates/ChartPanelTemplate';
 import rover_settings from '../../../../rover_settings.json';
-import { Select, Button, Tabs } from 'antd';
+import { Select, Button, Tabs, Row, Col } from 'antd';
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const sensorsList = rover_settings.sensorsList;
@@ -33,7 +33,7 @@ class ChartGenerationOptions extends Component {
 
     render() {
         return (
-            <Select className="generation-options" multiple onSelect={this.handleOnSelect} onDeselect={this.handleOnDeselect}
+            <Select className="generation-options" mode="multiple" onSelect={this.handleOnSelect} onDeselect={this.handleOnDeselect}
                     optionFilterProp="sensorName" placeholder="Select sensors to generate chart">
                 {this.generationOptions}
             </Select>
@@ -226,24 +226,26 @@ class QueryData extends Component {
         }
 
         return (
-            <BaseModuleTemplate moduleName="New Query">
-                <div className="controls">
+            <BaseModuleTemplate moduleName="Query Data">
+                <Row className="controls" type="flex">
                     <ChartGenerationOptions handleOnSelect={this.handleOnSelect} handleOnDeselect={this.handleOnDeselect}/>
                     <Button type="primary" onClick={this.handleGenerateChartPanels}>Generate Charts</Button>
-                </div>
+                </Row>
 
-                <div id="chart-panels">
-                    <Tabs
-                        hideAdd
-                        activeKey={this.state.activeKey}
-                        type="editable-card"
-                        onChange={this.handleOnChange}
-                        onEdit={this.handleOnEdit}
-                        animated={false}
-                    >
-                        {panes}
-                    </Tabs>
-                </div>
+                <Row id="chart-panels">
+                    <Col span={24}>
+                        <Tabs
+                            hideAdd
+                            activeKey={this.state.activeKey}
+                            type="editable-card"
+                            onChange={this.handleOnChange}
+                            onEdit={this.handleOnEdit}
+                            animated={false}
+                        >
+                            {panes}
+                        </Tabs>
+                    </Col>
+                </Row>
             </BaseModuleTemplate>
         );
     }
