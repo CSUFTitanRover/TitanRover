@@ -142,7 +142,7 @@ void setup()
   pinMode(joint1_enab_pin, OUTPUT);
   pinMode(joint1_pulse_pin, OUTPUT);
   digitalWrite(joint1_enab_pin, LOW);
-
+  
   // Set up Joint4
   pinMode(joint4_dir_pin, OUTPUT);
   pinMode(joint4_enab_pin, OUTPUT);
@@ -197,7 +197,6 @@ void loop()
     {
       val[i++] = Serial.read();
     }
-
 
     // If Safety checks don't pass reset buffer and stop rover
     if (val[4] != 0xaa && val[5] != 0xbb)
@@ -462,8 +461,28 @@ void loop()
       digitalWrite(joint5_pulse_pin, HIGH);
       digitalWrite(joint5_pulse_pin, LOW);
     }
-  }
+    else if (val[0] == 0x0A)  // Step a joint
+    {
+      // pwmVal should contain the total steps in both bytes val[2] and val[3]
+      stepJointHandler(val[1], pwmVal);
+    }
+    else if (val[0] == 0xff) // All auxiliary functions
+    {
+      if (val[1] == 0x01) // Calibrate the arm
+      {
+        //calibrateArm();
+      }
+      else if (val[1] == 0x02)  // Send back step information
+      {
+        sendInfo();
+      }
+      else if (val[1] == 0x03)  // Update the speed of stepper motors
+      {
+        delayVal = val[3];
+      }
+    }
 
+  }
   if (joint6_on && Calibrated)
   {
     digitalWrite(joint6_pulse_pin, HIGH);

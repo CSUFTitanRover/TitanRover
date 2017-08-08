@@ -3,6 +3,7 @@ var geolib = require('geolib');
 var spawn = require("child_process").spawn;
 var net = require('net');
 var magneticDeclination = 0; //12.3 in Fullerton, 15 in Hanksville
+
 //var python_proc = spawn('python',["/home/pi/TitanRover/GPS/IMU/Python_Version/IMU_Acc_Mag_Gyro.py", magneticDeclination]);
 var port = require('serialport');
 var now = require('performance-now');
@@ -30,7 +31,8 @@ var drive_timer;
 
 var distance;          // distance to next waypoint
 var onTargetRange = 5; // in meters, distance we want to start to modify the drive throttle to slow the rover down as we approach a waypoint
-var onTargetError = 1; //distance we need to stop at a waypoint
+
+
 onTargetRange = geolib.convertUnit('cm',onTargetRange); // immediately convert from meters to cm for comparisons.
 onTargetError = geolib.convertUnit('cm',onTargetError); // immediately convert from meters to cm for comparisons.
 
@@ -43,8 +45,6 @@ var forward_drive_modifier = 1; //to modify when driving straight forward
 var turning_drive_error = 3;         // within 20 degrees stop turn
 var forward_drive_to_turn_error = 10; //logic to exit forwardP and turn. 
 var forward_drive_error = 3;          //within 4 degrees drive straight
-
-//THROTTLE LOGIC
 var turning_throttle_min = 25;      // Minimum throttle value to move the rover
 var turning_throttle_max = 60;      // Maximum throttle value acceptable
 var forward_throttle_min = 25; //Minimum throttle value acceptable
@@ -167,6 +167,7 @@ imu_client.on('data',function(data,err){
         winston.info("ERROR: IMU Heading Out of Range: " + data);
     }
 });
+
 imu_client.on('end',function(){
    console.log('ERROR: imu disconnected'); 
    badHeadingData = true;

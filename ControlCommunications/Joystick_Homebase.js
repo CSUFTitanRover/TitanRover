@@ -102,7 +102,6 @@ const RESET_ROVER = {
     commandType: "arm",
     number: 1
 };
-
 const SET_ARDUINO_DEBUG = {
     commandType: 'control',
     type: 'arduinoDebug'
@@ -228,7 +227,6 @@ function handleJoystick_1(event) {
             }
             send_to_rover(event);
         } else if (event.number == 6 && event.value == 1) { // Button 7: Start the calibration sequence
-            event.commandType = 'arm'
             send_to_rover(event);
         } else if (event.number == 7 && event.value == 1) { // Button 8: Get back joint positions
             event.commandType = 'arm';

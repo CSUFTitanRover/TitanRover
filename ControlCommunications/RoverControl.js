@@ -163,7 +163,6 @@ function getMobilitySpeed(value, joystick_Max, joystick_Min) {
     if (value < 0) {
         value = 0;
     }
-
     return parseInt(value);
 }
 
@@ -434,6 +433,7 @@ port.on('error', function(err) {
 server.on('listening', function() {
     var address = server.address();
     console.log('Rover running on: ' + address.address + ':' + address.port);
+
 });
 
 // recieved a message from the homebase control to perform an action

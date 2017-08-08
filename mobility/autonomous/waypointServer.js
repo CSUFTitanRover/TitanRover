@@ -79,7 +79,6 @@ io.on('connection', function(socketClient) {
     console.log("Client Connected: " + socketClient.id);
 
 	// emit rover's location every 1.5 seconds
-
         setInterval(function() {
             //socketClient.emit('rover location', rover_location);
             // if the above doesnt work comment it out & try below
@@ -155,7 +154,6 @@ io.on('connection', function(socketClient) {
         console.log('mission finished called from scratch.js');
         io.emit('successful autonomy');
     });
-
 });
 
 process.on('SIGINT', function() {

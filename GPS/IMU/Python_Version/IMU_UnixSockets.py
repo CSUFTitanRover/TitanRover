@@ -312,7 +312,6 @@ while True:
         data = ''
         header = ''
          
-        
         try:
                 connection, client_address = sock.accept()
                 print >>sys.stderr, 'connection from', client_address
@@ -477,7 +476,7 @@ while True:
                         #print("%d,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.8f,%5.2f,%5.2f,%5.2f" % (n, AccXangle, AccYangle, gyroXangle,gyroYangle,gyroZangle,CFangleX,CFangleY, heading, tiltCompensatedHeading, kalmanX,kalmanY))
                         total_heading = heading 
                         #total_heading = total_heading / loop
-                        
+
                         if(MAGNETIC_DECLINATION + total_heading > 360):
                                 total_heading = (MAGNETIC_DECLINATION + total_heading) - 360
                         else:
