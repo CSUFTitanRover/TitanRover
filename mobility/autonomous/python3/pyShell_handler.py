@@ -15,7 +15,7 @@ if move_direction == 'f':
     dc.forwards(max_throttle)       
 
 elif move_direction == 'l':
-    print 'dc left'
+    
     dc.left()
 
 elif move_direction == 'r':

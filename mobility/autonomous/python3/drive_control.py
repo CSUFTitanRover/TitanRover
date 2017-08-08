@@ -56,8 +56,8 @@ def backwards(x):
 '''Right and left functions will probably need separate
     pwm values'''
 
-def right():
-    print 'turning right py'
+def left():
+    print 'turning left py'
     GPIO.output(MOTOR1A, GPIO.LOW)
     GPIO.output(MOTOR1B, GPIO.HIGH)
     GPIO.output(MOTOR2A, GPIO.HIGH)
@@ -65,8 +65,8 @@ def right():
     pwm.setPWM(0, 0,2500 )
     pwm.setPWM(1, 0, 2500)
 
-def left():
-    print 'turning left py'
+def right():
+    print 'turning right py'
     GPIO.output(MOTOR1A, GPIO.HIGH)
     GPIO.output(MOTOR1B, GPIO.LOW)
     GPIO.output(MOTOR2A, GPIO.LOW)
@@ -78,6 +78,7 @@ def stop():
     print "stopping"
     pwm.setPWM(0, 0, 0)
     pwm.setPWM(1, 0, 0)
+    GPIO.cleanup()
 
 def set_speed(throttle):
     print 'setting set_speed'      
@@ -85,6 +86,13 @@ def set_speed(throttle):
     pwm.setPWM(1, 0, throttle)
 
 def sigint_handler(signum, frame):
+    print "Exiting with cleanup"
+    pwm.setPWM(0, 0, 0)
+    pwm.setPWM(1, 0, 0)
+    GPIO.cleanup()
+    sys.exit(0)
+
+def shutdown(signum, frame):
     print "Exiting with cleanup"
     pwm.setPWM(0, 0, 0)
     pwm.setPWM(1, 0, 0)

@@ -6,7 +6,7 @@ class FourOhFour extends Component {
     render() {
         return (
             <BaseModuleTemplate>
-               <img src={FourOhFourIMG} alt="Can't find what you're looking for"/>
+               <img src={FourOhFourIMG} alt="Can't find what you're looking for!"/>
             </BaseModuleTemplate>
         );
     }

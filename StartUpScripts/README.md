@@ -61,3 +61,5 @@ Place K in front of name followed by the sequence when it should be stopped then
 ```ln -s path_to_script /etc/rc[level].d/K[sequenceNum][scriptName]```  
 
 
+## Also see Reach Startup Script Requirements
+[Emlid Reach Communication](https://github.com/CSUFTitanRover/TitanRover/blob/develop/GPS/Reach/README.md)
