@@ -1,0 +1,27 @@
+{
+    "base": {
+      "width": 150,
+      "height": 30
+    },
+    "bone1": {
+      "boneLength": 287,
+      "constraints": {
+        "min": 0,
+        "max": 90
+      }
+    },
+    "bone2": {
+      "boneLength": 143,
+      "constraints": {
+        "min": -90,
+        "max": 0
+      }
+    },
+    "bone3": {
+      "boneLength": 80,
+      "constraints": {
+        "min": -90,
+        "max": 0
+      }
+    }
+}
