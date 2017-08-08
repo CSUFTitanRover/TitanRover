@@ -12,7 +12,7 @@
 ####################################################################################
 import socket
 import sys
-
+import os
 import smbus
 import time
 import math
@@ -312,8 +312,8 @@ while True:
         data = ''
         header = ''
          
-        connection, client_address = sock.accept()
         try:
+                connection, client_address = sock.accept()
                 print >>sys.stderr, 'connection from', client_address
                 while True:
                         total_heading = 0.0
@@ -428,8 +428,9 @@ while True:
                         ####################################################################
                         #Us these two lines when the IMU is right side up.  IC's facing sky 
                         pitch = math.asin(accXnorm)
-                        if pitch <= 1 and pitch >= -1:
-                                roll = -math.asin(accYnorm/math.cos(pitch))
+                        temp = accYnorm/math.cos(pitch);
+                        if temp <= 1 and temp >= -1:
+                                roll = -math.asin(temp)
                         #
                         #Us these four lines when the IMU is upside down. IC's facing earth
                         #accXnorm = -accXnorm				#flip Xnorm as the IMU is upside down
@@ -468,22 +469,22 @@ while True:
 
                         
                         #slow program down a bit, makes the output more readable
-                        #time.sleep(0.00005)        #disable while not using loop features
+                        time.sleep(0.00005)        #disable while not using loop features
                         #break                  #this is disabliling the while loop for Node.js Control
                         #n = n + 1
                         #Output to stdout if running stand alone or passed to node.js control program through flush call
                         #print("%d,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.2f,%5.8f,%5.2f,%5.2f,%5.2f" % (n, AccXangle, AccYangle, gyroXangle,gyroYangle,gyroZangle,CFangleX,CFangleY, heading, tiltCompensatedHeading, kalmanX,kalmanY))
                         total_heading = heading 
                         #total_heading = total_heading / loop
-                        
-                        if(MAGNETIC_DECLINATION > total_heading):
-                                total_heading = 360 - (MAGNETIC_DECLINATION - total_heading)
+
+                        if(MAGNETIC_DECLINATION + total_heading > 360):
+                                total_heading = (MAGNETIC_DECLINATION + total_heading) - 360
                         else:
-                                total_heading = total_heading - MAGNETIC_DECLINATION
+                                total_heading = total_heading + MAGNETIC_DECLINATION
 
                         #print("%5.8f" % (total_heading))
                         #sys.stdout.flush()
 
                         connection.sendall(str(total_heading))
         except IOError as e:
-                connection.close()
+            print e

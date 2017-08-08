@@ -4,11 +4,9 @@
   Description:
 		Will be accepting commands from the homebase Controller and relaying
 			these commands to its various sub processes
-
 		Example:
 			Moblility code will be sent from the homebase controller to here and this will run the input
 				or pass it to another process to run it.
-
 		It will be sent as JSON with the format
 		{ commandType: string, ...}
 		each packet will consist of a commandType such as mobility, science, arm and use this to determine
@@ -31,6 +29,13 @@ var serialPort = require('serialport');
 var port = new serialPort('/dev/ttyACM0', {
     baudRate: 9600,
     parser: serialPort.parsers.readline('\r\n')
+}, function(err) {
+    if (err) {
+        console.log('Error: ', err.message);
+        process.exit();
+    } else {
+        console.log('Arduino is ready!');
+    }
 });
 
 var PORT = 3000;
@@ -60,6 +65,12 @@ var y_Axis_arr = new Uint16Array(3);
 y_Axis_arr[0] = 0x0009;
 y_Axis_arr[2] = 0xbbaa;
 var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
+
+var roverControl_arr = new Uint16Array(3);
+roverControl_arr[0] = 0x00ff;
+roverControl_arr[1] = 0x0000;
+roverControl_arr[2] = 0xbbaa;
+var roverControl_buff = Buffer.from(roverControl_arr.buffer);
 
 var time = new Date();
 
@@ -126,9 +137,13 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
 
 function getPwmValue(value, Joystick_MAX, Joystick_MIN) {
     if (value <= 0) {
-        value = value.map(Joystick_MIN, 0, 1000, 1500);
+        value = value.map(Joystick_MIN, 0, 2000, 1500);
     } else {
-        value = value.map(0, Joystick_MAX, 1500, 2000);
+        value = value.map(0, Joystick_MAX, 1500, 1000);
+    }
+
+    if (value < 1550 && value > 1450) {
+        value = 1500;
     }
 
     return parseInt(value);
@@ -148,7 +163,6 @@ function getMobilitySpeed(value, joystick_Max, joystick_Min) {
     if (value < 0) {
         value = 0;
     }
-
     return parseInt(value);
 }
 
@@ -169,7 +183,6 @@ function setXAxis(speed) {
 
     // Since we are using unsigned ints for serial make it between 0 and 254
     x_Axis_arr[1] = parseInt(speed + 127);
-	console.log(x_Axis_buff);
     port.write(x_Axis_buff);
 }
 
@@ -178,11 +191,8 @@ function setXAxis(speed) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
-
     value = getPwmValue(value, 32767, -32767);
-
     debug.Num_Mobility_Commands += 1;
-
     if (axis === 0) {
         x_Axis_arr[1] = value;
         port.write(x_Axis_buff);
@@ -194,7 +204,6 @@ function setXAxis(speed) {
     {
         x_Axis_arr[1] = getPwmValue(joystickData.x, 127.5, -127.5);
         y_Axis_arr[1] = getPwmValue(joystickData.y, 127.5, -127.5);
-
         port.write(x_Axis_buff);
         port.write(y_Axis_buff);
     }
@@ -223,7 +232,6 @@ function receiveMobility(joystickData) {
         port.write(x_Axis_buff);
         port.write(y_Axis_buff);
     }
-setXAxis(127);
 }
 
 // Send 0 to both the x and y axis to stop the rover from running
@@ -307,6 +315,13 @@ function handleControl(message) {
         time = new Date();
         debug.Curr_Time = time.toString();
         sendHome(debug);
+    } else if (message.type == "arduinoDebug") {
+        roverControl_arr[0] = 0x04ff;
+        port.write(roverControl_buff);
+    } else if (message.type == "assass") {
+        roverControl_arr[0] = 0x05ff;
+        roverControl_arr[1] = parseInt(message.value);
+        port.write(roverControl_buff);
     }
 }
 
@@ -323,32 +338,41 @@ function armControl(message) {
         // Determine which axis should be which joint.
         switch (axis) {
             case 0:
-                // Thumb button had to be pressed in order to use joint6
-                if (thumbPressed) {
-                    port.write(arm.joint6_360Unlimited(message));
-                } else {
-                    port.write(arm.joint3_linear2(message, getPwmValue(message.value, 32767, -32767)));
-                }
+                // Doing Nothing
                 break;
             case 1:
                 // Thumb button had to be pressed in order to use joint4
                 if (thumbPressed) {
-                    port.write(arm.joint4_rotateWrist(message));
+                    port.write(arm.joint7_gripper(message));
                 } else {
-                    port.write(arm.joint2_linear1(message, getPwmValue(message.value, 32767, -32767)));
+                    if (triggerPressed) {
+                        port.write(arm.joint3_linear2(message, getPwmValue(message.value, 32767, -32767)));
+                    } else {
+                        port.write(arm.joint2_linear1(message, getPwmValue(message.value, 32767, -32767)));
+                        // Make joint3 run at half speed
+                        message.value *= 0.5;
+                        port.write(arm.joint3_linear2(message, getPwmValue(message.value, 32767, -32767)));
+                    }
+
                 }
                 break;
             case 2:
-                port.write(arm.joint1_rotatingBase(message));
+                if (thumbPressed) {
+                    message.value *= -1;
+                    port.write(arm.joint6_360Unlimited(message));
+                } else {
+                    port.write(arm.joint1_rotatingBase(message));
+                }
                 break;
             case 3:
                 // This is the throttle
                 break;
             case 4:
-                port.write(arm.joint5_90degree(message));
+                message.value *= -1;
+                port.write(arm.joint4_rotateWrist(message));
                 break;
             case 5:
-                port.write(arm.joint7_gripper(message));
+                port.write(arm.joint5_90degree(message));
                 break;
             default:
                 throw new RangeError('invalid armcontrol axis');
@@ -396,15 +420,14 @@ port.on('data', function(data) {
 
 });
 
-/*var i = 0;
-setInterval(function(){
-    if (i < 128) {
-	setXAxis(i);
-    }
-    i++;
-},850);*/
-
-
+port.on('error', function(err) {
+    console.log('ArduinoError: ' + err);
+    var jsonBuilder = {};
+    jsonBuilder.ArduinoError = err;
+    jsonBuilder.type = 'debug';
+    sendHome(jsonBuilder);
+    process.exit();
+});
 
 
 server.on('listening', function() {

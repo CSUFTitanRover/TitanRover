@@ -99,13 +99,36 @@ function send_to_rover(message) {
     });
 }
 
+controller.on('connected', function() {
+    console.log('DualShock connected');
+});
+
+controller.on('error', function(err) {
+    console.log('Error: ' + err);
+});
+
+controller.on('disconnecting', function() {
+    console.log('DualShock has disconnected');
+    var stopRover = {
+        number: 2,
+        x: 0,
+        y: 0,
+        commandType: 'mobility'
+    };
+    send_to_rover(stopRover);
+});
+
+controller.on('connection:change', function(data) {
+    console.log('ConnectionChanged: ' + data);
+});
+
 // Shifting joystick values from 0-255 to -127.5 to 127.5
 // Set to 25% speed since this joystick is only used to move rover from one place to another
 controller.on('left:move', function(data) {
     event = {
         number: 2,
-        x: (data.x - 127.5) * 0.25,
-        y: ((data.y - 127.5) * 0.25) * -1,
+        x: (data.x - 127.5) * 0.50,
+        y: ((data.y - 127.5) * 0.50),
         commandType: "mobility"
     };
 
@@ -117,6 +140,7 @@ controller.on('left:move', function(data) {
     if (event.x < 1.5 && event.x > -1.5) {
         event.x = 0;
     }
+    console.log(event);
     send_to_rover(event);
 });
 /*
