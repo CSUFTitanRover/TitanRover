@@ -1,141 +1,785 @@
+/*
+   Author: Joseph Porter
+
+   Description:
+    This is the control for the mobility and arm.  Which will be run on a Arduino Mega
+    It will be reading from a serial communication line in 4 byte chunks
+*/
+
 #include <SPI.h>
 #include <AMIS30543.h>
+#include <Servo.h>
+#include <Stepper.h>
+#include <SoftwareSerial.h>
+#include <Sabertooth.h>
 
-const uint8_t joint1_out = 8;
-const char joint1_on = '1';
-const char joint1_off = '2';
-bool joint1_isOn = false;
+const int stepsPerRevolution = 200;
+// X Axis Mobility
+/*Servo x_mobility;
+  const uint8_t x_pwm_pin = 6;
 
-const uint8_t joint4_out = 9;
-const char joint4_on = '3';
-const char joint4_off = '4';
-bool joint4_isOn = false;
+  // Y Axis Mobility
+  Servo y_mobility;
+  const uint8_t y_pwm_pin = 7;*/
 
-const uint8_t joint5_out = 10;
-const char joint5_on = '5';
-const char joint5_off = '6';
-bool joint5_isOn = false;
+// Joint #1
+const uint8_t joint1_dir_pin = 30;
+const uint8_t joint1_enab_pin = 31;
+const uint8_t joint1_pulse_pin = 29;
+volatile bool joint1_on = false;
+const uint8_t joint1_limit_pin = A0;
+unsigned int joint1_sensorValue;
+uint8_t joint1_bit;
+uint8_t joint1_port;
+const int upperLimit = 630;
+const int lowerLimit = 55;
+const int middlePoint = 346;
+volatile bool centerJoint1 = false;
 
-const uint8_t joint6_out = 7;
-const uint8_t joint6_ss = 3;
-const char joint6_on = '7';
-const char joint6_off = '8';
-bool joint6_isOn = false;
+// Joint #2
+Servo joint2;
+const uint8_t joint2_pwm_pin = 4;
 
-const uint8_t joint7_out = 6;
-const uint8_t joint7_ss = 4;
-const char joint7_on = '9';
-const char joint7_off = '0';
-bool joint7_isOn = false;
+// Joint #3
+Servo joint3;
+const uint8_t joint3_pwm_pin = 5;
 
+// Joint #4
+const uint8_t joint4_dir_pin = 32;
+const uint8_t joint4_enab_pin = 35;
+const uint8_t joint4_pulse_pin = 36;
+volatile bool joint4_on = false;
+volatile bool joint4_interrupted = false;
+volatile bool joint4_needsStepOff = false;
+const uint8_t joint4_interrupt_pin = 3;
+unsigned long joint4_TotalSteps = 0;
+uint8_t joint4_bit;
+uint8_t joint4_port;
+const unsigned long joint4_StepsLimit = 7330;
+bool joint4passedLimit = false;
+const int joint4_LimitDistance_Steps = 100;
+
+// Joint #5
+const uint8_t joint5_dir_pin = 38;
+const uint8_t joint5_enab_pin = 39;
+const uint8_t joint5_pulse_pin = 40;
+volatile bool joint5_on = false;
+volatile bool joint5_interrupted = false;
+volatile bool joint5_needsStepOff = false;
+const uint8_t joint5_interrupt_pin = 2;
+unsigned long joint5_TotalSteps = 0;
+uint8_t joint5_bit;
+uint8_t joint5_port;
+const unsigned long joint5_StepsLimit = 50500;
+bool joint5passedLimit = false;
+const int joint5_LimitDistance_Steps = 1000;
+
+// Joint #6
 AMIS30543 joint6_stepper;
+const uint8_t joint6_ss = 44;
+const uint8_t joint6_dir_pin = 42;
+const uint8_t joint6_pulse_pin = 43;
+volatile bool joint6_on = false;
+
+// Joint #7
 AMIS30543 joint7_stepper;
+const uint8_t joint7_ss = 48;
+const uint8_t joint7_dir_pin = 46;
+const uint8_t joint7_pulse_pin = 47;
+volatile bool joint7_on = false;
+
+// AssAss globals
+Servo AssAss;
+const uint8_t assass_pwm_pin = 9;
+
+// Additional Global variables needed
+uint8_t val[6];
+int i;
+int delayVal = 1;
+uint16_t pwmVal;
+const int interruptDelay = 350;
+const int ignoreDelay = 250;
+static unsigned long ignore_time = 0;
+static unsigned long last_interrupt_time = 0;
+
+bool Calibrated = false;  // Arm can't be moved until calibrated
+bool debug = false;
+bool ignoreLimit = true;
+uint8_t analogRead_counter = 0;
+
+//SoftwareSerial SWSerial(NOT_A_PIN, 18); // tx-1 on arduino mega
+Sabertooth Back(129, Serial1);
 
 void setup()
 {
   SPI.begin();
-  // put your setup code here, to run once:
-  pinMode(joint1_out, OUTPUT);
-  pinMode(joint4_out, OUTPUT);
-  pinMode(joint5_out, OUTPUT);
-  pinMode(joint6_out, OUTPUT);
-  digitalWrite(joint6_out, LOW);
-  pinMode(joint6_ss, OUTPUT);
   Serial.begin(9600);
-  delay(1);
+  Serial1.begin(9600);
+  Back.autobaud();
 
+  delay(5);
+
+  Back.drive(0);
+  Back.turn(0);
+  // Start the mobility on zero
+  /*x_mobility.attach(x_pwm_pin);
+    x_mobility.writeMicroseconds(1500);
+
+    y_mobility.attach(y_pwm_pin);
+    y_mobility.writeMicroseconds(1500);*/
+
+  joint1_sensorValue = analogRead(joint1_limit_pin);
+
+  // Setup the linear actuators
+  joint2.attach(joint2_pwm_pin);
+  joint2.writeMicroseconds(1500);
+
+  joint3.attach(joint3_pwm_pin);
+  joint3.writeMicroseconds(1500);
+
+  // Set up Joint1
+  pinMode(joint1_dir_pin, OUTPUT);
+  pinMode(joint1_enab_pin, OUTPUT);
+  pinMode(joint1_pulse_pin, OUTPUT);
+  digitalWrite(joint1_enab_pin, LOW);
+  
+  // Set up Joint4
+  pinMode(joint4_dir_pin, OUTPUT);
+  pinMode(joint4_enab_pin, OUTPUT);
+  pinMode(joint4_pulse_pin, OUTPUT);
+  pinMode(joint4_interrupt_pin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(joint4_interrupt_pin), stopJoint4, FALLING);
+  digitalWrite(joint4_enab_pin, LOW);
+
+  // Set up Joint5
+  pinMode(joint5_dir_pin, OUTPUT);
+  pinMode(joint5_enab_pin, OUTPUT);
+  pinMode(joint5_pulse_pin, OUTPUT);
+  pinMode(joint5_interrupt_pin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(joint5_interrupt_pin), stopJoint5, FALLING);
+  digitalWrite(joint5_enab_pin, LOW);
+
+  // Set up the Polulu Stepper motors
   joint6_stepper.init(joint6_ss);
-
   joint6_stepper.resetSettings();
-
   joint6_stepper.setCurrentMilliamps(670);
-
-  joint6_stepper.setStepMode(200);
-
+  joint6_stepper.setStepMode(stepsPerRevolution);
   joint6_stepper.enableDriver();
+
+  // Deselect the slave select pin for joint6 to allow joint7 to communicate
+  //digitalWrite(joint6_ss, HIGH);
+
+  joint7_stepper.init(joint7_ss);
+  joint7_stepper.resetSettings();
+  joint7_stepper.setCurrentMilliamps(1250);
+  joint7_stepper.setStepMode(stepsPerRevolution);
+  joint7_stepper.enableDriver();
+
+  // Set up AssAss
+  AssAss.attach(assass_pwm_pin);
+
+  // Arduino needs these functions to be wrapped in another function
+  // This will set certain masks that allow use to detect the HIGH LOW of a pin faster
+  setPortandBit();
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop()
+{
+  // Will step of the limit switch if it has been triggered
+  checkNeedToStepOffSwitch();
 
-  if(Serial.available() > 0)
+  // Check if pi has sent command data to Arduino
+  if (Serial.available() >= 6)
   {
-    // Find the joint we should turn on or off
-    char num = Serial.read();
+    // Grap the 4 bytes from the raspberry pi
+    i = 0;
+    while (i < 6)
+    {
+      val[i++] = Serial.read();
+    }
 
-    // Either turn the stepper motors on or off
-    if(num == joint1_on)
+    // If Safety checks don't pass reset buffer and stop rover
+    if (val[4] != 0xaa && val[5] != 0xbb)
     {
-      joint1_isOn = true;
+      val[0] = 0;
+      joint1_on = false;
+      joint4_on = false;
+      joint5_on = false;
+      joint6_on = false;
+      joint7_on = false;
+      clearSerialBuffer();
     }
-    else if(num == joint4_on)
+
+    if (debug)
     {
-      joint4_isOn = true;
+      printDebug(val);
     }
-    else if(num == joint5_on)
+
+    // Convert the last two bytes into a 16 bit number
+    pwmVal = 0x0000;
+    pwmVal = (uint16_t)val[2];
+    pwmVal = pwmVal | ((uint16_t)val[3] << 8);
+
+    switch (val[0])
     {
-      joint5_isOn = true;
+      case 0x01:  // Joint1
+        setDirectionPin(joint1_dir_pin, val[1]);
+        joint1_on = val[3];
+        break;
+      case 0x02:  // Joint2
+        if (Calibrated)
+        {
+          joint2.writeMicroseconds(pwmVal);
+        }
+        break;
+      case 0x03:  // Joint3
+        if (Calibrated)
+        {
+          joint3.writeMicroseconds(pwmVal);
+        }
+        break;
+      case 0x04:  // Joint4
+        setDirectionPin(joint4_dir_pin, val[1]);
+        joint4_on = val[3];
+        // Don't move joint4 if we have hit are limit switch until user returns to zero point
+        if (joint4_interrupted && val[3] == 0x00)
+        {
+          joint4_interrupted = false;
+        }
+        break;
+      case 0x05:  // Joint5
+        setDirectionPin(joint5_dir_pin, val[1]);
+        joint5_on = val[3];
+        // Don't move joint5 if we have hit are limit switch until user returns to zero point
+        if (joint5_interrupted && val[3] == 0x00)
+        {
+          joint5_interrupted = false;
+        }
+        break;
+      case 0x06:  // Joint6
+        setDirectionPin(joint6_dir_pin, val[1]);
+        joint6_on = val[3];
+        break;
+      case 0x07:  // Joint7
+        setDirectionPin(joint7_dir_pin, val[1]);
+        joint7_on = val[3];
+        break;
+      case 0x08:  // x mobility
+        Back.turn(val[2] - 127);
+        //x_mobility.writeMicroseconds(pwnval);
+        break;
+      case 0x09:  // y mobility
+        Back.drive((val[2] - 127));
+        //y_mobility.writeMicroseconds(pwnval);
+        break;
+      case 0x0A:  // StepJoints
+        // pwmVal should contain the total steps in both bytes val[2] and val[3]
+        stepJointHandler(val[1], pwmVal);
+        break;
+      case 0x0B:
+        //motor activation for the autonomous tasks
+        Back.motor(1, val[2] - 127);
+        break;
+      case 0x0C:
+        //motor activation for the autonomous tasks
+        Back.motor(2, val[2] - 127);
+        break;
+      case 0xff:  // Auxillary functions
+        if (val[1] == 0x01) // Calibrate the arm
+        {
+          calibrateArm();
+        }
+        else if (val[1] == 0x02)  // Send back step information
+        {
+          sendInfo();
+        }
+        else if (val[1] == 0x03)  // Update the speed of stepper motors
+        {
+          delayVal = val[3];
+        }
+        else if (val[1] == 0x04)  // Turn on debug values
+        {
+          if (debug)
+          {
+            Serial.println("Turning off debug");
+          }
+          else
+          {
+            Serial.println("Turning on debug");
+          }
+          debug = !debug;
+        }
+        else if (val[1] == 0x05)
+        {
+          operateAssAss(val[2]);
+        }
+        else if (val[1] == 0x06)
+        {
+          centerJoint1 = val[2];
+        }
+        break;
+      default:
+        Serial.println("DON'T UNDERSTAND COMMAND");
+        break;
+    } // end of switch
+  } // endif serial.available()
+
+
+  // Check the POT's limits
+  if (analogRead_counter % 4 == 0)
+  {
+    joint1_sensorValue = analogRead(joint1_limit_pin);
+  }
+
+  // If we are centering the joint1 during autonomous
+  if (centerJoint1)
+  {
+    if (joint1_sensorValue > middlePoint + 15)
+    {
+      digitalWrite(joint1_dir_pin, LOW);
+      digitalWrite(joint1_pulse_pin, HIGH);
+      digitalWrite(joint1_pulse_pin, LOW);
+    } else if (joint1_sensorValue < middlePoint - 15)
+    {
+      digitalWrite(joint1_dir_pin, HIGH);
+      digitalWrite(joint1_pulse_pin, HIGH);
+      digitalWrite(joint1_pulse_pin, LOW);
     }
-    else if(num == joint6_on)
+  }
+  // Drive the stepper motors if they are activated
+  else if (joint1_on && Calibrated)
+  {
+    uint8_t state = (*portOutputRegister(joint1_port) & joint1_bit) ? HIGH : LOW;
+    if (state && joint1_sensorValue < upperLimit)
     {
-      joint6_isOn = true;
+      if (analogRead_counter % 2 == 0)
+      {
+        digitalWrite(joint1_pulse_pin, HIGH);
+        digitalWrite(joint1_pulse_pin, LOW);
+      }
     }
-    else if(num == joint7_on)
+    else if (!state && joint1_sensorValue > lowerLimit)
     {
-      joint7_isOn = true;
-    }
-    else if(num == joint1_off)
-    {
-      joint1_isOn = false;
-    }
-    else if(num == joint4_off)
-    {
-      joint4_isOn = false;
-    }
-    else if(num == joint5_off)
-    {
-      joint5_isOn = false;
-    }
-    else if(num == joint6_off)
-    {
-      joint6_isOn = false;
-    }
-    else if(num == joint7_off)
-    {
-      joint7_isOn = true;
+      if (analogRead_counter % 2 == 0)
+      {
+        digitalWrite(joint1_pulse_pin, HIGH);
+        digitalWrite(joint1_pulse_pin, LOW);
+      }
     }
   }
 
-  if(joint1_isOn)
+  if (joint4_on && joint4_interrupted == false && Calibrated)
   {
-    digitalWrite(joint1_out, HIGH);
-    digitalWrite(joint1_out, LOW);
+    /*uint8_t bit = digitalPinToBitMask(joint4_dir_pin);
+      uint8_t port = digitalPinToPort(joint4_dir_pin);
+
+      // Get the direction that the stepper was moving
+      uint8_t state = (*portOutputRegister(port) & bit) ? HIGH : LOW;*/
+    // Get the direction that the stepper was moving
+    uint8_t state = (*portOutputRegister(joint4_port) & joint4_bit) ? HIGH : LOW;
+
+    // Update the step count
+    if (!state)
+    {
+      // Check within limit
+      if (joint4_TotalSteps <= joint4_StepsLimit && joint4_TotalSteps > 0)
+      {
+        joint4_TotalSteps--;
+        joint4passedLimit = false;
+      }
+      else
+      {
+        // Stop movement and reset steps back to within limit
+        joint4passedLimit = true;
+      }
+    }
+    else
+    {
+      // Check within limit
+      if (joint4_TotalSteps < joint4_StepsLimit)
+      {
+        joint4_TotalSteps++;
+        joint4passedLimit = false;
+      }
+      else
+      {
+        // Stop movement and reset steps back to within limit
+        joint4passedLimit = true;
+      }
+    }
+
+    // Check if joint4TotalSteps has passed its limit
+    if (!joint4passedLimit && analogRead_counter % 3 == 0)
+    {
+      digitalWrite(joint4_pulse_pin, HIGH);
+      digitalWrite(joint4_pulse_pin, LOW);
+    }
   }
 
-  if(joint4_isOn)
+  if (joint5_on && joint5_interrupted == false && Calibrated)
   {
-    digitalWrite(joint4_out, HIGH);
-    digitalWrite(joint4_out, LOW);
+    /*uint8_t bit = digitalPinToBitMask(joint5_dir_pin);
+      uint8_t port = digitalPinToPort(joint5_dir_pin);
+
+      // Get the direction that the stepper was moving
+      uint8_t state = (*portOutputRegister(port) & bit) ? HIGH : LOW;*/
+    // Get the direction that the stepper was moving
+    uint8_t state = (*portOutputRegister(joint5_port) & joint5_bit) ? HIGH : LOW;
+
+    // Update the step count
+    if (state)
+    {
+      // Check within limit
+      if (joint5_TotalSteps <= joint5_StepsLimit && joint5_TotalSteps > 0)
+      {
+        joint5_TotalSteps--;
+        joint5passedLimit = false;
+      }
+      else
+      {
+        joint5passedLimit = true;
+      }
+    }
+    else
+    {
+      // Check within limit
+      if (joint5_TotalSteps < joint5_StepsLimit)
+      {
+        joint5_TotalSteps++;
+        joint5passedLimit = false;
+      }
+      else
+      {
+        // Stop movement and reset steps back to within limit
+        joint5passedLimit = true;
+      }
+    }
+
+    // Check if joint5TotalSteps has passed its limit
+    if (!joint5passedLimit)
+    {
+      digitalWrite(joint5_pulse_pin, HIGH);
+      digitalWrite(joint5_pulse_pin, LOW);
+    }
+    else if (val[0] == 0x0A)  // Step a joint
+    {
+      // pwmVal should contain the total steps in both bytes val[2] and val[3]
+      stepJointHandler(val[1], pwmVal);
+    }
+    else if (val[0] == 0xff) // All auxiliary functions
+    {
+      if (val[1] == 0x01) // Calibrate the arm
+      {
+        //calibrateArm();
+      }
+      else if (val[1] == 0x02)  // Send back step information
+      {
+        sendInfo();
+      }
+      else if (val[1] == 0x03)  // Update the speed of stepper motors
+      {
+        delayVal = val[3];
+      }
+    }
+
+  }
+  if (joint6_on && Calibrated)
+  {
+    digitalWrite(joint6_pulse_pin, HIGH);
+    digitalWrite(joint6_pulse_pin, LOW);
   }
 
-  if(joint5_isOn)
+  if (joint7_on && Calibrated)
   {
-    digitalWrite(joint5_out, HIGH);
-    digitalWrite(joint5_out, LOW);
+    digitalWrite(joint7_pulse_pin, HIGH);
+    digitalWrite(joint7_pulse_pin, LOW);
   }
 
-  if(joint6_isOn)
+  delay(delayVal);
+  analogRead_counter++;
+
+} // END LOOP
+
+void stepJointHandler(uint8_t joint, int16_t steps)
+{
+  uint8_t dir = 0x01;
+  if (steps < 0)
   {
-    digitalWrite(joint6_out, HIGH);
-    digitalWrite(joint6_out, LOW);
+    dir = 0x00;
+    steps *= -1;
+  }
+  switch (joint)
+  {
+    case 0x01:
+      // Need to add limit checking here
+      setDirectionPin(joint1_dir_pin, dir);
+      stepJoint(joint1_pulse_pin, steps);
+      break;
+    case 0x04:
+      // Need to add limit checking here
+      setDirectionPin(joint4_dir_pin, dir);
+      stepJoint(joint4_pulse_pin, steps);
+      break;
+    case 0x05:
+      // Need to add limit checking here
+      setDirectionPin(joint5_dir_pin, dir);
+      stepJoint(joint5_pulse_pin, steps);
+      break;
+    case 0x06:
+      setDirectionPin(joint6_dir_pin, dir);
+      stepJoint(joint6_pulse_pin, steps);
+      break;
+    case 0x07:
+      // Need to add limit checking here
+      setDirectionPin(joint7_dir_pin, dir);
+      stepJoint(joint7_pulse_pin, steps);
   }
 
-  if(joint7_isOn)
+}
+
+/*
+   @param puslePin  This will be the pin used to step the motor
+   @param steps     Number of steps to move the motor
+*/
+void stepJoint(uint8_t puslePin, uint16_t steps)
+{
+  for (unsigned int i = 0; i < steps; ++i)
   {
-    digitalWrite(joint7_out, HIGH);
-    digitalWrite(joint7_out, LOW);
+    digitalWrite(puslePin, HIGH);
+    digitalWrite(puslePin, LOW);
+    delay(delayVal);
+  }
+}
+
+/*
+   Will make the AssAss open and close
+   @param operation Either 1 or 0 telling the AssAss to open or close
+*/
+void operateAssAss(uint8_t operation)
+{
+  if (operation == 0x01)  // Open
+  {
+    AssAss.write(90);
+  }
+  else if (operation == 0x00) // Close
+  {
+    delay(3000);
+    AssAss.write(0);
+  }
+}
+
+// Will switch the pin based on what byte is sent from the pi
+void setDirectionPin(uint8_t pinValue, uint8_t val)
+{
+  if (val == 0x00)
+  {
+    digitalWrite(pinValue, LOW);
+  }
+  else if (val == 0x01)
+  {
+    digitalWrite(pinValue, HIGH);
+  }
+}
+
+/*
+   Will recalibrate the zero points for the joints
+   Only joint4 and joint5 will need to have there zero points calibrated
+   the rest can move to a predefined location
+*/
+void calibrateArm()
+{
+
+  Serial.println("Calibrating Arm");
+
+  joint4_interrupted = false;
+  joint5_interrupted = false;
+
+
+  /*if (!Calibrated)
+    {
+    joint2.writeMicroseconds(2000);
+    joint3.writeMicroseconds(2000);
+    }*/
+  Calibrated = true;
+  ignoreLimit = false;
+
+  // Run joint4 calibration
+  digitalWrite(joint4_dir_pin, LOW); // Run clock-wise to limit switch
+  while (!joint4_interrupted)
+  {
+    digitalWrite(joint4_pulse_pin, HIGH);
+    digitalWrite(joint4_pulse_pin, LOW);
+    delay(3);
+  }
+  checkNeedToStepOffSwitch();
+
+  // Run joint5 calibration
+  digitalWrite(joint5_dir_pin, HIGH);
+  while (!joint5_interrupted)
+  {
+    digitalWrite(joint5_pulse_pin, HIGH);
+    digitalWrite(joint5_pulse_pin, LOW);
+    delay(delayVal);
+  }
+  checkNeedToStepOffSwitch();
+
+  ignoreLimit = true;
+
+
+  Serial.println("Finished Calibrating");
+
+}
+
+/*
+   Will send statistics back to the pi
+*/
+void sendInfo()
+{
+  joint1_sensorValue = analogRead(joint1_limit_pin);
+  Serial.print(joint4_TotalSteps);
+  Serial.print(":");
+  Serial.print(joint5_TotalSteps);
+  Serial.print(":");
+  Serial.println(joint1_sensorValue);
+}
+
+/*
+   Interrupt function for joint4
+   Will stop joint until user returns joystick to zero point
+*/
+void stopJoint4()
+{
+  unsigned long joint4_interrupt_time = millis();
+  if (joint4_interrupt_time - last_interrupt_time > interruptDelay)
+  {
+    // Get the direction that the stepper was moving
+    uint8_t state = (*portOutputRegister(joint4_port) & joint4_bit) ? HIGH : LOW;
+
+    // Limit switch has been activated
+    if (!state && !ignoreLimit)
+    {
+      ignore_time = joint4_interrupt_time;
+      joint4_interrupted = true;
+      joint4_on = false;
+      joint4_needsStepOff = true;
+      joint4_TotalSteps = 0;
+    }
+
+    if (debug)
+    {
+      joint4_interrupted = true;
+      joint4_on = false;
+      joint4_needsStepOff = true;
+    }
+  }
+  last_interrupt_time = joint4_interrupt_time;
+}
+
+/*
+   Interrupt function for joint5
+   Will stop joint until user returns joystick to zero point
+*/
+void stopJoint5()
+{
+  unsigned long joint5_interrupt_time = millis();
+  if (joint5_interrupt_time - last_interrupt_time > interruptDelay)
+  {
+    uint8_t state = (*portOutputRegister(joint5_port) & joint5_bit) ? HIGH : LOW;
+
+    // Limit switch has been activated
+    if (state && !ignoreLimit)
+    {
+      ignore_time = joint5_interrupt_time;
+      joint5_on = false;
+      joint5_interrupted = true;
+      joint5_TotalSteps = 0;
+      joint5_needsStepOff = true;
+
+    }
+
+    if (debug)
+    {
+      joint5_interrupted = true;
+      joint5_on = false;
+      joint5_needsStepOff = true;
+    }
+  }
+  last_interrupt_time = joint5_interrupt_time;
+}
+
+/*
+   Will perform a certain number of steps to get off the limit switch
+   @param dirPin  The direction pin used for that stepper
+   @param pulsePin  The pin used to step the stepper motor
+*/
+void StepOffLimitSwitch(const uint8_t dirPin, const uint8_t pulsePin, const int LimitDistance_Steps)
+{
+  uint8_t bit = digitalPinToBitMask(dirPin);
+  uint8_t port = digitalPinToPort(dirPin);
+
+  // Get the direction that the stepper was moving
+  uint8_t state = (*portOutputRegister(port) & bit) ? HIGH : LOW;
+  digitalWrite(dirPin, !state);
+  stepJoint(pulsePin, LimitDistance_Steps);
+}
+
+/*
+   Arduino for some reason doesn't allow the bitmask and port functions to
+   be used unless they are wrapped in a function
+*/
+void setPortandBit()
+{
+  joint1_bit = digitalPinToBitMask(joint1_dir_pin);
+  joint1_port = digitalPinToPort(joint1_dir_pin);
+  joint4_bit = digitalPinToBitMask(joint4_dir_pin);
+  joint4_port = digitalPinToPort(joint4_dir_pin);
+  joint5_bit = digitalPinToBitMask(joint5_dir_pin);
+  joint5_port = digitalPinToPort(joint5_dir_pin);
+}
+
+void checkNeedToStepOffSwitch()
+{
+  if (joint4_needsStepOff)
+  {
+    Serial.println("Joint4 Limit Hit");
+    StepOffLimitSwitch(joint4_dir_pin, joint4_pulse_pin, joint4_LimitDistance_Steps);
+    joint4_needsStepOff = false;
   }
 
-  delay(1);
+  if (joint5_needsStepOff)
+  {
+    Serial.println("Joint5 Limit Hit");
+    StepOffLimitSwitch(joint5_dir_pin, joint5_pulse_pin, joint5_LimitDistance_Steps);
+    joint5_needsStepOff = false;
+  }
+}
 
+void clearSerialBuffer()
+{
+  Back.drive(0);
+  Back.turn(0);
+
+  uint8_t i = 0;
+  Serial.println("Bytes Switched Clearing Buffer");
+  while (Serial.available() > 0 && i < 64)
+  {
+    Serial.read();
+    i++;
+  }
+}
+
+void printDebug(uint8_t *val)
+{
+  Serial.print("Bytes: ");
+  Serial.print(val[0]);
+  Serial.print(":");
+  Serial.print(val[1]);
+  Serial.print(":");
+  Serial.print(val[2]);
+  Serial.print(":");
+  Serial.print(val[3]);
+  Serial.print(":");
+  Serial.print(val[4]);
+  Serial.print(":");
+  Serial.println(val[5]);
 }

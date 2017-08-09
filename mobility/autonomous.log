@@ -1,0 +1,680 @@
+{"level":"info","message":"Starting autonomous navigation","timestamp":72.261451}
+{"level":"info","message":"Getting target location","timestamp":76.767122}
+{"level":"info","message":"Current Location: {\"latitude\":33.64995,\"longitude\":-117.612345}","timestamp":77.151345}
+{"level":"info","message":"Target Location: {\"latitude\":33.64995,\"longitude\":-117.612345}","timestamp":77.291235}
+{"level":"info","message":"Already at waypoint. Skipping.","timestamp":3078.174351}
+{"level":"info","message":"Getting target location","timestamp":3079.406677}
+{"level":"info","message":"Current Location: {\"latitude\":33.64995,\"longitude\":-117.612345}","timestamp":3079.556194}
+{"level":"info","message":"Target Location: {\"latitude\":33.650316,\"longitude\":-117.612109}","timestamp":3079.739068}
+{"level":"info","message":"Initiating turn","timestamp":6084.058051}
+{"level":"info","message":"Turning ... Current heading: 45 Target heading: 28.23","timestamp":6101.770986}
+{"level":"info","message":"Turning ... Current heading: 44 Target heading: 28.23","timestamp":6119.158597}
+{"level":"info","message":"Turning ... Current heading: 43 Target heading: 28.23","timestamp":6138.165371}
+{"level":"info","message":"Turning ... Current heading: 42 Target heading: 28.23","timestamp":6158.046635}
+{"level":"info","message":"Turning ... Current heading: 41 Target heading: 28.23","timestamp":6177.081752}
+{"level":"info","message":"Turning ... Current heading: 40 Target heading: 28.23","timestamp":6194.04167}
+{"level":"info","message":"Turning ... Current heading: 39 Target heading: 28.23","timestamp":6213.311735}
+{"level":"info","message":"Turning ... Current heading: 38 Target heading: 28.23","timestamp":6230.199658}
+{"level":"info","message":"Turning ... Current heading: 37 Target heading: 28.23","timestamp":6247.994844}
+{"level":"info","message":"Turning ... Current heading: 36 Target heading: 28.23","timestamp":6264.98741}
+{"level":"info","message":"Turning ... Current heading: 35 Target heading: 28.23","timestamp":6282.136576}
+{"level":"info","message":"Turning ... Current heading: 34 Target heading: 28.23","timestamp":6298.777699}
+{"level":"info","message":"Turning ... Current heading: 33 Target heading: 28.23","timestamp":6316.189197}
+{"level":"info","message":"Turning ... Current heading: 32 Target heading: 28.23","timestamp":6333.508497}
+{"level":"info","message":"Turning ... Current heading: 31 Target heading: 28.23","timestamp":6349.047043}
+{"level":"info","message":"Turning ... Current heading: 30 Target heading: 28.23","timestamp":6365.658645}
+{"level":"info","message":"Turning ... Current heading: 29 Target heading: 28.23","timestamp":6383.498496}
+{"level":"info","message":"Reached desired heading: 29 degrees","timestamp":6384.209351}
+{"level":"info","message":"Initiating drive toward waypoint 1, {\"latitude\":33.650316,\"longitude\":-117.612109}","timestamp":6384.515264}
+{"level":"info","message":"driving...distance to target: 45 meter(s)","timestamp":9404.557514}
+{"level":"info","message":"driving...distance to target: 44 meter(s)","timestamp":9422.113583}
+{"level":"info","message":"driving...distance to target: 43 meter(s)","timestamp":9439.738386}
+{"level":"info","message":"driving...distance to target: 42 meter(s)","timestamp":9457.198504}
+{"level":"info","message":"driving...distance to target: 41 meter(s)","timestamp":9474.505976}
+{"level":"info","message":"driving...distance to target: 40 meter(s)","timestamp":9491.420196}
+{"level":"info","message":"driving...distance to target: 39 meter(s)","timestamp":9509.000555}
+{"level":"info","message":"driving...distance to target: 38 meter(s)","timestamp":9526.878923}
+{"level":"info","message":"driving...distance to target: 37 meter(s)","timestamp":9546.148446}
+{"level":"info","message":"driving...distance to target: 36 meter(s)","timestamp":9564.352218}
+{"level":"info","message":"driving...distance to target: 35 meter(s)","timestamp":9580.188026}
+{"level":"info","message":"driving...distance to target: 34 meter(s)","timestamp":9598.225592}
+{"level":"info","message":"driving...distance to target: 33 meter(s)","timestamp":9614.300409}
+{"level":"info","message":"driving...distance to target: 32 meter(s)","timestamp":9631.709149}
+{"level":"info","message":"driving...distance to target: 31 meter(s)","timestamp":9651.801149}
+{"level":"info","message":"driving...distance to target: 30 meter(s)","timestamp":9668.947489}
+{"level":"info","message":"driving...distance to target: 29 meter(s)","timestamp":9685.336707}
+{"level":"info","message":"driving...distance to target: 28 meter(s)","timestamp":9705.54864}
+{"level":"info","message":"driving...distance to target: 27 meter(s)","timestamp":9724.796541}
+{"level":"info","message":"driving...distance to target: 26 meter(s)","timestamp":9742.102264}
+{"level":"info","message":"driving...distance to target: 25 meter(s)","timestamp":9758.493415}
+{"level":"info","message":"driving...distance to target: 24 meter(s)","timestamp":9776.159622}
+{"level":"info","message":"driving...distance to target: 23 meter(s)","timestamp":9793.388657}
+{"level":"info","message":"driving...distance to target: 22 meter(s)","timestamp":9810.702666}
+{"level":"info","message":"driving...distance to target: 21 meter(s)","timestamp":9829.783893}
+{"level":"info","message":"driving...distance to target: 20 meter(s)","timestamp":9845.551126}
+{"level":"info","message":"driving...distance to target: 19 meter(s)","timestamp":9863.284295}
+{"level":"info","message":"driving...distance to target: 18 meter(s)","timestamp":9880.640996}
+{"level":"info","message":"driving...distance to target: 17 meter(s)","timestamp":9897.881346}
+{"level":"info","message":"driving...distance to target: 16 meter(s)","timestamp":9912.834669}
+{"level":"info","message":"driving...distance to target: 15 meter(s)","timestamp":9929.808297}
+{"level":"info","message":"driving...distance to target: 14 meter(s)","timestamp":9945.83931}
+{"level":"info","message":"driving...distance to target: 13 meter(s)","timestamp":9961.628381}
+{"level":"info","message":"driving...distance to target: 12 meter(s)","timestamp":9979.915107}
+{"level":"info","message":"driving...distance to target: 11 meter(s)","timestamp":9996.3444}
+{"level":"info","message":"driving...distance to target: 10 meter(s)","timestamp":10013.903033}
+{"level":"info","message":"driving...distance to target: 9 meter(s)","timestamp":10032.121879}
+{"level":"info","message":"driving...distance to target: 8 meter(s)","timestamp":10049.4988}
+{"level":"info","message":"driving...distance to target: 7 meter(s)","timestamp":10066.306556}
+{"level":"info","message":"driving...distance to target: 6 meter(s)","timestamp":10084.076677}
+{"level":"info","message":"driving...distance to target: 5 meter(s)","timestamp":10103.748589}
+{"level":"info","message":"driving...distance to target: 4 meter(s)","timestamp":10120.686172}
+{"level":"info","message":"driving...distance to target: 3 meter(s)","timestamp":10136.199946}
+{"level":"info","message":"driving...distance to target: 2 meter(s)","timestamp":10155.272457}
+{"level":"info","message":"driving...distance to target: 1 meter(s)","timestamp":10171.0451}
+{"level":"info","message":"Arrived...within 1 meter(s)","timestamp":10188.205418}
+{"level":"info","message":"Getting target location","timestamp":12191.328177}
+{"level":"info","message":"Current Location: {\"latitude\":33.650316,\"longitude\":-117.612109}","timestamp":12191.523082}
+{"level":"info","message":"Target Location: {\"latitude\":33.6492,\"longitude\":-117.610199}","timestamp":12191.766207}
+{"level":"info","message":"Initiating turn","timestamp":15196.325119}
+{"level":"info","message":"Turning ... Current heading: 29 Target heading: 125.06","timestamp":15213.250477}
+{"level":"info","message":"Turning ... Current heading: 30 Target heading: 125.06","timestamp":15230.187344}
+{"level":"info","message":"Turning ... Current heading: 31 Target heading: 125.06","timestamp":15247.806334}
+{"level":"info","message":"Turning ... Current heading: 32 Target heading: 125.06","timestamp":15266.425669}
+{"level":"info","message":"Turning ... Current heading: 33 Target heading: 125.06","timestamp":15284.902202}
+{"level":"info","message":"Turning ... Current heading: 34 Target heading: 125.06","timestamp":15302.140597}
+{"level":"info","message":"Turning ... Current heading: 35 Target heading: 125.06","timestamp":15319.673933}
+{"level":"info","message":"Turning ... Current heading: 36 Target heading: 125.06","timestamp":15338.22904}
+{"level":"info","message":"Turning ... Current heading: 37 Target heading: 125.06","timestamp":15354.53077}
+{"level":"info","message":"Turning ... Current heading: 38 Target heading: 125.06","timestamp":15371.842487}
+{"level":"info","message":"Turning ... Current heading: 39 Target heading: 125.06","timestamp":15390.615181}
+{"level":"info","message":"Turning ... Current heading: 40 Target heading: 125.06","timestamp":15406.843556}
+{"level":"info","message":"Turning ... Current heading: 41 Target heading: 125.06","timestamp":15424.466286}
+{"level":"info","message":"Turning ... Current heading: 42 Target heading: 125.06","timestamp":15443.902479}
+{"level":"info","message":"Turning ... Current heading: 43 Target heading: 125.06","timestamp":15460.20378}
+{"level":"info","message":"Turning ... Current heading: 44 Target heading: 125.06","timestamp":15476.251574}
+{"level":"info","message":"Turning ... Current heading: 45 Target heading: 125.06","timestamp":15493.960447}
+{"level":"info","message":"Turning ... Current heading: 46 Target heading: 125.06","timestamp":15511.328652}
+{"level":"info","message":"Turning ... Current heading: 47 Target heading: 125.06","timestamp":15528.20907}
+{"level":"info","message":"Turning ... Current heading: 48 Target heading: 125.06","timestamp":15546.65457}
+{"level":"info","message":"Turning ... Current heading: 49 Target heading: 125.06","timestamp":15563.595572}
+{"level":"info","message":"Turning ... Current heading: 50 Target heading: 125.06","timestamp":15581.027496}
+{"level":"info","message":"Turning ... Current heading: 51 Target heading: 125.06","timestamp":15598.722203}
+{"level":"info","message":"Turning ... Current heading: 52 Target heading: 125.06","timestamp":15617.009255}
+{"level":"info","message":"Turning ... Current heading: 53 Target heading: 125.06","timestamp":15633.323701}
+{"level":"info","message":"Turning ... Current heading: 54 Target heading: 125.06","timestamp":15650.094175}
+{"level":"info","message":"Turning ... Current heading: 55 Target heading: 125.06","timestamp":15668.189342}
+{"level":"info","message":"Turning ... Current heading: 56 Target heading: 125.06","timestamp":15686.996279}
+{"level":"info","message":"Turning ... Current heading: 57 Target heading: 125.06","timestamp":15704.148051}
+{"level":"info","message":"Turning ... Current heading: 58 Target heading: 125.06","timestamp":15721.16228}
+{"level":"info","message":"Turning ... Current heading: 59 Target heading: 125.06","timestamp":15737.828166}
+{"level":"info","message":"Turning ... Current heading: 60 Target heading: 125.06","timestamp":15755.061659}
+{"level":"info","message":"Turning ... Current heading: 61 Target heading: 125.06","timestamp":15773.250829}
+{"level":"info","message":"Turning ... Current heading: 62 Target heading: 125.06","timestamp":15789.231035}
+{"level":"info","message":"Turning ... Current heading: 63 Target heading: 125.06","timestamp":15808.581247}
+{"level":"info","message":"Turning ... Current heading: 64 Target heading: 125.06","timestamp":15824.719941}
+{"level":"info","message":"Turning ... Current heading: 65 Target heading: 125.06","timestamp":15842.098453}
+{"level":"info","message":"Turning ... Current heading: 66 Target heading: 125.06","timestamp":15859.718508}
+{"level":"info","message":"Turning ... Current heading: 67 Target heading: 125.06","timestamp":15877.027319}
+{"level":"info","message":"Turning ... Current heading: 68 Target heading: 125.06","timestamp":15895.884441}
+{"level":"info","message":"Turning ... Current heading: 69 Target heading: 125.06","timestamp":15911.593361}
+{"level":"info","message":"Turning ... Current heading: 70 Target heading: 125.06","timestamp":15928.180719}
+{"level":"info","message":"Turning ... Current heading: 71 Target heading: 125.06","timestamp":15946.91957}
+{"level":"info","message":"Turning ... Current heading: 72 Target heading: 125.06","timestamp":15963.938935}
+{"level":"info","message":"Turning ... Current heading: 73 Target heading: 125.06","timestamp":15981.325785}
+{"level":"info","message":"Turning ... Current heading: 74 Target heading: 125.06","timestamp":15997.458344}
+{"level":"info","message":"Turning ... Current heading: 75 Target heading: 125.06","timestamp":16014.176578}
+{"level":"info","message":"Turning ... Current heading: 76 Target heading: 125.06","timestamp":16031.332841}
+{"level":"info","message":"Turning ... Current heading: 77 Target heading: 125.06","timestamp":16047.757643}
+{"level":"info","message":"Turning ... Current heading: 78 Target heading: 125.06","timestamp":16065.399575}
+{"level":"info","message":"Turning ... Current heading: 79 Target heading: 125.06","timestamp":16082.749378}
+{"level":"info","message":"Turning ... Current heading: 80 Target heading: 125.06","timestamp":16099.212692}
+{"level":"info","message":"Turning ... Current heading: 81 Target heading: 125.06","timestamp":16118.5246}
+{"level":"info","message":"Turning ... Current heading: 82 Target heading: 125.06","timestamp":16136.591755}
+{"level":"info","message":"Turning ... Current heading: 83 Target heading: 125.06","timestamp":16157.382842}
+{"level":"info","message":"Turning ... Current heading: 84 Target heading: 125.06","timestamp":16173.98941}
+{"level":"info","message":"Turning ... Current heading: 85 Target heading: 125.06","timestamp":16194.380637}
+{"level":"info","message":"Turning ... Current heading: 86 Target heading: 125.06","timestamp":16210.639482}
+{"level":"info","message":"Turning ... Current heading: 87 Target heading: 125.06","timestamp":16228.312815}
+{"level":"info","message":"Turning ... Current heading: 88 Target heading: 125.06","timestamp":16246.704006}
+{"level":"info","message":"Turning ... Current heading: 89 Target heading: 125.06","timestamp":16264.102002}
+{"level":"info","message":"Turning ... Current heading: 90 Target heading: 125.06","timestamp":16284.404101}
+{"level":"info","message":"Turning ... Current heading: 91 Target heading: 125.06","timestamp":16301.093589}
+{"level":"info","message":"Turning ... Current heading: 92 Target heading: 125.06","timestamp":16318.100555}
+{"level":"info","message":"Turning ... Current heading: 93 Target heading: 125.06","timestamp":16335.613822}
+{"level":"info","message":"Turning ... Current heading: 94 Target heading: 125.06","timestamp":16354.188301}
+{"level":"info","message":"Turning ... Current heading: 95 Target heading: 125.06","timestamp":16370.073164}
+{"level":"info","message":"Turning ... Current heading: 96 Target heading: 125.06","timestamp":16387.526098}
+{"level":"info","message":"Turning ... Current heading: 97 Target heading: 125.06","timestamp":16405.418336}
+{"level":"info","message":"Turning ... Current heading: 98 Target heading: 125.06","timestamp":16423.993093}
+{"level":"info","message":"Turning ... Current heading: 99 Target heading: 125.06","timestamp":16440.086102}
+{"level":"info","message":"Turning ... Current heading: 100 Target heading: 125.06","timestamp":16457.571229}
+{"level":"info","message":"Turning ... Current heading: 101 Target heading: 125.06","timestamp":16475.081667}
+{"level":"info","message":"Turning ... Current heading: 102 Target heading: 125.06","timestamp":16492.148998}
+{"level":"info","message":"Turning ... Current heading: 103 Target heading: 125.06","timestamp":16510.377009}
+{"level":"info","message":"Turning ... Current heading: 104 Target heading: 125.06","timestamp":16528.486501}
+{"level":"info","message":"Turning ... Current heading: 105 Target heading: 125.06","timestamp":16544.600995}
+{"level":"info","message":"Turning ... Current heading: 106 Target heading: 125.06","timestamp":16563.069924}
+{"level":"info","message":"Turning ... Current heading: 107 Target heading: 125.06","timestamp":16580.265677}
+{"level":"info","message":"Turning ... Current heading: 108 Target heading: 125.06","timestamp":16597.238549}
+{"level":"info","message":"Turning ... Current heading: 109 Target heading: 125.06","timestamp":16613.181847}
+{"level":"info","message":"Turning ... Current heading: 110 Target heading: 125.06","timestamp":16630.735009}
+{"level":"info","message":"Turning ... Current heading: 111 Target heading: 125.06","timestamp":16649.383643}
+{"level":"info","message":"Turning ... Current heading: 112 Target heading: 125.06","timestamp":16666.376804}
+{"level":"info","message":"Turning ... Current heading: 113 Target heading: 125.06","timestamp":16684.26896}
+{"level":"info","message":"Turning ... Current heading: 114 Target heading: 125.06","timestamp":16702.74924}
+{"level":"info","message":"Turning ... Current heading: 115 Target heading: 125.06","timestamp":16718.140232}
+{"level":"info","message":"Turning ... Current heading: 116 Target heading: 125.06","timestamp":16734.352883}
+{"level":"info","message":"Turning ... Current heading: 117 Target heading: 125.06","timestamp":16753.519081}
+{"level":"info","message":"Turning ... Current heading: 118 Target heading: 125.06","timestamp":16771.575801}
+{"level":"info","message":"Turning ... Current heading: 119 Target heading: 125.06","timestamp":16788.351809}
+{"level":"info","message":"Turning ... Current heading: 120 Target heading: 125.06","timestamp":16805.90216}
+{"level":"info","message":"Turning ... Current heading: 121 Target heading: 125.06","timestamp":16821.975174}
+{"level":"info","message":"Turning ... Current heading: 122 Target heading: 125.06","timestamp":16840.560573}
+{"level":"info","message":"Turning ... Current heading: 123 Target heading: 125.06","timestamp":16856.215635}
+{"level":"info","message":"Turning ... Current heading: 124 Target heading: 125.06","timestamp":16872.084936}
+{"level":"info","message":"Turning ... Current heading: 125 Target heading: 125.06","timestamp":16890.142552}
+{"level":"info","message":"Reached desired heading: 125 degrees","timestamp":16890.346881}
+{"level":"info","message":"Initiating drive toward waypoint 2, {\"latitude\":33.6492,\"longitude\":-117.610199}","timestamp":16890.45016}
+{"level":"info","message":"driving...distance to target: 215 meter(s)","timestamp":19911.462217}
+{"level":"info","message":"driving...distance to target: 214 meter(s)","timestamp":19929.401074}
+{"level":"info","message":"driving...distance to target: 213 meter(s)","timestamp":19946.565903}
+{"level":"info","message":"driving...distance to target: 212 meter(s)","timestamp":19964.066104}
+{"level":"info","message":"driving...distance to target: 211 meter(s)","timestamp":19981.370082}
+{"level":"info","message":"driving...distance to target: 210 meter(s)","timestamp":19997.212326}
+{"level":"info","message":"driving...distance to target: 209 meter(s)","timestamp":20016.096253}
+{"level":"info","message":"driving...distance to target: 208 meter(s)","timestamp":20033.636736}
+{"level":"info","message":"driving...distance to target: 207 meter(s)","timestamp":20050.122759}
+{"level":"info","message":"driving...distance to target: 206 meter(s)","timestamp":20068.567773}
+{"level":"info","message":"driving...distance to target: 205 meter(s)","timestamp":20084.065525}
+{"level":"info","message":"driving...distance to target: 204 meter(s)","timestamp":20102.937481}
+{"level":"info","message":"driving...distance to target: 203 meter(s)","timestamp":20118.008869}
+{"level":"info","message":"driving...distance to target: 202 meter(s)","timestamp":20136.969624}
+{"level":"info","message":"driving...distance to target: 201 meter(s)","timestamp":20155.236524}
+{"level":"info","message":"driving...distance to target: 200 meter(s)","timestamp":20172.168107}
+{"level":"info","message":"driving...distance to target: 199 meter(s)","timestamp":20190.145077}
+{"level":"info","message":"driving...distance to target: 198 meter(s)","timestamp":20209.777902}
+{"level":"info","message":"driving...distance to target: 197 meter(s)","timestamp":20229.511549}
+{"level":"info","message":"driving...distance to target: 196 meter(s)","timestamp":20245.976388}
+{"level":"info","message":"driving...distance to target: 195 meter(s)","timestamp":20265.530038}
+{"level":"info","message":"driving...distance to target: 194 meter(s)","timestamp":20283.240628}
+{"level":"info","message":"driving...distance to target: 193 meter(s)","timestamp":20300.214318}
+{"level":"info","message":"driving...distance to target: 192 meter(s)","timestamp":20318.908568}
+{"level":"info","message":"driving...distance to target: 191 meter(s)","timestamp":20333.937004}
+{"level":"info","message":"driving...distance to target: 190 meter(s)","timestamp":20352.548648}
+{"level":"info","message":"driving...distance to target: 189 meter(s)","timestamp":20370.206575}
+{"level":"info","message":"driving...distance to target: 188 meter(s)","timestamp":20387.38501}
+{"level":"info","message":"driving...distance to target: 187 meter(s)","timestamp":20404.173079}
+{"level":"info","message":"driving...distance to target: 186 meter(s)","timestamp":20422.641539}
+{"level":"info","message":"driving...distance to target: 185 meter(s)","timestamp":20440.509944}
+{"level":"info","message":"driving...distance to target: 184 meter(s)","timestamp":20456.922011}
+{"level":"info","message":"driving...distance to target: 183 meter(s)","timestamp":20474.404297}
+{"level":"info","message":"driving...distance to target: 182 meter(s)","timestamp":20491.917775}
+{"level":"info","message":"driving...distance to target: 181 meter(s)","timestamp":20508.521676}
+{"level":"info","message":"driving...distance to target: 180 meter(s)","timestamp":20526.713111}
+{"level":"info","message":"driving...distance to target: 179 meter(s)","timestamp":20544.549917}
+{"level":"info","message":"driving...distance to target: 178 meter(s)","timestamp":20560.146777}
+{"level":"info","message":"driving...distance to target: 177 meter(s)","timestamp":20579.072644}
+{"level":"info","message":"driving...distance to target: 176 meter(s)","timestamp":20596.49654}
+{"level":"info","message":"driving...distance to target: 175 meter(s)","timestamp":20613.788872}
+{"level":"info","message":"driving...distance to target: 174 meter(s)","timestamp":20631.290094}
+{"level":"info","message":"driving...distance to target: 173 meter(s)","timestamp":20648.604057}
+{"level":"info","message":"driving...distance to target: 172 meter(s)","timestamp":20666.080977}
+{"level":"info","message":"driving...distance to target: 171 meter(s)","timestamp":20683.811773}
+{"level":"info","message":"driving...distance to target: 170 meter(s)","timestamp":20702.742361}
+{"level":"info","message":"driving...distance to target: 169 meter(s)","timestamp":20718.23728}
+{"level":"info","message":"driving...distance to target: 168 meter(s)","timestamp":20735.771964}
+{"level":"info","message":"driving...distance to target: 167 meter(s)","timestamp":20753.330738}
+{"level":"info","message":"driving...distance to target: 166 meter(s)","timestamp":20770.664868}
+{"level":"info","message":"driving...distance to target: 165 meter(s)","timestamp":20788.020702}
+{"level":"info","message":"driving...distance to target: 164 meter(s)","timestamp":20807.689143}
+{"level":"info","message":"driving...distance to target: 163 meter(s)","timestamp":20824.005529}
+{"level":"info","message":"driving...distance to target: 162 meter(s)","timestamp":20841.724807}
+{"level":"info","message":"driving...distance to target: 161 meter(s)","timestamp":20858.33926}
+{"level":"info","message":"driving...distance to target: 160 meter(s)","timestamp":20875.072825}
+{"level":"info","message":"driving...distance to target: 159 meter(s)","timestamp":20892.459519}
+{"level":"info","message":"driving...distance to target: 158 meter(s)","timestamp":20911.230465}
+{"level":"info","message":"driving...distance to target: 157 meter(s)","timestamp":20929.286832}
+{"level":"info","message":"driving...distance to target: 156 meter(s)","timestamp":20948.155345}
+{"level":"info","message":"driving...distance to target: 155 meter(s)","timestamp":20966.461136}
+{"level":"info","message":"driving...distance to target: 154 meter(s)","timestamp":20984.903191}
+{"level":"info","message":"driving...distance to target: 153 meter(s)","timestamp":21004.099911}
+{"level":"info","message":"driving...distance to target: 152 meter(s)","timestamp":21020.901299}
+{"level":"info","message":"driving...distance to target: 151 meter(s)","timestamp":21037.190414}
+{"level":"info","message":"driving...distance to target: 150 meter(s)","timestamp":21055.033971}
+{"level":"info","message":"driving...distance to target: 149 meter(s)","timestamp":21072.665263}
+{"level":"info","message":"driving...distance to target: 148 meter(s)","timestamp":21089.839082}
+{"level":"info","message":"driving...distance to target: 147 meter(s)","timestamp":21108.77051}
+{"level":"info","message":"driving...distance to target: 146 meter(s)","timestamp":21126.921918}
+{"level":"info","message":"driving...distance to target: 145 meter(s)","timestamp":21143.57781}
+{"level":"info","message":"driving...distance to target: 144 meter(s)","timestamp":21160.287012}
+{"level":"info","message":"driving...distance to target: 143 meter(s)","timestamp":21178.789788}
+{"level":"info","message":"driving...distance to target: 142 meter(s)","timestamp":21197.169481}
+{"level":"info","message":"driving...distance to target: 141 meter(s)","timestamp":21213.277602}
+{"level":"info","message":"driving...distance to target: 140 meter(s)","timestamp":21228.75355}
+{"level":"info","message":"driving...distance to target: 139 meter(s)","timestamp":21246.747715}
+{"level":"info","message":"driving...distance to target: 138 meter(s)","timestamp":21263.531184}
+{"level":"info","message":"driving...distance to target: 137 meter(s)","timestamp":21281.438068}
+{"level":"info","message":"driving...distance to target: 136 meter(s)","timestamp":21299.253276}
+{"level":"info","message":"driving...distance to target: 135 meter(s)","timestamp":21315.924214}
+{"level":"info","message":"driving...distance to target: 134 meter(s)","timestamp":21334.136359}
+{"level":"info","message":"driving...distance to target: 133 meter(s)","timestamp":21352.095376}
+{"level":"info","message":"driving...distance to target: 132 meter(s)","timestamp":21368.495976}
+{"level":"info","message":"driving...distance to target: 131 meter(s)","timestamp":21387.393054}
+{"level":"info","message":"driving...distance to target: 130 meter(s)","timestamp":21403.385181}
+{"level":"info","message":"driving...distance to target: 129 meter(s)","timestamp":21421.00563}
+{"level":"info","message":"driving...distance to target: 128 meter(s)","timestamp":21437.15318}
+{"level":"info","message":"driving...distance to target: 127 meter(s)","timestamp":21455.572072}
+{"level":"info","message":"driving...distance to target: 126 meter(s)","timestamp":21473.059536}
+{"level":"info","message":"driving...distance to target: 125 meter(s)","timestamp":21490.309284}
+{"level":"info","message":"driving...distance to target: 124 meter(s)","timestamp":21508.606739}
+{"level":"info","message":"driving...distance to target: 123 meter(s)","timestamp":21525.276299}
+{"level":"info","message":"driving...distance to target: 122 meter(s)","timestamp":21542.515987}
+{"level":"info","message":"driving...distance to target: 121 meter(s)","timestamp":21560.930049}
+{"level":"info","message":"driving...distance to target: 120 meter(s)","timestamp":21577.717093}
+{"level":"info","message":"driving...distance to target: 119 meter(s)","timestamp":21593.958354}
+{"level":"info","message":"driving...distance to target: 118 meter(s)","timestamp":21610.021648}
+{"level":"info","message":"driving...distance to target: 117 meter(s)","timestamp":21629.131956}
+{"level":"info","message":"driving...distance to target: 116 meter(s)","timestamp":21647.256068}
+{"level":"info","message":"driving...distance to target: 115 meter(s)","timestamp":21664.535368}
+{"level":"info","message":"driving...distance to target: 114 meter(s)","timestamp":21682.076156}
+{"level":"info","message":"driving...distance to target: 113 meter(s)","timestamp":21698.113315}
+{"level":"info","message":"driving...distance to target: 112 meter(s)","timestamp":21716.168863}
+{"level":"info","message":"driving...distance to target: 111 meter(s)","timestamp":21734.589039}
+{"level":"info","message":"driving...distance to target: 110 meter(s)","timestamp":21751.655001}
+{"level":"info","message":"driving...distance to target: 109 meter(s)","timestamp":21768.505638}
+{"level":"info","message":"driving...distance to target: 108 meter(s)","timestamp":21786.37358}
+{"level":"info","message":"driving...distance to target: 107 meter(s)","timestamp":21803.893353}
+{"level":"info","message":"driving...distance to target: 106 meter(s)","timestamp":21821.317012}
+{"level":"info","message":"driving...distance to target: 105 meter(s)","timestamp":21838.161171}
+{"level":"info","message":"driving...distance to target: 104 meter(s)","timestamp":21857.760715}
+{"level":"info","message":"driving...distance to target: 103 meter(s)","timestamp":21874.150406}
+{"level":"info","message":"driving...distance to target: 102 meter(s)","timestamp":21892.138922}
+{"level":"info","message":"driving...distance to target: 101 meter(s)","timestamp":21910.612246}
+{"level":"info","message":"driving...distance to target: 100 meter(s)","timestamp":21928.225647}
+{"level":"info","message":"driving...distance to target: 99 meter(s)","timestamp":21947.95947}
+{"level":"info","message":"driving...distance to target: 98 meter(s)","timestamp":21966.266023}
+{"level":"info","message":"driving...distance to target: 97 meter(s)","timestamp":21983.85121}
+{"level":"info","message":"driving...distance to target: 96 meter(s)","timestamp":22001.697213}
+{"level":"info","message":"driving...distance to target: 95 meter(s)","timestamp":22019.985094}
+{"level":"info","message":"driving...distance to target: 94 meter(s)","timestamp":22036.10783}
+{"level":"info","message":"driving...distance to target: 93 meter(s)","timestamp":22053.437534}
+{"level":"info","message":"driving...distance to target: 92 meter(s)","timestamp":22070.898793}
+{"level":"info","message":"driving...distance to target: 91 meter(s)","timestamp":22088.350692}
+{"level":"info","message":"driving...distance to target: 90 meter(s)","timestamp":22105.770038}
+{"level":"info","message":"driving...distance to target: 89 meter(s)","timestamp":22125.513214}
+{"level":"info","message":"driving...distance to target: 88 meter(s)","timestamp":22143.734319}
+{"level":"info","message":"driving...distance to target: 87 meter(s)","timestamp":22160.056648}
+{"level":"info","message":"driving...distance to target: 86 meter(s)","timestamp":22179.068215}
+{"level":"info","message":"driving...distance to target: 85 meter(s)","timestamp":22196.152915}
+{"level":"info","message":"driving...distance to target: 84 meter(s)","timestamp":22212.490632}
+{"level":"info","message":"driving...distance to target: 83 meter(s)","timestamp":22230.042573}
+{"level":"info","message":"driving...distance to target: 82 meter(s)","timestamp":22246.178478}
+{"level":"info","message":"driving...distance to target: 81 meter(s)","timestamp":22261.998045}
+{"level":"info","message":"driving...distance to target: 80 meter(s)","timestamp":22279.844022}
+{"level":"info","message":"driving...distance to target: 79 meter(s)","timestamp":22298.103558}
+{"level":"info","message":"driving...distance to target: 78 meter(s)","timestamp":22314.566686}
+{"level":"info","message":"driving...distance to target: 77 meter(s)","timestamp":22332.489925}
+{"level":"info","message":"driving...distance to target: 76 meter(s)","timestamp":22350.205573}
+{"level":"info","message":"driving...distance to target: 75 meter(s)","timestamp":22366.00297}
+{"level":"info","message":"driving...distance to target: 74 meter(s)","timestamp":22384.294801}
+{"level":"info","message":"driving...distance to target: 73 meter(s)","timestamp":22400.072642}
+{"level":"info","message":"driving...distance to target: 72 meter(s)","timestamp":22419.238687}
+{"level":"info","message":"driving...distance to target: 71 meter(s)","timestamp":22437.178378}
+{"level":"info","message":"driving...distance to target: 70 meter(s)","timestamp":22454.617713}
+{"level":"info","message":"driving...distance to target: 69 meter(s)","timestamp":22471.747952}
+{"level":"info","message":"driving...distance to target: 68 meter(s)","timestamp":22488.832867}
+{"level":"info","message":"driving...distance to target: 67 meter(s)","timestamp":22506.302898}
+{"level":"info","message":"driving...distance to target: 66 meter(s)","timestamp":22524.472152}
+{"level":"info","message":"driving...distance to target: 65 meter(s)","timestamp":22540.780775}
+{"level":"info","message":"driving...distance to target: 64 meter(s)","timestamp":22558.489554}
+{"level":"info","message":"driving...distance to target: 63 meter(s)","timestamp":22576.332426}
+{"level":"info","message":"driving...distance to target: 62 meter(s)","timestamp":22592.340948}
+{"level":"info","message":"driving...distance to target: 61 meter(s)","timestamp":22611.39089}
+{"level":"info","message":"driving...distance to target: 60 meter(s)","timestamp":22629.237855}
+{"level":"info","message":"driving...distance to target: 59 meter(s)","timestamp":22646.274823}
+{"level":"info","message":"driving...distance to target: 58 meter(s)","timestamp":22663.052414}
+{"level":"info","message":"driving...distance to target: 57 meter(s)","timestamp":22679.946814}
+{"level":"info","message":"driving...distance to target: 56 meter(s)","timestamp":22697.976005}
+{"level":"info","message":"driving...distance to target: 55 meter(s)","timestamp":22716.655444}
+{"level":"info","message":"driving...distance to target: 54 meter(s)","timestamp":22735.019208}
+{"level":"info","message":"driving...distance to target: 53 meter(s)","timestamp":22754.177316}
+{"level":"info","message":"driving...distance to target: 52 meter(s)","timestamp":22771.682805}
+{"level":"info","message":"driving...distance to target: 51 meter(s)","timestamp":22790.743699}
+{"level":"info","message":"driving...distance to target: 50 meter(s)","timestamp":22808.272593}
+{"level":"info","message":"driving...distance to target: 49 meter(s)","timestamp":22826.214467}
+{"level":"info","message":"driving...distance to target: 48 meter(s)","timestamp":22842.727398}
+{"level":"info","message":"driving...distance to target: 47 meter(s)","timestamp":22860.183891}
+{"level":"info","message":"driving...distance to target: 46 meter(s)","timestamp":22879.377081}
+{"level":"info","message":"driving...distance to target: 45 meter(s)","timestamp":22895.498171}
+{"level":"info","message":"driving...distance to target: 44 meter(s)","timestamp":22911.485915}
+{"level":"info","message":"driving...distance to target: 43 meter(s)","timestamp":22930.048998}
+{"level":"info","message":"driving...distance to target: 42 meter(s)","timestamp":22948.414589}
+{"level":"info","message":"driving...distance to target: 41 meter(s)","timestamp":22964.761005}
+{"level":"info","message":"driving...distance to target: 40 meter(s)","timestamp":22982.218771}
+{"level":"info","message":"driving...distance to target: 39 meter(s)","timestamp":23000.117651}
+{"level":"info","message":"driving...distance to target: 38 meter(s)","timestamp":23016.998621}
+{"level":"info","message":"driving...distance to target: 37 meter(s)","timestamp":23035.392146}
+{"level":"info","message":"driving...distance to target: 36 meter(s)","timestamp":23054.174774}
+{"level":"info","message":"driving...distance to target: 35 meter(s)","timestamp":23070.131841}
+{"level":"info","message":"driving...distance to target: 34 meter(s)","timestamp":23086.911498}
+{"level":"info","message":"driving...distance to target: 33 meter(s)","timestamp":23104.142836}
+{"level":"info","message":"driving...distance to target: 32 meter(s)","timestamp":23121.593833}
+{"level":"info","message":"driving...distance to target: 31 meter(s)","timestamp":23139.075128}
+{"level":"info","message":"driving...distance to target: 30 meter(s)","timestamp":23156.525471}
+{"level":"info","message":"driving...distance to target: 29 meter(s)","timestamp":23173.843343}
+{"level":"info","message":"driving...distance to target: 28 meter(s)","timestamp":23191.25905}
+{"level":"info","message":"driving...distance to target: 27 meter(s)","timestamp":23208.868734}
+{"level":"info","message":"driving...distance to target: 26 meter(s)","timestamp":23226.065424}
+{"level":"info","message":"driving...distance to target: 25 meter(s)","timestamp":23244.073309}
+{"level":"info","message":"driving...distance to target: 24 meter(s)","timestamp":23260.394346}
+{"level":"info","message":"driving...distance to target: 23 meter(s)","timestamp":23278.341847}
+{"level":"info","message":"driving...distance to target: 22 meter(s)","timestamp":23296.640051}
+{"level":"info","message":"driving...distance to target: 21 meter(s)","timestamp":23313.463399}
+{"level":"info","message":"driving...distance to target: 20 meter(s)","timestamp":23330.605341}
+{"level":"info","message":"driving...distance to target: 19 meter(s)","timestamp":23346.904307}
+{"level":"info","message":"driving...distance to target: 18 meter(s)","timestamp":23365.247749}
+{"level":"info","message":"driving...distance to target: 17 meter(s)","timestamp":23383.39628}
+{"level":"info","message":"driving...distance to target: 16 meter(s)","timestamp":23402.166934}
+{"level":"info","message":"driving...distance to target: 15 meter(s)","timestamp":23417.640661}
+{"level":"info","message":"driving...distance to target: 14 meter(s)","timestamp":23435.106919}
+{"level":"info","message":"driving...distance to target: 13 meter(s)","timestamp":23453.265304}
+{"level":"info","message":"driving...distance to target: 12 meter(s)","timestamp":23469.880964}
+{"level":"info","message":"driving...distance to target: 11 meter(s)","timestamp":23487.253042}
+{"level":"info","message":"driving...distance to target: 10 meter(s)","timestamp":23506.033119}
+{"level":"info","message":"driving...distance to target: 9 meter(s)","timestamp":23523.29979}
+{"level":"info","message":"driving...distance to target: 8 meter(s)","timestamp":23541.278641}
+{"level":"info","message":"driving...distance to target: 7 meter(s)","timestamp":23557.021707}
+{"level":"info","message":"driving...distance to target: 6 meter(s)","timestamp":23574.310824}
+{"level":"info","message":"driving...distance to target: 5 meter(s)","timestamp":23591.823109}
+{"level":"info","message":"driving...distance to target: 4 meter(s)","timestamp":23609.705937}
+{"level":"info","message":"driving...distance to target: 3 meter(s)","timestamp":23626.573218}
+{"level":"info","message":"driving...distance to target: 2 meter(s)","timestamp":23645.467304}
+{"level":"info","message":"driving...distance to target: 1 meter(s)","timestamp":23661.403001}
+{"level":"info","message":"Arrived...within 1 meter(s)","timestamp":23678.93086}
+{"level":"info","message":"Getting target location","timestamp":25683.175128}
+{"level":"info","message":"Current Location: {\"latitude\":33.6492,\"longitude\":-117.610199}","timestamp":25684.939803}
+{"level":"info","message":"Target Location: {\"latitude\":33.64945,\"longitude\":-117.609674}","timestamp":25685.092399}
+{"level":"info","message":"Initiating turn","timestamp":28689.250254}
+{"level":"info","message":"Turning ... Current heading: 125 Target heading: 60.23","timestamp":28706.10567}
+{"level":"info","message":"Turning ... Current heading: 124 Target heading: 60.23","timestamp":28723.548621}
+{"level":"info","message":"Turning ... Current heading: 123 Target heading: 60.23","timestamp":28740.883324}
+{"level":"info","message":"Turning ... Current heading: 122 Target heading: 60.23","timestamp":28758.024309}
+{"level":"info","message":"Turning ... Current heading: 121 Target heading: 60.23","timestamp":28776.091334}
+{"level":"info","message":"Turning ... Current heading: 120 Target heading: 60.23","timestamp":28793.192419}
+{"level":"info","message":"Turning ... Current heading: 119 Target heading: 60.23","timestamp":28810.924479}
+{"level":"info","message":"Turning ... Current heading: 118 Target heading: 60.23","timestamp":28827.879603}
+{"level":"info","message":"Turning ... Current heading: 117 Target heading: 60.23","timestamp":28845.49553}
+{"level":"info","message":"Turning ... Current heading: 116 Target heading: 60.23","timestamp":28863.90621}
+{"level":"info","message":"Turning ... Current heading: 115 Target heading: 60.23","timestamp":28881.404816}
+{"level":"info","message":"Turning ... Current heading: 114 Target heading: 60.23","timestamp":28898.092357}
+{"level":"info","message":"Turning ... Current heading: 113 Target heading: 60.23","timestamp":28916.227652}
+{"level":"info","message":"Turning ... Current heading: 112 Target heading: 60.23","timestamp":28932.332564}
+{"level":"info","message":"Turning ... Current heading: 111 Target heading: 60.23","timestamp":28948.301109}
+{"level":"info","message":"Turning ... Current heading: 110 Target heading: 60.23","timestamp":28963.967778}
+{"level":"info","message":"Turning ... Current heading: 109 Target heading: 60.23","timestamp":28982.144161}
+{"level":"info","message":"Turning ... Current heading: 108 Target heading: 60.23","timestamp":29000.259627}
+{"level":"info","message":"Turning ... Current heading: 107 Target heading: 60.23","timestamp":29019.496248}
+{"level":"info","message":"Turning ... Current heading: 106 Target heading: 60.23","timestamp":29037.675345}
+{"level":"info","message":"Turning ... Current heading: 105 Target heading: 60.23","timestamp":29056.081256}
+{"level":"info","message":"Turning ... Current heading: 104 Target heading: 60.23","timestamp":29073.852501}
+{"level":"info","message":"Turning ... Current heading: 103 Target heading: 60.23","timestamp":29091.190244}
+{"level":"info","message":"Turning ... Current heading: 102 Target heading: 60.23","timestamp":29107.048119}
+{"level":"info","message":"Turning ... Current heading: 101 Target heading: 60.23","timestamp":29123.929252}
+{"level":"info","message":"Turning ... Current heading: 100 Target heading: 60.23","timestamp":29141.350832}
+{"level":"info","message":"Turning ... Current heading: 99 Target heading: 60.23","timestamp":29159.871292}
+{"level":"info","message":"Turning ... Current heading: 98 Target heading: 60.23","timestamp":29174.492739}
+{"level":"info","message":"Turning ... Current heading: 97 Target heading: 60.23","timestamp":29193.793684}
+{"level":"info","message":"Turning ... Current heading: 96 Target heading: 60.23","timestamp":29211.048857}
+{"level":"info","message":"Turning ... Current heading: 95 Target heading: 60.23","timestamp":29228.053195}
+{"level":"info","message":"Turning ... Current heading: 94 Target heading: 60.23","timestamp":29246.084647}
+{"level":"info","message":"Turning ... Current heading: 93 Target heading: 60.23","timestamp":29263.709037}
+{"level":"info","message":"Turning ... Current heading: 92 Target heading: 60.23","timestamp":29280.758119}
+{"level":"info","message":"Turning ... Current heading: 91 Target heading: 60.23","timestamp":29299.5204}
+{"level":"info","message":"Turning ... Current heading: 90 Target heading: 60.23","timestamp":29315.643111}
+{"level":"info","message":"Turning ... Current heading: 89 Target heading: 60.23","timestamp":29334.103301}
+{"level":"info","message":"Turning ... Current heading: 88 Target heading: 60.23","timestamp":29352.576266}
+{"level":"info","message":"Turning ... Current heading: 87 Target heading: 60.23","timestamp":29370.028776}
+{"level":"info","message":"Turning ... Current heading: 86 Target heading: 60.23","timestamp":29388.131196}
+{"level":"info","message":"Turning ... Current heading: 85 Target heading: 60.23","timestamp":29405.979468}
+{"level":"info","message":"Turning ... Current heading: 84 Target heading: 60.23","timestamp":29424.089493}
+{"level":"info","message":"Turning ... Current heading: 83 Target heading: 60.23","timestamp":29443.411371}
+{"level":"info","message":"Turning ... Current heading: 82 Target heading: 60.23","timestamp":29461.192293}
+{"level":"info","message":"Turning ... Current heading: 81 Target heading: 60.23","timestamp":29480.407245}
+{"level":"info","message":"Turning ... Current heading: 80 Target heading: 60.23","timestamp":29496.04007}
+{"level":"info","message":"Turning ... Current heading: 79 Target heading: 60.23","timestamp":29512.086944}
+{"level":"info","message":"Turning ... Current heading: 78 Target heading: 60.23","timestamp":29530.27177}
+{"level":"info","message":"Turning ... Current heading: 77 Target heading: 60.23","timestamp":29548.235342}
+{"level":"info","message":"Turning ... Current heading: 76 Target heading: 60.23","timestamp":29567.645926}
+{"level":"info","message":"Turning ... Current heading: 75 Target heading: 60.23","timestamp":29585.893065}
+{"level":"info","message":"Turning ... Current heading: 74 Target heading: 60.23","timestamp":29603.995932}
+{"level":"info","message":"Turning ... Current heading: 73 Target heading: 60.23","timestamp":29620.0804}
+{"level":"info","message":"Turning ... Current heading: 72 Target heading: 60.23","timestamp":29637.629535}
+{"level":"info","message":"Turning ... Current heading: 71 Target heading: 60.23","timestamp":29653.597746}
+{"level":"info","message":"Turning ... Current heading: 70 Target heading: 60.23","timestamp":29672.159794}
+{"level":"info","message":"Turning ... Current heading: 69 Target heading: 60.23","timestamp":29687.86085}
+{"level":"info","message":"Turning ... Current heading: 68 Target heading: 60.23","timestamp":29704.404743}
+{"level":"info","message":"Turning ... Current heading: 67 Target heading: 60.23","timestamp":29721.922899}
+{"level":"info","message":"Turning ... Current heading: 66 Target heading: 60.23","timestamp":29739.353105}
+{"level":"info","message":"Turning ... Current heading: 65 Target heading: 60.23","timestamp":29756.683575}
+{"level":"info","message":"Turning ... Current heading: 64 Target heading: 60.23","timestamp":29774.892588}
+{"level":"info","message":"Turning ... Current heading: 63 Target heading: 60.23","timestamp":29791.467593}
+{"level":"info","message":"Turning ... Current heading: 62 Target heading: 60.23","timestamp":29807.142261}
+{"level":"info","message":"Turning ... Current heading: 61 Target heading: 60.23","timestamp":29823.185553}
+{"level":"info","message":"Reached desired heading: 61 degrees","timestamp":29823.514849}
+{"level":"info","message":"Initiating drive toward waypoint 3, {\"latitude\":33.64945,\"longitude\":-117.609674}","timestamp":29823.613997}
+{"level":"info","message":"driving...distance to target: 55 meter(s)","timestamp":32843.657714}
+{"level":"info","message":"driving...distance to target: 54 meter(s)","timestamp":32861.389274}
+{"level":"info","message":"driving...distance to target: 53 meter(s)","timestamp":32879.850287}
+{"level":"info","message":"driving...distance to target: 52 meter(s)","timestamp":32897.270861}
+{"level":"info","message":"driving...distance to target: 51 meter(s)","timestamp":32914.790185}
+{"level":"info","message":"driving...distance to target: 50 meter(s)","timestamp":32930.655743}
+{"level":"info","message":"driving...distance to target: 49 meter(s)","timestamp":32949.43064}
+{"level":"info","message":"driving...distance to target: 48 meter(s)","timestamp":32967.945551}
+{"level":"info","message":"driving...distance to target: 47 meter(s)","timestamp":32984.333918}
+{"level":"info","message":"driving...distance to target: 46 meter(s)","timestamp":33001.064182}
+{"level":"info","message":"driving...distance to target: 45 meter(s)","timestamp":33019.202392}
+{"level":"info","message":"driving...distance to target: 44 meter(s)","timestamp":33036.609517}
+{"level":"info","message":"driving...distance to target: 43 meter(s)","timestamp":33054.251952}
+{"level":"info","message":"driving...distance to target: 42 meter(s)","timestamp":33071.391822}
+{"level":"info","message":"driving...distance to target: 41 meter(s)","timestamp":33089.116846}
+{"level":"info","message":"driving...distance to target: 40 meter(s)","timestamp":33106.167132}
+{"level":"info","message":"driving...distance to target: 39 meter(s)","timestamp":33124.435056}
+{"level":"info","message":"driving...distance to target: 38 meter(s)","timestamp":33143.363689}
+{"level":"info","message":"driving...distance to target: 37 meter(s)","timestamp":33160.086152}
+{"level":"info","message":"driving...distance to target: 36 meter(s)","timestamp":33176.035593}
+{"level":"info","message":"driving...distance to target: 35 meter(s)","timestamp":33193.427353}
+{"level":"info","message":"driving...distance to target: 34 meter(s)","timestamp":33210.77297}
+{"level":"info","message":"driving...distance to target: 33 meter(s)","timestamp":33229.226061}
+{"level":"info","message":"driving...distance to target: 32 meter(s)","timestamp":33245.35229}
+{"level":"info","message":"driving...distance to target: 31 meter(s)","timestamp":33262.985204}
+{"level":"info","message":"driving...distance to target: 30 meter(s)","timestamp":33278.619581}
+{"level":"info","message":"driving...distance to target: 29 meter(s)","timestamp":33297.883429}
+{"level":"info","message":"driving...distance to target: 28 meter(s)","timestamp":33316.180385}
+{"level":"info","message":"driving...distance to target: 27 meter(s)","timestamp":33332.699268}
+{"level":"info","message":"driving...distance to target: 26 meter(s)","timestamp":33350.507135}
+{"level":"info","message":"driving...distance to target: 25 meter(s)","timestamp":33367.518293}
+{"level":"info","message":"driving...distance to target: 24 meter(s)","timestamp":33384.339105}
+{"level":"info","message":"driving...distance to target: 23 meter(s)","timestamp":33402.425487}
+{"level":"info","message":"driving...distance to target: 22 meter(s)","timestamp":33419.680864}
+{"level":"info","message":"driving...distance to target: 21 meter(s)","timestamp":33437.417305}
+{"level":"info","message":"driving...distance to target: 20 meter(s)","timestamp":33454.365204}
+{"level":"info","message":"driving...distance to target: 19 meter(s)","timestamp":33472.043283}
+{"level":"info","message":"driving...distance to target: 18 meter(s)","timestamp":33490.005669}
+{"level":"info","message":"driving...distance to target: 17 meter(s)","timestamp":33509.212206}
+{"level":"info","message":"driving...distance to target: 16 meter(s)","timestamp":33527.969043}
+{"level":"info","message":"driving...distance to target: 15 meter(s)","timestamp":33546.018209}
+{"level":"info","message":"driving...distance to target: 14 meter(s)","timestamp":33564.846068}
+{"level":"info","message":"driving...distance to target: 13 meter(s)","timestamp":33582.243369}
+{"level":"info","message":"driving...distance to target: 12 meter(s)","timestamp":33599.735226}
+{"level":"info","message":"driving...distance to target: 11 meter(s)","timestamp":33617.866962}
+{"level":"info","message":"driving...distance to target: 10 meter(s)","timestamp":33634.53485}
+{"level":"info","message":"driving...distance to target: 9 meter(s)","timestamp":33652.098493}
+{"level":"info","message":"driving...distance to target: 8 meter(s)","timestamp":33669.601792}
+{"level":"info","message":"driving...distance to target: 7 meter(s)","timestamp":33686.132779}
+{"level":"info","message":"driving...distance to target: 6 meter(s)","timestamp":33704.942189}
+{"level":"info","message":"driving...distance to target: 5 meter(s)","timestamp":33721.613582}
+{"level":"info","message":"driving...distance to target: 4 meter(s)","timestamp":33739.010204}
+{"level":"info","message":"driving...distance to target: 3 meter(s)","timestamp":33756.770802}
+{"level":"info","message":"driving...distance to target: 2 meter(s)","timestamp":33773.913189}
+{"level":"info","message":"driving...distance to target: 1 meter(s)","timestamp":33791.262052}
+{"level":"info","message":"Arrived...within 1 meter(s)","timestamp":33809.04929}
+{"level":"info","message":"Getting target location","timestamp":35814.53485}
+{"level":"info","message":"Current Location: {\"latitude\":33.64945,\"longitude\":-117.609674}","timestamp":35814.873824}
+{"level":"info","message":"Target Location: {\"latitude\":33.650781,\"longitude\":-117.611884}","timestamp":35815.062108}
+{"level":"info","message":"Initiating turn","timestamp":38818.457562}
+{"level":"info","message":"Turning ... Current heading: 61 Target heading: 305.89","timestamp":38836.412634}
+{"level":"info","message":"Turning ... Current heading: 60 Target heading: 305.89","timestamp":38853.6423}
+{"level":"info","message":"Turning ... Current heading: 59 Target heading: 305.89","timestamp":38870.593718}
+{"level":"info","message":"Turning ... Current heading: 58 Target heading: 305.89","timestamp":38888.112574}
+{"level":"info","message":"Turning ... Current heading: 57 Target heading: 305.89","timestamp":38904.579753}
+{"level":"info","message":"Turning ... Current heading: 56 Target heading: 305.89","timestamp":38922.187594}
+{"level":"info","message":"Turning ... Current heading: 55 Target heading: 305.89","timestamp":38938.032875}
+{"level":"info","message":"Turning ... Current heading: 54 Target heading: 305.89","timestamp":38956.55719}
+{"level":"info","message":"Turning ... Current heading: 53 Target heading: 305.89","timestamp":38976.065098}
+{"level":"info","message":"Turning ... Current heading: 52 Target heading: 305.89","timestamp":38992.954396}
+{"level":"info","message":"Turning ... Current heading: 51 Target heading: 305.89","timestamp":39010.122356}
+{"level":"info","message":"Turning ... Current heading: 50 Target heading: 305.89","timestamp":39028.601813}
+{"level":"info","message":"Turning ... Current heading: 49 Target heading: 305.89","timestamp":39046.640871}
+{"level":"info","message":"Turning ... Current heading: 48 Target heading: 305.89","timestamp":39062.165758}
+{"level":"info","message":"Turning ... Current heading: 47 Target heading: 305.89","timestamp":39079.510951}
+{"level":"info","message":"Turning ... Current heading: 46 Target heading: 305.89","timestamp":39100.83175}
+{"level":"info","message":"Turning ... Current heading: 45 Target heading: 305.89","timestamp":39117.185088}
+{"level":"info","message":"Turning ... Current heading: 44 Target heading: 305.89","timestamp":39135.176347}
+{"level":"info","message":"Turning ... Current heading: 43 Target heading: 305.89","timestamp":39157.055556}
+{"level":"info","message":"Turning ... Current heading: 42 Target heading: 305.89","timestamp":39176.95726}
+{"level":"info","message":"Turning ... Current heading: 41 Target heading: 305.89","timestamp":39195.944316}
+{"level":"info","message":"Turning ... Current heading: 40 Target heading: 305.89","timestamp":39214.990179}
+{"level":"info","message":"Turning ... Current heading: 39 Target heading: 305.89","timestamp":39232.872191}
+{"level":"info","message":"Turning ... Current heading: 38 Target heading: 305.89","timestamp":39250.245038}
+{"level":"info","message":"Turning ... Current heading: 37 Target heading: 305.89","timestamp":39265.973484}
+{"level":"info","message":"Turning ... Current heading: 36 Target heading: 305.89","timestamp":39285.614946}
+{"level":"info","message":"Turning ... Current heading: 35 Target heading: 305.89","timestamp":39302.553629}
+{"level":"info","message":"Turning ... Current heading: 34 Target heading: 305.89","timestamp":39319.269998}
+{"level":"info","message":"Turning ... Current heading: 33 Target heading: 305.89","timestamp":39335.441958}
+{"level":"info","message":"Turning ... Current heading: 32 Target heading: 305.89","timestamp":39353.547929}
+{"level":"info","message":"Turning ... Current heading: 31 Target heading: 305.89","timestamp":39372.004974}
+{"level":"info","message":"Turning ... Current heading: 30 Target heading: 305.89","timestamp":39390.467644}
+{"level":"info","message":"Turning ... Current heading: 29 Target heading: 305.89","timestamp":39407.359087}
+{"level":"info","message":"Turning ... Current heading: 28 Target heading: 305.89","timestamp":39425.994944}
+{"level":"info","message":"Turning ... Current heading: 27 Target heading: 305.89","timestamp":39445.276863}
+{"level":"info","message":"Turning ... Current heading: 26 Target heading: 305.89","timestamp":39462.755706}
+{"level":"info","message":"Turning ... Current heading: 25 Target heading: 305.89","timestamp":39480.683321}
+{"level":"info","message":"Turning ... Current heading: 24 Target heading: 305.89","timestamp":39499.46819}
+{"level":"info","message":"Turning ... Current heading: 23 Target heading: 305.89","timestamp":39515.010024}
+{"level":"info","message":"Turning ... Current heading: 22 Target heading: 305.89","timestamp":39531.637801}
+{"level":"info","message":"Turning ... Current heading: 21 Target heading: 305.89","timestamp":39548.010817}
+{"level":"info","message":"Turning ... Current heading: 20 Target heading: 305.89","timestamp":39563.583645}
+{"level":"info","message":"Turning ... Current heading: 19 Target heading: 305.89","timestamp":39582.106138}
+{"level":"info","message":"Turning ... Current heading: 18 Target heading: 305.89","timestamp":39600.430457}
+{"level":"info","message":"Turning ... Current heading: 17 Target heading: 305.89","timestamp":39617.476235}
+{"level":"info","message":"Turning ... Current heading: 16 Target heading: 305.89","timestamp":39634.07384}
+{"level":"info","message":"Turning ... Current heading: 15 Target heading: 305.89","timestamp":39650.728237}
+{"level":"info","message":"Turning ... Current heading: 14 Target heading: 305.89","timestamp":39670.643021}
+{"level":"info","message":"Turning ... Current heading: 13 Target heading: 305.89","timestamp":39689.69826}
+{"level":"info","message":"Turning ... Current heading: 12 Target heading: 305.89","timestamp":39708.164942}
+{"level":"info","message":"Turning ... Current heading: 11 Target heading: 305.89","timestamp":39724.822019}
+{"level":"info","message":"Turning ... Current heading: 10 Target heading: 305.89","timestamp":39743.905132}
+{"level":"info","message":"Turning ... Current heading: 9 Target heading: 305.89","timestamp":39760.70317}
+{"level":"info","message":"Turning ... Current heading: 8 Target heading: 305.89","timestamp":39776.337225}
+{"level":"info","message":"Turning ... Current heading: 7 Target heading: 305.89","timestamp":39792.366139}
+{"level":"info","message":"Turning ... Current heading: 6 Target heading: 305.89","timestamp":39807.343761}
+{"level":"info","message":"Turning ... Current heading: 5 Target heading: 305.89","timestamp":39824.008428}
+{"level":"info","message":"Turning ... Current heading: 4 Target heading: 305.89","timestamp":39842.748729}
+{"level":"info","message":"Turning ... Current heading: 3 Target heading: 305.89","timestamp":39858.131729}
+{"level":"info","message":"Turning ... Current heading: 2 Target heading: 305.89","timestamp":39875.34617}
+{"level":"info","message":"Turning ... Current heading: 1 Target heading: 305.89","timestamp":39894.793501}
+{"level":"info","message":"Turning ... Current heading: 0 Target heading: 305.89","timestamp":39913.344345}
+{"level":"info","message":"Turning ... Current heading: -1 Target heading: 305.89","timestamp":39931.553202}
+{"level":"info","message":"Turning ... Current heading: 360 Target heading: 305.89","timestamp":39948.294257}
+{"level":"info","message":"Turning ... Current heading: 359 Target heading: 305.89","timestamp":39965.236769}
+{"level":"info","message":"Turning ... Current heading: 358 Target heading: 305.89","timestamp":39981.2055}
+{"level":"info","message":"Turning ... Current heading: 357 Target heading: 305.89","timestamp":39999.840912}
+{"level":"info","message":"Turning ... Current heading: 356 Target heading: 305.89","timestamp":40016.682959}
+{"level":"info","message":"Turning ... Current heading: 355 Target heading: 305.89","timestamp":40034.215149}
+{"level":"info","message":"Turning ... Current heading: 354 Target heading: 305.89","timestamp":40051.866302}
+{"level":"info","message":"Turning ... Current heading: 353 Target heading: 305.89","timestamp":40069.177245}
+{"level":"info","message":"Turning ... Current heading: 352 Target heading: 305.89","timestamp":40086.435373}
+{"level":"info","message":"Turning ... Current heading: 351 Target heading: 305.89","timestamp":40104.13337}
+{"level":"info","message":"Turning ... Current heading: 350 Target heading: 305.89","timestamp":40121.899946}
+{"level":"info","message":"Turning ... Current heading: 349 Target heading: 305.89","timestamp":40139.88558}
+{"level":"info","message":"Turning ... Current heading: 348 Target heading: 305.89","timestamp":40156.616514}
+{"level":"info","message":"Turning ... Current heading: 347 Target heading: 305.89","timestamp":40174.574918}
+{"level":"info","message":"Turning ... Current heading: 346 Target heading: 305.89","timestamp":40192.068933}
+{"level":"info","message":"Turning ... Current heading: 345 Target heading: 305.89","timestamp":40210.096374}
+{"level":"info","message":"Turning ... Current heading: 344 Target heading: 305.89","timestamp":40229.170817}
+{"level":"info","message":"Turning ... Current heading: 343 Target heading: 305.89","timestamp":40246.449021}
+{"level":"info","message":"Turning ... Current heading: 342 Target heading: 305.89","timestamp":40265.180642}
+{"level":"info","message":"Turning ... Current heading: 341 Target heading: 305.89","timestamp":40282.217763}
+{"level":"info","message":"Turning ... Current heading: 340 Target heading: 305.89","timestamp":40300.025476}
+{"level":"info","message":"Turning ... Current heading: 339 Target heading: 305.89","timestamp":40318.224437}
+{"level":"info","message":"Turning ... Current heading: 338 Target heading: 305.89","timestamp":40333.977701}
+{"level":"info","message":"Turning ... Current heading: 337 Target heading: 305.89","timestamp":40350.741815}
+{"level":"info","message":"Turning ... Current heading: 336 Target heading: 305.89","timestamp":40369.28042}
+{"level":"info","message":"Turning ... Current heading: 335 Target heading: 305.89","timestamp":40387.706077}
+{"level":"info","message":"Turning ... Current heading: 334 Target heading: 305.89","timestamp":40404.318665}
+{"level":"info","message":"Turning ... Current heading: 333 Target heading: 305.89","timestamp":40421.456113}
+{"level":"info","message":"Turning ... Current heading: 332 Target heading: 305.89","timestamp":40438.043535}
+{"level":"info","message":"Turning ... Current heading: 331 Target heading: 305.89","timestamp":40455.297101}
+{"level":"info","message":"Turning ... Current heading: 330 Target heading: 305.89","timestamp":40472.784472}
+{"level":"info","message":"Turning ... Current heading: 329 Target heading: 305.89","timestamp":40490.232902}
+{"level":"info","message":"Turning ... Current heading: 328 Target heading: 305.89","timestamp":40507.863261}
+{"level":"info","message":"Turning ... Current heading: 327 Target heading: 305.89","timestamp":40525.34307}
+{"level":"info","message":"Turning ... Current heading: 326 Target heading: 305.89","timestamp":40541.053687}
+{"level":"info","message":"Turning ... Current heading: 325 Target heading: 305.89","timestamp":40559.916709}
+{"level":"info","message":"Turning ... Current heading: 324 Target heading: 305.89","timestamp":40574.667946}
+{"level":"info","message":"Turning ... Current heading: 323 Target heading: 305.89","timestamp":40590.043492}
+{"level":"info","message":"Turning ... Current heading: 322 Target heading: 305.89","timestamp":40606.209651}
+{"level":"info","message":"Turning ... Current heading: 321 Target heading: 305.89","timestamp":40624.116642}
+{"level":"info","message":"Turning ... Current heading: 320 Target heading: 305.89","timestamp":40641.273105}
+{"level":"info","message":"Turning ... Current heading: 319 Target heading: 305.89","timestamp":40659.500132}
+{"level":"info","message":"Turning ... Current heading: 318 Target heading: 305.89","timestamp":40679.652613}
+{"level":"info","message":"Turning ... Current heading: 317 Target heading: 305.89","timestamp":40698.136058}
+{"level":"info","message":"Turning ... Current heading: 316 Target heading: 305.89","timestamp":40716.571875}
+{"level":"info","message":"Turning ... Current heading: 315 Target heading: 305.89","timestamp":40732.455661}
+{"level":"info","message":"Turning ... Current heading: 314 Target heading: 305.89","timestamp":40751.982178}
+{"level":"info","message":"Turning ... Current heading: 313 Target heading: 305.89","timestamp":40775.819554}
+{"level":"info","message":"Turning ... Current heading: 312 Target heading: 305.89","timestamp":40792.668643}
+{"level":"info","message":"Turning ... Current heading: 311 Target heading: 305.89","timestamp":40812.174713}
+{"level":"info","message":"Turning ... Current heading: 310 Target heading: 305.89","timestamp":40832.314832}
+{"level":"info","message":"Turning ... Current heading: 309 Target heading: 305.89","timestamp":40850.520943}
+{"level":"info","message":"Turning ... Current heading: 308 Target heading: 305.89","timestamp":40869.493773}
+{"level":"info","message":"Turning ... Current heading: 307 Target heading: 305.89","timestamp":40888.050254}
+{"level":"info","message":"Turning ... Current heading: 306 Target heading: 305.89","timestamp":40904.001434}
+{"level":"info","message":"Reached desired heading: 306 degrees","timestamp":40904.219734}
+{"level":"info","message":"Initiating drive toward waypoint 4, {\"latitude\":33.650781,\"longitude\":-117.611884}","timestamp":40904.354211}
+{"level":"info","message":"driving...distance to target: 252 meter(s)","timestamp":43925.493831}
+{"level":"info","message":"driving...distance to target: 251 meter(s)","timestamp":43944.185994}
+{"level":"info","message":"driving...distance to target: 250 meter(s)","timestamp":43962.346625}
+{"level":"info","message":"driving...distance to target: 249 meter(s)","timestamp":43979.208026}
+{"level":"info","message":"driving...distance to target: 248 meter(s)","timestamp":43997.058276}
+{"level":"info","message":"driving...distance to target: 247 meter(s)","timestamp":44013.965603}
+{"level":"info","message":"driving...distance to target: 246 meter(s)","timestamp":44031.634795}
+{"level":"info","message":"driving...distance to target: 245 meter(s)","timestamp":44049.634606}
+{"level":"info","message":"driving...distance to target: 244 meter(s)","timestamp":44066.175127}
+{"level":"info","message":"driving...distance to target: 243 meter(s)","timestamp":44083.606682}
+{"level":"info","message":"driving...distance to target: 242 meter(s)","timestamp":44101.212587}
+{"level":"info","message":"driving...distance to target: 241 meter(s)","timestamp":44120.207625}
+{"level":"info","message":"driving...distance to target: 240 meter(s)","timestamp":44144.097518}
+{"level":"info","message":"driving...distance to target: 239 meter(s)","timestamp":44167.041585}
+{"level":"info","message":"driving...distance to target: 238 meter(s)","timestamp":44201.337716}
+{"level":"info","message":"driving...distance to target: 237 meter(s)","timestamp":44232.099986}
+{"level":"info","message":"driving...distance to target: 236 meter(s)","timestamp":44247.992301}
+{"level":"info","message":"driving...distance to target: 235 meter(s)","timestamp":44266.486427}
+{"level":"info","message":"driving...distance to target: 234 meter(s)","timestamp":44284.680441}
+{"level":"info","message":"driving...distance to target: 233 meter(s)","timestamp":44301.290182}
+{"level":"info","message":"driving...distance to target: 232 meter(s)","timestamp":44320.105749}
+{"level":"info","message":"driving...distance to target: 231 meter(s)","timestamp":44338.980149}
+{"level":"info","message":"driving...distance to target: 230 meter(s)","timestamp":44357.472743}
+{"level":"info","message":"driving...distance to target: 229 meter(s)","timestamp":44376.193579}
+{"level":"info","message":"driving...distance to target: 228 meter(s)","timestamp":44395.480247}
+{"level":"info","message":"driving...distance to target: 227 meter(s)","timestamp":44413.877824}
+{"level":"info","message":"driving...distance to target: 226 meter(s)","timestamp":44431.765894}
+{"level":"info","message":"driving...distance to target: 225 meter(s)","timestamp":44449.257529}
+{"level":"info","message":"driving...distance to target: 224 meter(s)","timestamp":44464.995862}
+{"level":"info","message":"driving...distance to target: 223 meter(s)","timestamp":44484.379402}
+{"level":"info","message":"driving...distance to target: 222 meter(s)","timestamp":44503.315331}
+{"level":"info","message":"driving...distance to target: 221 meter(s)","timestamp":44519.827043}
+{"level":"info","message":"driving...distance to target: 220 meter(s)","timestamp":44536.304709}
+{"level":"info","message":"driving...distance to target: 219 meter(s)","timestamp":44553.944785}
+{"level":"info","message":"driving...distance to target: 218 meter(s)","timestamp":44571.448831}
+{"level":"info","message":"driving...distance to target: 217 meter(s)","timestamp":44590.230446}

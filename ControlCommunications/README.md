@@ -1,22 +1,30 @@
-#Control Communications  
-The rover is being controlled using a Logitech 3d pro joystick controller.  
-This joystick controller will be JSON.stringify() to send over the network to the rover control to be parsed an relayed to its handler function.  The rover will be hosting a UDP server that will be accepting input from the HomebaseControl.js process.  The HomebaseControl.js process will also be hosting a UDP server that handles Connection information between the rover and the homebase station.  The rover should stop operating when it loses connection.  
+# Control Communications  
+### Can be controled in two ways with the Logitech Joysticks or dualshock-controller.  
+ It is parsed and relayed to its handler function.  The rover hosts a UDP server accepts input from the HomebaseControl.js process. HomebaseControl also hosts a UDP server that handles Connection information between the rover and homebase station.  The rover will stop operating when it loses connection.  
 
-#To operate the control  
-1. Plug joystick into linux computer
-2. Run the Control handler for the Homebase  ```node HomebaseControl.js```
+## To operate the control  
+1. Plug joystick into the computer
+2. Run the Control handler for the Homebase  ```node [The joystick you want]_Homebase.js```
 3. The RoverControl.js should be running on boot if it is not run  ```node RoverControl.js```  
+
+#### Joystick_Homebase.js accepts 4 arguments
+1. both - Will need both joysticks plugged in  
+2. mobility - Will need one joystick for mobility control  
+3. arm - Will need one joystick for arm control  
+4. none - No joysticks needed used for testing purposes  
+
+```node Joystick_Homebase.js [both|mobility|arm|none]```  
+If left blank will run in default both joysticks  
 
 ## Important information  
 HomebaseControl is running on port 5000  
 RoverControl    is running on port 3000  
 The GPIO pins used on the PI are the actual pins not names of pins  
 
-
-##Joystick Output Mapping  
+## Logitech Joysticks
 Buttons:    These values are either 1(pressed) or 0(unpressed)  
 number = 0: Trigger  
-number = 1: Thump button: Switch from Mobility mode to Arm mode  
+number = 1: Thump button  
 number = 2: Button 3  
 number = 3: Button 4  
 number = 4: Button 5  
@@ -27,60 +35,27 @@ number = 8: Button 9
 number = 9: Button 10  
 number = 10: Button 11  
 number = 11: Button 12  
-
 Axis:  
-number = 0: X Axis Mobility  
-number = 1: Y Axis Mobility  
-number = 2:  
-number = 3: Throttle For the Mobility  
-number = 4:  
-number = 5:  
+number = 0: X of big joystick value between -32767 and 32767  
+number = 1: Y of big joystick value between -32767 and 32767  
+number = 2: Twist of big joystick value between -32767 and 32767  
+number = 3: Throttle on bottom value between -32767 and 32767  
+number = 4: X top of joystick value is either -32767 left or 32767 right  
+number = 5: Y top of joystick value is either -32767 up or 32767 down  
 
-## Pins in use  
-We are using both a raspberry pi and arduino to drive the stepper motors for the arm.  
-The raspberry pi will be sending the on/off command to the arduino through serial transfer.
+## Joystick Dualshock  
+The left joystick is for drive control. Float values between -1 and 1.
 
-#### Raspberry Pi pins  
-*Joint1*  
-GPIO: 17 Direction - Actual pin: 11  
-GPIO: 27 Enable - Actual pin: 13  
+The arm uses the Dpad for the rotating base and the last limb. The right joystick is used for limbs 1 and 2 with inverse kinematics.
 
-*Joint4*  
-GPIO: 12 Direction - Actual pin: 32  
-GPIO: 16 Enable - Actual pin: 36  
+Full Mapping in the Doc!
 
-*Joint5*  
-GPIO: 22 Direction - Actual pin: 15  
-GPIO: 24 Enable - Actual pin: 18  
-
-*Joint6*  
-GPIO: 18 Direction - Actual pin: 12  
-
-#### Arduino pins  
-*Joint1*  
-Digital: 8 Pulse for stepper  
-
-*Joint4*  
-Digital: 9 Pulse for stepper  
-
-*Joint5*  
-Digital: 10 Pulse for stepper  
-
-*Joint6*  
-Digital: 7 Pulse for stepper  
-Slave Select: 3 Used to select which stepper motor we are using  
-
-*All Pololu Motors*  
-MOSI: 11 Master Out Slave In  
-MISO: 12 Master In Slave Out  
-SCK: 13 Clock to Synchronize data transfer  
-
-![alt text][pinout]  
-[pinout]:https://github.com/CSUFTitanRover/TitanRover/tree/master2017/ControlCommunications/pics/RoverControl.png "Pinout"
+https://docs.google.com/document/d/1WDijduTZjryv08eI5N0dVvTw98pcXWOBMx0P8Qr28a8/edit?usp=sharing
 
 ## Problems we faced  
-We first tried getting the pi to generate the GPIO signals needed to drive the stepper motors, but it wasn't fast enough.  
-So we then tried using PWM and set it to its full high over its duty cycle, this seemed to make things worse not better.
-We are now using two controllers a PI to handle the dir and enab pins while the arduino drives the puls needed to move the stepper motor.
+- We first tried getting the pi to generate the GPIO signals needed to drive the stepper motors, but it wasn't fast enough.  
+- So we then tried using PWM and set it to its full high over its duty cycle, this seemed to make things worse not better.
+- We are now using two controllers a PI to handle the dir and enab pins while the arduino drives the puls needed to move the stepper motor.
 We now need to see about going through serial to tell the arduino which motor to operate instead of a on/off pin.  
-After transfering to serial communication to the arduino if the raspberry pi restarts with the arduino plugged in the raspberry pi can't see its serial connection STILL NEED to FIX.
+- After transfering to serial communication to the arduino if the raspberry pi restarts with the arduino plugged in the raspberry pi can't see its serial connection STILL NEED to FIX.
+- We have changed our control to use the Pi as the master and the Arduino as the slave.

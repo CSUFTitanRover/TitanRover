@@ -4,11 +4,9 @@
   Description:
 		Will be accepting commands from the homebase Controller and relaying
 			these commands to its various sub processes
-
 		Example:
 			Moblility code will be sent from the homebase controller to here and this will run the input
 				or pass it to another process to run it.
-
 		It will be sent as JSON with the format
 		{ commandType: string, ...}
 		each packet will consist of a commandType such as mobility, science, arm and use this to determine
@@ -23,19 +21,72 @@ var bodyParser = require('body-parser');
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 
+// Importing arm functions
+var arm = require('./arm');
 // Allows us to contorl the rpio pins on the raspberry pi
-var rpio = require('rpio');
 var serialPort = require('serialport');
 
 var port = new serialPort('/dev/ttyACM0', {
-    baudRate: 9600
+    baudRate: 9600,
+    parser: serialPort.parsers.readline('\r\n')
+}, function(err) {
+    if (err) {
+        console.log('Error: ', err.message);
+        process.exit();
+    } else {
+        console.log('Arduino is ready!');
+    }
 });
 
 var PORT = 3000;
 var HOST = 'localhost';
 
 const HOME_PORT = 5000;
-const HOME_HOST = '192.168.1.143';
+var HOME_HOST = '';
+
+// The global Config of the RoverControl can be changed by homebase control on the fly
+var config = {
+    Joystick_MIN: -32767,
+    Joystick_MAX: 32767,
+    arm_on: true,
+    mobility_on: true,
+    TIME_TO_STOP: 1000,
+    TEST_CONNECTION: 2000,
+    saber_min: 0,
+    saber_max: 254
+};
+
+var x_Axis_arr = new Uint16Array(3);
+x_Axis_arr[0] = 0x0008;
+x_Axis_arr[2] = 0xbbaa;
+var x_Axis_buff = Buffer.from(x_Axis_arr.buffer);
+
+var y_Axis_arr = new Uint16Array(3);
+y_Axis_arr[0] = 0x0009;
+y_Axis_arr[2] = 0xbbaa;
+var y_Axis_buff = Buffer.from(y_Axis_arr.buffer);
+
+var roverControl_arr = new Uint16Array(3);
+roverControl_arr[0] = 0x00ff;
+roverControl_arr[1] = 0x0000;
+roverControl_arr[2] = 0xbbaa;
+var roverControl_buff = Buffer.from(roverControl_arr.buffer);
+
+var time = new Date();
+
+// If debug is true will send this info back to homebase control.
+var debug = {
+    type: "debug",
+    Number_Commands: 0,
+    Num_Mobility_Commands: 0,
+    Num_Arm_Commands: 0,
+    Num_Unknown_Commands: 0,
+    Tested_Connection_Num: 0,
+    Lost_Connection_Num: 0,
+    Start_Time: time.toString(),
+    Curr_Time: time.toString(),
+    LastTime_ConnectionLost: time.toString()
+};
 
 // This will be used to zero out the mobility when it has not recieved a message for a certain time.
 // zeroMessage[0] for y axis
@@ -67,125 +118,10 @@ const CONTROL_MESSAGE_ROVER = {
 // These consts handle connection information with the homebase
 var gotAck = true;
 var gotAckRover = true;
-const TIME_TO_STOP = 750;
-const TEST_CONNECTION = 3000;
 
-// PWM Config for Pi Hat:
-const makePwmDriver = require('adafruit-i2c-pwm-driver');
-const pwm = makePwmDriver({
-    address: 0x40,
-    device: '/dev/i2c-1',
-    debug: false
-});
-
-// Based on J. Stewart's calculations:
-// May need to be adjusted/recalculated
-// Values for Sabertooth 2X60:
-//    1000 = Full Reverse
-//    1500 = Stopped
-//    2000 = Full Forward.
-const saber_min = 241; // Calculated to be 1000 us
-const saber_mid = 325; // Calculated to be 1500 us
-const saber_max = 409; // Calculated to be 2000 us
-
-// Joystick values
-const Joystick_MIN = -32767;
-const Joystick_MAX = 32767;
 var triggerPressed = false;
 var thumbPressed = false;
 
-// PWM Channel Config Motor:
-const motor_left_channel = 0;
-const motor_right_channel = 1;
-
-/** All GPIO pins are the actual pins so 1-40
- * @param {joint_move_pin}
- * This pin is used to tell the arduino to send the pulse signals
- * @param {joint_dir_pin}
- * Tells the stepper which direction it should go
- * @param {joint_enab_pin}
- * Tells the stepper motor to hold its position after movement.
- *
- * This applies to joint1, joint4, joint5 which are the sumtor stepper motor drivers
- */
-
-// Joint1 rotating base pins
-const joint1_dir_pin = 11;
-const joint1_enab_pin = 13;
-const joint1_on = '1';
-const joint1_off = '2';
-
-// Set all pins to low on init
-rpio.open(joint1_dir_pin, rpio.OUTPUT, rpio.LOW);
-rpio.open(joint1_enab_pin, rpio.OUTPUT, rpio.LOW);
-
-// Joint2 PWM pins
-const joint2_pwm_pin = 4;
-
-// Joint3 PWM pins
-const joint3_pwm_pin = 5;
-
-// joint 4 Sumtor pins
-const joint4_dir_pin = 32;
-const joint4_enab_pin = 36;
-const joint4_on = '3';
-const joint4_off = '4';
-
-// Set all pins to low on init
-rpio.open(joint4_dir_pin, rpio.OUTPUT, rpio.LOW);
-rpio.open(joint4_enab_pin, rpio.OUTPUT, rpio.LOW);
-
-// joint 5 Sumtor pins
-const joint5_dir_pin = 15;
-const joint5_enab_pin = 18;
-const joint5_on = '5';
-const joint5_off = '6';
-
-// Set all pins to low on init
-rpio.open(joint5_dir_pin, rpio.OUTPUT, rpio.LOW);
-rpio.open(joint5_enab_pin, rpio.OUTPUT, rpio.LOW);
-
-// Joint 6 Pololu pins
-const joint6_dir_pin = 12;
-const joint6_on = '7';
-const joint6_off = '8';
-
-// Set all pins to low on init
-rpio.open(joint6_dir_pin, rpio.OUTPUT, rpio.LOW);
-
-// Joint 7 Pololu pins
-const joint7_dir_pin = 0;
-const joint7_on = '9';
-const joint7_off = '0';
-
-// Set all pins to low on init
-rpio.open(joint7_dir_pin, rpio.OUPTUT, rpio.LOW);
-
-
-// Pins to destroy
-// Will be used when program exits to close these pins
-var pins = [11, 12, 13, 15, 18, 32, 36];
-
-
-// Based on J. Stewart's calculations:
-pwm.setPWMFreq(50);
-
-// NPM Library for USB Logitech Extreme 3D Pro Joystick input:
-//    See: https://titanrover.slack.com/files/joseph_porter/F2DS4GBUM/Got_joystick_working_here_is_the_code.js
-//    Docs: https://www.npmjs.com/package/joystick
-//var joystick = new(require('joystick'))(0, 3500, 350);
-
-// NPM Differential Steering Library:
-//    Docs: https://www.npmjs.com/package/diff-steer
-var steerMotors = require('diff-steer/motor_control');
-
-// Global Variables to Keep Track of Asynchronous Translated
-//    Coordinate Assignment
-var lastX = 0;
-var lastY = 0;
-
-// Sets the speed at which the joystick values will be used
-var throttleValue = 1.0;
 
 /**
  * Prototype function.  Map values from range in_min -> in_max to out_min -> out_max
@@ -199,131 +135,124 @@ Number.prototype.map = function(in_min, in_max, out_min, out_max) {
     return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
 
-/**
- * Adjusts the speed by an exponential factor.  This makes acceleration a function
- *  of the product of differential steering and distance of joystick from its origin
- * @param {Number} x
- * @param {Number} y
- * @return {Number} A value between 0 and 1 that represents ratio of distance from
- *      origin to joystick coordinate.  Effectively lowers speed closer to origin.
- */
-var speedAdjust = function(x, y) {
-    var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-    var acceleration = (distance > Joystick_MAX) ? 1 : distance / Joystick_MAX;
-    return acceleration;
-}
-
-function setLeft(speed) {
-    pwm.setPWM(motor_left_channel, 0, parseInt(speed));
-}
-
-function setRight(speed) {
-    pwm.setPWM(motor_right_channel, 0, parseInt(speed));
-}
-
-var setMotors = function(diffSteer) {
-    setLeft(diffSteer.leftSpeed);
-    setRight(diffSteer.rightSpeed);
-    //console.log(diffSteer);
-};
-
-/**
-  Differential steering calculations are done here
-  * @param {xAxis}
-  * @param {yAxis}
-  * @return {speed_of_leftandright}
-  */
-function calculateDiff(yAxis, xAxis) {
-    //xAxis = xAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
-    //yAxis = yAxis.map(Joystick_MIN, Joystick_MAX, 100, -100);
-
-    //xAxis = xAxis * -1;
-    //yAxis = yAxis * -1;
-
-    var V = (32767 - Math.abs(xAxis)) * (yAxis / 32767.0) + yAxis;
-    var W = (32767 - Math.abs(yAxis)) * (xAxis / 32767.0) + xAxis;
-    var right = (V + W) / 2.0;
-    var left = (V - W) / 2.0;
-
-    if (right <= 0) {
-        right = right.map(Joystick_MIN, 0, saber_min, saber_mid);
+function getPwmValue(value, Joystick_MAX, Joystick_MIN) {
+    if (value <= 0) {
+        value = value.map(Joystick_MIN, 0, 2000, 1500);
     } else {
-        right = right.map(0, Joystick_MAX, saber_mid, saber_max);
+        value = value.map(0, Joystick_MAX, 1500, 1000);
     }
 
-    if (left <= 0) {
-        left = left.map(Joystick_MIN, 0, saber_min, saber_mid);
-    } else {
-        left = left.map(0, Joystick_MAX, saber_mid, saber_max);
+    if (value < 1550 && value > 1450) {
+        value = 1500;
     }
 
-    return {
-        "leftSpeed": left,
-        "rightSpeed": right
-    };
+    return parseInt(value);
 }
 
-// Set the throttle speed
-function setThrottle(adjust_Amount) {
-    throttleValue = adjust_Amount.map(Joystick_MAX, Joystick_MIN, 0, 1);
-    //console.log(throttleValue);
+function getMobilitySpeed(value, joystick_Max, joystick_Min) {
+    if (value <= 0) {
+        value = value.map(joystick_Min, 0, 0, 127);
+    } else {
+        value = value.map(0, joystick_Max, 127, 254);
+    }
+
+    if (value > 254) {
+        value = 254;
+    }
+
+    if (value < 0) {
+        value = 0;
+    }
+    return parseInt(value);
 }
 
+function setYAxis(speed) {
+    if (speed < -127 || speed > 127) {
+        throw new RangeError('speed must be between -127 and 127');
+    }
+
+    // Since we are using unsigened ints for serial make it between 0 and 254
+    y_Axis_arr[1] = parseInt(speed + 127);
+    port.write(y_Axis_buff);
+}
+
+function setXAxis(speed) {
+    if (speed < -127 || speed > 127) {
+        throw new RangeError('speed must be between -127 and 127');
+    }
+
+    // Since we are using unsigned ints for serial make it between 0 and 254
+    x_Axis_arr[1] = parseInt(speed + 127);
+    port.write(x_Axis_buff);
+}
 
 // Function that handles all mobility from the joystick
-var receiveMobility = function(joystickData) {
+/*function receiveMobility(joystickData) {
+    // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
+    let axis = parseInt(joystickData.number);
+    var value = parseInt(joystickData.value);
+    value = getPwmValue(value, 32767, -32767);
+    debug.Num_Mobility_Commands += 1;
+    if (axis === 0) {
+        x_Axis_arr[1] = value;
+        port.write(x_Axis_buff);
+    } else if (axis === 1) {
+        value *= -1;
+        y_Axis_arr[1] = value;
+        port.write(y_Axis_buff);
+    } else if (axis === 2) //If sent from Gamepad
+    {
+        x_Axis_arr[1] = getPwmValue(joystickData.x, 127.5, -127.5);
+        y_Axis_arr[1] = getPwmValue(joystickData.y, 127.5, -127.5);
+        port.write(x_Axis_buff);
+        port.write(y_Axis_buff);
+    }
+}*/
+
+function receiveMobility(joystickData) {
     // This function assumes that it is receiving correct JSON.  It does not check JSON comming in.
     let axis = parseInt(joystickData.number);
     var value = parseInt(joystickData.value);
 
-    var diffSteer;
+    value = getMobilitySpeed(value, 32767, -32767);
 
-    if (axis === 0 || axis === 1) {
-        value = parseInt(value * throttleValue);
-    }
+    debug.Num_Mobility_Commands += 1;
 
-    // X axis
     if (axis === 0) {
-        diffSteer = calculateDiff(value, lastY);
-        lastX = value;
-    }
-    // Y axis
-    else if (axis === 1) {
-        diffSteer = calculateDiff(lastX, value);
-        lastY = value;
-    }
-    // Throttle axis
-    else if (axis === 3) {
-        setThrottle(value)
-    }
+        x_Axis_arr[1] = value;
+        port.write(x_Axis_buff);
+    } else if (axis === 1) {
+        y_Axis_arr[1] = value;
+        port.write(y_Axis_buff);
+    } else if (axis === 2) //If sent from Gamepad
+    {
+        x_Axis_arr[1] = getMobilitySpeed(joystickData.x, 127.5, -127.5);
+        y_Axis_arr[1] = getMobilitySpeed(joystickData.y, 127.5, -127.5);
 
-    // If the Mobility recieved a driving axis.
-    if (axis === 0 || axis === 1) {
-        setMotors(diffSteer);
+        port.write(x_Axis_buff);
+        port.write(y_Axis_buff);
     }
-};
+}
 
 // Send 0 to both the x and y axis to stop the rover from running
 // Will only be invoked if we lose signal
 function stopRover() {
-    receiveMobility(zeroMessage[0]);
-    receiveMobility(zeroMessage[1]);
-
-    // Shutdown the arm
-    /*y
-    port.write(joint1_off);
-    port.write(joint2_off);
-    port.write(joint3_off);
-    port.write(joint4_off);
-    port.write(joint5_off);
-    port.write(joint6_off);
-    port.write(joint7_off);
-    */
+    //receiveMobility(zeroMessage[0]);
+    //receiveMobility(zeroMessage[1]);
+    x_Axis_arr[1] = 127;
+    y_Axis_arr[1] = 127;
+    port.write(x_Axis_buff);
+    port.write(y_Axis_buff);
+    // Stopping all joints
+    for (i = 1; i <= 7; i++) {
+        port.write(arm.stopJoint(i));
+    }
 
 }
 
 // Send data to the homebase control for connection information
 function sendHome(msg) {
+    msg = new Buffer(JSON.stringify(msg));
     server.send(msg, 0, msg.length, HOME_PORT, HOME_HOST, function(err) {
         if (err) {
             console.log("Problem with sending data!!!");
@@ -336,31 +265,32 @@ function sendHome(msg) {
 // Will test the connection to the homebase controller every TEST_CONNECTION times
 // Will stop the rover if we have lost connection after TIME_TO_STOP
 setInterval(function() {
-    var msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
-    sendHome(msg);
+    sendHome(CONTROL_MESSAGE_ROVER);
+    debug.Tested_Connection_Num += 1;
     gotAckRover = false;
     setTimeout(function() {
         if (gotAckRover === false) {
             console.log("Stopping Rover: ROVER lost connection to HOME")
+            debug.Lost_Connection_Num += 1;
+            time = new Date();
+            debug.LastTime_ConnectionLost = time.toString();
             stopRover();
         }
-    }, TIME_TO_STOP);
-}, TEST_CONNECTION);
+    }, config.TIME_TO_STOP);
+}, config.TEST_CONNECTION);
 
 /**
   Will handle the control messages that will tell us we have disconnected.
   * @param {JSON} message
 */
 function handleControl(message) {
-    var msg;
 
     //console.log("Control Message with type: " + message.type);
 
     // If the homestation is testing our connection
     if (message.type == "test") {
         gotAck = false;
-        msg = new Buffer(JSON.stringify(CONTROL_MESSAGE_ROVER));
-        sendHome(msg);
+        sendHome(CONTROL_MESSAGE_ROVER);
 
         // Start a timer to see if we are still connected otherwise stop the rover moving
         setTimeout(function() {
@@ -368,238 +298,84 @@ function handleControl(message) {
                 console.log("Stopping Rover: HOME tried to test us");
                 stopRover();
             }
-        }, TIME_TO_STOP);
+        }, config.TIME_TO_STOP);
 
 
         // Home station has responded don't need to stop.
     } else if (message.type == "ack") {
         gotAck = true;
         gotAckRover = true;
-    }
-
-}
-
-/**
- * Sends a PWM signal to the appropriate Linear Actuator
- * @param {int} channel PWM pin of linear Actuator
- * @param {int} value Will be between -32767 and 32767
- */
-function setLinearSpeed(channel, value) {
-    const linear_min = 241; // Calculated to be 1000 us
-    const linear_mid = 325; // Calculated to be 1500 us
-    const linear_max = 409; // Calculated to be 2000 us
-
-    var pwmSig;
-
-    if (value <= 0) {
-        pwmSig = parseInt(value.map(Joystick_MIN, 0, linear_min, linear_mid));
-        pwm.setPWM(channel, 0, pwmSig);
-    } else {
-        pwmSig = parseInt(value.map(0, Joystick_MAX, linear_mid, linear_max));
-        pwm.setPWM(channel, 0, pwmSig);
+    } else if (message.type == "config") {
+        config.arm_on = message.arm_on;
+        config.mobility_on = message.mobility_on;
+        config.Joystick_MAX = message.Joystick_MAX;
+        config.Joystick_MIN = message.Joystick_MIN;
+        console.log(config);
+    } else if (message.type == "debug") {
+        time = new Date();
+        debug.Curr_Time = time.toString();
+        sendHome(debug);
+    } else if (message.type == "arduinoDebug") {
+        roverControl_arr[0] = 0x04ff;
+        port.write(roverControl_buff);
+    } else if (message.type == "assass") {
+        roverControl_arr[0] = 0x05ff;
+        roverControl_arr[1] = parseInt(message.value);
+        port.write(roverControl_buff);
     }
 }
 
-/**
- * Joint1: Phantom Menace
- * The rotating base for the arm
- * Driver: Sumtor mb450a
- */
-function joint1_rotatingBase(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        rpio.write(joint1_dir_pin, rpio.HIGH);
-    } else {
-        rpio.write(joint1_dir_pin, rpio.LOW);
-    }
-
-    if (value == 0) {
-        port.write(joint1_off);
-    } else {
-        port.write(joint1_on);
-    }
-
-}
-
-/**
- * Joint2: Attack of the Clones
- * Will be the longer first linear Actuator
- * Driver: Actobotics Dual Motor Controller
- */
-function joint2_linear1(message) {
-    let value = parseInt(message.value);
-    setLinearSpeed(joint2_pwm_pin, value);
-}
-
-/**
- * Joint3: Revenge of the Sith
- * Will be the smaller second linear Actuator
- * Driver: Actobotics Dual Motor Controller
- */
-function joint3_linear2(message) {
-    let value = parseInt(message.value);
-    setLinearSpeed(joint3_pwm_pin, value);
-}
-
-/**
- * Joint4: A New Hope
- * The 180 degree wrist
- * Driver: Sumtor mb450a
- */
-function joint4_rotateWrist(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        rpio.write(joint4_dir_pin, rpio.HIGH);
-    } else {
-        rpio.write(joint4_dir_pin, rpio.LOW);
-    }
-
-    if (value == 0) {
-        port.write(joint4_off);
-    } else {
-        port.write(joint4_on);
-    }
-
-}
-
-/**
- * Joint5: Empire Strikes Back
- * The 90 degree joint
- * Driver: Sumtor mb450a
- */
-function joint5_90degree(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        rpio.write(joint5_dir_pin, rpio.HIGH);
-    } else {
-        rpio.write(joint5_dir_pin, rpio.LOW);
-    }
-
-    if (value == 0) {
-        port.write(joint5_off);
-    } else {
-        port.write(joint5_on);
-    }
-
-}
-
-/**
- * Joint6: Return of the Jedi
- * 360 degree rotation of this joint no need for limit switches
- * Driver is a Pololu
- */
-function joint6_360Unlimited(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        rpio.write(joint6_dir_pin, rpio.HIGH);
-    } else {
-        rpio.write(joint6_dir_pin, rpio.LOW);
-    }
-
-    if (value == 0) {
-        port.write(joint6_off);
-    } else {
-        port.write(joint6_on);
-    }
-}
-
-/**
- * Joint7: The Force Awakings
- * The gripper that is a linear actuator
- * Driver: Pololu AMIS-30543
- */
-function joint7_gripper(message) {
-    let value = parseInt(message.value);
-    let direction = (value < 0) ? true : false;
-
-    if (direction) {
-        rpio.write(joint7_dir_pin, rpio.HIGH);
-    } else {
-        rpio.write(joint7_dir_pin, rpio.LOW);
-    }
-
-    if (value == 0) {
-        port.write(joint7_off);
-    } else {
-        port.write(joint7_on);
-    }
-}
-
-/**
- * Tell this joint to stop moving
- * @param {int} jointNum 1 - 7
- */
-function stopJoint(jointNum) {
-    switch (jointNum) {
-        case 1:
-            port.write(joint1_off);
-            break;
-        case 2:
-            port.write(joint2_off);
-            break;
-        case 3:
-            port.write(joint3_off);
-            break;
-        case 4:
-            port.write(joint4_off);
-            break;
-        case 5:
-            port.write(joint5_off);
-            break;
-        case 6:
-            port.write(joint6_off);
-            break;
-        case 7:
-            port.write(joint7_off);
-            break;
-        default:
-            console.log(jointNum + " joint does not exist");
-    }
-}
 
 
 // Will handle control of the arm one to one.
 // Still need to figure out mapping of the joystick controller.
 function armControl(message) {
 
+    debug.Num_Arm_Commands += 1;
+
     if (message.type == 'axis') {
         var axis = parseInt(message.number);
         // Determine which axis should be which joint.
         switch (axis) {
             case 0:
-                if (thumbPressed) {
-                    joint3_linear2(message);
-                } else {
-                    joint6_360Unlimited(message);
-                }
+                // Doing Nothing
                 break;
             case 1:
+                // Thumb button had to be pressed in order to use joint4
                 if (thumbPressed) {
-                    joint2_linear1(message);
+                    port.write(arm.joint7_gripper(message));
                 } else {
-                    joint4_rotateWrist(message);
+                    if (triggerPressed) {
+                        port.write(arm.joint3_linear2(message, getPwmValue(message.value, 32767, -32767)));
+                    } else {
+                        port.write(arm.joint2_linear1(message, getPwmValue(message.value, 32767, -32767)));
+                        // Make joint3 run at half speed
+                        message.value *= 0.5;
+                        port.write(arm.joint3_linear2(message, getPwmValue(message.value, 32767, -32767)));
+                    }
+
                 }
                 break;
             case 2:
-                joint1_rotatingBase(message);
+                if (thumbPressed) {
+                    message.value *= -1;
+                    port.write(arm.joint6_360Unlimited(message));
+                } else {
+                    port.write(arm.joint1_rotatingBase(message));
+                }
                 break;
             case 3:
+                // This is the throttle
                 break;
             case 4:
-                joint5_90degree(message);
+                message.value *= -1;
+                port.write(arm.joint4_rotateWrist(message));
                 break;
             case 5:
-                joint7_gripper(message);
+                port.write(arm.joint5_90degree(message));
                 break;
             default:
+                throw new RangeError('invalid armcontrol axis');
 
         }
     } else if (message.type == 'button') {
@@ -611,61 +387,94 @@ function armControl(message) {
                 triggerPressed = val;
                 break;
             case 1:
-                thumbPressed = val;
+                // Switch our config to use other arm joints
+                thumbPressed = !thumbPressed;
                 if (thumbPressed) {
-                    stopJoint(2);
-                    stopJoint(3);
+                    port.write(arm.stopJoint(2));
+                    port.write(arm.stopJoint(3));
                 } else {
-                    stopJoint(4);
-                    stopJoint(6);
+                    port.write(arm.stopJoint(4));
+                    port.write(arm.stopJoint(6));
                 }
+                break;
+            case 6:
+                port.write(arm.calibrate());
+                break;
+            case 7:
+                port.write(arm.getJointInfo());
                 break;
             default:
         }
     }
 }
 
+// Any serial data from the arduino will be sent back home
+// and printed to the console
+port.on('data', function(data) {
+    console.log('ArduinoMessage: ' + data);
+    var jsonBuilder = {};
+    jsonBuilder.ArduinoMessage = data;
+    jsonBuilder.type = 'debug';
+
+    sendHome(jsonBuilder);
+
+});
+
+port.on('error', function(err) {
+    console.log('ArduinoError: ' + err);
+    var jsonBuilder = {};
+    jsonBuilder.ArduinoError = err;
+    jsonBuilder.type = 'debug';
+    sendHome(jsonBuilder);
+    process.exit();
+});
+
 
 server.on('listening', function() {
     var address = server.address();
     console.log('Rover running on: ' + address.address + ':' + address.port);
+
 });
 
 // recieved a message from the homebase control to perform an action
 server.on('message', function(message, remote) {
 
+    HOME_HOST = remote.address;
+
     var msg = JSON.parse(message);
     //console.log(msg.commandType);
+    //console.log(msg);
+
+    debug.Number_Commands += 1;
 
     // Seperate the incoming command to its specified subsystem
     switch (msg.commandType) {
         case 'mobility':
-            receiveMobility(msg);
+            if (config.mobility_on) {
+                receiveMobility(msg);
+            }
             break;
         case 'control':
             handleControl(msg);
             break;
         case 'arm':
-            armControl(msg);
+            if (config.arm_on) {
+                armControl(msg);
+            }
             break;
         default:
-            //console.log("###### Could not find commandType #######");
+            debug.Num_Unknown_Commands += 1;
+            console.log(msg);
+            throw new RangeError('commandType invalid');
     }
 });
 
 server.bind(PORT);
 
-// Will close all the pins that were in use by this process
-function closePins() {
-    pins.forEach(function(value) {
-        rpio.close(value);
-    });
-}
-
 process.on('SIGTERM', function() {
     console.log("STOPPING ROVER");
     stopRover();
-    closePins();
+    port.close();
     process.exit();
 });
 
@@ -674,7 +483,7 @@ process.on('SIGINT', function() {
     console.log("\n####### JUSTIN LIKES MENS!! #######\n");
     console.log("\t\t╭∩╮（︶︿︶）╭∩╮");
     stopRover();
-    closePins();
+    port.close();
     // some other closing procedures go here
     process.exit();
 });
