@@ -3,10 +3,11 @@ import BaseModuleTemplate from '../../../../templates/BaseModuleTemplate';
 import { Tabs } from 'antd';
 const TabPane = Tabs.TabPane;
 
-class Surround extends Component {
+
+class LeftCamera extends Component {
   render() {
       return (
-          <BaseModuleTemplate moduleName="360 Degree View" tagColor="green">
+          <BaseModuleTemplate moduleName="Left Camera - 180 Degree" tagColor="green">
               <Tabs defaultActiveKey="1">
                   <TabPane tab="Stream 1" key="1">
                       <img src="http://<IP ADDRESS>/video.mjpg" width="1280" height="720"/>
@@ -23,4 +24,4 @@ class Surround extends Component {
     }
 }
 
-export default Surround;
+export default LeftCamera;

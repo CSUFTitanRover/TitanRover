@@ -10,7 +10,7 @@ var fs = require("fs");
 var jsonfile = require('jsonfile');
 
 var file = '/home/pi/TitanRover/mobility/runt/node/gps.json' ; 
-var reachIP = '192.168.2.15';
+var reachIP = '192.168.1.112';
 var reach_shans_hotspot = '172.20.10.7';
 
 var gpsJSON  = {
@@ -21,7 +21,7 @@ var gpsJSON  = {
 
 // Connect to the reach server * you can set the reachs server information in the WebUI 
 var client = new net.Socket();
-client.connect(9001, reachIP, function() {
+client.connect(3000, reach_shans_hotspot , function() {
 	console.log('Connected to reach');
 });
 
@@ -48,8 +48,7 @@ client.on('data', function(data,err) {
             height: data[4],
             q: data[5]
         };
-    console.log(data[2] + " " + data[3])
-    //jsonfile.writeFileSync(file, gps_packet);
+    jsonfile.writeFileSync(file, gps_packet);
 });
 
 client.on('close', function() {

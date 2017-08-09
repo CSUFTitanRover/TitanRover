@@ -11,11 +11,13 @@ let routes = (
             <IndexRoute component={Modules.Mission.Overview} />
             <Route path="Decagon-5TE" component={Modules.Mission.Decagon5TE} />
             <Route path="DHT-11" component={Modules.Mission.DHT11} />
-            <Route path="C02" component={Modules.Mission.C02} />
-            <Route path="waypoints" component={Modules.Mission.Waypoints} />
+            <Route path="Sonic-Range-Finder" component={Modules.Mission.SonicRangeFinder} />
+            <Route path="arm-control" component={Modules.Mission.ArmControl} />
             <Route path="livefeeds" component={Modules.Mission.LiveFeeds}>
                 <Route path="/armcamera" component={Modules.Mission.ArmCamera} />
-                <Route path="/frontcamera" component={Modules.Mission.FrontCamera} />
+                <Route path="/mastcamera" component={Modules.Mission.MastCamera} />
+                <Route path="/leftcamera" component={Modules.Mission.LeftCamera} />
+                <Route path="/rightcamera" component={Modules.Mission.RightCamera} />
                 <Route path="/surround" component={Modules.Mission.Surround} />
             </Route>
 

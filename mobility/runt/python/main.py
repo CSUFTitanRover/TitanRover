@@ -3,21 +3,26 @@ import time
 from time import sleep
 import signal
 
+min_throttle = 1200 
+max_throttle = 4095
+
+    
+signal.signal(signal.SIGINT, dc.sigint_handler)
+
 print "Enter command left(l), right(r), forwards(f), backwards(b), stop(s)"
-dc.set_speed(150,150)
 while True:        
     move_direction = raw_input("Enter command: ")
     if move_direction == 'f':
-        dc.forwards()
+        dc.forwards(max_throttle)
 
     elif move_direction == 'l':
-        dc.left()
+        dc.left(max_throttle)
 
     elif move_direction == 'r':
-        dc.right()
+        dc.right(max_throttle)
 
     elif move_direction == 'b':
-        dc.backwards()
+        dc.backwards(max_throttle)
     
     elif move_direction == 's':
         dc.stop()

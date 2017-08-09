@@ -34,18 +34,17 @@ class NavMenu extends Component {
 
                     {sensorItemsGroup}
 
-                    <Menu.Item key="waypoints">
-                        <Link to="/waypoints" activeClassName="hotfix-item-selected">
-                            <Icon type="compass" /> Waypoints
-                        </Link>
-                    </Menu.Item>
-
                     <Menu.Item key="cameras">
                         <Link to="/livefeeds" activeClassName="hotfix-item-selected">
                             <Icon type="camera-o" /> Cameras
                         </Link>
                     </Menu.Item>
 
+                    <Menu.Item key="arm-control">
+                        <Link to="/arm-control" activeClassName="hotfix-item-selected">
+                            <Icon type="user" /> Arm Control
+                        </Link>
+                    </Menu.Item>
                 </SubMenu>
 
                 <SubMenu key="resources"

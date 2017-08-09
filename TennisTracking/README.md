@@ -1,16 +1,12 @@
 # Tracking Tennis Ball  
 
-This will take a long time (~2hrs) to install and will take about 3.9Gb of data.  Only works on Linux
+This will take a long time to download and will take about 3.9Gb of data.  Only works on Linux
 
 1. Run the script to install opencv  
 	```./install-opencv.sh```  
-2. Start up the virtual environment.
-	```
-	source ~/.profile
-	workon cv
-	```  
-3. Run the python script to track Tennis ball  
+2. Run the python script to track Tennis ball  
 	```python ball_tracking.py```  
+
 
 ## Additional Features  
 If you want to see what else opencv has to offer.  
@@ -20,3 +16,4 @@ If you want to see what else opencv has to offer.
 3. Then cd into python or any other language  
 4. Run any script some don't work cause you need pictures  
 	The face finding one is pretty neat.
+

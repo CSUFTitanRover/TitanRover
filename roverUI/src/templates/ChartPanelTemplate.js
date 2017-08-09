@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import rover_settings from '../../rover_settings.json';
 import moment from 'moment';
 import PanelOptions from './PanelOptionsTemplate';
-import { Layout, Button, message, Tag, Select, Row, Col } from 'antd';
+import { Layout, Button, message, Tag, Select } from 'antd';
 const { Content, Header } = Layout;
 const Option = Select.Option;
 
@@ -185,27 +185,15 @@ class ChartPanelTemplate extends Component {
         return (
             <Layout>
                 <Header className="controls">
-                    <Row>
-                        <Col sm={0} md={0} lg={4} xl={4}>
-                            <Tag color="blue">{this.props.chartID}</Tag>
-                        </Col>
-                        <Col sm={9} md={9} lg={7} xl={5}>
-                            <PanelOptions setDataToQuery={this.setDataToQuery}/>
-                        </Col>
+                    <Tag color="blue">{this.props.chartID}</Tag>
+                    <PanelOptions setDataToQuery={this.setDataToQuery}/>
 
-                        <Col sm={5} md={5} lg={4} xl={3}>
-                            <Select defaultValue={chartTypes[0]} style={{ width: 150 }} onChange={this.handleChartTypeChange}>
-                                {chartTypeOptions}
-                            </Select>
-                        </Col>
+                    <Select defaultValue={chartTypes[0]} style={{ width: 150 }} onChange={this.handleChartTypeChange}>
+                        {chartTypeOptions}
+                    </Select>
 
-                        <Col sm={3} md={3} lg={3} xl={3}>
-                            <Button type="primary" onClick={this.queryData}>Query Data</Button>
-                        </Col>
-                        <Col sm={1} md={3} lg={3} xl={3}>
-                            <Button type="danger" icon="close-circle-o" onClick={this.handleDeleteChartPanel}>Delete Current Chart Panel</Button>
-                        </Col>
-                    </Row>
+                    <Button type="primary" onClick={this.queryData}>Query Data</Button>
+                    <Button type="danger" icon="close-circle-o" onClick={this.handleDeleteChartPanel}>Delete Current Chart Panel</Button>
                 </Header>
 
                 <Content>

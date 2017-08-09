@@ -6,7 +6,7 @@
 
 ToDo's
 - [ ] - Decide on orientation of chip and finalize the code for proper angles
-- [x] - Fix NaN issue between Python and Node.js
+- [ ] - Fix NaN issue between Python and Node.js
 
 ==============================================================================================================================
 

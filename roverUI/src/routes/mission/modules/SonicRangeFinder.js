@@ -12,6 +12,16 @@ class SonicRangeFinder extends Component {
         };
     }
 
+    componentDidMount() {
+        let intervalID = setInterval( () => {
+            // this.setState({rangeValue: Math.round(Math.random() * 100) });
+            if (this.state.percent >= 100) {
+                clearInterval(intervalID);
+            }
+            this.setState({percent: this.state.percent+1})
+        }, 50);
+    }
+
     render() {
         return (
             <BaseModuleTemplate moduleName="Sonic-Range-Finder Chart">
