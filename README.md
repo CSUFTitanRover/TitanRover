@@ -5,6 +5,14 @@ Install Nodejs
 
 https://nodejs.org/en/download/package-manager/
 
+
+Install latest version of NodeJs for the Raspberry Pi:
+
+```sh
+
+sudo wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
+```
+
 Install dependencies with
 
 ```npm install``` 
